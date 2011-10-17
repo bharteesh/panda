@@ -626,6 +626,7 @@
 
 	<modules>
 <module>common</module>
+		<module>eventclient</module>
 	</modules>
 
 </project>
