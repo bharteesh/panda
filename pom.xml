@@ -402,6 +402,21 @@
 				<artifactId>c3p0</artifactId>
 				<version>${c3p0Version}</version>
 			</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-all</artifactId>
+			<version>${codehaus-jackson-Version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>${jboss-resteasy-jaxrs-Version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.ws</groupId>
+			<artifactId>jaxrs-api</artifactId>
+			<version>${javax-jaxrs-api-Version}</version>
+		</dependency>			
 
 <dependency>
   <groupId>aspectj</groupId>
@@ -547,15 +562,18 @@
 <groupId>org.ithaka.cm</groupId>
 <artifactId>toolresult</artifactId>
 </dependency>
-
-
-
+<dependency>
+	<groupId>org.ithaka.cm</groupId>
+	<artifactId>eventregistry</artifactId>
+	<version>0.0.1</version>
+</dependency>
 
   </dependencies>
 </dependencyManagement>
-
-
   <properties>
+		<codehaus-jackson-Version>1.8.5</codehaus-jackson-Version>  
+		<jboss-resteasy-jaxrs-Version>2.2.2.GA</jboss-resteasy-jaxrs-Version>  
+		<javax-jaxrs-api-Version>2.2.2.GA</javax-jaxrs-api-Version>  
 		<aspectjrtForDctmVersion>1.5.2a</aspectjrtForDctmVersion>
 		<orgPorticoVersion>2.0.1-SNAPSHOT</orgPorticoVersion>
 		<c3p0Version>0.9.1.2</c3p0Version>
@@ -606,6 +624,7 @@
 		<commonsConfigurationVersion>1.6</commonsConfigurationVersion>
 		<commonsPoolVersion>1.5.6</commonsPoolVersion>
 		<javaGnuTarVersion>1.1.4</javaGnuTarVersion>
+		
   </properties>
 
 	<reporting>
@@ -622,11 +641,9 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
-
 	<modules>
-<module>common</module>
+		<module>common</module>
 		<module>eventclient</module>
+		<module>conprepbooks</module>
 	</modules>
-
 </project>
