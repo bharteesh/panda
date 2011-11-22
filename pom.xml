@@ -572,6 +572,11 @@
 	<artifactId>eventregistry</artifactId>
 	<version>0.0.1</version>
 </dependency>
+<dependency>
+	<groupId>org.ithaka.cm</groupId>
+	<artifactId>som</artifactId>
+	<version>0.0.1</version>
+</dependency>
 
   </dependencies>
 </dependencyManagement>
