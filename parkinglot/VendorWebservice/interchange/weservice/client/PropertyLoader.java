@@ -27,9 +27,7 @@ public class PropertyLoader {
 	
 	private  void  loadProperties() {
 		props = new Properties();
-//		InputStream ins = ClassLoader
-//				.getSystemResourceAsStream(VendorDataInterChangeConstants.VENDOR_DATA_PROPERTIES_LOC
-//						+ VendorDataInterChangeConstants.VENDOR_DATA_PROPERTIES_FILE_NAME);
+
 		InputStream ins =this.getClass().getClassLoader().getResourceAsStream(VendorDataInterChangeConstants.VENDOR_DATA_PROPERTIES_FILE_NAME);
 		try {
 			props.load(ins);
