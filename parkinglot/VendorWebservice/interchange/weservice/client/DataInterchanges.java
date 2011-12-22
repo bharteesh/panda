@@ -24,10 +24,15 @@ public class DataInterchanges {
 	
 	public void postNotification(String notification){
 		VendorNotiFicationJAXBProvider  jaxbfacade=new VendorNotiFicationJAXBProvider();
-		jaxbfacade.Marshall();
+		try {
+			jaxbfacade.Marshall("submission");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		VendorDataWSSSLClient sslClient=new VendorDataWSSSLClient();
 		try {
-			String response=sslClient.getResponse("vendor");
+			String response=sslClient.getResponse("vendor","submission");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -90,7 +90,7 @@ public class VendorDataWSSSLClient {
 			}
 
 			@Override
-			public void checkServerTrusted(X509Certificate[] chain,
+			public void x509(X509Certificate[] chain,
 					String authType) throws CertificateException {
 
 			}

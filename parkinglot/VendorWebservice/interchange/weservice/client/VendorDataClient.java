@@ -8,6 +8,7 @@ import org.ithaka.cm.ebooks.vendor.interchange.webservice.IthakaServiceService;
 
 public class VendorDataClient {
 	private static Log logger =LogFactory.getLog(VendorDataClient.class);
+	
 
 	/**
 	 * @param args
@@ -16,8 +17,9 @@ public class VendorDataClient {
 		
 		VendorDataWSSSLClient client =new VendorDataWSSSLClient();
 		String response=null;
+		String submission=PropertyLoader.getProperty(VendorDataInterChangeConstants.SUBMISSION);
 		try {
-			response = client.getResponse("vendor1");
+			response = client.getResponse("vendor1",submission);
 		} catch (Exception e) {
 		logger.error("Exception while posting the request "+e);
 		}
