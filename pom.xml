@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.ithaka.cm</groupId>
-  <artifactId>cmsystems</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.ithaka.cm</groupId>
+	<artifactId>cmsystems</artifactId>
+	<version>3.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-  <name>CM Systems Top-level</name>
-  <build>
-    <pluginManagement>
-      <plugins>
+	<name>CM Systems Top-level</name>
+	<build>
+		<pluginManagement>
+			<plugins>
 
-	<plugin>
-	  <groupId>org.apache.maven.plugins</groupId>
-	  <artifactId>maven-compiler-plugin</artifactId>
-	  <version>${mavenCompilerPluginVersion}</version>
-	  <configuration>
-	    <source>1.6</source>
-	    <target>1.6</target>
-	  </configuration>
-	</plugin>
-	<plugin>
-	  <groupId>org.apache.maven.plugins</groupId>
-	  <artifactId>maven-surefire-plugin</artifactId>
-	  <version>2.7.2</version>
-	</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${mavenCompilerPluginVersion}</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.7.2</version>
+				</plugin>
 
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -32,12 +33,12 @@
 					<version>1.3</version>
 				</plugin>
 
-      </plugins>
-    </pluginManagement>
-  </build>
+			</plugins>
+		</pluginManagement>
+	</build>
 
-  <dependencyManagement>
-    <dependencies>
+	<dependencyManagement>
+		<dependencies>
 
 			<dependency>
 				<groupId>log4j</groupId>
@@ -59,23 +60,28 @@
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
 				<artifactId>jaxb-api</artifactId>
-	<version>${jaxbVersion}</version>			</dependency>
+				<version>${jaxbVersion}</version>
+			</dependency>
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
 				<artifactId>activation</artifactId>
-	<version>${activationVersion}</version>			</dependency>
+				<version>${activationVersion}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-impl</artifactId>
-				<version>${jaxbVersion}</version></dependency>
+				<version>${jaxbVersion}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-xjc</artifactId>
-				<version>${jaxbVersion}</version></dependency>
+				<version>${jaxbVersion}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb1-impl</artifactId>
-				<version>2.0</version></dependency>
+				<version>2.0</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.hibernate</groupId>
@@ -145,11 +151,11 @@
 				<artifactId>xtrim-server</artifactId>
 				<version>${dmcVersion}</version>
 			</dependency>
-<!--			<dependency>-->
-<!--				<groupId>emc.dctm</groupId>-->
-<!--				<artifactId>docweb</artifactId>-->
-<!--				<version>${webtopVersion}</version>-->
-<!--			</dependency>-->
+			<!-- <dependency> -->
+			<!-- <groupId>emc.dctm</groupId> -->
+			<!-- <artifactId>docweb</artifactId> -->
+			<!-- <version>${webtopVersion}</version> -->
+			<!-- </dependency> -->
 			<dependency>
 				<groupId>emc.dctm</groupId>
 				<artifactId>workflow</artifactId>
@@ -198,10 +204,10 @@
 				<version>${saxonVersion}</version>
 			</dependency>
 			<dependency>
-  <groupId>org.ithaka.cm</groupId>
-  <artifactId>saxon9bridge</artifactId>
-  <version>${saxonVersion}</version>
-</dependency>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>saxon9bridge</artifactId>
+				<version>${saxonVersion}</version>
+			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
@@ -210,9 +216,8 @@
 			<dependency>
 				<groupId>commons-logging</groupId>
 				<artifactId>commons-logging</artifactId>
-				<version>${commonsLoggingVersion}</version><!--
-				<scope>provided</scope>
-			--></dependency>
+				<version>${commonsLoggingVersion}</version><!-- <scope>provided</scope> -->
+			</dependency>
 			<dependency>
 				<groupId>castor</groupId>
 				<artifactId>castor</artifactId>
@@ -402,189 +407,208 @@
 				<artifactId>c3p0</artifactId>
 				<version>${c3p0Version}</version>
 			</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-all</artifactId>
-			<version>${codehaus-jackson-Version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxrs</artifactId>
-			<version>${jboss-resteasy-jaxrs-Version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.ws</groupId>
-			<artifactId>jaxrs-api</artifactId>
-			<version>${javax-jaxrs-api-Version}</version>
-		</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-all</artifactId>
+				<version>${codehaus-jackson-Version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxrs</artifactId>
+				<version>${jboss-resteasy-jaxrs-Version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.ws</groupId>
+				<artifactId>jaxrs-api</artifactId>
+				<version>${javax-jaxrs-api-Version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-validator</artifactId>
 				<version>${commons-validator-Version}</version>
 			</dependency>
 
-<dependency>
-  <groupId>aspectj</groupId>
-  <artifactId>aspectjrt</artifactId>
-  <version>${aspectjrtForDctmVersion}</version>
-</dependency>
+			<dependency>
+				<groupId>aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectjrtForDctmVersion}</version>
+			</dependency>
 
-<dependency>
-<groupId>commons-pool</groupId>
-<artifactId>commons-pool</artifactId>
-<version>${commonsPoolVersion}</version>
-</dependency>
+			<dependency>
+				<groupId>commons-pool</groupId>
+				<artifactId>commons-pool</artifactId>
+				<version>${commonsPoolVersion}</version>
+			</dependency>
 
-<dependency>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>javagnutar</artifactId>
-<version>${javaGnuTarVersion}</version>
-</dependency>
+			<dependency>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>javagnutar</artifactId>
+				<version>${javaGnuTarVersion}</version>
+			</dependency>
 
 
-<dependency>
-<version>0.0.1</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>archivestatistics</artifactId>
-</dependency>
+			<dependency>
+				<version>0.0.1</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>archivestatistics</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>assetservice</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>assetservice</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>characterconversion</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>characterconversion</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.2</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>dmd_curation_extract_1_0</artifactId>
-</dependency>
+			<dependency>
+				<version>1.2</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>dmd_curation_extract_1_0</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>dmdcurationrules</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>dmdcurationrules</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.1</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>domainconfig</artifactId>
-</dependency>
+			<dependency>
+				<version>1.1</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>domainconfig</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.1</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>formatlookup</artifactId>
-</dependency>
+			<dependency>
+				<version>1.1</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>formatlookup</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>formatregistry</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>formatregistry</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>ithakadublincore</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>ithakadublincore</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>messagelookup</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>messagelookup</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>mimetypelookup</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>mimetypelookup</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>offsystemmetadata</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>offsystemmetadata</artifactId>
+			</dependency>
 
-<dependency>
-<version>2.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>pmd</artifactId>
-</dependency>
+			<dependency>
+				<version>2.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>pmd</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.2</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>porticoarticlemetadata</artifactId>
-</dependency>
+			<dependency>
+				<version>1.2</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>porticoarticlemetadata</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>providerlookup</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>providerlookup</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>providerregistry</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>providerregistry</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>resolvefilereference</artifactId>
-</dependency>
+			<dependency>
+				<version>1.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>resolvefilereference</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.8</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>submissionprofile</artifactId>
-</dependency>
+			<dependency>
+				<version>1.8</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>submissionprofile</artifactId>
+			</dependency>
 
-<dependency>
-<version>2.0</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>toolinfo</artifactId>
-</dependency>
+			<dependency>
+				<version>2.0</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>toolinfo</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.9</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>toolregistry</artifactId>
-</dependency>
+			<dependency>
+				<version>1.9</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>toolregistry</artifactId>
+			</dependency>
 
-<dependency>
-<version>1.5</version>
-<groupId>org.ithaka.cm</groupId>
-<artifactId>toolresult</artifactId>
-</dependency>
-<dependency>
-	<groupId>org.ithaka.cm</groupId>
-	<artifactId>eventregistry</artifactId>
-	<version>0.0.1</version>
-</dependency>
-<dependency>
-	<groupId>org.ithaka.cm</groupId>
-	<artifactId>som</artifactId>
-	<version>1.0.0</version>
-</dependency>
-
-  </dependencies>
-</dependencyManagement>
-  <properties>
-		<codehaus-jackson-Version>1.8.5</codehaus-jackson-Version>  
-		<jboss-resteasy-jaxrs-Version>2.2.2.GA</jboss-resteasy-jaxrs-Version>  
+			<dependency>
+				<version>1.5</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>toolresult</artifactId>
+			</dependency>
+			<dependency>
+				<version>0.0.1</version>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>eventregistry</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>onix-jaxb</artifactId>
+				<version>${onix-jaxbVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>som</artifactId>
+				<version>${somVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>som_extract</artifactId>
+				<version>${som_extractVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>cats-ws-bookseriesandset</artifactId>
+				<version>${cats-ws-bookseriesandsetVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ithaka.cm</groupId>
+				<artifactId>catsqueryresponse</artifactId>
+				<version>${catsqueryresponseVersion}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<properties>
+		<codehaus-jackson-Version>1.8.5</codehaus-jackson-Version>
+		<jboss-resteasy-jaxrs-Version>2.2.2.GA</jboss-resteasy-jaxrs-Version>
 		<javax-jaxrs-api-Version>2.2.2.GA</javax-jaxrs-api-Version>
-		<commons-validator-Version>1.3.1</commons-validator-Version>		
+		<commons-validator-Version>1.3.1</commons-validator-Version>
 		<aspectjrtForDctmVersion>1.5.2a</aspectjrtForDctmVersion>
 		<orgPorticoVersion>2.0.1-SNAPSHOT</orgPorticoVersion>
 		<c3p0Version>0.9.1.2</c3p0Version>
@@ -635,9 +659,12 @@
 		<commonsConfigurationVersion>1.6</commonsConfigurationVersion>
 		<commonsPoolVersion>1.5.6</commonsPoolVersion>
 		<javaGnuTarVersion>1.1.4</javaGnuTarVersion>
-		
-  </properties>
-
+		<catsqueryresponseVersion>1.0.0</catsqueryresponseVersion>
+		<cats-ws-bookseriesandsetVersion>1.0.0</cats-ws-bookseriesandsetVersion>
+		<som_extractVersion>1.0.0</som_extractVersion>
+		<somVersion>1.0.0</somVersion>
+		<onix-jaxbVersion>3.0</onix-jaxbVersion>
+	</properties>
 	<reporting>
 		<plugins>
 			<plugin>
@@ -656,5 +683,6 @@
 		<module>common</module>
 		<module>eventclient</module>
 		<module>conprepbooks</module>
+		<module>Adhoc</module>
 	</modules>
 </project>
