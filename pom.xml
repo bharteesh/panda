@@ -11,7 +11,11 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-
+<plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>${findBugsVersion}</version>
+      </plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -615,7 +619,7 @@
 		<javassistVersion>3.4.GA</javassistVersion>
 		<ojdbc6Version>11.2.0.2.0</ojdbc6Version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<findbugsPluginVersion>2.3.1</findbugsPluginVersion>
+		<findbugsVersion>2.4.1-SNAPSHOT</findbugsVersion>
 		<mavenCompilerPluginVersion>2.3.2</mavenCompilerPluginVersion>
 		<slf4jVersion>1.6.1</slf4jVersion>
 		<imqVersion>3.5-SP1</imqVersion>
@@ -670,7 +674,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>${findbugsPluginVersion}</version>
+				<version>${findBugsVersion}</version>
 				<configuration>
 					<findbugsXmlOutput>true</findbugsXmlOutput>
 					<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
