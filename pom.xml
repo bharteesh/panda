@@ -607,6 +607,52 @@
 				<version>${catsqueryresponseVersion}</version>
 			</dependency>
 		</dependencies>
+                  <dependency>
+                     <groupId>org.apache.pdfbox</groupId>
+                     <artifactId>pdfbox</artifactId>
+                     <version>${pdfbox.version}</version>
+                   </dependency>
+                   <dependency>
+                     <groupId>org.apache.pdfbox</groupId>
+                     <artifactId>fontbox</artifactId>
+                     <version>${pdfbox.version}</version>
+                   </dependency>
+                   <dependency>
+                     <groupId>org.apache.pdfbox</groupId>
+                     <artifactId>jempbox</artifactId>
+                     <version>${pdfbox.version}</version>
+                   </dependency>
+                   <dependency>
+                     <groupId>org.bouncycastle</groupId>
+                     <artifactId>bcmail-jdk15</artifactId>
+                     <version>${bouncycastlebcmail.version}</version>
+                   </dependency>
+                   <dependency>
+                     <groupId>org.bouncycastle</groupId>
+                     <artifactId>bcprov-jdk15</artifactId>
+                     <version>${bouncycastlebcprov.version}</version>
+                   </dependency>
+                   <dependency>
+                     <groupId>com.ibm.icu</groupId>
+                     <artifactId>icu4j</artifactId>
+                     <version>${ibmicu4j.version}</version>
+                   </dependency>
+                   <dependency>
+                              <groupId>org.jdom</groupId>
+                              <artifactId>jaxen-core</artifactId>
+                              <version>${jaxen-core.version}</version>
+                   </dependency>             
+                   <dependency>
+                              <groupId>org.jdom</groupId>
+                              <artifactId>jaxen-jdom</artifactId>
+                              <version>${jaxen-jdom.version}</version>
+                   </dependency>
+                   <dependency>
+                              <groupId>org.jdom</groupId>
+                              <artifactId>saxpath</artifactId>
+                              <version>${saxpath.version}</version>
+                   </dependency>
+		
 	</dependencyManagement>
 	<properties>
 		<codehaus-jackson-Version>1.8.5</codehaus-jackson-Version>
@@ -668,6 +714,14 @@
 		<som_extractVersion>1.0.0</som_extractVersion>
 		<somVersion>1.0.0</somVersion>
 		<onix-jaxbVersion>3.0</onix-jaxbVersion>
+                                             <pdfbox.version>1.6.0</pdfbox.version>
+                                             <bouncycastlebcmail.version>1.44</bouncycastlebcmail.version>
+                                             <bouncycastlebcprov.version>1.44</bouncycastlebcprov.version>
+                                             <ibmicu4j.version>3.8</ibmicu4j.version>
+                                             <jaxen-core.version>1.0-FCS</jaxen-core.version>
+                                             <jaxen-jdom.version>1.0-FCS</jaxen-jdom.version>
+                                             <saxpath.version>1.0-FCS</saxpath.version>
+		
 	</properties>
 	<reporting>
 		<plugins>
