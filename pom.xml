@@ -651,6 +651,11 @@
 				<artifactId>saxpath</artifactId>
 				<version>${saxpath.version}</version>
 			</dependency>
+			<dependency>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava</artifactId>
+    <version>${guava.version}</version>
+</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<properties>
@@ -720,7 +725,7 @@
 		<jaxen-core.version>1.0-FCS</jaxen-core.version>
 		<jaxen-jdom.version>1.0-FCS</jaxen-jdom.version>
 		<saxpath.version>1.0-FCS</saxpath.version>
-
+	<guava.version>11.0.1</guava.version>
 	</properties>
 	<reporting>
 		<plugins>
