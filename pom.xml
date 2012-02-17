@@ -652,13 +652,25 @@
 				<version>${saxpath.version}</version>
 			</dependency>
 			<dependency>
-    <groupId>com.google.guava</groupId>
-    <artifactId>guava</artifactId>
-    <version>${guava.version}</version>
-</dependency>
+    			<groupId>com.google.guava</groupId>
+			    <artifactId>guava</artifactId>
+			    <version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ithaka.cm</groupId>			
+				<artifactId>vendor-notification</artifactId>
+				<version>${vendor-notification-Version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ithaka.cm</groupId>			
+				<artifactId>vendor-status</artifactId>
+				<version>${vendor-status-Version}</version>
+			</dependency>			
 		</dependencies>
 	</dependencyManagement>
 	<properties>
+		<vendor-status-Version>1.2.0</vendor-status-Version>
+		<vendor-notification-Version>1.2.0</vendor-notification-Version>		
 		<codehaus-jackson-Version>1.8.5</codehaus-jackson-Version>
 		<jboss-resteasy-jaxrs-Version>2.2.2.GA</jboss-resteasy-jaxrs-Version>
 		<javax-jaxrs-api-Version>2.2.2.GA</javax-jaxrs-api-Version>
