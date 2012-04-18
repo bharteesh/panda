@@ -757,7 +757,7 @@
 		<module>common</module>
 		<module>eventclient</module>
 		<module>conprepbooks</module>
-		<!-- <module>Adhoc</module> -->
+		<module>Adhoc</module>
 		<module>bookshibernateconfig</module>
 		<module>booksdist</module>
 	</modules>
