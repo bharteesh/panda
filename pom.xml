@@ -727,7 +727,7 @@
 		<javaGnuTarVersion>1.1.4</javaGnuTarVersion>
 		<catsqueryresponseVersion>1.0.0</catsqueryresponseVersion>
 		<cats-ws-bookseriesandsetVersion>1.0.0</cats-ws-bookseriesandsetVersion>
-		<som_extractVersion>1.0.0</som_extractVersion>
+		<som_extractVersion>1.0.1</som_extractVersion>
 		<somVersion>1.0.0</somVersion>
 		<onix-jaxbVersion>3.0</onix-jaxbVersion>
 		<pdfbox.version>1.6.0</pdfbox.version>
