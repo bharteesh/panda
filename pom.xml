@@ -606,6 +606,11 @@
 				<version>${catsqueryresponseVersion}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.itextpdf</groupId>
+				<artifactId>itextpdf</artifactId>
+				<version>${itext.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.pdfbox</groupId>
 				<artifactId>pdfbox</artifactId>
 				<version>${pdfbox.version}</version>
@@ -729,6 +734,7 @@
 		<som_extractVersion>1.0.2</som_extractVersion>
 		<somVersion>1.0.0</somVersion>
 		<onix-jaxbVersion>3.0</onix-jaxbVersion>
+		<itext.version>5.3.3</itext.version>
 <!-- 		<pdfbox.version>1.6.0</pdfbox.version> -->
 		<pdfbox.version>1.7.1</pdfbox.version>
 		<bouncycastlebcmail.version>1.44</bouncycastlebcmail.version>
