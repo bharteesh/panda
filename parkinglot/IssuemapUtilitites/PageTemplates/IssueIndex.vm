@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<TITLE>Index Page</TITLE>
+<STYLE type="text/css">
+   subtoolbar {border-top-width: 0px; border-top-style: none;}
+ </STYLE>	
+</head>
+<body>
+<P><H1> Index Page </H1></P>	
+	<table width="400" height="496" border="2" align="left" cellpadding="2" cellspacing="2">
+		$aggregateURL
+	</table>		
+</body>
+</html>
