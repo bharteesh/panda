@@ -6,7 +6,7 @@
            http://www.springframework.org/schema/beans 
            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
            http://www.springframework.org/schema/batch 
-           http://www.springframework.org/schema/batch/spring-batch-2.0.xsd
+           http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
  	<beans:bean id="applicationProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" name="applicationProperties">
@@ -15,23 +15,24 @@
 	
     <beans:import resource="applicationContext.xml"/>
     
- 	<context:component-scan base-package="org.ithaka.phx" />
-
 
  	<job id="phoenixArchivalJob" job-repository="jobRepository" abstract="false" restartable="true">
-		<step id="scanRepository" next="updateIssuemapTable">
+		<!-- <step id="scanRepository" next="updateIssuemapTable">
 			<tasklet ref="scanRepositoryTask"/>
-		</step> 
-		<step id="updateIssuemapTable" next="archiveIssuemaps">
-		  <tasklet>
-                <chunk reader="updateIssuemapItemReader" processor="updateIssuemapItemProcessor" writer="updateIssuemapItemWriter" commit-interval="5" task-executor="taskExecutor"/>
+		</step> -->
+		<step id="updateIssuemapTable">
+		  <tasklet task-executor="taskExecutor">
+                <chunk reader="updateIssuemapItemReader" processor="updateIssuemapItemProcessor" writer="updateIssuemapItemWriter" commit-interval="5" skip-policy="alwaysSkipItemSkipPolicy"/>
+                <listeners >
+                    <listener ref="phoenixArchiverSkipListerner"/>
+                </listeners>
 		  </tasklet>
 		</step>   
-		<step id="archiveIssuemaps" >
+		<!-- <step id="archiveIssuemaps" >
 			<tasklet>
                 <chunk reader="archiveIssuemapItemReader" writer="archiveIssuemapItemWriter" commit-interval="1"  task-executor="taskExecutor"/>
             </tasklet>
-		</step>
+		</step> -->
     	<listeners>
          	<listener ref="ReportingListener"/>
 	       	<listener ref="processShutdownListener"/>
@@ -42,21 +43,22 @@
 
 	<!--  BEANS RELATED TO SCAN REPOSITORY TASK -->	
  	
- 	<beans:bean id="scanRepositoryTask" class="org.ithaka.phx.archive.steps.scanrepository.ScanRepositoryTask" name="scanRepositoryTask">
+ 	<beans:bean id="scanRepositoryTask" class="org.ithaka.phx.archive.steps.scanrepository.ScanRepositoryTask" name="scanRepositoryTask" scope="prototype">
 		<beans:property name="command" ref="scanRepositoryCommand" />
  	</beans:bean>
 
-	<beans:bean id="scanRepositoryCommand" class="org.ithaka.phx.archive.steps.scanrepository.ScanRepositoryCommand">
+	<beans:bean id="scanRepositoryCommand" class="org.ithaka.phx.archive.steps.scanrepository.ScanRepositoryCommand" scope="prototype">
  		<beans:property name="fileListingDAO" ref="fileListingDAO" />
   		<beans:property name="repositoryLocationList" value="${REPO_ROOT_DIRECTORY}" />		
+  		<beans:property name="manualCleanAndRestart" value="false" />		<!--  This will force it to insert all the issuemap, no matter if it was scanned previously. This will be equal to executing the scan for the first time -->
 	</beans:bean>
 
 	<!--  BEANS RELATED TO STEP UPDATE ISSUEMAP TABLE TASK -->
-	<beans:bean id="updateIssuemapItemReader" class="org.ithaka.phx.archive.steps.updateissuemap.SynchronizedIMItemReader" name="updateIssuemapItemReader">
+	<beans:bean id="updateIssuemapItemReader" class="org.ithaka.phx.archive.steps.updateissuemap.SynchronizedIMItemReader" name="updateIssuemapItemReader" scope="prototype">
 		<beans:property name="delegate" ref="delegateUpdateIssuemapItemReader" />
 	</beans:bean>
 
-	<beans:bean id="delegateUpdateIssuemapItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" name="delegateUpdateIssuemapItemReader">
+	<beans:bean id="delegateUpdateIssuemapItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" name="delegateUpdateIssuemapItemReader" scope="prototype">
 		<beans:property name="dataSource" ref="dataSource" />
 		<beans:property name="saveState" value="false" />
 		<beans:property name="rowMapper" ref="rowFileDetailHelperMapper" />
@@ -69,18 +71,29 @@
         </beans:property>				
 	</beans:bean>	
 
- 	<beans:bean id="updateIssuemapItemWriter" class="org.ithaka.phx.archive.steps.updateissuemap.UpdateIssuemapItemWritter" name="updateIssuemapItemWriter">
+ 	<beans:bean id="updateIssuemapItemWriter" class="org.ithaka.phx.archive.steps.updateissuemap.UpdateIssuemapItemWritter" name="updateIssuemapItemWriter" scope="prototype">
 		<beans:property name="fileListingDAO" ref="fileListingDAO"/>
 	</beans:bean>   
 
+	<!-- FOR Handling Skips -->
+	<beans:bean id="alwaysSkipItemSkipPolicy" class="org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy">
+	
+	</beans:bean>
+	<beans:bean id="phoenixArchiverSkipListerner" class="org.ithaka.phx.archive.common.PhoenixArchiverSkipListerner" scope="step">
+		<beans:property name="jobID" value="#{stepExecution.jobExecution.id}"/>
+		<beans:property name="fileListingDAO" ref="fileListingDAO"/>
+	</beans:bean>	
+	
+	<beans:bean id="updateIssuemapItemProcessor" class="org.ithaka.phx.archive.steps.updateissuemap.UpdateIssuemapItemProcessor" scope="prototype"/>
+
    	<!--  BEANS RELATED TO ARCHIVING AND AMAZON GLACIER UPLOAD TASK -->	
 
-	<beans:bean id="archiveIssuemapItemReader" class="org.ithaka.phx.archive.steps.updateissuemap.SynchronizedIMItemReader" name="archiveIssuemapItemReader">
+	<beans:bean id="archiveIssuemapItemReader" class="org.ithaka.phx.archive.steps.updateissuemap.SynchronizedIMItemReader" name="archiveIssuemapItemReader" scope="prototype">
 		<beans:property name="delegate" ref="delegateArchiveIssuemapItemReader" />
 	</beans:bean>
 
  	  
-	<beans:bean id="delegateArchiveIssuemapItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" name="delegateArchiveIssuemapItemReader">
+	<beans:bean id="delegateArchiveIssuemapItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" name="delegateArchiveIssuemapItemReader" scope="prototype">
 		<beans:property name="dataSource" ref="dataSource" />
 		<beans:property name="saveState" value="false" />
 		<beans:property name="rowMapper" ref="rowFileDetailHelperMapper" />
@@ -93,7 +106,8 @@
         </beans:property>				
 	</beans:bean>	
 
- 	<beans:bean id="archiveIssuemapItemWriter" class="org.ithaka.phx.archive.steps.archiveissuemap.ArchiveIssuemapItemWritter" name="archiveIssuemapItemWriter">
+	
+ 	<beans:bean id="archiveIssuemapItemWriter" class="org.ithaka.phx.archive.steps.archiveissuemap.ArchiveIssuemapItemWritter" name="archiveIssuemapItemWriter" scope="prototype">
 		<beans:property name="fileListingDAO" ref="fileListingDAO"/>
 		<beans:property name="tempArchiveLocation" value="${TEMP_ARCHIVE_OUTPUT_LOCATION}"/>
 	</beans:bean>    
@@ -108,7 +122,8 @@
  	
 
 	<!--  COMMON BEANS -->
-	
+	<beans:bean id="rowFileDetailHelperMapper" class="org.ithaka.phx.archive.dao.RowFileDetailHelperMapper" scope="prototype"/>
+	<beans:bean id="ReportingListener" class="org.ithaka.phx.infrastructure.ReportingListener"/>
 	
 	<beans:bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" name="taskExecutor" >
 		<beans:property name="corePoolSize" value="10" />
