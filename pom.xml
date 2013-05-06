@@ -766,7 +766,8 @@
 		<module>Adhoc</module>
 		<module>bookshibernateconfig</module>
 		<module>booksdist</module>
-    <module>koala</module>
-    <module>pandahibernateconfig</module>
-  </modules>
+    	<module>koala</module>
+   		<module>pandahibernateconfig</module>
+    	<module>publishersetup</module>
+	</modules>
 </project>
