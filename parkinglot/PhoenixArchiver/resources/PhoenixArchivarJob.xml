@@ -17,10 +17,10 @@
     
 
  	<job id="phoenixArchivalJob" job-repository="jobRepository" abstract="false" restartable="true">
-		<!-- <step id="scanRepository" next="updateIssuemapTable">
+		<step id="scanRepository" next="updateIssuemapTable">
 			<tasklet ref="scanRepositoryTask"/>
-		</step> -->
-		<step id="updateIssuemapTable">
+		</step>
+		<step id="updateIssuemapTable" next="archiveIssuemaps">
 		  <tasklet task-executor="taskExecutor">
                 <chunk reader="updateIssuemapItemReader" processor="updateIssuemapItemProcessor" writer="updateIssuemapItemWriter" commit-interval="5" skip-policy="alwaysSkipItemSkipPolicy"/>
                 <listeners >
@@ -28,11 +28,14 @@
                 </listeners>
 		  </tasklet>
 		</step>   
-		<!-- <step id="archiveIssuemaps" >
-			<tasklet>
-                <chunk reader="archiveIssuemapItemReader" writer="archiveIssuemapItemWriter" commit-interval="1"  task-executor="taskExecutor"/>
+		<step id="archiveIssuemaps">
+			<tasklet task-executor="taskExecutor">
+                <chunk reader="archiveIssuemapItemReader" writer="archiveIssuemapItemWriter" commit-interval="1" />
+                <listeners >
+                    <listener ref="phoenixArchiverSkipListerner"/>
+                </listeners>
             </tasklet>
-		</step> -->
+		</step>
     	<listeners>
          	<listener ref="ReportingListener"/>
 	       	<listener ref="processShutdownListener"/>
@@ -100,7 +103,7 @@
 		<beans:property name="sql">
             <beans:value>
                 <![CDATA[
-                   SELECT * FROM PHX_JSTOR_FILESYSTEM_TABLE WHERE PHX_ISSUEMAP_AG_PROCESSED = '0' AND PHX_ISSUEMAP_PROCESSED = '0'
+                   SELECT * FROM PHX_JSTOR_FILESYSTEM_TABLE WHERE PHX_ISSUEMAP_PROCESSED = '1' AND PHX_ISSUEMAP_AG_PROCESSED = '0'  
                 ]]>
             </beans:value>
         </beans:property>				
@@ -109,9 +112,20 @@
 	
  	<beans:bean id="archiveIssuemapItemWriter" class="org.ithaka.phx.archive.steps.archiveissuemap.ArchiveIssuemapItemWritter" name="archiveIssuemapItemWriter" scope="prototype">
 		<beans:property name="fileListingDAO" ref="fileListingDAO"/>
-		<beans:property name="tempArchiveLocation" value="${TEMP_ARCHIVE_OUTPUT_LOCATION}"/>
+		<beans:property name="archiveUtilityCommand" ref="archiveUtilityCommand"/>
+		<beans:property name="awsUtilityCommand" ref="awsUtilityCommand"/>
 	</beans:bean>    
- 
+
+	<beans:bean id="archiveUtilityCommand" class="org.ithaka.phx.archive.steps.archiveissuemap.ArchiveUtilityCommand" scope="prototype">
+		<beans:property name="defaultArchiveSourceLocation" value="${DEFAULT_ARCHIVE_OUTPUT_LOCATION}"/>
+	</beans:bean> 
+   	<beans:bean id="awsUtilityCommand" class="org.ithaka.phx.archive.steps.archiveissuemap.AWSUtilityCommand" scope="prototype">
+		<beans:property name="accessKey" value="${AWS_ACCESSKEY}"/>
+		<beans:property name="secretKey" value="${AWS_SECRETKEY}"/>   	
+		<beans:property name="vaultName" value="${AWS_VAULTNAME}"/>   
+		<beans:property name="awsEndpoint" value="${AWS_ENDPOINT}"/>   	
+   	</beans:bean>
+   	
    	
    	<!--  BEANS RELATED TO PROGRAM CONTROLLER TASK -->	
  	<beans:bean id="launcher" class="org.ithaka.phx.archive.BatchController" name="launcher">
