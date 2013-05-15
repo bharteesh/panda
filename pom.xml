@@ -669,10 +669,27 @@
 				<groupId>org.ithaka.cm</groupId>			
 				<artifactId>vendor-status</artifactId>
 				<version>${vendor-status-Version}</version>
+			</dependency>
+			<dependency>
+  				<groupId>org.springframework</groupId>
+  				<artifactId>spring-tx</artifactId>
+  				<version>${spring-3-0-2-version}</version>
+			</dependency>			
+			<dependency>
+			  	<groupId>org.springframework</groupId>
+  				<artifactId>spring-jdbc</artifactId>
+  				<version>${spring-3-0-2-version}</version>
+			</dependency>			
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+  				<version>${spring-3-0-2-version}</version>
 			</dependency>			
 		</dependencies>
 	</dependencyManagement>
 	<properties>
+	    
+		<spring-3-0-2-version>3.0.2.RELEASE</spring-3-0-2-version>
 		<vendor-status-Version>1.2.0</vendor-status-Version>
 		<vendor-notification-Version>1.2.0</vendor-notification-Version>		
 		<codehaus-jackson-Version>1.8.5</codehaus-jackson-Version>
