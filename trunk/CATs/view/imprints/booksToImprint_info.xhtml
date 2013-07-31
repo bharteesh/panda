@@ -1,0 +1,164 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2>
+		<h:outputText value="#{booksToImprintWizard.wizardTitle}" />
+	</h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Info</li>
+			<li class="disabled">2. Results</li>
+		</ul>
+		<div class="cluster smart">
+
+		<a:outputPanel layout="none" id="noLayoutErrorMsgs">
+				<s:div styleClass="alert">
+					<s:div rendered="#{not empty booksToImprintWizard.errorMsgs}" id="errorMsgsDiv">
+						<a:repeat value="#{booksToImprintWizard.errorMsgs}" var="_errMsg">
+							<p>#{_errMsg}</p>
+						</a:repeat>
+					</s:div>
+				</s:div>
+		</a:outputPanel>
+		<a:outputPanel layout="none" id="addedBooksPanel">
+		<s:div id="addedBooksDiv" styleClass="field" rendered="#{booksToImprintWizard.addedBooksList.size gt 0}">
+			<label>Added Books</label>
+			<span class="actuallist">
+			<rich:dataTable var="_book" value="#{booksToImprintWizard.addedBooksList}">	    	
+	    	 	<rich:column>
+	    	 		<h:outputText value="#{_book.bestTitle}"></h:outputText>
+	    	 	</rich:column>
+		    	<rich:column>
+		    		<a:commandLink styleClass="button delete2" action="#{booksToImprintWizard.removeBook(_book)}"
+						 reRender="addedBooksPanel, booksTable"
+						 status="globalWaitStatus"		
+						 ajaxSingle="true"
+						 ignoreDupResponses="true"
+						 limitToList="true">						
+					</a:commandLink>		    	
+		    	</rich:column>	
+	    	</rich:dataTable>
+	    	</span>
+		</s:div>
+		</a:outputPanel>
+		
+		<a:outputPanel layout="none" id="chooseBooksPanel">
+		<s:div id="chooseBooksFragment"  styleClass="field">		
+			
+			<label>Choose Books</label>
+					
+			<h:inputText id="default_search_catBooksList" 
+			 			value="#{catBooksList.catBooks.bestTitle}"
+			 			onchange="return false;" size="60">		
+			 	<a:support event="onblur"  	ajaxSingle="true" eventsQueue="#{divParam}eventsQueue"/>	 			
+			</h:inputText>
+	
+			<a:commandLink 
+			  		 styleClass="button filter"
+					 value="Filter"
+					 action="#{booksToImprintWizard.narrowList(rich:findComponent('default_search_catBooksList').value)}"
+					 reRender="booksToImprintWizardForm"
+					 status="globalWaitStatus"
+					 ajaxSingle="true" 
+					 eventsQueue="#{divParam}eventsQueue"
+					 ignoreDupResponses="true"
+					 limitToList="true"/>		
+			 
+			<rich:dataTable id="booksTable"
+				value="#{booksToImprintWizard.booksList}" var="_catBooks">
+				<rich:column>
+					<a:commandLink value="Add" 
+						 action="#{booksToImprintWizard.addBook(_catBooks)}"
+						 reRender="chooseBooksPanel, addedBooksPanel, noLayoutErrorMsgs, booksTable"
+						 status="globalWaitStatus"
+						 disabled="#{booksToImprintWizard.disableAddButton(_catBooks)}"	
+						 styleClass="button add #{booksToImprintWizard.disableAddButton(_catBooks) ? 'disabled' : ''}"					 
+						 ajaxSingle="true" 
+						 eventsQueue="#{divParam}eventsQueue"
+						 ignoreDupResponses="true"
+						 limitToList="true">
+					</a:commandLink>
+				</rich:column>				
+				
+				<cats:wizardColumn 
+						entityList="#{catBooksList}" propertyLabel="ID"
+						propertyPath="catBooks.id"
+						propertyValue="#{catBooksList.catBooks.id}"
+						propertyName="id" value="#{_catBooks.id}" />
+						
+				<cats:wizardColumn 
+						entityList="#{catBooksList}" propertyLabel="Record Reference ID"
+						propertyPath="catBooks.catRecordRefId"
+						propertyValue="#{catBooksList.catBooks.catRecordRefId}"
+						propertyName="catRecordRefId" value="#{_catBooks.catRecordRefId}" />				
+				
+				<cats:wizardColumn 
+						entityList="#{catBooksList}" propertyLabel="Publisher"
+						propertyPath="catBooks.booksPublishers"
+						propertyValue="#{catBooksList.catBooks.booksPublishers}"
+						propertyName="booksPublishers"
+						value="#{_catBooks.booksPublishers}">
+					</cats:wizardColumn>
+				
+					<cats:wizardColumn 
+						entityList="#{catBooksList}" propertyLabel="Series Title"
+						propertyPath="catBooks.seriesTitle"
+						propertyValue="#{catBooksList.catBooks.seriesTitle}"
+						propertyName="seriesTitle" 
+						value="#{_catBooks.seriesTitle}">
+					</cats:wizardColumn>
+					
+					<cats:wizardColumn 
+						entityList="#{catBooksList}" propertyLabel="Best Title"
+						propertyPath="catBooks.bestTitle"
+						propertyValue="#{catBooksList.catBooks.bestTitle}"
+						propertyName="bestTitle"
+						value="#{_catBooks.bestTitle}">
+					</cats:wizardColumn>
+					
+					<cats:wizardColumn
+						entityList="#{catBooksList}" propertyLabel="Best EISBN13"
+						propertyPath="catBooks.bestEisbn13"
+						propertyValue="#{catBooksList.catBooks.bestEisbn13}"
+						propertyName="bestEisbn13"
+						value="#{_catBooks.bestEisbn13}">
+					</cats:wizardColumn>	
+
+				
+			</rich:dataTable>
+		</s:div>	
+		
+		</a:outputPanel>	
+		</div>
+
+		<div class="push"></div>
+
+		<a:commandLink styleClass="button" value="Quit"
+			status="globalWaitStatus" ignoreDupResponses="true"
+			eventsQueue="#{divParam}eventsQueue"
+			reRender="booksToImprintWizardModal"
+			limitToList="true"
+			oncomplete="#{rich:component('booksToImprintQuit')}.show(); return false;">
+		</a:commandLink>
+
+		<a:commandLink styleClass="button right" value="Save"
+			status="globalWaitStatus" ignoreDupResponses="true"
+			eventsQueue="#{divParam}eventsQueue"
+			limitToList="true"
+			action="#{booksToImprintWizard.performCreateOperation()}"
+			reRender="booksToImprintWizardForm" />
+	</div>
+
+</ui:composition>
+

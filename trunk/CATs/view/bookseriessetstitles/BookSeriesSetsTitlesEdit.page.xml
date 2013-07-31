@@ -1,0 +1,43 @@
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/CatBookSeriesSetsTitlesList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{catBookSeriesSetsTitlesHome.wire}"/>
+   <param name="catBookSeriesSetsTitlesFrom"/>
+   <param name="id" value="#{catBookSeriesSetsTitlesHome.catBookSeriesSetsTitlesId}"/>
+   <param name="catBookSeriesSetsTitlesId" value="#{catBookSeriesSetsTitlesHome.catBookSeriesSetsTitlesId}"/>
+   <param name="selectedTab" value="#{catBookSeriesSetsTitlesHome.selectedTab}"/>
+
+   <navigation from-action="#{catBookSeriesSetsTitlesHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/bookseriessetstitles/BookSeriesSetsTitlesEdit.xhtml"/>
+      </rule>
+   </navigation>
+   <navigation from-action="#{catBookSeriesSetsTitlesHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/bookseriessetstitles/BookSeriesSetsTitlesEdit.xhtml"/>
+      </rule>
+   </navigation>
+   
+   <navigation from-action="#{catBookSeriesSetsTitlesHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/lists/CatBookSeriesSetsTitles.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation>
+   		<rule if-outcome="cancel" >
+         <end-conversation before-redirect="true"/>
+         <redirect view-id="/bookseriessetstitles/BookSeriesSetsTitlesEdit.xhtml"/>
+    	</rule>
+   </navigation>
+
+
+</page>

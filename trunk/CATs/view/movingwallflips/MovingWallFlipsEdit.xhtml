@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+	<ui:param name="entityType" value="movingwallflip" />
+	<ui:param name="moremenu" value="moremenu" />
+
+
+	<ui:define name="badge">
+		<ui:include src="MovingWallFlipsBadge.xhtml" />
+	</ui:define>
+	<ui:define name="body">
+		<div id="globalStatusDiv" style="display: none;">
+			<img src="../img/loading.gif" />
+		</div>
+		<a:status id="globalWaitStatus" forceId="true" layout="none"
+			onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+			onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+		<a:form id="catMovingWallFlipsHomeEdit">
+
+
+
+
+
+			<rich:tabPanel id="maintab" switchType="ajax"
+				selectedTab="#{catMovingWallFlipsHome.selectedTab}" styleClass="tab"
+				contentClass="tab_content">
+				<rich:tab label="Flip Content" id="tab1" name="tab1"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catMovingWallFlipsHome.updateUserTabPreferences('tab1')}">
+					<ui:include src="MovingWallFlipsContentTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Audit Trail" id="tab2" name="tab2"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catMovingWallFlipsHome.updateUserTabPreferences('tab2')}">
+					<ui:include src="MovingWallFlipsAuditTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+
+			<div id="functions">
+				<a:commandLink action="#{catMovingWallFlipsHome.remove}"
+					ignoreDupResponses="true"
+					disabled="#{(!s:hasPermission(catMovingWallFlipsHome.instance, 'delete CatMovingWallFlips')) or (catMovingWallFlipsHome.instance.catLifecycle.label ne 'Completed')}"
+					styleClass="button delete #{((!s:hasPermission(catMovingWallFlipsHome.instance, 'delete CatMovingWallFlips')) or ( catMovingWallFlipsHome.instance.catLifecycle.label ne 'Completed')) ? 'disabled' : ''}"
+					value="Delete" />
+
+				<a:commandLink action="#{catMovingWallFlipsHome.update}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" styleClass="button saveOrCancel disabled"
+					reRender="catMovingWallFlipsHomeEdit" value="Save" />
+				<a:commandLink action="#{catMovingWallFlipsHome.cancel}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" styleClass="button saveOrCancel disabled"
+					reRender="catMovingWallFlipsHomeEdit" value="Cancel" />
+
+			</div>
+		</a:form>
+
+
+
+
+		<ui:include src="/movingwallflips/bulkm_MovingWallFlips.xhtml">
+			<ui:param name="pageURL" value="Yes" />
+		</ui:include>
+		<ui:include src="createm_MovingWallFlipsNote.xhtml" />
+
+		<ui:include src="/onholdreason/updateOnHoldReason_modal.xhtml">
+			<ui:param name="pageURL" value="Yes" />
+		</ui:include>
+	</ui:define>
+	<ui:define name="notes">
+		<ui:include src="MovingWallFlipsNotes.xhtml" />
+	</ui:define>
+</ui:composition>

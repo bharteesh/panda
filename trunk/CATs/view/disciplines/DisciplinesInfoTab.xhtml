@@ -1,0 +1,62 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" 
+xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:a="http://richfaces.org/a4j" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:rich="http://richfaces.org/rich" 
+xmlns:ui="http://java.sun.com/jsf/facelets" id="SOMEDiv1">
+
+
+  <s:decorate id="catName_div1" template="../layout/edit.xhtml">
+    <ui:define name="label">Name</ui:define>
+	<h:outputText value="#{catDisciplinesHome.instance.catName}"/>
+		      <a:commandLink 
+				ignoreDupResponses="true"
+	    		value="Edit"
+				reRender="changeNameForm" 
+				oncomplete="Richfaces.showModalPanel('changeNameModal');"
+				styleClass="button wizard #{!s:hasPermission(catDisciplinesHome.instance, 'modify catName') ? 'disabled' : ''}"
+				disabled="#{!s:hasPermission(catDisciplinesHome.instance, 'modify catName')}"
+				status="globalWaitStatus"
+				eventsQueue="disciplinesEditQueue"
+				onclick="if ( ! checkForSave() ) { return false ; }"
+				ajaxSingle="true"/>
+  </s:decorate>
+
+  <s:decorate id="catType_div1" template="../layout/edit.xhtml">
+    <ui:define name="label">Type:</ui:define>
+    <h:selectOneMenu onchange="enableSaveCancel();" disabled="#{!s:hasPermission(catDisciplinesHome.instance, 'modify catType')}" 
+	  required="true" name="catType" value="#{catDisciplinesHome.instance.catType}">
+		   		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catDisciplines_Type}" var="i"/>
+		       </h:selectOneMenu>
+  </s:decorate>
+  
+  <s:decorate template="../layout/edit.xhtml">
+  	<ui:define name="label">Negotiator</ui:define>
+    <h:outputText value="#{catDisciplinesHome.instance.negotiatorsValue}"/>
+    
+			<a:commandLink 
+				action="#{addNegotiatorsToDiscBean.editNegotiators}"
+				oncomplete="#{rich:component('addNegotiatorsToDiscWizard')}.show(); return false;"
+				value="Add Negotiators" reRender="addNegotiatorsToDiscWizard"
+				styleClass="button wizard #{!(s:hasPermission(catDisciplinesHome.instance, 'modify catDisciplinesNegotiators')) ? 'disabled' : ''}"
+				disabled="#{!(s:hasPermission(catDisciplinesHome.instance, 'modify catDisciplinesNegotiators'))}" 
+				status="globalWaitStatus"
+				eventsQueue="cmptsEditQueue"
+				ajaxSingle="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"/>
+
+	
+  </s:decorate>
+    	<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">LTM Code</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="catLtmCode"
+				value="#{catDisciplinesHome.instance.catLtmCode}" 
+				maxlength="255"
+				readonly="#{!s:hasPermission(catDisciplinesHome.instance, 'modify catLtmCode')}"/>
+				</s:decorate>
+
+	<div class="push"/>
+	
+</s:div>

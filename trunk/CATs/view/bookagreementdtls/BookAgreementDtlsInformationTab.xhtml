@@ -1,0 +1,59 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="booksInformationDiv1">
+
+	<div class="col col1">
+
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Date Added</ui:define>
+			<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="true"
+                	id="dateAdded" inputClass="datestyle" value="#{catBookAgreementDtlsHome.instance.catDateAddedToAgreement}"/>
+		</s:decorate>
+		  <s:decorate  template="../layout/edit.xhtml">
+              <ui:define name="label">Outcome</ui:define>
+               <h:selectOneMenu onchange="enableSaveCancel();"  disabled="true" 
+               		name="outcome" value="#{catBookAgreementDtlsHome.instance.catOutcome}" required="false">
+			   		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="None..." 
+			   			value="#{listsForEnums.catBookAgrmtDtls_Outcome}" var="i"/>
+			    </h:selectOneMenu>
+ 
+          </s:decorate>
+          	<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Future Termination Date</ui:define>
+			<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="true"
+                	id="futureTerminationDate" inputClass="datestyle" value="#{catBookAgreementDtlsHome.instance.catTerminationDateSchd}"/>
+		</s:decorate> 
+		          	<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Termination Date</ui:define>
+			<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="true"
+                	id="terminationDate" inputClass="datestyle" value="#{catBookAgreementDtlsHome.instance.catTerminationDateActl}"/>
+		</s:decorate> 
+		         <s:decorate template="../layout/edit.xhtml">
+              <ui:define name="label">Future Licensor</ui:define>
+              <h:inputText onchange="enableSaveCancel();"    readonly="true" 
+              	id="futureLicensor" value="#{catBookAgreementDtlsHome.instance.catFutureLicensor}"/>
+         </s:decorate>
+         
+         <s:decorate template="../layout/edit.xhtml">
+              <ui:define name="label">Reason Licensor Not Required</ui:define>
+              <h:inputTextarea onchange="enableSaveCancel();"   cols="20" readonly="true" 
+              	id="reasonLicensorNotRequired" rows="2" value="#{catBookAgreementDtlsHome.instance.catReasonLicensorNotReqd}"/>
+         </s:decorate>
+         
+         <s:decorate template="../layout/edit.xhtml">
+              <ui:define name="label">Termination Note</ui:define>
+              <h:inputTextarea onchange="enableSaveCancel();"   cols="20" readonly="true" 
+              	id="catTerminationNote" rows="2" value="#{catBookAgreementDtlsHome.instance.catTerminationNote}"/>
+         </s:decorate>
+	</div>
+ 
+	<div class="push" />
+
+</s:div>

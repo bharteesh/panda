@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	
+	<h2><h:outputText value="#{advBookAgreementDtlsLifecycle.wizardTitle}" /></h2>
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Info</li>
+			<li class="selected">2. Results</li>
+		</ul>
+		
+		<div class="cluster smart">
+			<div class="title eligible">
+	            <h1>Book Agreement Details (1)</h1>
+	            <p>You successfully updated Lifecycle of Book Agreement Detail (<strong>#{advBookAgreementDtlsLifecycle.catBookAgreementDtlsHome.instance.id}</strong>) 
+		            to <strong>#{advBookAgreementDtlsLifecycle.catBookAgreementDtlsHome.instance.catLifecycle.label}</strong>.</p>
+	        </div>
+	        <div>
+	        	<ui:include src="/bookagreementdtls/wizard_BookAgreementDtlsTable.xhtml">
+					<ui:param name="bookAgreementDtlsList" value="#{advBookAgreementDtlsLifecycle.bookAgreementDtlsList}"/>
+				</ui:include>
+				
+	        </div>
+	        <div class="title eligible">
+	            <h1><h:outputText value="Excluded Book PDFs (#{advBookAgreementDtlsLifecycle.bookVersionsList.size})" /></h1>
+	            <p>The following PDFs were automatically set to Excluded with "Agreement Terminated" as the Reason.</p>
+	        </div>
+	        <div>
+	        	<ui:include src="/bookagreementdtls/wizard_BookVersionTable.xhtml">
+					<ui:param name="bookVersionsList" value="#{advBookAgreementDtlsLifecycle.bookVersionsList}"/>
+				</ui:include>
+				
+	        </div>
+	        <div class="title eligible">
+	            <h1><h:outputText value="Excluded Book Submissions (#{advBookAgreementDtlsLifecycle.bookSubmissionsList.size})"/> </h1>
+	            <p>The following Submissions were automatically set to Excluded with "Agreement Terminated" as the Reason.</p>
+	        </div>
+	        <div>
+	        	<ui:include src="/bookagreementdtls/wizard_BookSubmissionTable.xhtml">
+					<ui:param name="bookSubmissionsList" value="#{advBookAgreementDtlsLifecycle.bookSubmissionsList}"/>
+				</ui:include>
+				
+	        </div>
+
+	       <div class="title eligible">
+	            <h1><h:outputText value="Excluded Book Covers (#{advBookAgreementDtlsLifecycle.bookCoversList.size})"/></h1>
+	            <p>The following Covers were automatically set to Excluded with "Agreement Terminated" as the Reason. </p>
+	        </div>
+	        <div>
+	        	<ui:include src="/bookagreementdtls/wizard_BookCoverTable.xhtml">
+					<ui:param name="bookCoversList" value="#{advBookAgreementDtlsLifecycle.bookCoversList}"/>
+				</ui:include>
+				
+	        </div>
+	        
+
+	    </div>
+	    
+
+		
+		<div class="push"></div>		
+		
+		<a:commandLink 
+		    rendered="#{empty pageURL}"
+		    styleClass="button right" 
+		    value="Return"
+   			eventsQueue="advBkAgreeDtlsQueue"
+            status="globalWaitStatus"
+			onclick="#{rich:component('advBkAgreeDtlsPanel')}.hide();" 
+			action="#{advBookAgreementDtlsLifecycle.reset}" 
+			oncomplete="javascript:location.reload(true);"/>
+		
+		<a:commandLink 
+		    rendered="#{not empty pageURL}"
+		    styleClass="button right" 
+		    value="Return"   	
+		    eventsQueue="advBkAgreeDtlsQueue"
+		    status="globalWaitStatus"
+			action="#{advBookAgreementDtlsLifecycle.reset}" 
+			oncomplete="#{rich:component('advBkAgreeDtlsPanel')}.hide();javascript:location.href=formatURL(location.href,'#{selectedTab}');"/>
+		
+	</div>
+	
+</ui:composition>

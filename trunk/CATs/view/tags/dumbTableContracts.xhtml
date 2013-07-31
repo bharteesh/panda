@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:z="http://www.qualcomm.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a="http://richfaces.org/a4j"
+	  xmlns:s="http://jboss.com/products/seam/taglib">
+<ui:composition>
+
+<rich:dataTable value="#{value}"
+							var="_catContracts">
+							<rich:column>
+								<f:facet name="header">ID</f:facet>
+								<h:outputText value="#{_catContracts.id}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Lifecycle</f:facet>
+								<h:outputText value="#{_catContracts.catLifecycle.label}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Outcome</f:facet>
+								<h:outputText value="#{_catContracts.catOutcome.label}" />
+							</rich:column>
+							<!-- <rich:column>
+								<f:facet name="header">Publisher ID</f:facet>
+								<h:outputText value="#{_catContracts.catPublishers.id}" />
+							</rich:column>-->
+							<rich:column>
+								<f:facet name="header">Publisher Name</f:facet>
+								<h:outputText value="#{_catContracts.publisherValue}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Agreement Version</f:facet>
+								<h:outputText value="#{_catContracts.catAgreementVersion}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Agreement Date Signed</f:facet>
+								<h:outputText value="#{_catContracts.catAgreementDate}" />
+							</rich:column>
+	</rich:dataTable>
+</ui:composition>
+</html>

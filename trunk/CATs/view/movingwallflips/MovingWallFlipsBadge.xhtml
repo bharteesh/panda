@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<s:div xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:s="http://jboss.com/products/seam/taglib" xmlns:a="http://richfaces.org/a4j" xmlns:cats="http://www.ithaka.org/cats" xmlns:rich="http://richfaces.org/rich" id="badge">
+
+<h1>#{catMovingWallFlipsHome.instance.id}</h1>
+
+  <s:decorate id="recordType" template="../layout/edit.xhtml">
+    <ui:define name="label">Record Type:</ui:define>
+    <h:outputText value="Moving Wall Flip"/>
+  </s:decorate>
+
+
+  <s:decorate id="catCmptCatName" template="../layout/edit.xhtml">
+    <ui:define name="label">Component Name:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catCmpts.catName}"/>
+  </s:decorate>
+
+  <s:decorate id="catCmptSetsValue" template="../layout/edit.xhtml">
+    <ui:define name="label">Set Name:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catCmpts.setsValue}"/>
+  </s:decorate>
+
+  <s:decorate id="catLifecycle" template="../layout/edit.xhtml">
+    <ui:define name="label">Lifecycle:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catLifecycle.label}"/>
+    <a:form>
+    <a:commandLink onclick="if ( ! checkForSave() ) { return false ; }" eventsQueue="persistingQueue"  id="catLifecycleEditButton" 
+    ignoreDupResponses="true" action="#{catMovingWallFlipsHome.updateUsingWizard('ADVANCE')}" value="Advance Lifecycle" reRender="catMovingWallFlipsBulkPanel" 
+    oncomplete="Richfaces.showModalPanel('catMovingWallFlipsBulkPanel');" 
+    styleClass="button wizard #{!s:hasPermission(catMovingWallFlipsHome.instance, 'modify catLifecycle') ? 'disabled' : ''}" 
+    disabled="#{!s:hasPermission(catMovingWallFlipsHome.instance, 'modify catLifecycle')}" status="globalWaitStatus" ajaxSingle="true" />
+    
+				</a:form>
+    
+  </s:decorate>
+
+
+
+  <s:decorate id="catFlipToPublicYear" template="../layout/edit.xhtml">
+    <ui:define name="label">Flip Date:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catFlipToPublicYear}"/>
+  </s:decorate>
+
+  <s:decorate id="catFlipPublctnDate" template="../layout/edit.xhtml">
+    <ui:define name="label">Release Through:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catFlipPublctnDate}"/>
+  </s:decorate>
+
+  <s:decorate id="catContentRange" template="../layout/edit.xhtml">
+    <ui:define name="label">Flip Content:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catContentRange}"/>
+  </s:decorate>
+
+
+  <s:decorate id="catPublctnUnitCnt" template="../layout/edit.xhtml">
+    <ui:define name="label">Pub. Unit Count:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catPublctnUnitCnt}"/>
+  </s:decorate>
+
+  <s:decorate id="catPublctnUnitCntNote" template="../layout/edit.xhtml">
+    <ui:define name="label">Pub. Unit Count Note:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catPublctnUnitCntNote}"/>
+  </s:decorate>
+
+  <s:decorate id="catOnHold" template="../layout/edit.xhtml">
+    <ui:define name="label">On Hold:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catOnHold ? 'Yes': 'No'}"/>
+    <a:form>
+		<a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }"  id="catOnHoldEditButton" ignoreDupResponses="true" action="#{catMovingWallFlipsHome.updateUsingWizard('ONHOLD')}" value="Edit" reRender="catMovingWallFlipsBulkPanel" oncomplete="Richfaces.showModalPanel('catMovingWallFlipsBulkPanel');" styleClass="button wizard #{!s:hasPermission(catMovingWallFlipsHome.instance, 'modify catOnHold') ? 'disabled' : ''}" disabled="#{!s:hasPermission(catMovingWallFlipsHome.instance, 'modify catOnHold')}" status="globalWaitStatus" eventsQueue="movingWallFlipsEditQueue" ajaxSingle="true" />
+				</a:form>
+  </s:decorate>
+
+  <s:decorate id="catOnHoldReason" template="../layout/edit.xhtml">
+    <ui:define name="label">On Hold Reason:</ui:define>
+    <h:outputText value="#{catMovingWallFlipsHome.instance.catOnHoldReason}"/>
+     <a:form>	
+		<a:commandLink 
+					ignoreDupResponses="true"
+		    		action="#{updateOnHoldReasonWizard.prepUpdateOperation(catMovingWallFlipsHome.instance)}"
+					value="Edit"
+					reRender="updateOnHoldReasonModalPanels" 
+					oncomplete="Richfaces.showModalPanel('updateOnHoldReasonPanel');"
+					styleClass="button wizard #{!s:hasPermission(catMovingWallFlipsHome.instance, 'modify catOnHold') or not catMovingWallFlipsHome.instance.catOnHold ? 'disabled':''}"
+					disabled="#{!s:hasPermission(catMovingWallFlipsHome.instance, 'modify catOnHold') or not catMovingWallFlipsHome.instance.catOnHold}"
+					status="globalWaitStatus"
+					ajaxSingle="true"
+					onclick="if ( ! checkForSave() ) { return false ; }"/>
+	</a:form>
+  </s:decorate>
+
+
+
+</s:div>

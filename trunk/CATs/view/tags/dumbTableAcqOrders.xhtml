@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:z="http://www.qualcomm.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a="http://richfaces.org/a4j"
+	  xmlns:s="http://jboss.com/products/seam/taglib">
+
+THIS TEXT WILL BE REMOVED
+<ui:composition>
+
+<rich:dataTable value="#{value}"
+							var="_catAcqOrders">
+							<rich:column>
+								<f:facet name="header">ID</f:facet>
+								<h:outputText value="#{_catAcqOrders.id}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Lifecycle</f:facet>
+								<h:outputText value="#{_catAcqOrders.catLifecycle.label}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Type</f:facet>
+								<h:outputText value="#{_catAcqOrders.catType}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Set Name</f:facet>
+								<h:outputText value="#{_catAcqOrders.catSets.catCurrentTitle.catName}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Component Name</f:facet>
+								<h:outputText value="#{_catAcqOrders.catCmpts.catName}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Supplier</f:facet>
+								<h:outputText value="#{_catAcqOrders.catSupplier}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Publication Unit Range</f:facet>
+								<h:outputText value="#{_catAcqOrders.catPublctnUnitRange}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Cover Date Range</f:facet>
+								<h:outputText value="#{_catAcqOrders.catCoverDateRange}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">On Hold</f:facet>
+								<h:outputText value="#{_catAcqOrders.catOnHold}" />
+							</rich:column>
+							
+						</rich:dataTable>
+
+
+</ui:composition>
+THIS TEXT WILL BE REMOVED AS WELL
+</html>

@@ -1,0 +1,289 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{createBookSeriesWizard.createTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Info</li>
+			<li class="disabled">2. Results</li>
+		</ul>
+	
+		<div class="cluster">
+			<a:outputPanel layout="none" id="noLayoutErrorMsgs">
+				<s:div styleClass="alert">
+					<s:div rendered="#{not empty createBookSeriesWizard.errorMsgs}" id="errorMsgsDiv">
+						<a:repeat value="#{createBookSeriesWizard.errorMsgs}" var="_errMsg">
+							<p>#{_errMsg}</p>
+						</a:repeat>
+					</s:div>
+				</s:div>
+			</a:outputPanel>
+			
+			<a:outputPanel layout="none" id="addedPublishersPanel">
+				<s:div id="addedPublishersDiv" styleClass="field" rendered="#{createBookSeriesWizard.addedPublishersList.size gt 0}">
+					<label>Added Publishers</label>
+					<span class="actuallist">
+					<rich:dataTable var="_pub" value="#{createBookSeriesWizard.addedPublishersList}">	    	
+			    	 	<rich:column>
+			    	 		<h:outputText value="#{_pub.catName}"></h:outputText>
+			    	 	</rich:column>
+				    	<rich:column>
+				    		<a:commandLink styleClass="button delete2" action="#{createBookSeriesWizard.removePublisher(_pub)}"
+								 reRender="addedPublishersPanel, noLayoutPubList"
+								 status="globalWaitStatus"		
+								 ajaxSingle="true"
+								 ignoreDupResponses="true"
+								 limitToList="true">						
+							</a:commandLink>		    	
+				    	</rich:column>	
+			    	</rich:dataTable>
+			    	</span>
+				</s:div>
+			</a:outputPanel>
+			
+			<a:outputPanel layout="none" id="choosePublishersPanel">
+				<s:div id="choosePublishersFragment"  styleClass="field">		
+					
+					<label>Choose Publishers</label>
+							
+					<h:inputText id="default_search_catPublishersList" 
+					 			value="#{catPublishersList.catPublishers.catName}"
+					 			onchange="return false;" size="60">		
+					 	<a:support event="onblur"  	ajaxSingle="true" eventsQueue="createBookSeriesQueue"
+					 	limitToList="true"/>	 			
+					</h:inputText>
+			
+					<a:commandLink 
+					  		 styleClass="button filter"
+							 value="Filter"
+							 action="#{createBookSeriesWizard.narrowPubsList(rich:findComponent('default_search_catPublishersList').value)}"
+							 reRender="noLayoutPubList"
+							 status="globalWaitStatus"
+							 ajaxSingle="true" 
+							 eventsQueue="createBookSeriesQueue"
+							 ignoreDupResponses="true"
+							 limitToList="true"/>
+				</s:div>
+			</a:outputPanel>
+			 
+			<div class="smart">
+				<a:outputPanel layout="none" id="noLayoutPubList">
+					<ui:include src="/bookseries/createPublisherTable_BookSeries.xhtml"/>
+				</a:outputPanel>
+			</div>
+			<br/>
+			<br/>
+			
+			
+			<div class="title change">
+				<h1>Info</h1>
+				<p>Fill out basic information about the Book Series</p>
+			</div>
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Initial Article</ui:define>
+				<h:inputText
+					id="catInitialArticle" maxlength="20" size="25"
+					value="#{createBookSeriesWizard.bookSeriesInitArticle}" />
+				<span class="comments">Examples: the, a, la,el </span>
+			</s:decorate>
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Title</ui:define>
+				 <h:inputTextarea cols="20" required="true" id="bookSeriesTitle"
+                     rows="2" value="#{createBookSeriesWizard.bookSeriesTitle}">
+                     <a:support event="onblur"
+                    	eventsQueue="createBookSeriesQueue"
+                    	ajaxSingle="true"
+                    	limitToList="true"/>
+                 </h:inputTextarea>
+                <span class="comments">
+                	<a:commandLink styleClass="button find" value="Check for Series with Same Name"
+						action="#{createBookSeriesWizard.checkForDuplicates}"
+						reRender="noLayoutNoDups, noLayoutHasDups, noLayoutNoJrnls, noLayoutHasJrnls" 
+						eventsQueue="createBookSeriesQueue"
+						status="globalWaitStatus"
+						ajaxSingle="true"
+						limitToList="true"/>
+					<br/><br/>						
+                	<a:commandLink styleClass="button find" value="Check for Journals with Same Name"
+						action="#{createBookSeriesWizard.checkForJournals}"
+						reRender="noLayoutNoDups, noLayoutHasDups, noLayoutNoJrnls, noLayoutHasJrnls" 
+						eventsQueue="createBookSeriesQueue"
+						status="globalWaitStatus"
+						ajaxSingle="true"
+						limitToList="true"/>
+						
+                	
+					
+					
+                </span>
+                
+			</s:decorate>
+			
+			<a:outputPanel layout="none" id="noLayoutNoDups">
+				<s:div rendered="#{createBookSeriesWizard.checkForDup and !createBookSeriesWizard.hasDups}" styleClass="alert eligible">
+					<p>No other book series share this title.</p>
+				</s:div>
+			</a:outputPanel>
+			
+			<a:outputPanel layout="none" id="noLayoutHasDups">
+				<s:div rendered="#{createBookSeriesWizard.checkForDup and createBookSeriesWizard.hasDups}" styleClass="alert">
+					<p><strong>#{createBookSeriesWizard.duplicateSeries.size}</strong> book series share this title. Click <strong>Continue</strong> if you want to make the duplicate.</p>
+				</s:div>
+				<s:div rendered="#{createBookSeriesWizard.checkForDup and createBookSeriesWizard.hasDups}" styleClass="smart scroller">
+				
+				
+		   			<rich:dataTable id="bookSeriesTableWiz"
+		                var="_catBookSeries"
+		              	value="#{createBookSeriesWizard.duplicateSeries}"
+		              	rowClasses="odd,even">
+		           
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Main Title"/>
+				        	</f:facet>
+							<h:outputText value="#{_catBookSeries.mainTitle}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Book Series Publishers"/>
+				        	</f:facet>
+							<h:outputText value="#{_catBookSeries.seriesPublishers}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="EISSN"/>
+				        	</f:facet>
+							<h:outputText value="#{_catBookSeries.catEIssn}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="ID"/>
+				        	</f:facet>
+							<h:outputText value="#{_catBookSeries.id}" />        		
+			        	</rich:column>
+			        	
+		        	</rich:dataTable>
+		        </s:div>
+			   
+			</a:outputPanel>
+			
+			<a:outputPanel layout="none" id="noLayoutNoJrnls">
+				<s:div rendered="#{createBookSeriesWizard.checkForJrnl and !createBookSeriesWizard.hasJrnlsMatchingSeriesTitle}" styleClass="alert eligible">
+					<p>No Journals found with name <b>#{createBookSeriesWizard.bookSeriesTitle}</b>.</p>
+				</s:div>
+			</a:outputPanel>
+			
+			<a:outputPanel layout="none" id="noLayoutHasJrnls">
+				<s:div rendered="#{createBookSeriesWizard.checkForJrnl and createBookSeriesWizard.hasJrnlsMatchingSeriesTitle}" styleClass="alert">
+					<p><strong>#{createBookSeriesWizard.jrnlsMatchingSeriesTitle.size}</strong> journals found with name <strong>#{createBookSeriesWizard.bookSeriesTitle}</strong>.</p>
+				</s:div>
+				<s:div rendered="#{createBookSeriesWizard.checkForJrnl and createBookSeriesWizard.hasJrnlsMatchingSeriesTitle}" styleClass="smart scroller">
+				
+				
+		   			<rich:dataTable id="bookSeriesCmptTableWiz"
+		                var="_catCmpts"
+		              	value="#{createBookSeriesWizard.jrnlsMatchingSeriesTitle}"
+		              	rowClasses="odd,even">
+		              	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Set Name"/>
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.setsValue}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Component Name"/>
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catName}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Backfile Summary"/>
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.bfOverallOnboardingStatus}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="CSP Onboarding"/>
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catCspOnboardingStatus.label}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="ISSN"/>
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catPrintIssn}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Extent (Dates)"/>
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catDateRange}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Participation"/>
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catParticipationDate}" >
+								<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+							</h:outputText>        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="On Hold"/>
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catOnHold ? 'Yes' : 'No'}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="ID"/>
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.id}" />        		
+			        	</rich:column>
+			        	
+		            </rich:dataTable>
+		        </s:div>
+			</a:outputPanel>
+			
+		</div>
+		
+		<div class="push"></div>
+		<a:commandLink styleClass="button" value="Quit"
+      		eventsQueue="createBookSeriesQueue"
+            status="globalWaitStatus"
+		    oncomplete="#{rich:component('createBookSeriesQuit')}.show(); return false;"
+		    ajaxSingle="true"
+		    limitToList="true"/>
+			 
+ 
+		<a:commandLink
+			styleClass="button right" value="Save"
+			eventsQueue="createBookSeriesQueue"
+            status="globalWaitStatus"
+			action="#{createBookSeriesWizard.performCreateOperation}" 
+			reRender="createBookSeriesWizardForm" 
+			limitToList="true"/>
+		
+	</div>
+</ui:composition>

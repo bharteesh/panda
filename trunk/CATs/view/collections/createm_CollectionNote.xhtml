@@ -1,0 +1,28 @@
+<ui:composition id="collectionNotePanel"
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<rich:modalPanel id="collectionNoteWizardModal" 
+		width="910" height="550" styleClass="modal">
+		<s:div id="collectionNoteModalDiv">
+			<a:form ajaxSubmit="true" ajaxSingle="true" id="collectionNoteForm">
+				<a:include viewId="#{createCollectionNoteWizard.currentCreateView}"></a:include>
+			</a:form>
+		</s:div>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="collectionNoteQuit" width="910"
+		height="550" styleClass="modal">
+		<s:div id="collectionNoteModalQuitDiv">
+			<a:form ajaxSubmit="true" ajaxSingle="true" id="collectionNoteWizardQuit">
+				<a:include viewId="#{createCollectionNoteWizard.quitView}"></a:include>
+			</a:form>
+		</s:div>
+	</rich:modalPanel>
+
+</ui:composition>

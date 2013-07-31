@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+
+	<ui:param name="entityType" value="bookAgreementDtls" />
+	<ui:param name="moremenu" value="moremenu" />
+
+	<ui:define name="badge">
+		<ui:include src="BookAgreementDtlsBadge.xhtml" />
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="BookAgreementDtlsEditForm">
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/loading.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+			<rich:tabPanel 
+				id="maintab" 
+			   switchType="ajax"
+				styleClass="tab"
+				contentClass="tab_content"
+				selectedTab="#{catBookAgreementDtlsHome.selectedTab}">
+
+				<rich:tab label="Book Agreement Details Information" id="tab1" name="tab1" eventsQueue="BookAgreementDtlsEditQueue" status="globalWaitStatus"
+					action="#{catBookAgreementDtlsHome.updateUserTabPreferences('tab1')}">
+					<ui:include src="BookAgreementDtlsInformationTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Audit" id="tab2" name="tab2" eventsQueue="BookAgreementDtlsEditQueue" status="globalWaitStatus" 
+					action="#{catBookAgreementDtlsHome.updateUserTabPreferences('tab2')}" >
+					<ui:include src="BookAgreementDtlsAuditTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Events" id="eventsTab" name="eventsTab" eventsQueue="BookAgreementDtlsEditQueue" status="globalWaitStatus" 
+					action="#{catBookAgreementDtlsHome.updateUserTabPreferences('eventsTab')}">
+					<ui:include src="BookAgreementDtlsEventsTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+					<div id="functions">
+			<a:commandLink action="#{catBookAgreementDtlsHome.update}"  
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" styleClass="button saveOrCancel disabled" 
+		    		value="Save"
+		    		reRender="bookAgreementDtlsEditForm" limitToList="true"
+		    		eventsQueue="bookAgreementDtlsEditQueue" status="globalWaitStatus" />
+		    	<a:commandLink action="#{catBookAgreementDtlsHome.cancel}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" ajaxSingle="true" styleClass="button saveOrCancel disabled" 
+		    		value="Cancel" limitToList="true"
+		    		eventsQueue="bookAgreementDtlsEditQueue" status="globalWaitStatus"/>
+			</div>
+		</h:form>
+		<ui:include src="/bookagreementdtls/advLifecyclem_BkAgreementDtls.xhtml">
+	 		<ui:param name="pageURL" value="/bookagreementdtls/advLifecyclem_BkAgreementDtls.xhtml"/>
+	 	</ui:include>
+	</ui:define>
+</ui:composition>

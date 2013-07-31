@@ -1,0 +1,165 @@
+<s:div 
+   xmlns:s="http://jboss.com/products/seam/taglib" 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:a="http://richfaces.org/a4j" 
+   xmlns:f="http://java.sun.com/jsf/core" 
+   xmlns:h="http://java.sun.com/jsf/html" 
+   xmlns:rich="http://richfaces.org/rich" 
+   xmlns:ui="http://java.sun.com/jsf/facelets" 
+   id="acquisitionsDiv1">
+    
+    <div class="col col1">
+        <s:decorate id="catThStatusField22" template="../layout/edit.xhtml">
+               <ui:define name="label">Title History Status</ui:define>
+				<h:outputText value="#{catSetsHome.instance.catThStatus.label}"/>
+				<a:commandLink 
+				ignoreDupResponses="true"
+	    		action="#{catSetsHome.updateUsingWizard('THSTATUS')}"
+				value="Edit"
+				reRender="setsBulkOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('setsBulkUpdatePanel');"
+				styleClass="button wizard #{(!s:hasPermission(catSetsHome.instance, 'modify catThStatus') or (catSetsHome.instance.catThStatus.label eq 'Completed') or (empty catSetsHome.instance.catThNegotiator))? 'disabled' : ''}"
+				disabled="#{(!s:hasPermission(catSetsHome.instance, 'modify catThStatus')) or (catSetsHome.instance.catThStatus.label eq 'Completed') or (empty catSetsHome.instance.catThNegotiator)}"
+				status="globalWaitStatus"
+				eventsQueue="setsEditQueue"
+				ajaxSingle="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"/>
+			</s:decorate>
+         
+         <s:decorate id="catThPageCntField23" template="../layout/edit.xhtml">
+                <ui:define name="label">Page Count Est.</ui:define>
+                <h:inputText onchange="enableSaveCancel();"  readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catThPageCnt')}" 
+                	id="catThPageCnt4" value="#{catSetsHome.instance.catThPageCnt}">
+                </h:inputText>
+         </s:decorate>
+         
+          <s:decorate id="catThPageCntESTAccuracy3" template="../layout/edit.xhtml">
+                <ui:define name="label">Page Count Estimate Accuracy Rating</ui:define>
+                <h:selectOneMenu onchange="enableSaveCancel();"  disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catThPageCntEstAccuracy')}" 
+                	name="catThPageCntEstAccuracy" value="#{catSetsHome.instance.catThPageCntEstAccuracy}">
+			   		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="None..." 
+			   			value="#{listsForEnums.catSets_ThPageCntEstAccuracy}" var="i"/>
+				</h:selectOneMenu>
+            </s:decorate>  
+         
+         <s:decorate id="catPublctnFrequencyField25" template="../layout/edit.xhtml">
+             <ui:define name="label">Frequency</ui:define>
+             <h:inputTextarea onchange="enableSaveCancel();"  readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catPublctnFrequency')}" 
+             	id="catPublctnFrequency6" maxlength="1000" styleClass="largetextarea" value="#{catSetsHome.instance.catPublctnFrequency}">
+             </h:inputTextarea>
+         </s:decorate>
+         
+         <s:decorate id="catOclcLibrariesHldCntField27" template="../layout/edit.xhtml">
+             <ui:define name="label">OCLC Libraries Holding This Record </ui:define>
+             <h:inputText onchange="enableSaveCancel();"  readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catOclcLibrariesHldCnt')}" 
+             	id="catOclcLibrariesHldCnt8" value="#{catSetsHome.instance.catOclcLibrariesHldCnt}">
+             </h:inputText>
+         </s:decorate>
+          
+         <s:decorate id="catIllustrationContentField29" template="../layout/edit.xhtml">
+             <ui:define name="label">Illustrations</ui:define>
+             <h:selectOneMenu onchange="enableSaveCancel();"  disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catIllustrationContent')}" 
+             	name="catIllustrationContent" value="#{catSetsHome.instance.catIllustrationContent}">
+   				<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="None..." 
+   					value="#{listsForEnums.catSets_IllustrationContent}" var="i"/>
+       		</h:selectOneMenu>
+         </s:decorate>
+         
+         <s:decorate id="catAcqKickOffNoteField210" template="../layout/edit.xhtml">
+             <ui:define name="label">Acquisition Kick-Off</ui:define>
+             <h:inputTextarea onchange="enableSaveCancel();"  cols="20" readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catAcqKickOffNote')}" 
+             	id="catAcqKickOffNote11" rows="2" value="#{catSetsHome.instance.catAcqKickOffNote}"/>
+         </s:decorate>
+         
+         <s:decorate id="catAcqContact211" template="../layout/edit.xhtml">
+         	<ui:define name="label">Acquisition Contact</ui:define>
+         	<h:inputTextarea onchange="enableSaveCancel();" cols="20" readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catAcqContact')}" 
+             	id="catAcqContact11" rows="2" value="#{catSetsHome.instance.catAcqContact}"/>
+         </s:decorate>
+         
+         <s:decorate id="catThPublctnUnitRangeField212" template="../layout/edit.xhtml">
+             <ui:define name="label">Extent (Pub. Units)</ui:define>
+             <h:inputTextarea onchange="enableSaveCancel();"  cols="20" readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catThPublctnUnitRange')}" 
+             	id="catThPublctnUnitRange13" rows="2" value="#{catSetsHome.instance.catThPublctnUnitRange}"/>
+	    </s:decorate>
+         
+		</div>
+	    <div class="col col2"> 
+	    	  
+	    	 <s:decorate id="catThDateRangeField214" template="../layout/edit.xhtml">
+                <ui:define name="label">Extent (Dates)</ui:define>
+                <h:inputTextarea onchange="enableSaveCancel();"  cols="20" readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catThDateRange')}" 
+                	id="catThDateRange15" rows="2" value="#{catSetsHome.instance.catThDateRange}"/>
+	         </s:decorate>
+	         
+	         <s:decorate id="catFrstPubUntPublshInCspField217" template="../layout/edit.xhtml">
+                <ui:define name="label">1st PU Post Launch</ui:define>
+                <h:inputTextarea onchange="enableSaveCancel();"  cols="20" 
+                	readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catFrstPubUntPublshInCsp')}"
+                	id="catFrstPubUntPublshInCsp15" rows="2" value="#{catSetsHome.instance.catFrstPubUntPublshInCsp}"/>
+             </s:decorate>
+	         
+	         <s:decorate id="catIniContentToScanField217" template="../layout/edit.xhtml">
+                <ui:define name="label">Scan for Launch</ui:define>
+                <h:inputTextarea onchange="enableSaveCancel();"  cols="20" 
+                	readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catIniContentToScan')}"
+                	id="catIniContentToScan15" rows="2" value="#{catSetsHome.instance.catIniContentToScan}"/>
+             </s:decorate>
+             
+             <s:decorate id="catIniContentToHdrFrmPdf217" template="../layout/edit.xhtml">
+                <ui:define name="label">Header MD for Launch</ui:define>
+                <h:inputTextarea onchange="enableSaveCancel();"  cols="20" 
+                	readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catIniContentToHdrFrmPdf')}"
+                	id="catIniContentToHdrFrmPdf15" rows="2" value="#{catSetsHome.instance.catIniContentToHdrFrmPdf}"/>
+             </s:decorate>
+             
+             <s:decorate id="catFirstEContentRcvdDateField116" template="../layout/edit.xhtml">
+                <ui:define name="label">1st E Content Rcvd</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       	enableManualInput="true"  datePattern="yyyy/MM/dd"
+			       	disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catFirstEContentRcvdDate')}"
+                	id="catFirstEContentRcvdDate117" inputClass="datestyle" value="#{catSetsHome.instance.catFirstEContentRcvdDate}"/>
+            </s:decorate>
+            
+            <s:decorate id="catAllEContentRcvdDate116" template="../layout/edit.xhtml">
+                <ui:define name="label">All E Content Rcvd</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+                	disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catAllEContentRcvdDate')}"
+			       	enableManualInput="true"  datePattern="yyyy/MM/dd"
+                	id="catAllEContentRcvdDate117" inputClass="datestyle" value="#{catSetsHome.instance.catAllEContentRcvdDate}"/>
+            </s:decorate>
+             
+             <s:decorate id="catOnGoingDigiField221" template="../layout/edit.xhtml">
+                <ui:define name="label">Ongoing Digitization</ui:define>
+			    <h:outputText value="#{catSetsHome.instance.catOnGoingDigi ? 'Yes':'No'}"/>
+			    <a:commandLink 
+				ignoreDupResponses="true"
+	    		action="#{catSetsHome.updateUsingWizard('ONGOINGDIGI')}"
+				value="Edit"
+				reRender="setsBulkOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('setsBulkUpdatePanel');"
+				styleClass="button wizard #{!s:hasPermission(catSetsHome.instance, 'modify catOnGoingDigi') ? 'disabled':''}"
+				disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catOnGoingDigi')}"
+				status="globalWaitStatus"
+				eventsQueue="setsEditQueue"
+				ajaxSingle="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"/>
+				
+             </s:decorate>
+             
+             <s:decorate id="catReasonNoOngoingDigiField222" template="../layout/edit.xhtml">
+                <ui:define name="label">Reason No Ongoing Digitization</ui:define>
+                <h:selectOneMenu onchange="enableSaveCancel();"  disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catReasonNoOngoingDigi')}" 
+                	name="catReasonNoOngoingDigi" value="#{catSetsHome.instance.catReasonNoOngoingDigi}">
+			   		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="None..." 
+			   			value="#{listsForEnums.catSets_ReasonNoOngoingDigi(catSetsHome.instance)}" var="i"/>
+			    </h:selectOneMenu>
+			    
+             </s:decorate>
+             
+	    </div> 
+	    
+   		<div class="push"/>
+	    
+
+ </s:div>

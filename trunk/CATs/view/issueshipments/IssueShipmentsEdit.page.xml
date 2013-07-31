@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/CatIssueShipmentsList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{catIssueShipmentsHome.wire}"/>
+
+   <param name="catIssueShipmentsFrom"/>
+   <param name="catIssueShipmentsId" value="#{catIssueShipmentsHome.catIssueShipmentsId}"/>
+   <param name="id" value="#{catIssueShipmentsHome.catIssueShipmentsId}"/>
+   <param name="catAcqOrdersFrom"/>
+   <param name="catAcqOrdersId" value="#{catAcqOrdersHome.catAcqOrdersId}"/>
+   <param name="selectedTab" value="#{catIssueShipmentsHome.selectedTab}"/>
+
+   <navigation from-action="#{catIssueShipmentsHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/issueshipments/IssueShipmentsEdit.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{catIssueShipmentsHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/issueshipments/IssueShipmentsEdit.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{catIssueShipmentsHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/lists/CatIssueShipmentsList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation>
+            <rule if-outcome="cancel" >
+                <end-conversation before-redirect="true"/>
+         <redirect view-id="/issueshipments/IssueShipmentsEdit.xhtml"/>
+    </rule>
+     </navigation>
+
+
+</page>

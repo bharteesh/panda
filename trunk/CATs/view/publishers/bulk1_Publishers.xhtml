@@ -1,0 +1,71 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+
+	<h2><h:outputText value="#{catPublishersBulkOperations.bulkTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+				<li class="selected">1. Permissions</li>
+				<li class="disabled">2. Change</li>
+				<li class="disabled">3. Additional</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		<div class="cluster smart">
+
+		<p><h:outputText
+			value="You have selected  #{catPublishersBulkOperations.bulkInvalid.size() + catPublishersBulkOperations.bulkSelection.size()}   records to change." /></p>
+
+		<s:fragment rendered="#{not empty catPublishersBulkOperations.bulkInvalid}">
+			<p><h:outputText
+				value="You "/><em><h:outputText
+				value="do not"/></em><h:outputText
+				value=" have permission to change "/>
+			<h:outputText
+				value="#{catPublishersBulkOperations.bulkInvalid.size()}" /><h:outputText
+				value=" of "/> 
+				<h:outputText
+				value="#{catPublishersBulkOperations.bulkInvalid.size() + catPublishersBulkOperations.bulkSelection.size()}" /><h:outputText
+				value=" records."/></p>
+
+			<!-- a list on value="#{catPublishersBulkOperations.bulkInvalid}"  -->
+		</s:fragment> <s:fragment rendered="#{not empty catPublishersBulkOperations.bulkSelection}">
+			<p><h:outputText
+				value="You have permission to change "/> 
+			<h:outputText
+				value="#{catPublishersBulkOperations.bulkSelection.size()}" /><h:outputText
+				value=" of "/>
+				<h:outputText
+				value="#{catPublishersBulkOperations.bulkInvalid.size() + catPublishersBulkOperations.bulkSelection.size()}" /><h:outputText
+				value=" records. "/></p>
+
+			<!-- a list on value="#{catPublishersBulkOperations.bulkSelection}"  -->
+		</s:fragment>
+
+</div>
+		<div class="push"></div>
+		
+		<a:commandLink styleClass="button" value="Quit" 
+			action="#{catPublishersBulkOperations.bulkReset}" 
+			oncomplete="#{rich:component('catPublishersListBulkUpdatePanel')}.hide();" 
+			reRender="#{catPublishersBulkOperations.bulkOpsSelectFieldId}"		
+		/>
+		
+		<a:commandLink styleClass="button right" value="Continue" 
+			disabled="#{empty catPublishersBulkOperations.bulkSelection}"
+			action="#{catPublishersBulkOperations.bulkNext}" 
+			reRender="catPublishersListWizard"/>
+		
+		</div>
+	
+</ui:composition>

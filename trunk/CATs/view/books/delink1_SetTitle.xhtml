@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2>
+		<h:outputText value="#{delinkSetWizard.wizardTitle}" />
+	</h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Remove</li>
+		</ul>
+		<div class="cluster smart">
+			<a:outputPanel layout="none" id="noLayoutErrorMsgs">
+				<s:div styleClass="alert">
+					<s:div rendered="#{not empty changeSetWizard.errorMsgs}"
+						id="errorMsgsDiv">
+						<a:repeat value="#{changeSetWizard.errorMsgs}" var="_errMsg">
+							<p>#{_errMsg}</p>
+						</a:repeat>
+					</s:div>
+				</s:div>
+			</a:outputPanel>
+		<a:outputPanel layout="none" id="warningMessagePanel">
+				<s:div id="warningMsg_div"
+					rendered="true">
+					<div class="alert">
+						<p>You are about to remove this book from the set 
+						<em><h:outputText value="#{delinkSetWizard.bookSet.getMainTitle()}"/></em>. If you do not 
+						want to do this, please select Quit below.</p>
+					</div>
+				</s:div>
+			</a:outputPanel>
+		</div>
+		<div>
+		
+		</div>
+		<div class="push">
+	
+
+		</div>
+
+		<a:commandLink styleClass="button" value="Quit"
+			reRender="delinkSetTitleForm"
+			oncomplete="#{rich:component('delinkSetQuit')}.show(); return false;"
+			eventsQueue="delinkSetQueue" status="globalWaitStatus">
+		</a:commandLink>
+
+			
+					<a:commandLink 
+		    rendered="#{empty pageURL}"
+		    styleClass="button right" 
+		    value="Save and Return"
+   			eventsQueue="delinkSetQueue"
+            status="globalWaitStatus"
+			onclick="#{rich:component('delinkSetTitleWizardModal')}.hide();" 
+			action="#{delinkSetWizard.performDelinkOperation()}" 
+			oncomplete="javascript:location.reload(true);"
+			limitToList="true"/>
+		
+		<a:commandLink 
+		    rendered="#{not empty pageURL}" 
+		    styleClass="button right" 
+		    value="Save and Return"   	
+		    eventsQueue="delinkSetQueue"
+		    status="globalWaitStatus"
+			action="#{delinkSetWizard.performDelinkOperation()}" 
+			oncomplete="#{rich:component('delinkSetTitleWizardModal')}.hide();javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+			limitToList="true"/>
+
+	</div>
+</ui:composition>
+

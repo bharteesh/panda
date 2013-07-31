@@ -1,0 +1,194 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps many">
+			<li class="disabled">...</li>
+			<li class="">5. Rights</li>
+			<li class="">6. Publisher Roles</li>
+			<li class="">7. Disciplines</li>
+			<li class="selected">8. Results</li>
+		</ul>
+		<div class="cluster smart">
+			<p>You have successfully created the following records:</p>
+			
+			<s:fragment rendered="#{createJournalWizard.newOrExistingSet eq 'existing'}">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Components" />
+					</f:facet>
+				</rich:panel>
+				<rich:dataTable value="#{createJournalWizard.newCmptList}" var="_catCmpts">
+					<rich:column>
+						<f:facet name="header">ID</f:facet>
+						<s:link value="#{_catCmpts.id}"  view="/components/ComponentsEdit.xhtml" propagation="none">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Name</f:facet>
+						<s:link value="#{_catCmpts.catName}"  view="/components/ComponentsEdit.xhtml" propagation="none">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Lifecycle</f:facet>
+						<s:link value="#{_catCmpts.catLifecycle.label}"  view="/components/ComponentsEdit.xhtml" propagation="none">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Sets</f:facet>
+						<ui:repeat value="#{_catCmpts.catComponentSets.toArray()}" var="_catSets"
+							varStatus="_status" rendered="#{not empty _catCmpts.catComponentSets}">
+							<h:outputText value="#{_catSets.catCurrentTitle.catName}; " />
+						</ui:repeat>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Extent (Pub Units)</f:facet>
+						<s:link value="#{_catCmpts.catPublctnUnitRange}"  view="/components/ComponentsEdit.xhtml" propagation="none">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Extent (Dates)</f:facet>
+						<s:link value="#{_catCmpts.catDateRange}"  view="/components/ComponentsEdit.xhtml" propagation="none">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Print ISSN</f:facet>
+						<s:link value="#{_catCmpts.catPrintIssn}"  view="/components/ComponentsEdit.xhtml" propagation="none">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">On Hold</f:facet>
+						<s:link value="#{_catCmpts.catOnHold ? 'Yes' : 'No'}"  view="/components/ComponentsEdit.xhtml" propagation="none">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+						</s:link>
+					</rich:column>
+				</rich:dataTable>
+				
+			</s:fragment>
+			
+			
+			<s:fragment rendered="#{createJournalWizard.newOrExistingSet eq 'new'}">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Components" />
+					</f:facet>
+				</rich:panel>
+				<cats:dumbTableComponents value="#{createJournalWizard.newCmptList}" />
+				
+				<br/>
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Sets" />
+					</f:facet>
+				</rich:panel>
+				<rich:dataTable value="#{createJournalWizard.newSetsList}"
+					var="_catSets">
+					<rich:column>
+						<f:facet name="header">ID</f:facet>
+						<s:link view="/sets/SetsEdit.xhtml" propagation="none" value="#{_catSets.id}">
+	      					<f:param name="catSetsId" value="#{_catSets.id}"/>
+                		</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Name</f:facet>
+						<s:link view="/sets/SetsEdit.xhtml" propagation="none" value="#{_catSets.catCurrentTitle.catName}">
+	      					<f:param name="catSetsId" value="#{_catSets.id}"/>
+                		</s:link>
+						
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Lifecycle</f:facet>
+						<s:link view="/sets/SetsEdit.xhtml" propagation="none" value="#{_catSets.catLifecycle.label}">
+	      					<f:param name="catSetsId" value="#{_catSets.id}"/>
+                		</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Extent (Dates)</f:facet>
+						<s:link view="/sets/SetsEdit.xhtml" propagation="none" value="#{_catSets.catThDateRange}">
+	      					<f:param name="catSetsId" value="#{_catSets.id}"/>
+                		</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">On Hold</f:facet>
+						<s:link view="/sets/SetsEdit.xhtml" propagation="none" value="#{_catSets.catOnHold ? 'Yes' : 'No'}">
+	      					<f:param name="catSetsId" value="#{_catSets.id}"/>
+                		</s:link>
+					</rich:column>
+				</rich:dataTable>
+				
+			</s:fragment>
+			
+			<s:fragment rendered="#{createTitleRelationshipsWizard.createdTitleRltnshps.size > 0}">
+				<br/>
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Title Relationships" />
+					</f:facet>
+				</rich:panel>
+				<cats:dumbTableTitleRelationships value="#{createTitleRelationshipsWizard.createdTitleRltnshps}" />
+			</s:fragment>
+			
+			<s:fragment rendered="#{createJournalWizard.catCmptsHome.contractDetailsList.size > 0}">
+				<br/>
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Agreement Details" />
+					</f:facet>
+				</rich:panel>
+				<cats:dumbTableContractDetails value="#{createJournalWizard.catCmptsHome.contractDetailsList}" />
+			</s:fragment>
+			
+			<s:fragment rendered="#{createJournalWizard.catCmptsHome.catPublishersToCmptses.size > 0}">
+				<br/>
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Publisher Roles" />
+					</f:facet>
+				</rich:panel>
+				<cats:dumbTablePublishersToCmpts value="#{createJournalWizard.catCmptsHome.catPublishersToCmptses}" />
+			</s:fragment>
+			
+			<s:fragment rendered="#{createJournalWizard.currentDisciplines.size > 0}">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Disciplines" />
+					</f:facet>
+				</rich:panel>
+				<p><b>#{createJournalWizard.catCmptsHome.instance.catName}</b> was added to following disciplines:</p>
+				 <rich:dataList var="_disc" value="#{createJournalWizard.currentDisciplines}" type="disc" >
+				 	<h:outputText value="#{createJournalWizard.discIncValue} : #{_disc.catName}" />
+				 </rich:dataList>
+			</s:fragment>
+						
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button right" value="Return"
+			action="#{createJournalWizard.reset}" 
+			oncomplete="#{rich:component('createJournalWizardModal')}.hide(); #{rich:component('createJournalQuit')}.hide(); javascript:location.reload(true);" 
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+			
+		
+		
+			</div>
+</ui:composition>

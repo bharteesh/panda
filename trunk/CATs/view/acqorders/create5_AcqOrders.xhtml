@@ -1,0 +1,90 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{createAcqOrdersWizard.createTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+				<li class="">1. Change</li>
+				<li class="">2. Main</li>
+				<li class="">3. Additional</li>
+				<li class="">4. Lifecycle</li>
+				<li class="selected">5. Results</li>
+		</ul>
+		
+		<div class="cluster smart">
+
+		  <p><h:outputText value="You created the following records:"/></p>
+
+    		<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Orders" />
+				</f:facet>
+			</rich:panel>
+			<cats:dumbTableAcqOrders value="#{createAcqOrdersWizard.createdAcqOrdersList}" />
+
+		<s:div rendered="#{not empty createAcqOrdersWizard.catIssueShipmentsList}">
+    		<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Shipments" />
+				</f:facet>
+			</rich:panel>
+			<cats:dumbTableIssueShipments value="#{createAcqOrdersWizard.catIssueShipmentsList}" />
+		</s:div>
+		<s:div rendered="#{createAcqOrdersWizard.isCatLifecycleOfValueOrdered(createAcqOrdersWizard.createdAcqOrdersList.get(0).catLifecycle) and createAcqOrdersWizard.isCatTypeOfValueSubscription(createAcqOrdersWizard.createdAcqOrdersList.get(0).catType)}">
+    		<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="No shipments created because this is a subscription order. Create shipments with the add and copy shipment wizards." />
+				</f:facet>
+			</rich:panel>
+		</s:div>
+
+
+
+
+
+
+
+			</div>
+
+			<div class="push"></div>		
+
+
+
+		<a:commandLink id="finishAsNormalwizard"
+		    styleClass="button right" 
+		    value="Return"
+   			eventsQueue="#{divParam}eventsQueue"
+           	status="globalWaitStatus"			
+			action="#{createAcqOrdersWizard.createReset}" 
+			oncomplete="#{rich:component('createAcqOrdersPanel')}.hide(); javascript:location.reload(true);" 
+			reRender="createAcqOrderswizard,#{reRenderMe}"
+			rendered="#{empty pageURL}"/>
+		
+		<s:link id="finishAsNormalwizard1"
+		    styleClass="button right" 
+		    value="Return"
+			action="#{createAcqOrdersWizard.createReset}" 
+			oncomplete="#{rich:component('createAcqOrdersPanel')}.hide(); javascript:location.href=formatURL(location.href);" 
+			rendered="#{not empty pageURL}" 
+			includePageParams="true" 
+			view="#{pageURL}" 
+			propagation="none"/>
+
+		
+		</div>
+	
+</ui:composition>
+

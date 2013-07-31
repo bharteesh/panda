@@ -1,0 +1,455 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+
+	<ui:param name="entityType" value="books" />
+	<ui:param name="moremenu" value="moremenu"/>
+	
+	<ui:define name="body">
+
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatBooksList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catBooksList}"></ui:param>
+			<ui:param name="divId" value="1" />
+		</ui:include>
+
+		<a:form>
+
+			<s:div id="header" styleclass="header">
+
+				<div class="left">
+					<span class="museo"> <h:outputText
+							value="Books
+(#{empty catBooksList.resultList ? 0 : (catBooksList.paginated ? catBooksList.resultCount : catBooksList.resultList.size)})"></h:outputText>
+					</span>
+
+
+					<h:selectOneMenu name="flavour"
+						value="#{catBooksList.flavour}">
+						<s:selectItems value="#{catBooksList.flavours}" var="i"
+							itemValue="#{i}" label="#{catBooksList.flavourLabel(i)}" />
+						<a:support event="onchange"
+							action="#{catBooksList.updateUserSkinPreferences}"
+							oncomplete="javascript: location.href='CatBooksList.seam'" ignoreDupResponses="true"
+							eventsQueue="booksListQueue" ajaxSingle="true" />
+					</h:selectOneMenu>
+					<s:link id="clearSearch" status="globalWaitStatus"
+						ignoreDupResponses="true" styleClass="button wizard"
+						action="#{catBooksList.reset}" value="X" ajaxSingle="true"
+						propagation="none"
+						oncomplete="javascript: location.href='CatBooksList.seam'">
+						<f:param name="flavour" value="#{catBooksList.flavour}" />
+					</s:link>
+				</div>
+				<div class="right">
+					<ui:include src="adhocReportSelect.xhtml">
+						<ui:param name="entityQuery" value="#{catBooksList}"/>
+					</ui:include>
+				</div>
+				
+
+			</s:div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/Animated-Hourglass.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+
+				<h:dataTable id="catBooksList" var="_catBooks"
+					value="#{catBooksList.resultList}" rowClasses="odd,even"
+					styleClass="mainListClass">				
+
+					<cats:column linkToId="#{_catBooks.id}" styleClass="id"
+						rendered="#{catBooksList.listFlavour['id']}"
+						entityList="#{catBooksList}" propertyLabel="CATS Book ID"
+						propertyPath="catBooks.id"
+						propertyValue="#{catBooksList.catBooks.id}"
+						propertyName="id" sortable="true" value="#{_catBooks.id}" />
+						
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['catRecordRefId']}"
+						entityList="#{catBooksList}" propertyLabel="RecRef ID"
+						propertyPath="catBooks.catRecordRefId"
+						propertyValue="#{catBooksList.catBooks.catRecordRefId}"
+						propertyName="catRecordRefId" sortable="true" value="#{_catBooks.catRecordRefId}" />
+						
+					<cats:column sortable="true" linkToId="#{_catBooks.id}"
+						rendered="#{listFlavour['catDoi']}"
+						entityList="#{catBooksList}"
+						propertyLabel="Book DOI"
+						propertyPath="catBooks.catDoi"
+						propertyValue="#{catBooksList.catBooks.catDoi}"
+						propertyName="catDoi"
+						value="#{_catBooks.catDoi}">
+					</cats:column>
+					
+					<cats:column sortable="true" linkToId="#{_catBooks.id}"
+						rendered="#{listFlavour['catOrigDisciplineId']}"
+						entityList="#{catBooksList}" propertyLabel="Original Discipline"
+						propertyPath="catBooks.catOrigDisciplineId"
+						propertyValue="#{catBooksList.catBooks.catOrigDisciplineId}"
+						propertyName="catOrigDisciplineId" value="#{_catBooks.catOrigDisciplineId}">
+					</cats:column>
+					
+					<cats:column sortable="true" linkToId="#{_catBooks.id}"
+						rendered="#{listFlavour['mostRecentLmtdPrice']}"
+						entityList="#{catBooksList}" propertyLabel="Most Recent Limited Price"
+						propertyPath="catBooks.mostRecentLmtdPrice"
+						propertyValue="#{catBooksList.catBooks.mostRecentLmtdPrice}"
+						propertyName="mostRecentLmtdPrice" value="#{_catBooks.mostRecentLmtdPrice}">
+						<f:convertNumber type="currency" maxFractionDigits="2" pattern="######.00"/>
+					</cats:column>
+					
+					<cats:column sortable="true" linkToId="#{_catBooks.id}"
+						rendered="#{listFlavour['mostRecentUnlmtdPrice']}"
+						entityList="#{catBooksList}" propertyLabel="Most Recent Unlimited Price"
+						propertyPath="catBooks.mostRecentUnlmtdPrice"
+						propertyValue="#{catBooksList.catBooks.mostRecentUnlmtdPrice}"
+						propertyName="mostRecentUnlmtdPrice" value="#{_catBooks.mostRecentUnlmtdPrice}">
+						<f:convertNumber type="currency" maxFractionDigits="2" pattern="######.00"/>
+					</cats:column>
+					
+					<cats:column sortable="true" linkToId="#{_catBooks.id}"
+						rendered="#{listFlavour['catLtdMostRecentPriceDist']}"
+						entityList="#{catBooksList}" propertyLabel="Active Limited Price"
+						propertyPath="catBooks.catLtdMostRecentPriceDist"
+						propertyValue="#{catBooksList.catBooks.catLtdMostRecentPriceDist}"
+						propertyName="catLtdMostRecentPriceDist" value="#{_catBooks.catLtdMostRecentPriceDist}">
+						<f:convertNumber type="currency" maxFractionDigits="2" pattern="######.00"/>
+					</cats:column>
+					<cats:column linkToId="#{_catBooks.id}" sortable="true"
+						rendered="#{catBooksList.listFlavour['catLtdMostRecentPriceDistDate']}"
+						entityList="#{catBooksList}" propertyLabel="Active Ltd Price Distribution Date"
+						propertyPath="catBooks.catLtdMostRecentPriceDistDate"
+						propertyValue="#{catBooksList.catBooks.catLtdMostRecentPriceDistDate}"
+						propertyName="catLtdMostRecentPriceDistDate"
+						value="#{_catBooks.catLtdMostRecentPriceDistDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column sortable="true" linkToId="#{_catBooks.id}"
+						rendered="#{listFlavour['catUnltdMostRecentPriceDist']}"
+						entityList="#{catBooksList}" propertyLabel="Active Unlimited Price"
+						propertyPath="catBooks.catUnltdMostRecentPriceDist"
+						propertyValue="#{catBooksList.catBooks.catUnltdMostRecentPriceDist}"
+						propertyName="catUnltdMostRecentPriceDist" value="#{_catBooks.catUnltdMostRecentPriceDist}">
+						<f:convertNumber type="currency" maxFractionDigits="2" pattern="######.00"/>
+					</cats:column>
+					<cats:column linkToId="#{_catBooks.id}" sortable="true"
+						rendered="#{catBooksList.listFlavour['catUnltdMostRecentPriceDistDate']}"
+						entityList="#{catBooksList}" propertyLabel="Active Unlimited Price Distribution Date"
+						propertyPath="catBooks.catUnltdMostRecentPriceDistDate"
+						propertyValue="#{catBooksList.catBooks.catUnltdMostRecentPriceDistDate}"
+						propertyName="catUnltdMostRecentPriceDistDate"
+						value="#{_catBooks.catUnltdMostRecentPriceDistDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>					
+				
+					<cats:column linkToId="#{_catBooks.id}" sortable="true"
+						rendered="#{catBooksList.listFlavour['mostRecentPscmRelease']}"
+						entityList="#{catBooksList}" propertyLabel="Most Recent SCM Release"
+						propertyPath="catBooks.mostRecentPscmRelease"
+						propertyValue="#{catBooksList.catBooks.mostRecentPscmRelease}"
+						propertyName="mostRecentPscmRelease"
+						value="#{_catBooks.mostRecentPscmRelease}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}" sortable="true"
+						rendered="#{catBooksList.listFlavour['firstPublishedScmDate']}"
+						entityList="#{catBooksList}" propertyLabel="Earliest SCM Release"
+						propertyPath="catBooks.firstPublishedScmDate"
+						propertyValue="#{catBooksList.catBooks.firstPublishedScmDate}"
+						propertyName="firstPublishedScmDate"
+						value="#{_catBooks.firstPublishedScmDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['booksPublishers']}"
+						entityList="#{catBooksList}" propertyLabel="Publisher"
+						propertyPath="catBooks.booksPublishers"
+						propertyValue="#{catBooksList.catBooks.booksPublishers}"
+						propertyName="booksPublishers" sortable="true"
+						value="#{_catBooks.booksPublishers}" rollup="true">
+					</cats:column>
+				
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['seriesTitle']}"
+						entityList="#{catBooksList}" propertyLabel="Series Title"
+						propertyPath="catBooks.seriesTitle"
+						propertyValue="#{catBooksList.catBooks.seriesTitle}"
+						propertyName="seriesTitle" sortable="true"
+						value="#{_catBooks.seriesTitle}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['setTitle']}"
+						entityList="#{catBooksList}" propertyLabel="Set Title"
+						propertyPath="catBooks.setTitle"
+						propertyValue="#{catBooksList.catBooks.setTitle}"
+						propertyName="setTitle" sortable="true"
+						value="#{_catBooks.setTitle}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bestTitle']}"
+						entityList="#{catBooksList}" propertyLabel="Title"
+						propertyPath="catBooks.bestTitle"
+						propertyValue="#{catBooksList.catBooks.bestTitle}"
+						propertyName="bestTitle" sortable="true"
+						value="#{_catBooks.bestTitle}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bestSubTitle']}"
+						entityList="#{catBooksList}" propertyLabel="Subtitle"
+						propertyPath="catBooks.bestSubTitle"
+						propertyValue="#{catBooksList.catBooks.bestSubTitle}"
+						propertyName="bestSubTitle" sortable="true"
+						value="#{_catBooks.bestSubTitle}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bestEisbn13']}"
+						entityList="#{catBooksList}" propertyLabel="EISBN13"
+						propertyPath="catBooks.bestEisbn13"
+						propertyValue="#{catBooksList.catBooks.bestEisbn13}"
+						propertyName="bestEisbn13" sortable="true"
+						value="#{_catBooks.bestEisbn13}" rollup="true" >
+					</cats:column>
+					
+					<cats:entityColumn 
+						entityList="#{catBooksList}" 
+						enumList="#{catDisciplinesList.allDisciplines}"
+						enumValueMap="#{catBooksList.disciplinesValueMap}"
+						reRender="catBooksList,tableNav1,tableNav2,header"
+						linkToId="#{_catBooks.id}" 
+						value="#{_catBooks.currentDisciplines}"
+						propertyLabel="Current Disciplines"
+						rendered="#{catBooksList.listFlavour['currentDisciplines']}"
+						propertyPath="catBooks.currentDisciplines"
+						propertyValue="#{catBooksList.catBooks.currentDisciplines}"
+						propertyName="currentDisciplines" 
+						sortable="true" 
+						rollup="true"
+					/>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bookPartsDoisAssignedValue']}"
+						entityList="#{catBooksList}" propertyLabel="BP DOIs Assigned"
+						propertyPath="catBooks.bookPartsDoisAssignedValue"
+						propertyValue="#{catBooksList.catBooks.bookPartsDoisAssignedValue}"
+						propertyName="bookPartsDoisAssignedValue" sortable="true"
+						enumList="#{listsForEnums.yesNo}"
+						value="#{_catBooks.bookPartsDoisAssignedValue ? 'Yes' : 'No'}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bookImprintValue']}"
+						entityList="#{catBooksList}" propertyLabel="Imprint"
+						propertyPath="catBooks.bookImprintValue"
+						propertyValue="#{catBooksList.catBooks.bookImprintValue}"
+						propertyName="bookImprintValue" sortable="true"
+						value="#{_catBooks.bookImprintValue}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bestSubmissionSeq']}"
+						entityList="#{catBooksList}" propertyLabel="Best Sub Seq"
+						propertyPath="catBooks.bestSubmissionSeq"
+						propertyValue="#{catBooksList.catBooks.bestSubmissionSeq}"
+						propertyName="bestSubmissionSeq" sortable="true"
+						value="#{_catBooks.bestSubmissionSeq}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						enumList="#{listsForEnums.catBookSubmissions_Lifecycle}"
+						rendered="#{catBooksList.listFlavour['bestSubmissionLifecycle']}"
+						entityList="#{catBooksList}" propertyLabel="Best Sub Lifecycle"
+						propertyPath="catBooks.bestSubmissionLifecycle"
+						propertyValue="#{catBooksList.catBooks.bestSubmissionLifecycle}"
+						propertyName="bestSubmissionLifecycle" sortable="true"
+						value="#{_catBooks.bestSubmissionLifecycle.label}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						enumList="#{listsForEnums.catBookSubmissions_QcOutcome}"
+						rendered="#{catBooksList.listFlavour['bestSubmissionQcOutcome']}"
+						entityList="#{catBooksList}" propertyLabel="Best Sub QC Outcome"
+						propertyPath="catBooks.bestSubmissionQcOutcome"
+						propertyValue="#{catBooksList.catBooks.bestSubmissionQcOutcome}"
+						propertyName="bestSubmissionQcOutcome" sortable="true"
+						value="#{_catBooks.bestSubmissionQcOutcome.label}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}" sortable="true"
+						rendered="#{catBooksList.listFlavour['bestSubmissionQcOutcomeDate']}"
+						entityList="#{catBooksList}" propertyLabel="Best Sub QC Outcome Date"
+						propertyPath="catBooks.bestSubmissionQcOutcomeDate"
+						propertyValue="#{catBooksList.catBooks.bestSubmissionQcOutcomeDate}"
+						propertyName="bestSubmissionQcOutcomeDate"
+						value="#{_catBooks.bestSubmissionQcOutcomeDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bestSubmissionVendor']}"
+						entityList="#{catBooksList}" propertyLabel="Best Sub Vendor"
+						propertyPath="catBooks.bestSubmissionVendor"
+						propertyValue="#{catBooksList.catBooks.bestSubmissionVendor}"
+						propertyName="bestSubmissionVendor" sortable="true"
+						value="#{_catBooks.bestSubmissionVendor}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['litSubCreated']}"
+						entityList="#{catBooksList}" propertyLabel="LitSub Created"
+						propertyPath="catBooks.litSubCreated"
+						propertyValue="#{catBooksList.catBooks.litSubCreated}"
+						propertyName="litSubCreated" sortable="true"
+						enumList="#{listsForEnums.yesNo}"
+						value="#{_catBooks.litSubCreated ? 'Yes' : 'No'}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}" sortable="true"
+						rendered="#{catBooksList.listFlavour['bestScmPublicationDate']}"
+						entityList="#{catBooksList}" propertyLabel="Publication Date"
+						propertyPath="catBooks.bestScmPublicationDate"
+						propertyValue="#{catBooksList.catBooks.bestScmPublicationDate}"
+						propertyName="bestScmPublicationDate"
+						value="#{_catBooks.bestScmPublicationDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['booksPublishersPrefix']}"
+						entityList="#{catBooksList}" propertyLabel="Publisher Prefix"
+						propertyPath="catBooks.booksPublishersPrefix"
+						propertyValue="#{catBooksList.catBooks.booksPublishersPrefix}"
+						propertyName="booksPublishersPrefix" sortable="true"
+						value="#{_catBooks.booksPublishersPrefix}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['booksPublishersCode']}"
+						entityList="#{catBooksList}" propertyLabel="Publisher Code"
+						propertyPath="catBooks.booksPublishersCode"
+						propertyValue="#{catBooksList.catBooks.booksPublishersCode}"
+						propertyName="booksPublishersCode" sortable="true"
+						value="#{_catBooks.booksPublishersCode}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['publisherEmbargo']}"
+						entityList="#{catBooksList}" propertyLabel="Global Embargo"
+						propertyPath="catBooks.publisherEmbargo"
+						propertyValue="#{catBooksList.catBooks.publisherEmbargo}"
+						propertyName="publisherEmbargo" sortable="true"
+						enumList="#{listsForEnums.yesNo}"
+						value="#{_catBooks.publisherEmbargo ? 'Yes' : 'No'}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}" sortable="true"
+						rendered="#{catBooksList.listFlavour['bestEmbargoDate']}"
+						entityList="#{catBooksList}" propertyLabel="Embargo Date"
+						propertyPath="catBooks.bestEmbargoDate"
+						propertyValue="#{catBooksList.catBooks.bestEmbargoDate}"
+						propertyName="bestEmbargoDate"
+						value="#{_catBooks.bestEmbargoDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bookSeriesId']}"
+						entityList="#{catBooksList}" propertyLabel="Series ID"
+						propertyPath="catBooks.bookSeriesId"
+						propertyValue="#{catBooksList.catBooks.bookSeriesId}"
+						propertyName="bookSeriesId" sortable="true"
+						value="#{_catBooks.bookSeriesId}" rollup="true">
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bookSeriesDoi']}"
+						entityList="#{catBooksList}" propertyLabel="Series DOI"
+						propertyPath="catBooks.bookSeriesDoi"
+						propertyValue="#{catBooksList.catBooks.bookSeriesDoi}"
+						propertyName="bookSeriesDoi" sortable="true"
+						value="#{_catBooks.bookSeriesDoi}" rollup="true">
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['bookImprintPubStmt']}"
+						entityList="#{catBooksList}" propertyLabel="Imprint Publisher Statement"
+						propertyPath="catBooks.bookImprintPubStmt"
+						propertyValue="#{catBooksList.catBooks.bookImprintPubStmt}"
+						propertyName="bookImprintPubStmt" sortable="true"
+						value="#{_catBooks.bookImprintPubStmt}" rollup="true">
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['agreementValue']}"
+						entityList="#{catBooksList}" propertyLabel="Agreement"
+						propertyPath="catBooks.agreementValue"
+						propertyValue="#{catBooksList.catBooks.agreementValue}"
+						propertyName="agreementValue" sortable="true"
+						value="#{_catBooks.agreementValue}" rollup="true" >
+					</cats:column>
+											
+					<cats:column linkToId="#{_catBooks.id}" sortable="true"
+						rendered="#{catBooksList.listFlavour['catDateModified']}"
+						entityList="#{catBooksList}" propertyLabel="Last Modified"
+						propertyPath="catBooks.catDateModified"
+						propertyValue="#{catBooksList.catBooks.catDateModified}"
+						propertyName="catDateModified"
+						value="#{_catBooks.catDateModified}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						rendered="#{catBooksList.listFlavour['distributorValue']}"
+						entityList="#{catBooksList}" propertyLabel="Distributor"
+						propertyPath="catBooks.distributorValue"
+						propertyValue="#{catBooksList.catBooks.distributorValue}"
+						propertyName="distributorValue" sortable="true"
+						value="#{_catBooks.distributorValue}" rollup="true">
+					</cats:column>
+					
+					<cats:column linkToId="#{_catBooks.id}"
+						enumList="#{listsForEnums.catPipelineReport_Status}"
+						rendered="#{catBooksList.listFlavour['pipelineStatusValue']}"
+						entityList="#{catBooksList}" propertyLabel="Pipeline Status"
+						propertyPath="catBooks.pipelineStatusValue"
+						propertyValue="#{catBooksList.catBooks.pipelineStatusValue}"
+						propertyName="pipelineStatusValue" sortable="true"
+						value="#{_catBooks.pipelineStatusValue.label}" rollup="true" >
+					</cats:column>
+
+				</h:dataTable>
+			</div>
+		</a:form>
+
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatBooksList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catBooksList}"></ui:param>
+			<ui:param name="divId" value="2" />
+		</ui:include>
+
+		<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+		<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catBooksList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+	</ui:define>
+</ui:composition>

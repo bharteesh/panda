@@ -1,0 +1,31 @@
+---- SQL statements which are executed at application startup if hibernate.hbm2ddl.auto is 'create' or 'create-drop'
+--insert into cat_roles (id, cat_name)
+--values
+--('system','System');
+--insert into cat_roles (id, cat_name)
+--values
+--('cdpubrel','CD Publisher Relations');
+--insert into cat_roles (id, cat_name)
+--values
+--('cdnego','CD Negotiations');
+--insert into cat_roles (id, cat_name)
+--values
+--('librs','Librarians');
+--insert into cat_roles (id, cat_name)
+--values
+--('acq','Acquisitions');
+--insert into cat_roles (id, cat_name)
+--values
+--('inven','Inventory');
+--insert into cat_roles (id, cat_name)
+--values
+--('cmarch','CM Arch. Comp');
+--insert into cat_roles (id, cat_name)
+--values
+--('cmmgt','CM Management');
+--insert into cat_roles (id, cat_name)
+--values
+--('drt','DRT');
+--
+--insert into cat_user_roles (cat_user_id, cat_roles_id)
+--values('nkerr', 'system');

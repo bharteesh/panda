@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+	
+ 	<ui:param name="entityType" value="submissionQcMessage" />
+	<ui:param name="moremenu" value="moremenu"/>
+	
+	<ui:define name="body">
+
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatSubmissionQcMessageList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catSubmissionQcMessageList}"></ui:param>
+			<ui:param name="divId" value="1" />
+		</ui:include>
+
+		<a:form>
+
+			<s:div id="header" styleclass="header">
+
+				<div class="left">
+					<span class="museo"> <h:outputText
+							value="QC Messages
+(#{empty catSubmissionQcMessageList.resultList ? 0 : (catSubmissionQcMessageList.paginated ? catSubmissionQcMessageList.resultCount : catSubmissionQcMessageList.resultList.size)})"></h:outputText>
+					</span>
+
+
+					<h:selectOneMenu name="flavour"
+						value="#{catSubmissionQcMessageList.flavour}">
+						<s:selectItems value="#{catSubmissionQcMessageList.flavours}" var="i"
+							itemValue="#{i}" label="#{catSubmissionQcMessageList.flavourLabel(i)}" />
+						<a:support event="onchange"
+							action="#{catSubmissionQcMessageList.updateUserSkinPreferences}"
+							oncomplete="javascript: location.href='CatSubmissionQcMessageList.seam'" ignoreDupResponses="true"
+							eventsQueue="submissionQcMessageListQueue" ajaxSingle="true" />
+					</h:selectOneMenu>
+					<s:link id="clearSearch" status="globalWaitStatus"
+						ignoreDupResponses="true" styleClass="button wizard"
+						action="#{catSubmissionQcMessageList.reset}" value="X" ajaxSingle="true"
+						propagation="none"
+						oncomplete="javascript: location.href='CatSubmissionQcMessageList.seam'">
+						<f:param name="flavour" value="#{catSubmissionQcMessageList.flavour}" />
+					</s:link>
+				</div>
+
+
+				<div class="right">
+					<ui:include src="adhocReportSelect.xhtml">
+						<ui:param name="entityQuery" value="#{catSubmissionQcMessageList}" />
+					</ui:include>
+					
+				</div>
+
+			</s:div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/Animated-Hourglass.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+ 
+			<div id="mainlistscroller">
+
+				<h:dataTable id="catSubmissionQcMessageList" var="_catSubmissionQcMessage"
+					value="#{catSubmissionQcMessageList.resultList}" rowClasses="odd,even"
+					styleClass="mainListClass">
+
+					<cats:column linkToId="#{_catSubmissionQcMessage.id}" styleClass="submissionId"
+						rendered="#{catSubmissionQcMessageList.listFlavour['catBookSubmissions.id']}"
+						entityList="#{catSubmissionQcMessageList}" propertyLabel="Book Submission"
+						propertyPath="catSubmissionQcMessage.catBookSubmissions.id"
+						propertyValue="#{catSubmissionQcMessageList.catSubmissionQcMessage.catBookSubmissions.id}"
+						propertyName="catBookSubmissions.id" sortable="true" value="#{_catSubmissionQcMessage.catBookSubmissions.id}" /> 
+
+					<cats:column linkToId="#{_catSubmissionQcMessage.id}" styleClass="id"
+						rendered="#{catSubmissionQcMessageList.listFlavour['id']}"
+				 		entityList="#{catSubmissionQcMessageList}" propertyLabel="ID"
+						propertyPath="catSubmissionQcMessage.id"
+						propertyValue="#{catSubmissionQcMessageList.catSubmissionQcMessage.id}"
+						propertyName="id" sortable="true" value="#{_catSubmissionQcMessage.id}" />
+						
+								<cats:column linkToId="#{_catSubmissionQcMessage.id}" styleClass="catSortKey"
+						rendered="#{catSubmissionQcMessageList.listFlavour['catSortKey']}"
+						entityList="#{catSubmissionQcMessageList}" propertyLabel="Sort Key"
+						propertyPath="catSubmissionQcMessage.catSortKey"
+						propertyValue="#{catSubmissionQcMessageList.catSubmissionQcMessage.catSortKey}"
+						propertyName="catSortKey" sortable="true" value="#{_catSubmissionQcMessage.catSortKey}" />
+						 
+
+			
+					<cats:column linkToId="#{_catSubmissionQcMessage.id}" styleClass="catMessage"
+						rendered="#{catSubmissionQcMessageList.listFlavour['catMessage']}"
+						entityList="#{catSubmissionQcMessageList}" propertyLabel="Message"
+						propertyPath="catSubmissionQcMessage.catMessage"
+						propertyValue="#{catSubmissionQcMessageList.catSubmissionQcMessage.catMessage}"
+						propertyName="catMessage" sortable="true" value="#{_catSubmissionQcMessage.catMessage}"  lob="true"/>
+						
+			
+						
+					<cats:column linkToId="#{_catSubmissionQcMessage.id}" styleClass="catDateCreated"
+						rendered="#{catSubmissionQcMessageList.listFlavour['catDateCreated']}"
+						entityList="#{catSubmissionQcMessageList}" propertyLabel="Date Created"
+						propertyPath="catSubmissionQcMessage.catDateCreated"
+						propertyValue="#{catSubmissionQcMessageList.catSubmissionQcMessage.catDateCreated}"
+						propertyName="catDateCreated" sortable="true" value="#{_catSubmissionQcMessage.catDateCreated}" />
+						
+					<cats:column linkToId="#{_catSubmissionQcMessage.id}" styleClass="catDateModified"
+						rendered="#{catSubmissionQcMessageList.listFlavour['catDateModified']}"
+						entityList="#{catSubmissionQcMessageList}" propertyLabel="Date Modified"
+						propertyPath="catSubmissionQcMessage.catDateModified"
+						propertyValue="#{catSubmissionQcMessageList.catSubmissionQcMessage.catDateModified}"
+						propertyName="catDateModified" sortable="true" value="#{_catSubmissionQcMessage.catDateModified}" />
+
+				</h:dataTable>
+			</div> 
+		</a:form>
+
+
+
+
+		<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+		<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catSubmissionQcMessageList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+	</ui:define>
+</ui:composition>

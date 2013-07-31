@@ -1,0 +1,31 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+    <m:from name="CATS" address="#{assetFetcherMailOps.fromEmail}" />
+    <ui:repeat var="_toEmail" value="#{assetFetcherMailOps.toEmailList}">
+    <m:to><h:outputText value="#{_toEmail}"/></m:to>
+    </ui:repeat>
+    <ui:repeat var="_ccEmail" value="#{assetFetcherMailOps.ccList}">  
+    	<m:cc><h:outputText value="#{_ccEmail}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="#{assetFetcherMailOps.assetType} Assets Received From Fletcher"/></m:subject>
+	<m:replyTo address="catssupport@ithaka.org"/>
+    <m:body> 
+    	<p><h:outputText value="Hi #{assetFetcherMailOps.displayName}" />,</p>
+    	<s:fragment rendered="true">
+			<p>
+				<h:outputText value="We have received #{assetFetcherMailOps.assetType} assets from Fletcher . Please see the attached file for the results." />
+				<br/>
+			</p>
+		</s:fragment>
+		<p>Sincerely,<br/>CATS</p>
+						<m:attachment 
+		   value="#{assetFetcherMailOps.attachment}" 
+		   fileName="#{assetFetcherMailOps.attachmentName}"/>
+    </m:body>
+</m:message>

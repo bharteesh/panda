@@ -1,0 +1,117 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	
+	
+	
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo">
+						<h:outputText value="Contributors" />
+				</span>
+				<a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('contributors'.concat(divId))}" 
+					ignoreDupResponses="true" status="globalWaitStatus"  reRender="#{tableId}" 
+					styleClass="button wizard"
+					eventsQueue="scmEditQueue"/>
+			</div>
+			<div class="right">
+			</div>
+		</div>
+		<rich:dataTable id="#{tableId}" var="_catContributor"
+			value="#{contributorsList}"
+			rendered="#{not empty contributorsList}">
+			
+			<rich:column id="id" sortBy="#{_catContributor.id}"
+				filterBy="#{_catContributor.id}" sortable="true" 
+				sortOrder="#{sortFiltBean['contributors'.concat(divId)]['id_sortOrder']}"
+				filterValue="#{sortFiltBean['contributors'.concat(divId)]['id_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID"/>
+				</f:facet>
+					<h:outputText value="#{_catContributor.id}" />
+			</rich:column>
+			<rich:column id="onixRole" sortBy="#{_catContributor.catOnixRole}"
+				filterBy="#{_catContributor.catOnixRole}" sortable="true" 
+				sortOrder="#{sortFiltBean['contributors'.concat(divId)]['onixRole_sortOrder']}"
+				filterValue="#{sortFiltBean['contributors'.concat(divId)]['onixRole_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Type"/>
+				</f:facet>
+					<h:outputText value="#{_catContributor.catOnixRole.label}" />
+			</rich:column>
+			<rich:column id="prefix" sortBy="#{_catContributor.catPrefix}"
+				filterBy="#{_catContributor.catPrefix}" sortable="true" 
+				sortOrder="#{sortFiltBean['contributors'.concat(divId)]['prefix_sortOrder']}"
+				filterValue="#{sortFiltBean['contributors'.concat(divId)]['prefix_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Prefix"/>
+				</f:facet>
+					<h:outputText value="#{_catContributor.catPrefix}" />
+			</rich:column>
+			<rich:column id="surname" sortBy="#{_catContributor.catSurname}"
+				filterBy="#{_catContributor.catSurname}" sortable="true" 
+				sortOrder="#{sortFiltBean['contributors'.concat(divId)]['surname_sortOrder']}"
+				filterValue="#{sortFiltBean['contributors'.concat(divId)]['surname_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Surname"/>
+				</f:facet>
+					<h:outputText value="#{_catContributor.catSurname}" />
+			</rich:column>
+			<rich:column id="givenName" sortBy="#{_catContributor.catGivenNames}"
+				filterBy="#{_catContributor.catGivenNames}" sortable="true" 
+				sortOrder="#{sortFiltBean['contributors'.concat(divId)]['givenName_sortOrder']}"
+				filterValue="#{sortFiltBean['contributors'.concat(divId)]['givenName_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Given Names"/>
+				</f:facet>
+					<h:outputText value="#{_catContributor.catGivenNames}" />
+			</rich:column>
+			<rich:column id="suffix" sortBy="#{_catContributor.catSuffix}"
+				filterBy="#{_catContributor.catSuffix}" sortable="true" 
+				sortOrder="#{sortFiltBean['contributors'.concat(divId)]['suffix_sortOrder']}"
+				filterValue="#{sortFiltBean['contributors'.concat(divId)]['suffix_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Suffix"/>
+				</f:facet>
+					<h:outputText value="#{_catContributor.catSuffix}" />
+			</rich:column>
+			<rich:column id="collab" sortBy="#{_catContributor.catCollab}"
+				filterBy="#{_catContributor.catCollab}" sortable="true" 
+				sortOrder="#{sortFiltBean['contributors'.concat(divId)]['collab_sortOrder']}"
+				filterValue="#{sortFiltBean['contributors'.concat(divId)]['collab_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Institutional Contributor Name"/>
+				</f:facet>
+					<h:outputText value="#{_catContributor.catCollab}" />
+			</rich:column>
+			<rich:column id="stringName" sortBy="#{_catContributor.catStringName}"
+				filterBy="#{_catContributor.catStringName}" sortable="true" 
+				sortOrder="#{sortFiltBean['contributors'.concat(divId)]['stringName_sortOrder']}"
+				filterValue="#{sortFiltBean['contributors'.concat(divId)]['stringName_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="String Name"/>
+				</f:facet>
+					<h:outputText value="#{_catContributor.catStringName}" />
+			</rich:column>
+			<rich:column id="seqName" sortBy="#{_catContributor.catSequence}"
+				filterBy="#{_catContributor.catSequence}" sortable="true" 
+				sortOrder="#{sortFiltBean['contributors'.concat(divId)]['seqName_sortOrder']}"
+				filterValue="#{sortFiltBean['contributors'.concat(divId)]['seqName_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Sequence"/>
+				</f:facet>
+					<h:outputText value="#{_catContributor.catSequence}" />
+			</rich:column>
+		</rich:dataTable>
+
+	</div>
+
+
+
+</s:div>

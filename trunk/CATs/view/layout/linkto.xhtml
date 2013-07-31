@@ -1,0 +1,195 @@
+<s:div xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h:form id="linkToForm">
+		<a:jsFunction action="#{LinkTo.linkTo}" name="linkTo">
+			<a:actionparam name="id" assignTo="#{LinkTo.id}"></a:actionparam>
+		</a:jsFunction>
+	</h:form>
+	
+	<rich:jQuery timing="onJScall" name="enableSaveCancel" selector=".saveOrCancel.disabled" query="removeClass('disabled')"/>
+
+	<rich:jQuery timing="onload" name="addDisabledToReadonly" selector="*[readonly]" query="addClass('disabled')"/>
+	<rich:jQuery timing="onload" name="addDisabledToDisabled" selector="*[disabled]" query="addClass('disabled')"/>
+
+	<rich:jQuery timing="onload" name="moreMenuChange" selector="#moreMenuOptionsSelect" query="each(moreMenu)"/>
+
+	<script type="text/javascript">
+	var moreMenuMapping = {};
+	moreMenuMapping['imprints'] = '/lists/CatImprintsList.seam';
+	moreMenuMapping['disciplines'] = '/lists/Disciplines.seam';
+	moreMenuMapping['invitations'] = '/lists/CatInvitationsList.seam';
+	moreMenuMapping['orderproblems'] = '/lists/CatAcqOrdersProblemsList.seam';
+	moreMenuMapping['movingwallflip'] = '/lists/CatMovingWallFlipsList.seam';
+	moreMenuMapping['contractdetails'] = '/lists/CatContractDtlsList.seam';
+	moreMenuMapping['walldetails'] = '/lists/CatWallDtlsList.seam';
+	moreMenuMapping['walloverrides'] = '/lists/CatWallOverridesList.seam';
+	moreMenuMapping['publishersToCmpts'] = '/lists/CatPublishersToCmptsList.seam';
+	moreMenuMapping['riders'] = '/lists/CatRidersList.seam';
+	moreMenuMapping['digivendor'] = '/lists/CatDigiVendorListList.seam';
+	moreMenuMapping['senttohcl'] = '/lists/CatSourceSentToHclList.seam';
+	moreMenuMapping['relationships'] = '/lists/CatTitleRltnshpsList.seam';
+	moreMenuMapping['bookSeries'] = '/lists/CatBookSeriesList.seam'
+	moreMenuMapping['booksets'] = '/lists/CatBookSetsList.seam';
+	moreMenuMapping['bookSeriesSetsTitles'] = '/lists/CatBookSeriesSetsTitlesList.seam';
+	moreMenuMapping['scm'] = '/lists/CatScmList.seam';
+	moreMenuMapping['books'] = '/lists/CatBooksList.seam';
+	moreMenuMapping['bookAgreementDtls'] = '/lists/CatBookAgreementDtlsList.seam';
+	moreMenuMapping['bookSubmissions'] = '/lists/CatBookSubmissionsList.seam';
+	moreMenuMapping['bookVersions'] = '/lists/CatBookVersionsList.seam';
+	moreMenuMapping['submissionQcMessage'] = '/lists/CatSubmissionQcMessageList.seam';
+	moreMenuMapping['contributors'] = '/lists/CatContributorsList.seam';
+	moreMenuMapping['bookParts'] = '/lists/CatBookPartsList.seam';
+	moreMenuMapping['bookCovers'] = '/lists/CatBookCoversList.seam';
+	moreMenuMapping['platformDistributions'] = '/lists/CatLtmDistributionsList.seam';
+
+	var topLevelMapping = {}; 
+	topLevelMapping['publishers'] = '/lists/CatPublishersList.seam';
+	topLevelMapping['contracts'] = '/lists/CatContractsList.seam';
+	topLevelMapping['orders'] = '/lists/CatAcqOrdersList.seam';
+	topLevelMapping['shipments'] = '/lists/CatIssueShipmentsList.seam';
+	topLevelMapping['collections'] = '/lists/CatCollectionsList.seam';
+	topLevelMapping['sets'] = '/lists/SetsRollupsList.seam';
+	topLevelMapping['cmpt'] = '/lists/CmptsRollupsList.seam';
+	
+function moreMenu() {
+		
+		var select = jQuery('#moreMenuOptionsSelect');
+
+			
+			
+			if ( jQuery('#container').hasClass('moremenu') ) {
+				
+				for (var entityType in moreMenuMapping) {
+				    if ( jQuery('#container').hasClass(entityType) ) {
+				        selectOptionOfValue( entityType);
+				        break;
+				    }
+				}
+				
+			} else {
+				select.get(0).options.selectedIndex = 0;
+			}
+			
+			jQuery(this).change(
+				function() {
+					var which = jQuery('#moreMenuOptionsSelect option:selected').val();
+					var dest = moreMenuMapping[which];
+					if ( dest != null ) {
+						window.location = '#{request.contextPath}' + dest;
+					}
+				}
+			);
+}
+
+
+function upToListMode() {
+	var which = jQuery('#moreMenuOptionsSelect option:selected').val();
+	var dest = moreMenuMapping[which];
+	if ( dest == null ) {
+		which = jQuery('#container').attr("class")
+		if ( which != null ) {
+			which = which.replace(/record/, "").replace(/^\s*/, "").replace(/\s*$/, "");
+			dest = topLevelMapping[which];
+		}
+	}
+	if ( dest != null ) {
+		window.location = '#{request.contextPath}' + dest;
+		return true;
+	}
+	return false;
+}
+
+
+	function selectOptionOfValue( val) {
+		jQuery("#moreMenuOptionsSelect option[value='"+val+"']").get(0).selected = true;
+	}
+
+	function checkForSave() {
+			var howMany = jQuery('.saveOrCancel:not(.disabled)').length;
+			if ( howMany != 0 ) {
+				alert("Please save your changes first!");
+				return false;
+			}
+			return true;
+		}
+
+
+	
+			function cancelEventBubbling(evt) {
+				var e = (typeof evt != 'undefined') ? evt : event;
+				e.cancelBubble = true;
+			}
+			function toggleCheckboxes(checked, clazz) {
+			       jQuery('.'+clazz).each(function(){ this.checked = checked; }); 
+			}
+
+
+			function toggleMoreNav() {
+				setVisibilityMoreNav(jQuery('#more').hasClass('hidden'));
+			}
+			function showMoreNav() {
+				setVisibilityMoreNav(true);
+			}
+			function hideMoreNav() {
+				setVisibilityMoreNav(false);
+			}
+			function setVisibilityMoreNav(visible) {
+				if ( visible ) {
+					jQuery('#more').removeClass('hidden');
+				} else {
+					jQuery('#more').addClass('hidden');
+				}
+			}
+
+
+			function checkRadios(styleClass, msg) {
+				var retValue = false;
+				jQuery('.' + styleClass).each(function(){ 
+					if(this.checked) {retValue=true;}
+				}); 
+				if(retValue == false){
+					alert(msg);
+				}
+				return retValue;
+			}
+			function emulateRadios(chkbx, styleClass) {
+				jQuery('.' + styleClass).each(function(){ 
+					this.checked = false; 
+				}); 
+				chkbx.checked = true;
+			}
+
+			function formatURL(url,selectedTab) {
+                var stringToFind = "cid=";
+                var index = url.lastIndexOf(stringToFind);
+                if(index > 0) {
+                      url = url.substring(0,index-1);
+                }
+                var selectedTabStr = "selectedTab=";
+                var index1 = url.lastIndexOf(selectedTabStr);
+                if(index1 > 0) {
+                      url = url.substring(0,index1-1);
+                }
+                url = url+'&amp;'+"selectedTab="+selectedTab;
+                return url;
+          }
+
+
+			// 2011-02-02: CAT-391 : removes leading/trailing white spaces from strings (entered in filter input fields from list views)
+			// this function used in column.xhtml
+			function strTrim(str){
+				var str1 = str.value;
+				var str2 = str1.replace(/^\s+/,"").replace(/\s+$/,"").replace(/\s+/g," ");
+				str.value = str2;
+			}
+			
+		</script>
+		
+</s:div>

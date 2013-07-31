@@ -1,0 +1,43 @@
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/lists/CatBookCoversList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{catBookCoversHome.wire}"/>
+   <param name="catBookCoversFrom"/>
+   <param name="id" value="#{catBookCoversHome.id}"/>
+   <param name="catBookCoversId" value="#{catBookCoversHome.catBookCoversId}"/>
+   <param name="selectedTab" value="#{catBookCoversHome.selectedTab}"/>
+
+   <navigation from-action="#{catBookCoversHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/bookcovers/BookCoversEdit.xhtml"/>
+      </rule>
+   </navigation>
+   <navigation from-action="#{catBookCoversHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/bookcovers/BookCoversEdit.xhtml"/>
+      </rule>
+   </navigation>
+   
+   <navigation from-action="#{catBookCoversHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/bookcovers/BookCoversEdit.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation>
+   		<rule if-outcome="cancel" >
+         <end-conversation before-redirect="true"/>
+         <redirect view-id="/bookcovers/BookCoversEdit.xhtml"/>
+    	</rule>
+   </navigation>
+
+
+</page>

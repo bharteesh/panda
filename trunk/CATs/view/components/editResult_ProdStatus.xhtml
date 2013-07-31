@@ -1,0 +1,423 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{editCmptProductionStatusWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Edit</li>
+			<li class="selected">2. Results</li>
+		</ul>
+		<div class="cluster smart">
+				
+			<s:div styleClass="title eligible" rendered="#{not empty editCmptProductionStatusWizard.validCmptsList}">
+            	<h1>Components (#{editCmptProductionStatusWizard.validCmptsList.size()})</h1>
+
+              	<p>You successfully changed the <strong>Backfile Onboarding Status</strong> to 
+              	<strong>#{editCmptProductionStatusWizard.cmptInstance.catProductionStatus.label}</strong> 
+              	for the following components:</p>
+            </s:div>
+            <div class="push"></div>
+			<s:fragment rendered="#{not empty editCmptProductionStatusWizard.validCmptsList}">
+				<div class="scroller">
+		   			<rich:dataTable id="catCmptsListPStatus"
+		                var="_catCmpts"
+		              	value="#{editCmptProductionStatusWizard.validCmptsList}"
+		              	rowClasses="odd,even">
+		           
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Set Name" id="setname" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.setsValue}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Component Name" id="cmptname" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catName}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Backfile Onboarding Status" id="prodStatus" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catProductionStatus.label}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="CSP Onboarding Status" id="cspOnboardingStatus" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catCspOnboardingStatus.label}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Print ISSN" id="cmptissn" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catPrintIssn}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Extent (Pub Units)" id="cmptpurange" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catPublctnUnitRange}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Extent (Dates)" id="cmptdateRange" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catDateRange}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="Journal Id" id="cmptjid" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catLtmJournalId}" />        		
+			        	</rich:column>
+			        	
+		        	</rich:dataTable>
+	        	</div>
+        	</s:fragment>
+        	
+        	<s:div styleClass="title eligible" rendered="#{not empty editCmptProductionStatusWizard.updatedWallDtlsList}">
+            	<h1>Wall Details (#{editCmptProductionStatusWizard.updatedWallDtlsList.size()})</h1>
+
+              	<p>You successfully changed the <strong>Lifecycle</strong> to 
+              	<strong>Implemented</strong> 
+              	for the following Wall Details:</p>
+            </s:div>
+            <div class="push"></div>
+			<s:fragment rendered="#{not empty editCmptProductionStatusWizard.updatedWallDtlsList}">
+				<div class="scroller">
+					<rich:dataTable value="#{editCmptProductionStatusWizard.updatedWallDtlsList}"
+						var="_catWallDtls">
+						<rich:column>
+							<f:facet name="header">Set Name</f:facet>
+							<h:outputText value="#{_catWallDtls.catSets.catCurrentTitle.catName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Set BF Onboarding</f:facet>
+							<h:outputText value="#{_catWallDtls.catSets.bfOverallOnboardingStatus}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Wall Lifecycle</f:facet>
+							<h:outputText value="#{_catWallDtls.catLifecycle.label}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Wall Change</f:facet>
+							<h:outputText value="#{_catWallDtls.catChangeType}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Wall Type</f:facet>
+							<h:outputText value="#{_catWallDtls.catWallType}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Moving Wall Value</f:facet>
+							<h:outputText value="#{_catWallDtls.catMovingValue}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Fixed Date</f:facet>
+							<h:outputText value="#{_catWallDtls.catFixedDate}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Ceased Date</f:facet>
+							<h:outputText value="#{_catWallDtls.catCeasedDate}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Amendment Date</f:facet>
+							<h:outputText value="#{_catWallDtls.catEffectiveDate}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Implemented Scheduled for</f:facet>
+							<h:outputText value="#{_catWallDtls.catImplementationDateSchd}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Implemented on</f:facet>
+							<h:outputText value="#{_catWallDtls.catImplementationDateActl}" />
+						</rich:column>
+					</rich:dataTable>
+				</div>
+			</s:fragment>
+			
+			<s:div styleClass="title eligible" rendered="#{not empty editCmptProductionStatusWizard.createdMWFlipList}">
+            	<h1>Moving Wall Flips (#{editCmptProductionStatusWizard.createdMWFlipList.size()})</h1>
+              	<p>You successfully created following Moving Wall Flips:</p>
+            </s:div>
+            <div class="push"></div>
+			<s:fragment rendered="#{not empty editCmptProductionStatusWizard.createdMWFlipList}">
+				<div class="scroller">
+					<rich:dataTable value="#{editCmptProductionStatusWizard.createdMWFlipList}"
+						var="_catmwallflips">
+						<rich:column>
+							<f:facet name="header">Flip Date</f:facet>
+							<h:outputText value="#{_catmwallflips.catFlipToPublicYear}">
+								<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+							</h:outputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Set Name</f:facet>
+							<h:outputText value="#{_catmwallflips.catCmpts.setsValue}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Component Name</f:facet>
+							<h:outputText value="#{_catmwallflips.catCmpts.catName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Release Through</f:facet>
+							<h:outputText value="#{_catmwallflips.catFlipPublctnDate}">
+								<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+							</h:outputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Content</f:facet>
+							<h:outputText value="#{_catmwallflips.catContentRange}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Count</f:facet>
+							<h:outputText value="#{_catmwallflips.catPublctnUnitCnt}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Lifecycle</f:facet>
+							<h:outputText value="#{_catmwallflips.catLifecycle.label}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Prod Status</f:facet>
+							<h:outputText value="#{_catmwallflips.catProductionStatus.label}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">In Repository</f:facet>
+							<h:outputText value="#{_catmwallflips.catAllInRepository.label}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">On Hold</f:facet>
+							<h:outputText value="#{_catmwallflips.catOnHold ? 'Yes' : 'No'}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">ID</f:facet>
+							<h:outputText value="#{_catmwallflips.id}" />
+						</rich:column>
+					</rich:dataTable>
+				</div>
+			</s:fragment>
+			
+			<s:div styleClass="title ineligible" rendered="#{not empty editCmptProductionStatusWizard.notValidCmptsList}">
+            	<h1>Components (#{editCmptProductionStatusWizard.notValidCmptsList.size()})</h1>
+
+              	<p>You were not able to change the <strong>Backfile Onboarding Status</strong> to
+              	<strong>#{editCmptProductionStatusWizard.cmptInstance.catProductionStatus.label}</strong>
+              	for these components because the component was on hold, or Content Development has not yet indicated that all rights are obtained for the back file,
+              	or its Backfile Onboarding Status was already past the status you wanted, or you aren't allowed to move it from current status to the status you wanted 
+              	because you would be skipping an important step that someone else needs to do first.
+              	</p>
+            </s:div>
+            <div class="push"></div>
+			
+			<div class="push"></div>
+			<s:fragment rendered="#{not empty editCmptProductionStatusWizard.notValidCmptsList}">
+				<div class="scroller">
+		   			<rich:dataTable id="catCmptsListNVPStatus"
+		                var="_catCmpts"
+		              	value="#{editCmptProductionStatusWizard.notValidCmptsList}"
+		              	rowClasses="odd,even">
+		           
+			        	<rich:column id="col2">
+				        	<f:facet name="header">
+				        		<h:outputText value="Set Name" id="setname" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.setsValue}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col3">
+				        	<f:facet name="header">
+				        		<h:outputText value="Component Name" id="cmptname" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catName}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col11">
+				        	<f:facet name="header">
+				        		<h:outputText value="Backfile Onboarding Status" id="prodStatus" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catProductionStatus.label}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="CSP Onboarding Status" id="cspOnboardingStatus" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catCspOnboardingStatus.label}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col6">
+				        	<f:facet name="header">
+				        		<h:outputText value="Print ISSN" id="cmptissn" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catPrintIssn}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col7">
+				        	<f:facet name="header">
+				        		<h:outputText value="Extent (Pub Units)" id="cmptpurange" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catPublctnUnitRange}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col8">
+				        	<f:facet name="header">
+				        		<h:outputText value="Extent (Dates)" id="cmptdateRange" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catDateRange}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col10">
+				        	<f:facet name="header">
+				        		<h:outputText value="Journal Id" id="cmptjid" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts.catLtmJournalId}" />        		
+			        	</rich:column>
+			        	
+		        	</rich:dataTable>
+	        	</div>
+        	</s:fragment>
+        	
+        	<s:div styleClass="title ineligible" rendered="#{not empty editCmptProductionStatusWizard.missingJournalCodesList}">
+            	<h1>Components (#{editCmptProductionStatusWizard.missingJournalCodesList.size()})</h1>
+
+              	<p>You were not able to change the <strong>Backfile Onboarding Status</strong> to
+              	<strong>#{editCmptProductionStatusWizard.cmptInstance.catProductionStatus.label}</strong>
+              	for these components because they are missing Journal Codes. Add Journal Codes before advancing the status.
+              	</p>
+            </s:div>
+            <div class="push"></div>
+			
+			<div class="push"></div>
+			<s:fragment rendered="#{not empty editCmptProductionStatusWizard.missingJournalCodesList}">
+				<div class="scroller">
+		   			<rich:dataTable id="catCmptsListmissingJournals"
+		                var="_catCmpts2"
+		              	value="#{editCmptProductionStatusWizard.missingJournalCodesList}"
+		              	rowClasses="odd,even">
+		           
+			        	<rich:column id="col2">
+				        	<f:facet name="header">
+				        		<h:outputText value="Set Name" id="setname" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts2.setsValue}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col3">
+				        	<f:facet name="header">
+				        		<h:outputText value="Component Name" id="cmptname" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts2.catName}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col11">
+				        	<f:facet name="header">
+				        		<h:outputText value="Backfile Onboarding Status" id="prodStatus" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts2.catProductionStatus.label}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column>
+				        	<f:facet name="header">
+				        		<h:outputText value="CSP Onboarding Status" id="cspOnboardingStatus" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts2.catCspOnboardingStatus.label}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col6">
+				        	<f:facet name="header">
+				        		<h:outputText value="Print ISSN" id="cmptissn" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts2.catPrintIssn}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col8">
+				        	<f:facet name="header">
+				        		<h:outputText value="Extent (Dates)" id="cmptdateRange" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts2.catDateRange}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col7">
+				        	<f:facet name="header">
+				        		<h:outputText value="Extent (Pub Units)" id="cmptpurange" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts2.catPublctnUnitRange}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col10">
+				        	<f:facet name="header">
+				        		<h:outputText value="Journal Id" id="cmptjid" />
+				        	</f:facet>
+							<h:outputText value="#{_catCmpts2.catLtmJournalId}" />        		
+			        	</rich:column>
+			        	
+		        	</rich:dataTable>
+	        	</div>
+        	</s:fragment>
+									
+			<div class="push"></div>
+			<div class="">
+				<br/>
+				<strong>When can I edit Backfile Production Status?</strong><br/> <br/>
+				
+				<strong>Acquisitions</strong> can change the status from:<br/>
+				1. New to Acquisition Started or Acquisition Completed<br/>
+				2. Acquisition Started to Acquisition Completed <br/><br/>
+				
+				<strong>Librarians</strong> can change the status from:<br/>
+				1. Acquisition Completed to SIG Started or SIG Completed<br/>
+				2. SIG Started to SIG Completed<br/><br/>
+				
+				<strong>The A Team (Archival Accuracy and Completeness) and Inventory</strong> can change the status from:<br/>
+				1. SIG Completed to Sent to Vendor<br/><br/>
+
+				<strong>CM Management</strong> can change the status from:<br/>
+				1. Sent to Vendor to QC Started or Data Hand-Off Completed<br/>
+				2. QC Started to QC Completed or Data Hand-Off Completed<br/>
+				3. QC Completed to Data Hand-Off Completed<br/><br/>
+				
+				<strong>Data Release Team</strong> can change the status from:<br/>
+				1. Data Hand-Off Completed to Scheduled for Release<br/>
+				2. Scheduled for Release to Released
+			 
+			</div>
+			
+		</div>
+		
+		
+		
+		<div class="push"></div>
+	
+			<a:commandLink styleClass="button right" value="Return" 
+				action="#{editCmptProductionStatusWizard.reset}" 
+				oncomplete="#{rich:component('editProdStatusWizardModal')}.hide(); #{rich:component('editProdStatusQuit')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+				eventsQueue="prodStatusQueue" status="globalWaitStatus"
+				rendered="#{not empty pageURL}"/>
+			
+			<a:commandLink styleClass="button right" value="Return" 
+				action="#{editCmptProductionStatusWizard.reset}" 
+				oncomplete="#{rich:component('editProdStatusWizardModal')}.hide(); #{rich:component('editProdStatusQuit')}.hide(); javascript:location.reload(true);"
+				eventsQueue="prodStatusQueue" status="globalWaitStatus"
+				rendered="#{empty pageURL}"/>
+		
+	</div>
+</ui:composition>

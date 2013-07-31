@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd" login-required="true">
+<begin-conversation join="true"/>
+  <param name="flavour" value="#{catInvitationNoteList.flavour}"/>
+
+
+   <param name="firstResult" value="#{catInvitationNoteList.firstResult}"/>
+   <param name="sort" value="#{catInvitationNoteList.orderColumn}"/>
+   <param name="dir" value="#{catInvitationNoteList.orderDirection}"/>
+   <param name="logic" value="#{catInvitationNoteList.restrictionLogicOperator}"/>
+
+   <param name="from"/>
+   <param name="id" value="#{catInvitationNoteList.catInvitationNote.id}"/>
+   <param name="catCreator" value="#{catInvitationNoteList.catInvitationNote.catCreator}"/>
+   <param name="catType" value="#{catInvitationNoteList.catInvitationNote.catType}"/>
+
+
+<!-- catInvitationNoteList -->
+<param name="catDateCreated" value="#{catInvitationNoteList.catInvitationNote.catDateCreated}"/>
+
+</page>

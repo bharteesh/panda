@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2>
+		<h:outputText value="#{createWallOverridesWizard.createTitle}" />
+	</h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="disabled">1. Permissions</li>
+			<li class="disabled">2. Change</li>
+			<li class="disabled">3. Additional</li>
+			<li class="selected">4. Results</li>
+		</ul>
+		<div class="cluster">
+
+
+			<p>
+				<h:outputText value="You have created a Wall Override for the Set " />
+				<em><h:outputText
+						value="#{createWallOverridesWizard.setsToAddTo.catCurrentTitle.catName}" />
+				</em>:
+			</p>
+
+			<s:decorate template="../layout/edit.xhtml" id="id">
+				<ui:define name="label">ID</ui:define>
+				<h:outputText value="#{createWallOverridesWizard.createInstance.id}" />
+			</s:decorate>
+			<s:decorate template="../layout/edit.xhtml" id="catLifecycle">
+				<ui:define name="label">Lifecycle</ui:define>
+				<h:outputText
+					value="#{createWallOverridesWizard.createInstance.catLifecycle.label}" />
+			</s:decorate>
+
+			<s:decorate template="../layout/edit.xhtml"
+				id="catDisplayThroughDate">
+				<ui:define name="label">Display Through Date</ui:define>
+				<h:outputText
+					value="#{createWallOverridesWizard.createInstance.catDisplayThroughDate}">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</h:outputText>
+			</s:decorate>
+
+
+		</div>
+
+		<div class="push"></div>
+
+		<a:commandLink styleClass="button right" value="Return"
+			action="#{createWallOverridesWizard.createReset}"
+			oncomplete="#{rich:component('createWallOverridesPanel')}.hide();javascript:location.reload(true);"
+			rendered="#{empty pageURL}" ignoreDupResponses="true"
+			status="globalWaitStatus" />
+		<a:commandLink
+			styleClass="button right" value="Return"
+			action="#{createWallOverridesWizard.createReset}"
+			oncomplete="#{rich:component('createWallOverridesPanel')}.hide();javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+			eventsQueue="createWallOverrides"
+			rendered="#{not empty pageURL}" ignoreDupResponses="true"
+			status="globalWaitStatus"/>
+			
+	</div>
+
+</ui:composition>
+

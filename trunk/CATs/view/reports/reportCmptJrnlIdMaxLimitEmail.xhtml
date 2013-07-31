@@ -1,0 +1,23 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    >
+
+    <m:from name="CATS" address="#{mailOps.fromEmail}"/>
+    <m:to name="#{cmptJrnlIdMaxLimitMailOps.email}">#{cmptJrnlIdMaxLimitMailOps.email}</m:to>
+    <ui:repeat var="_email" value="#{cmptJrnlIdMaxLimitMailOps.ccList}">
+    	<m:cc><h:outputText value="#{_email}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="Component Journal ID approaching Max Limit"/> </m:subject>
+    <m:body>
+        <p><h:outputText value="Dear #{cmptJrnlIdMaxLimitMailOps.displayName}" />,</p>
+              
+        <p>
+        	<h:outputText value="Component Journal ID sequence value has reached #{cmptJrnlIdMaxLimitMailOps.cmptJrndIdLimitValue}. Please increase the MAX_VALUE of the sequence: CMPT_LTM_JOURNAL_ID_SEQ."/>
+        </p>
+					
+		<p>Sincerely,<br/>CATS</p>
+		
+    </m:body>
+</m:message>

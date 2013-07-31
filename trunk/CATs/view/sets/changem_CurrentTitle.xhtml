@@ -1,0 +1,32 @@
+<ui:composition id="changeCurrentTitlePanel"
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<rich:modalPanel id="changeCurrentTitleWizardModal" 
+		width="900" height="550" styleClass="modal">
+		<s:div id="modalDiv">
+			<a:form ajaxSubmit="true" ajaxSingle="true" id="changeCurrentTitleForm">
+				<a:include viewId="#{changeCurrentTitleWizard.currentView}">
+					<f:param name="pageURL" value="#{pageURL}"/>
+				</a:include>
+			</a:form>
+		</s:div>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="changeCurrentTitleQuit" width="900"
+		height="550" styleClass="modal">
+		<s:div id="modalQuitDiv">
+			<a:form ajaxSubmit="true" ajaxSingle="true" id="wizardQuit">
+				<a:include viewId="#{changeCurrentTitleWizard.quitView}">
+					<f:param name="pageURL" value="#{pageURL}"/>
+				</a:include>
+			</a:form>
+		</s:div>
+	</rich:modalPanel>
+
+</ui:composition>

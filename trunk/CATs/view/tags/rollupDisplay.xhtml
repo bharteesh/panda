@@ -1,0 +1,21 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:z="http://www.qualcomm.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a="http://richfaces.org/a4j"
+	  xmlns:cats="http://www.ithaka.org/cats"
+	  xmlns:s="http://jboss.com/products/seam/taglib">
+
+THIS TEXT WILL BE REMOVED
+<ui:composition>
+	<s:fragment rendered="#{value ne null}">
+			<h:outputText value="#{value.enumLabel}: " rendered="#{not empty value.enumLabel}"><br/></h:outputText>
+			<cats:dumbListByCatName list="#{value.detailAsList}"/>
+	</s:fragment>
+</ui:composition>
+THIS TEXT WILL BE REMOVED AS WELL
+</html>

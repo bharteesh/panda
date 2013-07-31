@@ -1,0 +1,63 @@
+<s:div id="header" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:rich="http://richfaces.org/rich">
+ 
+    <div id="logo"><a href="#{request.contextPath}"></a></div>
+    
+    <s:div  id="username1"><s:fragment rendered="#{identity.loggedIn}"><span>Welcome, <h:outputText value=" #{identity.credentials.username}"/>| </span><h:outputText value=" "/><s:link id="taskArea" view="/taskarea/taskArea.seam" value="Tasks" propagation="none"/><h:outputText value=" "/><s:link id="menuAdmin" view="/admin/index.seam" value="Admin" rendered="#{s:hasRole('ADMIN')}" propagation="none"/><h:outputText value=" "/><s:link id="menuReports" view="/reports/index.seam" value="Reports" propagation="none"/><h:outputText value=" "/><s:link id="menuLogoutId" view="/home.xhtml" action="#{identity.logout}" value="Logout" rendered="#{identity.loggedIn}" propagation="none"/></s:fragment>
+    <s:fragment rendered="#{!identity.loggedIn}"><s:link id="menuLoginId" view="/login.xhtml" value="Login"  propagation="none"/></s:fragment>
+    </s:div>
+    
+    <ul class="nav nav1">
+      <li class="item1"><s:link view="/lists/CatCollectionsList.xhtml" propagation="none" value="Collections"><f:param name="firstResult" value="0"/></s:link></li>
+      <li class="item2"><s:link view="/lists/SetsRollupsList.xhtml" propagation="none" value="Sets"><f:param name="firstResult" value="0"/></s:link></li>
+      <li class="item3"><s:link view="/lists/CmptsRollupsList.xhtml" propagation="none" value="Components"><f:param name="firstResult" value="0"/></s:link></li>
+    </ul>
+    <ul class="nav nav2">
+      <li class="item1"><s:link view="/lists/CatPublishersList.xhtml" propagation="none" value="Publishers"><f:param name="firstResult" value="0"/></s:link></li>
+      <li class="item2"><s:link view="/lists/CatContractsList.xhtml" propagation="none" value="Agreements"><f:param name="firstResult" value="0"/></s:link></li>
+    </ul>
+    <ul class="nav nav3">
+      <li class="item1"><s:link view="/lists/CatAcqOrdersList.xhtml" propagation="none" value="Orders"><f:param name="firstResult" value="0"/></s:link></li>
+      <li class="item2"><s:link view="/lists/CatIssueShipmentsList.xhtml" propagation="none" value="Shipments"><f:param name="firstResult" value="0"/></s:link></li>
+    </ul>
+
+<ul class="nav nav_more"> 
+<li class="item1"> 
+<select id="moreMenuOptionsSelect">      
+<option value="More Options">More Options</option>
+<option value="imprints" >Imprints</option> 
+<option value="disciplines" >Disciplines</option> 
+<option value="invitations" >Invitations</option> 
+<option value="orderproblems" >Order Problems</option> 
+<option value="movingwallflip" >Moving Wall Flips</option> 
+<option value="contractdetails" >Agreement Details</option> 
+<option value="walldetails" >Wall Details</option> 
+<option value="walloverrides" >Wall Overrides</option> 
+<option value="publishersToCmpts" >Publisher Roles</option> 
+<option value="riders" >Riders</option> 
+<option value="digivendor" >Digitization Vendors</option> 
+<option value="senttohcl" >Source Sent To Hcl</option> 
+<option value="relationships">Title Relationships</option>
+<option value="bookSeries">Book Series</option>
+<option value="booksets">Book Sets</option>
+<option value="bookSeriesSetsTitles"> Book Series Sets Titles</option>
+<option value="scm">SCM</option>
+<option value="books">Books</option>
+<option value="bookAgreementDtls">Book Agreement Dtls</option>
+<option value="bookVersions">Book PDFs</option>
+<option value="bookSubmissions">Book Submissions</option>
+<option value="bookParts">Book Parts</option>
+<option value="contributors">Contributors</option>
+<option value="submissionQcMessage">QC Messages</option>
+<option value="bookCovers">Book Covers</option>
+<option value="platformDistributions">Platform Distributions</option>
+
+</select>
+</li>
+</ul> 
+<a class="button up" href="#" onclick="upToListMode();">List View</a>
+</s:div>

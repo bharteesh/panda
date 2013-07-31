@@ -1,0 +1,33 @@
+# Creation record for the identifier generator in NOID/noid.bdb.
+# 
+erc:
+who:       cmjp/cmsys
+what:      unlimited sequential identifiers of form cts.zeeek
+       A Noid minting and binding database has been created that will bind
+       and mint an unbounded number of identifiers
+       with the template "cts.zeeek".
+       Sample identifiers would be "22573/cts000m" and "22573/cts2gw28".
+       Minting order is sequential.
+when:      20101119155000
+where:     aa2cmjpora02.ithaka.org:/cmjp/noid/cts/.
+Version:   Noid 0.423
+Size:      unlimited
+Template:  cts.zeeek
+       A suggested parent directory for this template is "noid_cts4+".  Note:
+       separate minters need separate directories, and templates can suggest
+       short names; e.g., the template "xz.redek" suggests the parent directory
+       "noid_xz4" since identifiers are "xz" followed by 4 characters.
+Policy:    (:G--NITE)
+       This minter's durability summary is (maximum possible being "GRANITE")
+         "G--NITE", which breaks down, property by property, as follows.
+          ^^^^^^^
+          |||||||______ (E)lided of vowels to avoid creating words by accident
+          ||||||______ (T)ranscription safe due to a generated check character
+          |||||______ (I)mpression safe from ignorable typesetter-added hyphens
+          ||||______ (N)on-reassignable in life of Name Assigning Authority
+          |||__ not (A)lphabetic-run-limited to pairs to avoid acronyms
+          ||__ not (R)andomly sequenced to avoid series semantics
+          |______ (G)lobally unique within a registered namespace (currently
+                     tests only ARK namespaces; apply for one at ark@cdlib.org)
+Authority: ithaka.org | CATS
+NAAN:      22573

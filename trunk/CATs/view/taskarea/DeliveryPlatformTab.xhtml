@@ -1,0 +1,111 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="DevPlatDiv1">
+
+	<!-- START Export Delivery Platform Series Feed -->
+	<rich:panel
+		rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Export Delivery Platform Series Feed</h1>
+			<section>
+				<h:form id="bookSeriesID" enctype="multipart/form-data">
+					<dl>
+						<dt>
+							Series Spreadsheet Path:
+							<s:fileUpload data="#{catsOnDemandFeeds.file}" required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:outputText value="Is this a Dry Run?" />
+							<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+								value="#{catsOnDemandFeeds.isDryRun}" />
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{catsOnDemandFeeds.generateLtmBookseriesFeed()}" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Daily feed of book series that have been added to or modified
+					for ingest into Literatum.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/DeliveryPlatformSeriesFeedTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Export Delivery Platform Series Feed -->
+	<!-- START LSI Generation -->
+	<rich:panel
+		rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Export Books to Delivery Platform (New Framework)</h1>
+			<section>
+				<h:form id="bookSpreadsheetFile" enctype="multipart/form-data">
+					<dl>
+						<dt>
+							Book ID Spreadsheet Path:
+							<s:fileUpload data="#{catsOnDemandFeeds.file}" required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:outputText value="Is this a Dry Run?" />
+							<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+								value="#{catsOnDemandFeeds.isDryRun}" />
+						</dt>
+						<dt>
+							<h:commandButton value="Upload" action="#{catsOnDemandFeeds.generateLSIFeed()}" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Makes books for ingest into the Delivery Platform. Generates
+					an input file for ConPrep; ConPrep workflow creates batches.</p>
+				<p>
+					<a target="_blank" href="../templatespreadsheets/lsiTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END LSI Generation -->
+	<!-- START Load Delivery Platform Distribution Status and Dates -->
+	<rich:panel
+		rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Load Delivery Platform Distribution Status and Dates</h1>
+			<section>
+			<h:form id="ltmDistInfoForm" enctype="multipart/form-data">
+			<dl>
+				<dt>Spreadsheet Path:
+				<s:fileUpload data="#{loadLtmDistStatusAndDatesCreator.file}"
+					required="true">
+				</s:fileUpload>
+				</dt>
+				<dt>
+				<h:commandButton value="Import"
+					action="#{loadLtmDistStatusAndDatesCreator.loadLtmDistStatusAndDates()}" />
+				</dt>
+			</dl>
+			</h:form>
+		</section>
+		<section>
+			<p>Loads outcomes of an attempt to ingest books to the Delivery Platform or push them to Live on the Delivery Platform. Updates records in the CAT_LTM_DISTRIBUTIONS table with dates and current status.</p>
+			<p>
+				<a target="_blank"
+					href="../templatespreadsheets/LtmDistStatusDatesTemplate.xlsx">Download
+					Template Spreadsheet</a> to see an example.
+			</p>
+		</section>
+		</section>
+	</rich:panel>
+	<!-- END Load Delivery Platform Distribution Status and Dates -->
+</s:div>

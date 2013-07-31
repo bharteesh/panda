@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+
+	<h2><h:outputText value="#{catPublishersBulkOperations.bulkTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1. Permissions</li>
+		<li class="disabled">2. Change</li>
+		<li class="selected">3. Additional</li>
+		<li class="disabled">4. Results</li>
+	</ul>
+	<div class="cluster smart">
+
+<!-- fragments with things to edit per bulkOp -->
+
+	<div class="push"></div>
+
+
+<a:commandLink styleClass="button" value="Quit"
+			reRender="catPublishersListWizard" oncomplete="#{rich:component('catPublishersListBulkUpdateQuit')}.show(); return false;">
+			</a:commandLink> 
+		
+		
+		<a:commandLink
+		styleClass="button right" value="Continue"
+		action="#{catPublishersBulkOperations.performBulkOperation}" reRender="catPublishersListWizard" />
+</div>
+</div>
+
+</ui:composition>

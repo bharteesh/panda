@@ -1,0 +1,106 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+<ui:composition>
+	<c:set var="safeClassPropertyName"	value="#{fn:replace(propertyName, '\\.', '_')}" />
+	<c:set var="toggleId" value="toggle_#{safeClassPropertyName}" />
+	<c:set var="toggleColumns" value="1" />
+	<c:set var="toggleWidth" value="360" />
+	<c:set var="toggleHeight" value="360" />
+
+	<rich:column
+		styleClass="#{styleClass} #{safeClassPropertyName} #{rollup == 'true' ? 'rollupColumn' : ''}"
+		headerClass=" #{styleClass} #{safeClassPropertyName} #{rollup == 'true' ? 'rollupColumn' : ''}"
+		rendered="#{rendered}">
+		<f:facet name="header">
+			<h:panelGrid columns="1" rendered="#{sortable eq 'true'}">
+				<s:link styleClass="propertySorter"
+					value="#{propertyLabel} #{entityList.orderColumn == propertyPath ? (entityList.orderDirection == 'desc' ? messages.down : messages.up) : ''}"
+					propagation="end" rendered="#{empty lob or not lob}">
+					<f:param name="sort" value="#{propertyPath}" />
+					<f:param name="dir"
+						value="#{entityList.orderColumn == propertyPath and entityList.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+					<f:param name="firstResult" value="0" />
+				</s:link>
+
+				<s:div styleClass="propertyFilter">
+					
+					<s:div rendered="#{empty propertyStartValue and empty propertyEndValue}">
+						<span onclick="#{rich:component(toggleId)}.show();">Date Filter..</span>
+					</s:div>
+					<s:div rendered="#{not empty propertyStartValue or not empty propertyEndValue}">
+						<span onclick="#{rich:component(toggleId)}.show();">
+							<h:outputText value="#{not empty propertyStartValue ? entityList.formatDate(propertyStartValue) :'----------'}" /> to
+							<br/>
+							<h:outputText value="#{not empty propertyEndValue ? entityList.formatDate(propertyEndValue) : '----------'}"/>
+						</span>
+					</s:div>
+					<rich:modalPanel id="#{toggleId}" width="#{toggleWidth}"
+						height="#{toggleHeight}">
+						<div>
+							
+							<s:div>
+								<h2>Filter by #{propertyLabel}:</h2>
+							</s:div>
+							
+							<s:div id="startDateDivId_#{propertyName}">
+								
+	                			<h4>Start Date (yyyy/mm/dd)</h4>
+								<rich:calendar id="startDateRangeCalender_#{propertyName}"
+									enableManualInput="true" datePattern="yyyy/MM/dd"
+									inputClass="datestyle" value="#{propertyStartValue}"
+									styleClass="#{safeClassPropertyName}_datestyle">
+								</rich:calendar>
+							</s:div>
+							
+							<s:div>
+	                			<h4>End Date (yyyy/mm/dd)</h4>
+								<rich:calendar id="endDateRangeCalender_#{propertyName}"
+									enableManualInput="true" datePattern="yyyy/MM/dd"
+									inputClass="datestyle" value="#{propertyEndValue}"
+									styleClass="#{safeClassPropertyName}_datestyle">
+								</rich:calendar>
+							</s:div>
+										
+						</div>
+						<div class="push"></div>
+						
+						<a:commandLink
+							reRender="#{reRender}" oncomplete="orderColumns();"
+							status="globalWaitStatus"
+							onclick="#{rich:component(toggleId)}.hide();"
+							styleClass="button right"
+							eventsQueue="dateQueue">Done</a:commandLink>
+						
+					</rich:modalPanel>
+
+					<s:conversationId></s:conversationId>
+					<f:param name="sort" value="#{sort}" />
+					<f:param name="dir" value="#{dir}" />
+					<f:param name="firstResult" value="0" />
+				</s:div>
+
+			</h:panelGrid>
+		</f:facet>
+
+		<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" styleClass="#{safeClassPropertyName}">
+			<f:param name="id" value="#{linkToId}" />
+			<h:outputText value="#{value}">
+				<ui:insert />
+			</h:outputText>
+		</s:link>
+
+	</rich:column>
+</ui:composition>
+
+</html>

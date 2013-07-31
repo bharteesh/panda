@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="../layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">jtrackMigration</f:facet>
+
+        <a:form id="JtrackMigrationForm">
+
+            <a:commandButton id="jtrackMigration" value="jtrackMigration!"
+                             action="#{JtrackMigration.jtrackMigration}"/>
+			<a:commandButton id="jsource" value="jsource!"
+                             action="#{JtrackMigration.jsource}"/>
+                             
+                             <a:commandButton id="titlerelats" value="titlerelats"
+                             action="#{JtrackMigration.titleRelats}"/>
+        </a:form>
+
+    </rich:panel>
+
+
+	<rich:panel>
+		<f:facet name="header">Agreement items</f:facet>
+		
+		<a:form id="contractsItems">
+		
+		
+			<a:commandButton id="getContractsListed" value="find contract ids" action="#{jtrackMigrationContractIdsOp.performList}"/>
+		
+			<a:commandButton id="insertContractRvns" value="insert contract revisions" action="#{jtrackMigrationContractIdsOp.performInsertion}"/>
+		</a:form>
+	</rich:panel>
+
+
+	<rich:panel>
+		<f:facet name="header">rollupregenqueue</f:facet>
+		
+		<p>Currently: Active: ${rollupRegenQueue.active}</p>
+		
+		<h:form id="rrqa">
+			<h:commandButton id="activate" value="activate" action="#{rollupRegenQueue.setActive(true)}"/>
+			<h:commandButton id="deactivate" value="deactivate" action="#{rollupRegenQueue.setActive(false)}"/>
+		
+		</h:form>
+	
+	</rich:panel>
+
+
+	<rich:panel>
+		<f:facet name="header">excluded titles</f:facet>
+		
+		<rich:dataList value="#{JtrackMigration.excludedTitles}" var="_et">
+			<h:outputText value="#{_et}" />
+		</rich:dataList>
+	
+	</rich:panel>
+	
+	<rich:panel>
+	<f:facet name="header">Exclusion Loading</f:facet>
+	
+	<p>Exclusion File valid: ${exclusionsLoader.fileValid()}</p>
+	
+	<a:form id="exclusionLoad" rendered="#{exclusionsLoader.fileValid()}">
+	
+	<a:commandButton id="loadExclusions" value="load" action="#{exclusionsLoader.loadExclusions}"/>
+	
+	</a:form>
+	
+	</rich:panel>
+
+</ui:define>
+
+</ui:composition>

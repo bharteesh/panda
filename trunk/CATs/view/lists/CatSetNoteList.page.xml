@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd" login-required="true">
+<begin-conversation join="true"/>
+  <param name="flavour" value="#{catSetNoteList.flavour}"/>
+
+
+   <param name="firstResult" value="#{catSetNoteList.firstResult}"/>
+   <param name="sort" value="#{catSetNoteList.orderColumn}"/>
+   <param name="dir" value="#{catSetNoteList.orderDirection}"/>
+   <param name="logic" value="#{catSetNoteList.restrictionLogicOperator}"/>
+
+   <param name="from"/>
+   <param name="id" value="#{catSetNoteList.catSetNote.id}"/>
+   <param name="catCreator" value="#{catSetNoteList.catSetNote.catCreator}"/>
+   <param name="catType" value="#{catSetNoteList.catSetNote.catType}"/>
+
+
+<!-- catSetNoteList -->
+<param name="catDateCreated" value="#{catSetNoteList.catSetNote.catDateCreated}"/>
+
+</page>

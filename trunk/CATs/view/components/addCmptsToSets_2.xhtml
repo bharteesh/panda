@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+
+
+	<h2>Add Components to Sets</h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="">1. Permissions</li>
+		<li class="selected">2. Change</li>
+		<li class="disabled">3. Additional</li>
+		<li class="disabled">4. Results</li>
+	</ul>
+	<div class="cluster smart">
+
+	<p>Select the Set you want to add to:</p>
+
+	<div class="scroller"><rich:dataTable id="catSetsList"
+		var="_catSets" value="#{addCmptsToSets.setsList}"
+		rendered="#{not empty addCmptsToSets.setsList}" rowClasses="odd,even">
+
+		<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+			<!--  not all sets available for this operation. -->
+			<s:fragment
+				rendered="#{s:hasPermission(_catSets, 'special addCmptsToSets')}">
+
+				<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+						value="#{addCmptsToSets.selections[_catSets]}" 
+						onclick="emulateRadios(this, 'bulk_checkbox');"/>
+
+			</s:fragment>
+		</rich:column>
+
+		<rich:column id="id" sortBy="#{_catSets.id}" filterBy="#{_catSets.id}"
+			sortable="true">
+			<f:facet name="header">
+				<h:outputText value="ID" />
+			</f:facet>
+			<h:outputText value="#{_catSets.id}" />
+		</rich:column>
+		<rich:column id="catName" sortBy="#{_catSets.catCurrentTitle.catName}"
+			filterBy="#{_catSets.catCurrentTitle.catName}" sortable="true">
+			<f:facet name="header">
+				<h:outputText value="Name" />
+			</f:facet>
+			<h:outputText value="#{_catSets.catCurrentTitle.catName}" />
+		</rich:column>
+		<rich:column id="catLifecycle" sortBy="#{_catSets.catLifecycle}"
+			filterBy="#{_catSets.catLifecycle}" sortable="true">
+			<f:facet name="header">
+				<h:outputText value="Lifecycle" />
+			</f:facet>
+			<h:outputText value="#{_catSets.catLifecycle}" />
+		</rich:column>
+		<rich:column id="catThDateRange" sortBy="#{_catSets.catThDateRange}"
+			filterBy="#{_catSets.catThDateRange}" sortable="true">
+			<f:facet name="header">
+				<h:outputText value="TH Date Range" />
+			</f:facet>
+			<h:outputText value="#{_catSets.catThDateRange}" />
+		</rich:column>
+		<rich:column id="catOnHold" sortBy="#{_catSets.catOnHold}"
+			filterBy="#{_catSets.catOnHold}" sortable="true">
+			<f:facet name="header">
+				<h:outputText value="On Hold" />
+			</f:facet>
+			<h:outputText value="#{_catSets.catOnHold}" />
+		</rich:column>
+
+	</rich:dataTable></div>
+
+	</div>
+
+	<div class="push"></div>
+
+	<a:commandLink styleClass="button" value="Quit"  limitToList="true"
+		oncomplete="#{rich:component('addCmptsToSetsQuit')}.show(); return false;"
+		eventsQueue="wizardQueue" status="globalWaitStatus">
+	</a:commandLink> <a:commandLink styleClass="button right" value="Continue"
+		onclick="if(checkRadios('bulk_checkbox', 'Please select a Set') == false) {return false}"
+		action="#{addCmptsToSets.next}" reRender="wizard" limitToList="true"
+		eventsQueue="wizardQueue" status="globalWaitStatus"/>
+	</div>
+</ui:composition>
+

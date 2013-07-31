@@ -1,0 +1,222 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+<s:div id="createWallDtlsId">
+	<h2><h:outputText value="#{createWallDetailsWizard.createTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="selected">1. Info</li>
+		<li class="disabled">2. Results</li>
+	</ul>
+	<div class="cluster">		
+		<s:div id="chooseSetsFragment" styleClass="#{empty createWallDetailsWizard.setsToAddTo ? 'field':'off'}">		
+			<span class="field" >
+			<label>Choose a Set</label>			
+			<h:inputText id="default_search_catSetsList"
+				disabled="#{createWallDetailsWizard.fromSetsRecord}"
+				value="#{catSetsList.catSets.catCurrentTitle.catName}"
+				onchange="return false;" size="60">
+				<a:support event="onblur"
+                    	eventsQueue="createWallDtlsQueue"
+                    	ajaxSingle="true"/>	 
+			</h:inputText>
+		
+			<a:commandLink styleClass="button filter" value="Filter"
+				disabled="#{createWallDetailsWizard.fromSetsRecord}"
+				action="#{createWallDetailsWizard.narrowList(rich:findComponent('default_search_catSetsList').value)}"
+				reRender="createWallDtlsId, wallInfoPanel, buttonPanel" ajaxSingle="true" status="globalWaitStatus" ignoreDupResponses="true" eventsQueue="createWallDtlsQueue"/>
+			</span>
+	</s:div>			
+			<div class="smart">
+							
+				<rich:dataTable id="sets" value="#{createWallDetailsWizard.setsList}" styleClass="scroller"
+					rendered="#{not empty createWallDetailsWizard.setsList}"
+					var="_setsRollup">
+					
+					<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+						<h:selectBooleanCheckbox styleClass="sets_checkbox"
+							value="#{createWallDetailsWizard.selectionsForSets[_setsRollup]}"
+							onclick="emulateRadios(this, 'sets_checkbox');" >
+							<a:support event="onchange" 
+								ajaxSingle="true"	action="#{createWallDetailsWizard.selectParentSet}"
+								reRender="sets,wallInfoPanel, buttonPanel" status="globalWaitStatus"/>
+						</h:selectBooleanCheckbox>
+					</rich:column>
+					<cats:wizardColumn entityList="#{catSetsList}" propertyLabel="Name"
+						propertyName="catName"
+						propertyPath="catSets.catCurrentTitle.catName"
+						propertyValue="#{catSetsList.catSets.catCurrentTitle.catName}"
+						reRender="sets" value="#{_setsRollup.catCurrentTitle.catName}" />
+					<cats:wizardColumn entityList="#{catSetsList}"
+						propertyLabel="Lifecycle" propertyName="catLifecycle"
+						propertyPath="catSets.catLifecycle"
+						propertyValue="#{catSetsList.catLifecycle}" reRender="sets"
+						value="#{_setsRollup.catLifecycle.label}" />
+					<cats:wizardColumn entityList="#{catSetsList}"
+						propertyLabel="Extent (Dates)" propertyName="catThDateRange"
+						propertyPath="catSets.catThDateRange"
+						propertyValue="#{catSetsList.catSets.catThDateRange}"
+						reRender="sets" value="#{_setsRollup.catThDateRange}" />
+					<cats:wizardColumn entityList="#{catSetsList}" propertyLabel="Wall"
+						propertyName="id" propertyPath="catSets.wallValue"
+						propertyValue="#{catSetsList.catSets.wallValue}" reRender="sets"
+						value="#{_setsRollup.wallValue}" />
+					<cats:wizardColumn entityList="#{catSetsList}"
+						propertyLabel="On Hold" propertyName="catOnHold"
+						propertyPath="catSets.catOnHold"
+						propertyValue="#{catSetsList.catSets.catOnHold}" reRender="sets"
+						value="#{_setsRollup.catOnHold ? 'Yes' : 'No'}" />
+					<cats:wizardColumn entityList="#{catSetsList}" propertyLabel="ID"
+						propertyName="id" propertyPath="catSets.id"
+						propertyValue="#{catSetsList.catSets.id}" reRender="sets"
+						value="#{_setsRollup.id}" />
+				</rich:dataTable>			
+			</div>
+			<div>
+				<div class="push"></div>
+				<a:outputPanel layout="none" id="wallInfoPanel">
+				<s:div id="catWallInfosdiv" rendered="#{not empty createWallDetailsWizard.setsToAddTo}">
+					<div class="title change">
+			        	<h1>Wall Info</h1>
+			        	<p>Help the system fill out basic information about this wall.</p>
+			   		 </div>			   		 
+			   		 <s:decorate id="catWallChangeType_div" template="../layout/edit.xhtml">
+						<ui:define name="label">Change Type</ui:define>
+						<h:selectOneMenu required="true" name="catChangeType" value="#{createWallDetailsWizard.createInstance.catChangeType}">
+				   			<s:selectItems value="#{listsForEnums.catWallDtls_CatChangeType}" var="i" itemValue="#{i}"
+				               	  label="#{i.label}"/>
+				               	 <a:support event="onchange" reRender="catWallTypesdiv" ajaxSingle="true" status="globalWaitStatus"/>
+				       </h:selectOneMenu>
+						<span class="comments">
+							Why are you creating this wall record? Use <strong>New</strong> when you create the first wall for a newly signed title. If the journal has ceased publication, use <strong>Cease</strong>.
+						</span>
+					</s:decorate>					
+				   	<s:div id="catWallTypesdiv">
+				   		<s:decorate id="catWallTypeId" template="../layout/edit.xhtml">
+							<ui:define name="label">Wall Type</ui:define>
+							<h:selectOneMenu required="true" name="catWallType" value="#{createWallDetailsWizard.createInstance.catWallType}">
+								<s:selectItems value="#{createWallDetailsWizard.availableWallTypes}" var="i" itemValue="#{i}"
+									                 label="#{i.label}" noSelectionLabel="Choose..."/>
+									 <a:support event="onchange" reRender="wallAddnlPanel" ajaxSingle="true" status="globalWaitStatus"/>									                 
+							</h:selectOneMenu>
+							<span class="comments">Type of wall.</span>
+						</s:decorate>		
+					</s:div>
+				<a:outputPanel layout="none" id="wallAddnlPanel">
+					<s:div id="catWallMovingsdiv"  rendered="#{createWallDetailsWizard.createInstance.catWallType.label eq 'Moving'}">
+						<s:decorate id="catMovingValueId" template="../layout/edit.xhtml">
+							<ui:define name="label">Moving Wall Value</ui:define>
+							<h:inputText id="catMovingValue" value="#{createWallDetailsWizard.createInstance.catMovingValue}" required="true"></h:inputText>
+							<span class="comments">Length of the moving wall in years.</span>
+						</s:decorate>
+					</s:div>
+					<s:div id="catWallFixedsdiv"  rendered="#{createWallDetailsWizard.createInstance.catWallType.label eq 'Fixed'}">
+						<s:decorate id="catFixedDate_div" template="../layout/edit.xhtml">
+								<ui:define name="label">Fixed Date</ui:define>
+								<span class="read_only"><rich:calendar enableManualInput="true"  required="true" name="catFixedDate"
+						                          value="#{createWallDetailsWizard.createInstance.catFixedDate}" 
+						                          datePattern="yyyy/MM/dd" inputClass="datestyle"/>
+						        </span>
+						        <span class="comments">The last day we have rights to display. Example: If the wall is fixed at 2005, we can display everything published through and including December 31, 2004. The fixed date will be 2004/12/31.</span>
+						</s:decorate>
+					</s:div>
+					<s:div id="catWallCeasedsdiv"  rendered="#{createWallDetailsWizard.createInstance.catWallType.label eq 'Ceased'}">
+						<s:decorate id="catCeasedDate_div" template="../layout/edit.xhtml">
+								<ui:define name="label">Ceased Date</ui:define>
+								<span class="read_only"><rich:calendar enableManualInput="true"  required="true" name="catCeasedDate"
+						                          value="#{createWallDetailsWizard.createInstance.catCeasedDate}" 
+						                          datePattern="yyyy/MM/dd" inputClass="datestyle"/>
+						        </span>
+							 <span class="comments">The publication date of this set's final publication unit. When the publication date only includes a year, use the first day of that year. When the publication date only includes a year and month,
+								use the first day of that month. If the final issue spans more than one publication date, use the latest date. You will be able to revise this date outside of the wizard. Example: If the last issue was published May, 1910 the cease date will be
+								1910/05/01.</span>
+						</s:decorate>
+					</s:div>
+				</a:outputPanel>	
+						
+					<s:decorate id="catWallLifecycleId" template="../layout/edit.xhtml">
+							<ui:define name="label">Lifecycle</ui:define>
+							<h:selectOneMenu required="true" name="catWallLifecycle" value="#{createWallDetailsWizard.createInstance.catLifecycle}">
+								<s:selectItems value="#{createWallDetailsWizard.availableLifecycleValues}" var="i" itemValue="#{i}"
+									                 label="#{i.label}" noSelectionLabel="Choose..."/>
+									 <a:support event="onchange" reRender="catWallOtherDatesPanel" ajaxSingle="true" status="globalWaitStatus"/>									                 
+							</h:selectOneMenu>
+							<span class="comments">You can set the lifecycle for this wall. Use <strong>Proposed</strong> if the licensor is considering this as the wall but has not officially committed to it. Use <strong>Confirmed</strong> if the licensor has signed an agreement (for
+									new titles) or amendment (for wall changes). Use <strong>Implemented</strong> if JSTOR Public already uses this wall information. You will only be able to choose <strong>Proposed</strong> for Sets that have not been signed. If the set already has an Implemented Wall,
+									you can only choose <strong>Proposed</strong> or <strong>Confirmed</strong>; you need to <strong>Deprecate</strong> the old wall before <strong>Implementing</strong> the new wall. If the Set already has a Confirmed Wall, then you cannot choose <strong>Confirmed</strong>.
+							</span>
+					</s:decorate>
+					<a:outputPanel layout="none" id="catWallOtherDatesPanel">
+						<s:div id="catWallEffectDatediv"  rendered="#{createWallDetailsWizard.createInstance.catLifecycle.label eq 'Confirmed' or 
+																		createWallDetailsWizard.createInstance.catLifecycle.label eq 'Implemented'}">
+							<s:decorate id="catWallEffectDate_div" template="../layout/edit.xhtml" styleClass="lastdate">
+									<ui:define name="label">Amendment Date</ui:define>
+									<span class="read_only"><rich:calendar enableManualInput="true"  required="true" name="catEffectiveDate"
+							                          value="#{createWallDetailsWizard.createInstance.catEffectiveDate}" 
+							                          datePattern="yyyy/MM/dd" inputClass="datestyle"/>
+							        </span>
+								 	<span class="comments">Date JSTOR countersigned licensor's official agreement to use this wall for this set. If the licensor specifies wall information as part of the JSTOR Backfile License Agreement, use
+									the <strong>Agreement Date</strong>.</span>
+							</s:decorate>
+						</s:div>
+						<s:div id="catWallSchdImplDatediv"  rendered="#{createWallDetailsWizard.createInstance.catLifecycle.label eq 'Implemented'}">
+							<s:decorate id="catWallSchdImplDate_div" template="../layout/edit.xhtml" styleClass="lastdate">
+									<ui:define name="label">Scheduled Implementation</ui:define>
+									<span class="read_only"><rich:calendar enableManualInput="true"  name="catSchdImplDate"
+							                          value="#{createWallDetailsWizard.createInstance.catImplementationDatePrjd}" 
+							                          datePattern="yyyy/MM/dd" inputClass="datestyle"/>
+							        </span>
+								 	<span class="comments">Date when this wall will go live on JSTOR Public. Use the set's scheduled <strong>Release Date</strong> for a new title.</span>
+							</s:decorate>
+							<s:decorate id="catWallActlImplDate_div" template="../layout/edit.xhtml" styleClass="lastdate">
+									<ui:define name="label">Implemented on</ui:define>
+									<span class="read_only"><rich:calendar enableManualInput="true"  required="true" name="catActlImplDate" 
+							                          value="#{createWallDetailsWizard.createInstance.catImplementationDateActl}" 
+							                          datePattern="yyyy/MM/dd" inputClass="datestyle"/>
+							        </span>
+								 	<span class="comments">Date when this wall went live on JSTOR Public. Use the set's scheduled <strong>Release Date</strong> for a new title.</span>
+							</s:decorate>
+						</s:div>
+					</a:outputPanel>
+				</s:div>				
+				</a:outputPanel>
+			</div>					
+	</div>
+
+	<div class="push"></div>
+
+	<s:div id="buttonPanel">
+	<a:commandLink styleClass="button" value="Quit"
+		reRender="createWallDetailswizard,#{reRenderMe}"
+		oncomplete="#{rich:component('createWallDetailsQuit')}.show(); return false;"
+		status="globalWaitStatus" ajaxSingle="true"
+		ignoreDupResponses="true">
+	</a:commandLink>	
+		<s:fragment	rendered="#{not empty createWallDetailsWizard.setsToAddTo}">
+			<a:commandLink styleClass="button right" value="Continue"
+				action="#{createWallDetailsWizard.createNext}"
+				reRender="createWallDetailswizard" eventsQueue="createWallDetails"
+				status="globalWaitStatus" ignoreDupResponses="true" />
+		</s:fragment> <s:fragment rendered="#{empty createWallDetailsWizard.setsToAddTo}">
+			<a:commandLink styleClass="button right" value="Continue"
+				onclick="if(checkRadios('sets_checkbox', 'Please select a Set') == false) {return false}"
+				action="#{createWallDetailsWizard.createNext}"
+				reRender="createWallDetailswizard" eventsQueue="createWallDetails"
+				status="globalWaitStatus" ignoreDupResponses="true">
+			</a:commandLink>
+		</s:fragment>
+	</s:div>	
+	</div>
+</s:div>
+</ui:composition>

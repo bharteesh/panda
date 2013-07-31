@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+	
+  <ui:param name="entityType" value="platformDistributions" />
+	<ui:param name="moremenu" value="moremenu" />
+	<ui:define name="badge">
+		<ui:include src="LtmDistributionsBadge.xhtml" />
+	</ui:define>
+	
+	<ui:define name="body">
+		<h:form id="ltmDistributionsEditForm">
+		<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+				
+			<rich:tabPanel 
+				id="maintab" 
+			   	switchType="ajax"
+				styleClass="tab"
+				contentClass="tab_content"
+				selectedTab="#{catLtmDistributionsHome.selectedTab}">
+
+				<rich:tab label="Distribution Info" id="tab1" name="tab1" eventsQueue="ltmDistributionsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catLtmDistributionsHome.updateUserTabPreferences('tab1')}" limitToList="true">
+					<ui:include src="LtmDistributionsInformationTab.xhtml" />
+				</rich:tab>
+				
+				<rich:tab label="Audit" id="tab2" name="tab2" eventsQueue="ltmDistributionsEditQueue" status="globalWaitStatus" 
+					action="#{catLtmDistributionsHome.updateUserTabPreferences('tab2')}" reRender="qcMessagesLayout" limitToList="true">
+					<ui:include src="LtmDistributionsAuditTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Events" id="eventsTab" name="eventsTab" eventsQueue="ltmDistributionsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catLtmDistributionsHome.updateUserTabPreferences('eventsTab')}" limitToList="true">
+					<ui:include src="LtmDistributionsEventsTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+			<div id="functions">
+		    	<a:commandLink action="#{catLtmDistributionsHome.update}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" styleClass="button saveOrCancel disabled" 
+		    		value="Save"
+		    		reRender="ltmDistributionsEditForm"
+		    		eventsQueue="ltmDistributionsEditQueue" status="globalWaitStatus"/>
+		    	<a:commandLink action="#{catLtmDistributionsHome.cancel}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" ajaxSingle="true" styleClass="button saveOrCancel disabled" 
+		    		value="Cancel"
+		    		eventsQueue="ltmDistributionsEditQueue" status="globalWaitStatus"/>
+		    </div>
+		</h:form>
+				
+</ui:define>		
+</ui:composition>

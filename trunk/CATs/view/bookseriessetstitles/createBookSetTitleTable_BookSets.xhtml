@@ -1,0 +1,61 @@
+<s:div id="bookSetFilterTable" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats"
+    styleClass="scroller">
+    
+    
+	<rich:dataTable id="bookSetTable"
+		value="#{createBookSetTitleWizard.bookSetsList}" var="_bookSet">
+		<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+			<h:selectBooleanCheckbox styleClass="entity_checkbox"
+				value="#{createBookSetTitleWizard.selectionsForBookSets[_bookSet]}"
+				onclick="emulateRadios(this, 'entity_checkbox');" >
+				<a:support event="onchange" 
+					action="#{createBookSetTitleWizard.selectParentBookSet}"
+					reRender="noLayoutBookSetList,noLayoutErrorMsgs"
+					eventsQueue="createBookSetsTitleQueue"
+					status="globalWaitStatus"
+					ajaxSingle="true"
+					limitToList="true"/>
+			</h:selectBooleanCheckbox>
+		</rich:column>
+		
+		<cats:wizardColumn
+			entityList="#{catBookSetsList}"
+			propertyLabel="Main Title"
+			propertyName="mainTitle"
+			propertyPath="catBookSetsList.mainTitle"
+			propertyValue="#{catBookSetsList.catBookSets.mainTitle}"
+			reRender="bookSetTable"
+			value="#{_bookSet.mainTitle}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catBookSetsList}"
+			propertyLabel="Book Set Publishers"
+			propertyName="setPublishers"
+			propertyPath="catBookSetsList.setPublishers"
+			propertyValue="#{catBookSetsList.catBookSets.setPublishers}"
+			reRender="bookSetTable"
+			value="#{_bookSet.setPublishers}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catBookSetsList}"
+			propertyLabel="ID"
+			propertyName="id"
+			propertyPath="catBookSetsList.id"
+			propertyValue="#{catBookSetsList.catBookSets.id}"
+			reRender="bookSetTable"
+			value="#{_bookSet.id}"/>
+		
+	</rich:dataTable>
+	<s:div styleClass="blanktable" rendered="#{empty createBookSetTitleWizard.bookSetsList}">
+		<span>Choose a Book Set.</span>
+	</s:div>
+    
+	
+ </s:div>

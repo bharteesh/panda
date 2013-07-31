@@ -1,0 +1,314 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+
+	<h2><h:outputText value="#{catIssueShipmentsBulkOperations.bulkTitle}" /></h2>
+	
+		<div id="step1">
+		<s:fragment rendered="#{not catIssueShipmentsBulkOperations.bulkOperationsType.equals('ADVANCE')}">
+			<ul class="steps">
+					<li class="">1. Permissions</li>
+					<li class="selected">2. Change</li>
+					<li class="disabled">3. Additional</li>
+					<li class="disabled">4. Results</li>
+			</ul>
+		</s:fragment>
+		<s:fragment rendered="#{catIssueShipmentsBulkOperations.bulkOperationsType.equals('ADVANCE')}">
+			<ul class="steps">
+					<li class="selected">1. Edit</li>
+					<li class="disabled">2. Results</li>
+			</ul>
+		</s:fragment>
+	
+		<div class="cluster smart">
+
+<!-- fragments with things to edit per bulkOp -->
+
+<s:fragment rendered="#{catIssueShipmentsBulkOperations.bulkOperationsType.equals('CHNGPARENT')}">
+
+<s:div id="chooseCmptsFragment">
+		  <h:inputText id="default_search_catCmptsList" value="#{catCmptsList.catCmpts.catName}" size="60" onchange="return false;"/>
+
+		  <a:commandLink 
+		  		 styleClass="button filter"
+				 value="Filter list on Component Name"
+				 action="#{catIssueShipmentsBulkOperations.narrowList(rich:findComponent('default_search_catCmptsList').value)}"
+				 reRender="chooseCmptsFragment"
+				 status="globalWaitStatus"
+				 />
+
+
+		
+
+			<div class="scroller">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Components (#{catCmptsList.resultCount})" />
+					</f:facet>
+				</rich:panel>
+
+
+			  <rich:dataTable id="cmpts"
+				value="#{catCmptsList.resultList}" var="_catCmpts">
+				<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+					<h:selectBooleanCheckbox styleClass="entity_checkbox"
+						value="#{catIssueShipmentsBulkOperations.selectionsForEntities[_catCmpts]}"
+						onclick="emulateRadios(this, 'entity_checkbox');" />
+				</rich:column>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="ID"
+			propertyName="id"
+			propertyPath="catCmpts.id"
+			propertyValue="#{catCmptsList.catCmpts.id}"
+			reRender="cmpts"
+			value="#{_catCmpts.id}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Name"
+			propertyName="catName"
+			propertyPath="catCmpts.catName"
+			propertyValue="#{catCmptsList.catCmpts.catName}"
+			reRender="cmpts"
+			value="#{_catCmpts.catName}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Lifecycle"
+			propertyName="catLifecycle"
+			propertyPath="catCmpts.catLifecycle"
+			propertyValue="#{catCmptsList.catLifecycle}"
+			reRender="cmpts"
+			value="#{_catCmpts.catLifecycle}"
+		/>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Sets Name"
+			propertyName="setsValue"
+			propertyPath="catCmpts.setsValue"
+			propertyValue="#{catCmptsList.catCmpts.setsValue}"
+			reRender="cmpts"
+			value="#{_catCmpts.setsValue}"
+		/>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Publication Unit Range"
+			propertyName="catPublctnUnitRange"
+			propertyPath="catCmpts.catPublctnUnitRange"
+			propertyValue="#{catCmptsList.catCmpts.catPublctnUnitRange}"
+			reRender="cmpts"
+			value="#{_catCmpts.catPublctnUnitRange}"
+		/>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Date Range"
+			propertyName="catDateRange"
+			propertyPath="catCmpts.catDateRange"
+			propertyValue="#{catCmptsList.catCmpts.catDateRange}"
+			reRender="cmpts"
+			value="#{_catCmpts.catDateRange}"
+		/>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Print ISSN"
+			propertyName="catPrintIssn"
+			propertyPath="catCmpts.catPrintIssn"
+			propertyValue="#{catCmptsList.catCmpts.catPrintIssn}"
+			reRender="cmpts"
+			value="#{_catCmpts.catPrintIssn}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="On Hold"
+			propertyName="catOnHold"
+			propertyPath="catCmpts.catOnHold"
+			propertyValue="#{catCmptsList.catCmpts.catOnHold}"
+			reRender="cmpts"
+			value="#{_catCmpts.catOnHold}"
+		/>
+
+
+
+
+
+
+			</rich:dataTable>
+			</div>
+	</s:div>
+
+</s:fragment>
+
+<!-- catLifecycle -->
+<s:fragment rendered="#{catIssueShipmentsBulkOperations.bulkOperationsType.equals('ADVANCE')}">	
+		<div class="alert">
+					<p class="highlight">
+					You are advancing the shipment's lifecycle from <strong><h:outputText value="#{catIssueShipmentsHome.instance.catLifecycle}" /></strong> to 
+					<strong><h:outputText value="#{catIssueShipmentsBulkOperations.newLifecycleValue}" /></strong>
+					</p>
+		</div>
+		
+		<div class="alert">
+				<p>When you hit Continue, the system will also Complete the order unless it's a subscription, is on hold, has open problems, or has other open shipments. If you do not want to Complete the order, hit
+					Quit button now.</p>		
+		</div>	
+		<s:div styleClass="title"> 
+			<h1><h:outputText value="Your Shipment (1)"/></h1>
+			 <p>You are changing the lifecycle to <h:outputText value=" #{catIssueShipmentsBulkOperations.newLifecycleValue} " /> for this shipment</p>
+		</s:div>
+		<div class="push"></div> 
+			<cats:dumbTableIssueShipmentsLifecycle value="#{catIssueShipmentsBulkOperations.issueShipmentsList}"/>
+			
+		<s:div styleClass="title"> 
+			<h1><h:outputText value="Your Order (1)"/></h1>
+			<p>Your shipment belongs to this order</p>
+		</s:div>
+		<div class="push"></div> 
+			<cats:dumbTableAcqOrdersShipmentsLifecycle value="#{catIssueShipmentsBulkOperations.acqOrdersList}"/>
+		
+		
+			<div class="title change">
+					<h1> Edit </h1>
+					<p>Fill out required information for to Complete the shipment.</p>
+			</div>			
+					<s:decorate id="catNotReceivedNote_div" template="../layout/edit.xhtml">
+			    			<ui:define name="label">Notes</ui:define>
+		                   <h:inputTextarea cols="20"	id="catNotes" rows="2"
+								value="#{catIssueShipmentsBulkOperations.bulkInstance.catNote}"/>
+				           <span class="comments">Notes about missing or damaged content. Remember to file an Order Problem if needed.</span>
+					</s:decorate>
+					<s:decorate id="catMaterialFormat_div" template="../layout/edit.xhtml">
+			    			<ui:define name="label">Format</ui:define>
+		                    <h:selectOneMenu id="catMaterialFormat" value="#{catIssueShipmentsBulkOperations.bulkInstance.catMaterialFormat}"
+		                           requiredMessage="Please make a selection !!"  required="true">
+				   	    	    <s:selectItems value="#{listsForEnums.catIssueShipments_MaterialFormat}" var="i" itemValue="#{i}"
+				                     label="#{i.label}" noSelectionLabel="Choose..." />
+				           </h:selectOneMenu>
+				           <span class="comments">Physical Format</span>
+					</s:decorate>
+					<s:decorate id="catReprints_div" template="../layout/edit.xhtml">
+			    			<ui:define name="label">Reprints</ui:define>
+		                    <h:selectOneMenu id="catReprints" value="#{catIssueShipmentsBulkOperations.bulkInstance.catReprints}"
+		                           requiredMessage="Please make a selection !!"  required="true">
+				   	    	    <s:selectItems value="#{listsForEnums.catIssueShipments_Reprints}" var="i" itemValue="#{i}"
+				                     label="#{i.label}" noSelectionLabel="Choose..." />
+				           </h:selectOneMenu>
+				           <span class="comments">Does this shipment include any reprints?</span>
+					</s:decorate>
+					<s:decorate id="catSourceCondition_div" template="../layout/edit.xhtml">
+		    				<ui:define name="label">Condition</ui:define>
+		                    <h:selectOneMenu id="catSourceCondition" value="#{catIssueShipmentsBulkOperations.bulkInstance.catSourceCondition}"
+		                           requiredMessage="Please make a selection !!" required="true">
+				   	    	    <s:selectItems value="#{listsForEnums.catIssueShipments_SourceCondition}" var="i" itemValue="#{i}"
+				                     label="#{i.label}" noSelectionLabel="Choose..." />
+				           </h:selectOneMenu>
+				           <span class="comments">To the best of your knowledge, is the source material usable for digitization?</span>
+					</s:decorate>	
+					<s:decorate id="catOutcome_div" template="../layout/edit.xhtml">
+						<ui:define name="label">Outcome</ui:define>
+		                <h:selectOneMenu id="catOutcome" value="#{catIssueShipmentsBulkOperations.bulkInstance.catOutcome}"
+		                           requiredMessage="Please make a selection !!" 
+					               required="true">
+				   		    <s:selectItems value="#{listsForEnums.catIssueShipments_Outcome}" var="i" itemValue="#{i}"
+				                 label="#{i.label}" noSelectionLabel="Choose..." />                  
+				       </h:selectOneMenu>
+				       <span class="comments">Did we receive all of the shipment?</span>
+					</s:decorate>		
+					<s:decorate id="catOrderOutcome_div" template="../layout/edit.xhtml">
+						<ui:define name="label">Order Outcome</ui:define>
+		                <h:selectOneMenu id="catOrderOutcome" value="#{catIssueShipmentsBulkOperations.acqOrdersInstance.catOutcome}"
+		                           requiredMessage="Please make a selection !!" 
+					               required="true">
+				   		    <s:selectItems value="#{listsForEnums.catAcqOrders_Outcome}" var="i" itemValue="#{i}"
+				                 label="#{i.label}" noSelectionLabel="Choose..." />                  
+				       </h:selectOneMenu>
+				       <span class="comments">Did we receive all of the order? System will use this order outcome if it can complete the order.</span>
+					</s:decorate>
+		
+</s:fragment>
+
+<!--  onhold -->
+<s:fragment rendered="#{catIssueShipmentsBulkOperations.bulkOperationsType.equals('ONHOLD') and catIssueShipmentsBulkOperations.bulkRequiredProperties.contains('catOnHold')}">
+<div class="scroller">
+	<p>Please make a selection.</p>
+	
+    <s:decorate id="catOnHold_div" template="../layout/edit.xhtml">
+    <ui:define name="label">On Hold</ui:define>
+    <h:selectOneMenu 
+           id="modifyOnHold" value="#{catIssueShipmentsBulkOperations.bulkInstance.catOnHold}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		<s:selectItems value="#{listsForEnums.yesNo}" var="i" itemValue="#{i.value}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+                    <a:support event="onchange"
+                    	eventsQueue="#{divParam}eventsQueue"
+                    	status="globalWaitStatus"
+                        reRender="noLayoutExistingFromCatOnHold" ajaxSingle="true"/>
+		       </h:selectOneMenu>
+    </s:decorate>
+    <a:outputPanel layout="none" id="noLayoutExistingFromCatOnHold">
+    <s:div id="catOnHoldReason_outer_div" rendered="#{catIssueShipmentsBulkOperations.bulkOptionalProperties.contains('catOnHoldReason') and catIssueShipmentsBulkOperations.bulkInstance.catOnHold == true}">
+       <s:decorate id="catOnHoldReason_div" template="../layout/edit.xhtml">
+	     	<ui:define name="label">On Hold Reason</ui:define>
+                <h:inputTextarea id="catOnHoldReason" 
+                           requiredMessage="Please enter a value !!" 
+			               required="true" 
+                           cols="20" rows="2" value="#{catIssueShipmentsBulkOperations.bulkInstance.catOnHoldReason}"/>	     	
+	   </s:decorate>
+    </s:div>
+    </a:outputPanel>
+	
+</div>
+</s:fragment>
+
+			</div>
+
+		<div class="push"></div>
+
+
+
+	<a:commandLink styleClass="button" value="Quit"
+			rendered="#{not (catIssueShipmentsBulkOperations.bulkOperationsType.equals('CHNGPARENT'))}"
+			eventsQueue="#{divParam}eventsQueue"
+			status="globalWaitStatus"
+			reRender="issueshipmentswizard" oncomplete="#{rich:component('issueshipmentsbulkUpdateQuit')}.show(); return false;">
+			</a:commandLink> 			
+
+			
+		<a:commandLink id="continueWithOnclickValidation"
+		rendered="#{catIssueShipmentsBulkOperations.bulkOperationsType.equals('CHNGPARENT')}"
+		styleClass="button right" value="Continue"
+		eventsQueue="#{divParam}eventsQueue"
+		status="globalWaitStatus"
+		onclick="if(checkRadios('entity_checkbox', 'Please select an entry') == false) {return false}"
+		action="#{catIssueShipmentsBulkOperations.bulkNext}"
+		reRender="issueshipmentswizard" />
+
+
+		<a:commandLink id="continueWithoutOnclickValidation"
+		rendered="#{not (catIssueShipmentsBulkOperations.bulkOperationsType.equals('CHNGPARENT'))}"
+		styleClass="button right" value="Continue"
+		eventsQueue="#{divParam}eventsQueue"
+		status="globalWaitStatus"
+		action="#{catIssueShipmentsBulkOperations.bulkNext}"
+		reRender="issueshipmentswizard" />
+		
+		
+			</div>
+	
+</ui:composition>

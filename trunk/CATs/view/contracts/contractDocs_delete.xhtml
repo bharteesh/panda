@@ -1,0 +1,57 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats">
+	
+	<h2><h:outputText value="Delete PDF"/></h2>
+	<div id="step1">
+		<div class="cluster">
+		<s:fragment rendered="#{contractDocsWizard.contractDocsListToDelete.size eq 0}">
+			<div class="alert">			
+				<p>Please select at least one file.</p>
+			</div>		
+		</s:fragment>
+		<s:fragment rendered="#{contractDocsWizard.contractDocsListToDelete.size gt 0}">
+			<div class="alert">			
+				<p>Are you sure you want to delete the following PDF files?</p>
+			</div>
+			<div class="smart">		
+			<rich:dataTable id="uploadedList" var="data" value="#{contractDocsWizard.contractDocsListToDelete}" 
+							rendered="#{contractDocsWizard.contractDocsListToDelete.size gt 0}">
+	                <rich:column>
+	                    <f:facet name="header">File Name</f:facet>
+	                    <h:outputText value="#{data.catFileName}"/>
+	                </rich:column>
+	                <rich:column>
+	                    <f:facet name="header">Document Type</f:facet>
+	                    <h:outputText value="#{data.catDocType.label}"/>
+	                </rich:column>
+	                <rich:column>
+	                    <f:facet name="header">Uploaded by</f:facet>
+	                    <h:outputText value="#{data.catUploadedBy}"/>
+	                </rich:column>
+	                <rich:column>
+	                    <f:facet name="header">Uploaded on</f:facet>
+	                    <h:outputText value="#{data.catUploadedDate}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+	                </rich:column>
+	                <rich:column>
+	                    <f:facet name="header">Size(bytes)</f:facet>
+	                    <h:outputText value="#{data.catFileSize}"/>
+	                </rich:column>
+		   		  </rich:dataTable>
+			</div>
+		</s:fragment>
+	</div>	</div>			 
+		<div class="push"></div>
+		<a:commandLink styleClass="button" value="No, Return"  action="#{contractDocsWizard.reset}" status="globalWaitStatus" ignoreDupResponses="true"
+			oncomplete="javascript:location.reload(true);" limitToList="true"/>
+			
+		<a:commandLink styleClass="button right" value="Yes, Delete" status="globalWaitStatus" ignoreDupResponses="true"
+			action="#{contractDocsWizard.performDelete()}" rendered="#{contractDocsWizard.contractDocsListToDelete.size gt 0}" oncomplete="javascript:location.reload(true);" limitToList="true"/>
+		
+</ui:composition>

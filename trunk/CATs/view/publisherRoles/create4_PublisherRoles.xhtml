@@ -1,0 +1,55 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{createPublisherRolesWizard.createTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+		<li class="">1. Choose Pub</li>
+		<li class="">2. Add</li>
+		<li class="selected">3. Optional</li>
+		<li class="disabled">4. Results</li>
+		</ul>
+		<div class="cluster smart">
+
+		<p>Enter the new value to apply to the publisher role.</p>
+
+<s:fragment rendered="#{createPublisherRolesWizard.createOptionalProperties.contains('catPromoMaterialsDate')}">
+<s:decorate id="catPromoMaterialsDateDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Promotional Materials Sent</ui:define>
+<rich:calendar enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(createPublisherRolesWizard.createTransientInstance, 'modify catPromoMaterialsDate')}" id="catPromoMaterialsDate" inputClass="datestyle" value="#{createPublisherRolesWizard.createTransientInstance.catPromoMaterialsDate}"/>
+</s:decorate>
+</s:fragment>
+
+			</div>
+
+		<div class="push"></div>
+
+            <a:commandLink styleClass="button" value="Quit"
+				status="globalWaitStatus" ignoreDupResponses="true" 
+       			eventsQueue="#{divParam}eventsQueue"
+			    reRender="createPublisherRolesWizard" oncomplete="#{rich:component('createPublisherRolesQuit')}.show(); return false;">
+			</a:commandLink> 
+
+			<a:commandLink
+				styleClass="button right" value="Save"
+				status="globalWaitStatus" ignoreDupResponses="true" 
+       			eventsQueue="#{divParam}eventsQueue"
+				action="#{createPublisherRolesWizard.performCreateOperation}" 
+				reRender="createPublisherRolesWizard" />
+			</div>
+	
+</ui:composition>
+

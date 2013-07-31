@@ -1,0 +1,164 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a="http://richfaces.org/a4j" xmlns:cats="http://www.ithaka.org/cats" template="../layout/list_template.xhtml">
+  <ui:define name="body">
+    <h:outputText value="CatCollectionChangeHist Search Results (#{empty catCollectionChangeHistList.resultList ? 0 : (catCollectionChangeHistList.paginated ? catCollectionChangeHistList.resultCount : catCollectionChangeHistList.resultList.size)})"></h:outputText>
+    <a:form>
+      
+
+			<div class="header">
+			<div class="left"><span class="museo">ENTITY NAME</span> 
+			  
+			  <h:selectOneMenu
+				name="flavour" value="#{catCollectionChangeHistList.flavour}" onchange="this.form.submit();">
+				<s:selectItems value="#{catCollectionChangeHistList.flavours}" var="i"
+					itemValue="#{i}" label="#{catCollectionChangeHistList.flavourLabel(i)}" />
+
+			</h:selectOneMenu></div>
+
+			<div class="right"><h:selectOneMenu id="catCollectionChangeHistListBulkOperationsSelect"
+				rendered="#{not empty catCollectionChangeHistBulkOperations.bulkOperationsNames}"
+    				value="#{catCollectionChangeHistBulkOperations.bulkOperationsType}"
+    >
+				<a:support event="onchange"
+					action="#{catCollectionChangeHistBulkOperations.prepBulkOperations( 'catCollectionChangeHistList', 'catCollectionChangeHistListBulkOperationsSelect' )}"
+					reRender="catCollectionChangeHistListBulkOperationsPanels,catCollectionChangeHistList"
+					oncomplete="if ( #{rich:element('catCollectionChangeHistListBulkOperationsSelect')}.options.selectedIndex != 0 ) { #{rich:component('catCollectionChangeHistListBulkUpdatePanel')}.show(); } ; return false; " 
+					/>
+				<s:selectItems value="#{catCollectionChangeHistBulkOperations.bulkOperationsNames}" var="b"
+					label="#{catCollectionChangeHistBulkOperations.bulkOperations[b]}" itemValue="#{b}"
+					noSelectionLabel="Bulk Operations" />
+			</h:selectOneMenu>
+			
+							<ui:include src="adhocReportSelect.xhtml"><ui:param name="entityQuery" value="#{catCollectionChangeHistList}"/></ui:include>
+			
+			
+			</div>
+			
+			<div class="right">
+				<s:link styleClass="button" rendered="#{s:hasPermission(catCollectionChangeHistList.catCollectionChangeHist, 'create CatCollectionChangeHist')}" view="/home.xhtml" propagation="none" value="Create ENTITY NAME"/>
+			</div>
+			
+			</div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/Animated-Hourglass.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+
+
+<h:dataTable id="catCollectionChangeHistList" var="_catCollectionChangeHist" value="#{catCollectionChangeHistList.resultList}" rendered="#{not empty catCollectionChangeHistList.resultList}" rowClasses="odd,even" styleClass="mainListClass">
+
+<rich:column styleClass="checkBoxes" headerClass="checkBoxes" rendered="#{not empty catCollectionChangeHistBulkOperations.bulkOperationsNames}"><f:facet name="header"><h:panelGrid columns="1"><h:outputText value=" " /><input type="checkbox" id="select_all_checkbox" name="select_all_checkbox" onclick="toggleCheckboxes(this.checked, 'bulk_checkbox');" /></h:panelGrid></f:facet><div onclick="cancelEventBubbling(event);"><h:selectBooleanCheckbox styleClass="bulk_checkbox checkBoxes" value="#{catCollectionChangeHistBulkOperations.selections[_catCollectionChangeHist]}" /></div></rich:column>
+        
+        <cats:column styleClass="id" rendered="#{listFlavour['id']}"
+          
+            
+              entityList="#{catCollectionChangeHistList}" 
+              propertyLabel="Id" 
+              propertyPath="catCollectionChangeHist.id" 
+              propertyValue="#{catCollectionChangeHistList.catCollectionChangeHist.id}" 
+              propertyName="id" 
+              sortable="true"  
+            
+          
+          value="#{_catCollectionChangeHist.id}" 
+        ></cats:column>
+        <cats:column styleClass="catChangeBy" rendered="#{listFlavour['catChangeBy']}"
+          
+            
+              entityList="#{catCollectionChangeHistList}" 
+              propertyLabel="Cat change by" 
+              propertyPath="catCollectionChangeHist.catChangeBy" 
+              propertyValue="#{catCollectionChangeHistList.catCollectionChangeHist.catChangeBy}" 
+              propertyName="catChangeBy" 
+              sortable="true"  
+            
+          
+          value="#{_catCollectionChangeHist.catChangeBy}" 
+        ></cats:column>
+        <cats:column styleClass="catChangeType" rendered="#{listFlavour['catChangeType']}"
+          
+            
+              entityList="#{catCollectionChangeHistList}" 
+              propertyLabel="Cat change type" 
+              propertyPath="catCollectionChangeHist.catChangeType" 
+              propertyValue="#{catCollectionChangeHistList.catCollectionChangeHist.catChangeType}" 
+              propertyName="catChangeType" 
+              sortable="true"  
+              enumList="#{listsForEnums.catCollectionChangeHist_ChangeType}" 
+            
+          
+          value="#{_catCollectionChangeHist.catChangeType.label}" 
+        ></cats:column>
+        <cats:column styleClass="catCollections.id" rendered="#{listFlavour['catCollections.id']}"
+          
+            
+              entityList="#{catCollectionChangeHistList}" 
+              propertyLabel="Cat collections id" 
+              propertyPath="catCollectionChangeHist.catCollections.id" 
+              propertyValue="#{catCollectionChangeHistList.catCollectionChangeHist.catCollections.id}" 
+              propertyName="catCollections.id" 
+              sortable="true"  
+            
+          
+          value="#{_catCollectionChangeHist.catCollections.id}" 
+        ></cats:column>
+        <cats:column styleClass="catDateChange" rendered="#{listFlavour['catDateChange']}"
+          
+            
+              entityList="#{catCollectionChangeHistList}" 
+              propertyLabel="Cat date change" 
+              propertyPath="catCollectionChangeHist.catDateChange" 
+              propertyValue="#{catCollectionChangeHistList.catCollectionChangeHist.catDateChange}" 
+              propertyName="catDateChange" 
+              sortable="true"  
+            
+          
+          value="#{_catCollectionChangeHist.catDateChange}" ><s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+        </cats:column>
+        <cats:column styleClass="catOldValue" rendered="#{listFlavour['catOldValue']}"
+          
+            
+              entityList="#{catCollectionChangeHistList}" 
+              propertyLabel="Cat old value" 
+              propertyPath="catCollectionChangeHist.catOldValue" 
+              propertyValue="#{catCollectionChangeHistList.catCollectionChangeHist.catOldValue}" 
+              propertyName="catOldValue" 
+              sortable="true"  
+            
+          
+          value="#{_catCollectionChangeHist.catOldValue}" 
+        ></cats:column>
+        <cats:column styleClass="catReason" rendered="#{listFlavour['catReason']}"
+          
+            
+              entityList="#{catCollectionChangeHistList}" 
+              propertyLabel="Cat reason" 
+              propertyPath="catCollectionChangeHist.catReason" 
+              propertyValue="#{catCollectionChangeHistList.catCollectionChangeHist.catReason}" 
+              propertyName="catReason" 
+              sortable="true"  
+            
+          
+          value="#{_catCollectionChangeHist.catReason}" 
+        ></cats:column>
+        
+      </h:dataTable></div>
+    </a:form>
+    <ui:include src="../layout/tablenav.xhtml">
+      <ui:param name="viewPath" value="/lists/CatCollectionChangeHistList.xhtml"></ui:param>
+      <ui:param name="entityList" value="#{catCollectionChangeHistList}"></ui:param>
+    </ui:include>
+    
+    
+  <ui:include src="bulkm_CatCollectionChangeHist.xhtml"></ui:include>
+<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+ 	<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catCollectionChangeHistList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+</ui:define>
+</ui:composition>

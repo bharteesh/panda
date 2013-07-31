@@ -1,0 +1,120 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+	<h2><h:outputText value="#{duplicateIssueShipmentsWizard.duplicateTitle}" /></h2>
+		<div id="step1">
+		<ul class="steps many">
+				<li class="">1. Parent</li>
+				<li class="">2. Change</li>
+				<li class="selected">3. Additional</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+
+		<div class="cluster smart">
+         <p>Please make additional selections(if any).</p>
+
+<s:fragment rendered="#{!duplicateIssueShipmentsWizard.isCatOnHoldOfValueTrue(duplicateIssueShipmentsWizard.originalTransientInstance.catOnHold) and
+                        !duplicateIssueShipmentsWizard.isCatOnHoldOfValueTrue(duplicateIssueShipmentsWizard.duplicateTransientInstance.catOnHold) and
+                        !duplicateIssueShipmentsWizard.isCatLifecycleOfValueCompleted(duplicateIssueShipmentsWizard.duplicateTransientInstance.catLifecycle)}">
+<p>No additional information required.</p>
+</s:fragment>
+
+<s:fragment rendered="#{duplicateIssueShipmentsWizard.isCatOnHoldOfValueTrue(duplicateIssueShipmentsWizard.originalTransientInstance.catOnHold)}">
+<p>Please make additional selections to the original record.</p>
+<div class="scroller">
+			<s:decorate id="catOnHoldReason_org_div" template="../layout/edit.xhtml">
+				<ui:define name="label">On Hold Reason(Original)</ui:define>
+                    <h:inputTextarea id="catOnHoldReason_org" cols="20" rows="2" 
+                       requiredMessage="Please enter a value !!"
+                       required="true"
+                       value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catOnHoldReason}"/>
+			</s:decorate>
+</div>
+</s:fragment>
+
+<s:fragment rendered="#{duplicateIssueShipmentsWizard.isCatOnHoldOfValueTrue(duplicateIssueShipmentsWizard.duplicateTransientInstance.catOnHold) or
+                        duplicateIssueShipmentsWizard.isCatLifecycleOfValueCompleted(duplicateIssueShipmentsWizard.duplicateTransientInstance.catLifecycle)}">
+<p>Please make additional selections to the copied record.</p>
+<div class="scroller">
+<s:div rendered="#{duplicateIssueShipmentsWizard.isCatOnHoldOfValueTrue(duplicateIssueShipmentsWizard.duplicateTransientInstance.catOnHold)}">
+			<s:decorate id="catOnHoldReason_copy_div" template="../layout/edit.xhtml">
+				<ui:define name="label">On Hold Reason(Copy)</ui:define>
+                    <h:inputTextarea id="catOnHoldReason_copy" cols="20" rows="2" 
+                       requiredMessage="Please enter a value !!"
+                       required="true"
+                       value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catOnHoldReason}"/>
+			</s:decorate>
+</s:div>
+<s:div rendered="#{duplicateIssueShipmentsWizard.isCatLifecycleOfValueCompleted(duplicateIssueShipmentsWizard.duplicateTransientInstance.catLifecycle)}">			
+			<s:decorate id="catOutcome_div" template="../layout/edit.xhtml">
+				<ui:define name="label">Outcome(copy)</ui:define>
+                <h:selectOneMenu id="catOutcome" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catOutcome}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{listsForEnums.catIssueShipments_Outcome}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+                    <a:support event="onchange" 
+                        reRender="noLayoutExistingForOutcome" 
+                        eventsQueue="#{divParam}eventsQueue" 
+                        status="globalWaitStatus"
+                        ajaxSingle="true"/>
+		       </h:selectOneMenu>
+			</s:decorate>
+			
+			<a:outputPanel layout="none" id="noLayoutExistingForOutcome">
+            <s:div id="catMaterialFormat_outer_div" rendered="#{duplicateIssueShipmentsWizard.isCatOutcomeOfValueReceivedAll(duplicateIssueShipmentsWizard.duplicateTransientInstance.catOutcome)}">
+    			<s:decorate id="catMaterialFormat_div" template="../layout/edit.xhtml">
+	    			<ui:define name="label">Material Format(copy)</ui:define>
+                    <h:selectOneMenu id="catMaterialFormat" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catMaterialFormat}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   	    	    <s:selectItems value="#{listsForEnums.catIssueShipments_MaterialFormat}" var="i" itemValue="#{i}"
+		                     label="#{i.label}" noSelectionLabel="Choose..." />
+		           </h:selectOneMenu>
+			    </s:decorate>
+			    <s:decorate id="catSourceCondition_div" template="../layout/edit.xhtml">
+    				<ui:define name="label">Source Condition(copy)</ui:define>
+                    <h:selectOneMenu id="catSourceCondition" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catSourceCondition}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   	    	    <s:selectItems value="#{listsForEnums.catIssueShipments_SourceCondition}" var="i" itemValue="#{i}"
+		                     label="#{i.label}" noSelectionLabel="Choose..." />
+		           </h:selectOneMenu>
+			    </s:decorate>
+			</s:div>
+			</a:outputPanel>
+</s:div>			
+</div>
+</s:fragment>
+
+			</div>
+
+
+		<div class="push"></div>
+
+
+                <a:commandLink styleClass="button" value="Quit"
+			eventsQueue="#{divParam}eventsQueue"
+			status="globalWaitStatus"
+			reRender="issueshipmentsduplicatewizard" oncomplete="#{rich:component('issueshipmentsduplicateUpdateQuit')}.show(); return false;">
+			</a:commandLink> 
+
+		<a:commandLink id="saveWithoutOnclickValidation"
+		styleClass="button right" value="Save"
+		eventsQueue="#{divParam}eventsQueue"
+		status="globalWaitStatus"
+		action="#{duplicateIssueShipmentsWizard.performDuplicateOperation}" reRender="issueshipmentsduplicatewizard" />
+
+			</div>
+	
+</ui:composition>

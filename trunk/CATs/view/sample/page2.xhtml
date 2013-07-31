@@ -1,0 +1,15 @@
+<h:panelGrid xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+ 
+   <rich:inputNumberSlider value="#{sampleBean.number}"
+	 minValue="0" maxValue="100"
+	 enableManualInput="false"/>
+   <a:commandLink value="Close and Save" 
+	onclick="#{rich:component('panel')}.hide();"
+	action="#{sampleBean.reset}"
+	reRender="result"/>
+</h:panelGrid>

@@ -1,0 +1,29 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:ui="http://java.sun.com/jsf/facelets" id="SOMEDiv2">
+
+	<div class="col col1">
+<s:decorate id="catCreator_div2" template="../layout/edit.xhtml">
+<ui:define name="label">Creator</ui:define>
+<h:outputText value="#{catAcqOrdersProblemsHome.instance.catCreator}"/>
+</s:decorate>
+
+<s:decorate id="catDateCreated_div2" template="../layout/edit.xhtml">
+<ui:define name="label">Date Created</ui:define>
+<h:outputText value="#{catAcqOrdersProblemsHome.instance.catDateCreated}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+</s:decorate>
+
+<s:decorate id="catResolvedBy_div2" template="../layout/edit.xhtml">
+<ui:define name="label">Resolved by</ui:define>
+<h:outputText value="#{catAcqOrdersProblemsHome.instance.catResolvedBy}"/>
+</s:decorate>
+
+<s:decorate id="catDateResolved_div2" template="../layout/edit.xhtml">
+<ui:define name="label">Date resolved</ui:define>
+<h:outputText value="#{catAcqOrdersProblemsHome.instance.catDateResolved}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+</s:decorate>
+
+
+</div>
+
+	<div class="push"/>
+
+</s:div>

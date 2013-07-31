@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:z="http://www.qualcomm.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a="http://richfaces.org/a4j"
+	  xmlns:s="http://jboss.com/products/seam/taglib">
+<ui:composition>
+
+<rich:dataTable value="#{value}"
+							var="_catContractDtls">							
+							<rich:column>
+								<f:facet name="header">Publisher</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.catContracts.publisherValue}" />
+								</s:link>
+							</rich:column>						
+							<rich:column>
+								<f:facet name="header">Type</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.catContracts.catType.label}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Agreement<br/>Date</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.catContracts.catAgreementDate}">
+									<s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Agreement<br/>Version</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.catContracts.catAgreementVersion}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Set Name</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.returnSetsFormattedString()}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Component<br/>Name</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+									<h:outputText value="#{_catContractDtls.catCmpts.catName}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Agreement Detail&#39;s<br/>Lifecycle</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.catLifecycle.label}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">All or Part</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.catAllOrPartOfCmpt}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Coverage</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.catContentCovered}" />
+								</s:link>
+							</rich:column>
+							<rich:column rendered="#{catTypeValue eq 'Csp'}">
+								<f:facet name="header">CSP Launch</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.catCspLaunchDate}">
+									<s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Date Added to<br/>Agreement</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.catEffectiveDate}">
+									<s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>	
+								</s:link>							
+							</rich:column>
+							<rich:column rendered="#{catTypeValue eq 'Backfile'}">
+								<f:facet name="header">Riders</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.riderNames}" />	
+								</s:link>							
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">ID</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catContractDtls.id}"/>
+								<h:outputText value="#{_catContractDtls.id}" />			
+								</s:link>					
+							</rich:column>
+	</rich:dataTable>
+</ui:composition>
+</html>

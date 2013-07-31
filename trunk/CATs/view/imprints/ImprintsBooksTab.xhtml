@@ -1,0 +1,23 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="ImprintsBooksDiv1">
+
+	<a:form>
+		<a:outputPanel layout="none" id="booksLayout">
+			<s:div id="booksTable" rendered="true">
+
+				<ui:include src="ImprintsBooksTable.xhtml">
+					<ui:param name="divId" value="impBooksTableDiv" />
+					<ui:param name="tableId" value="impBooksTable" />
+					<ui:param name="booksList"
+						value="#{catImprintsHome.booksList}" />
+				</ui:include>
+				
+							
+			</s:div>
+		</a:outputPanel>
+	</a:form>
+</s:div>

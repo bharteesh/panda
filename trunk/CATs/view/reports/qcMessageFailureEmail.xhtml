@@ -1,0 +1,23 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    >
+
+    <m:from name="CATS" address="#{mailOps.fromEmail}"/>
+    <m:to name="#{qcMessageMailOps.displayName}">#{qcMessageMailOps.email}</m:to>
+        <ui:repeat var="_email" value="#{qcMessageMailOps.ccList}">
+    	<m:cc><h:outputText value="#{_email}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="QC Message Error Failure"/> </m:subject>
+    <m:body>
+        <p><h:outputText value="Dear #{qcMessageMailOps.displayName}" />,</p>
+        <p><h:outputText value="The QC Messages for the submission, #{qcMessageMailOps.qcSubmission}, were not received by CATS from Conprep. Please investigate."></h:outputText></p>
+        
+        <p>The error is as follows: <h:outputText value="#{qcMessageMailOps.errorMessage}"></h:outputText></p>
+      
+			
+		<p>Sincerely,<br/>CATS</p>
+		
+    </m:body>
+</m:message>

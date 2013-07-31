@@ -1,0 +1,42 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:rich="http://richfaces.org/rich">
+
+<h1>#{catScmHome.instance.id}</h1>	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Record Type</ui:define>
+		<h:outputText value="SCM" />
+	</s:decorate>
+	<!--  Add Books link here -->
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">ID</ui:define>
+		<h:outputText value="#{catScmHome.instance.id}"/>
+	</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Type</ui:define>
+		<h:outputText value="#{catScmHome.instance.catType.label}"/>
+	</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Book</ui:define>
+			<h:outputText>
+			<s:link view="/books/BooksEdit.xhtml" id="books" propagation="none" value="#{catScmHome.instance.catBooks.id}">
+	       		<f:param name="id" value="#{catScmHome.instance.catBooks.id}" />
+                </s:link></h:outputText>
+		</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Creator</ui:define>
+		<h:outputText value="#{catScmHome.instance.catCreator}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Created Date</ui:define>
+		<h:outputText value="#{catScmHome.instance.catDateCreated}">
+			<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+		</h:outputText>
+	</s:decorate>
+</s:div>

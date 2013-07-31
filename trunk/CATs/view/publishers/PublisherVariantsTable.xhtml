@@ -1,0 +1,97 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo"> <h:outputText value="Publisher Variants (#{pubVariantsList.size})" />
+				</span>
+				<a:commandLink value="X"
+					action="#{sortFiltBean.resetSortFilt('catPubVariant'.concat(divId))}"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					reRender="#{divId}pubVariantsList" styleClass="button wizard" />
+			</div>
+	<div class="right">
+		<a:commandLink ignoreDupResponses="true" value="Add Variant"
+			action="#{publisherVariantsWizard.prepAddVariant()}"	
+			reRender="publisherVariantsWizardPanel"
+			oncomplete="#{rich:component('publisherVariantsWizardModal')}.show();"
+			status="globalWaitStatus" ajaxSingle="true" limitToList="true"			
+            styleClass="button wizard #{!s:hasPermission(catPublishersHome.instance, 'add_reln catPublisherVariants') ? 'disabled' : ''}"
+			disabled="#{!s:hasPermission(catPublishersHome.instance, 'add_reln catPublisherVariants')}"
+			/>
+	</div>
+	</div>
+		<rich:dataTable id="#{divId}pubVariantsList" var="_catPubVariant"
+			value="#{pubVariantsList}" rendered="#{not empty pubVariantsList}">
+			
+			<rich:column id="#{divId}Name" sortBy="#{_catPubVariant.catName}"
+				filterBy="#{_catPubVariant.catName}" sortable="true"
+				sortOrder="#{sortFiltBean['catPubVariant'.concat(divId)]['catPubVariantName_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubVariant'.concat(divId)]['catPubVariantName_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Name" />
+				</f:facet>				
+					<h:outputText value="#{_catPubVariant.catName}" />
+				
+			</rich:column>
+			
+			<rich:column id="#{divId}Type" sortBy="#{_catPubVariant.catType}"
+				filterBy="#{_catPubVariant.catType}" sortable="true"
+				sortOrder="#{sortFiltBean['catPubVariant'.concat(divId)]['catPubVariantType_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubVariant'.concat(divId)]['catPubVariantType_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Type" />
+				</f:facet>				
+					<h:outputText value="#{_catPubVariant.catType.label}" />				
+			</rich:column>
+			
+			<rich:column id="#{divId}id" sortBy="#{_catPubVariant.id}"
+				filterBy="#{_catPubVariant.id}" sortable="true"
+				sortOrder="#{sortFiltBean['catPubVariant'.concat(divId)]['catPubVariantId_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubVariant'.concat(divId)]['catPubVariantId_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID" />
+				</f:facet>				
+					<h:outputText value="#{_catPubVariant.id}" />				
+			</rich:column>
+			<rich:column>
+				<f:facet name="header"></f:facet>
+				<a:commandLink 			    			
+			    			id="editButton"				
+				    		action="#{publisherVariantsWizard.prepEditVariant(_catPubVariant)}"	
+							reRender="publisherVariantsWizardPanel"
+							oncomplete="#{rich:component('publisherVariantsWizardModal')}.show();"
+							value="Edit"							
+							styleClass="button wizard #{!s:hasPermission(catPublishersHome.instance, 'modify catPublisherVariants') ? 'disabled' : ''}"
+							disabled="#{!s:hasPermission(catPublishersHome.instance, 'modify catPublisherVariants')}"
+							status="globalWaitStatus"
+							ignoreDupResponses="true"
+							ajaxSingle="true"
+							limitToList="true">					
+				</a:commandLink>				
+			</rich:column>
+			<rich:column>
+			<a:commandLink 			    			
+			    			id="deleteVariantButton"				
+				    		action="#{publisherVariantsWizard.prepDeleteVariant(_catPubVariant)}"	
+				    		disabled="#{!publisherVariantsWizard.deletable(_catPubVariant) or (!s:hasPermission(catPublishersHome.instance, 'remove_reln catPublisherVariants'))}"
+				    		reRender="publisherVariantsWizardPanel"
+							oncomplete="#{rich:component('publisherVariantsWizardModal')}.show();"
+							value="Delete"							
+							styleClass="button delete #{!publisherVariantsWizard.deletable(_catPubVariant) or !s:hasPermission(catPublishersHome.instance, 'remove_reln catPublisherVariants') ? 'disabled' : ''}"
+							status="globalWaitStatus"
+							ignoreDupResponses="true"
+							ajaxSingle="true"
+							limitToList="true">					
+			</a:commandLink>
+			</rich:column>
+		</rich:dataTable>
+	</div>
+
+</s:div>

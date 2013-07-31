@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="../layout/template.xhtml">
+
+	<ui:define name="badge">
+	<h1> </h1>
+	</ui:define>
+	
+	<ui:define name="body">
+	<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+				
+			<h1>Normalize Data</h1>
+		<br/>
+		<br/>
+		<rich:panel>		
+			<f:facet name="header">Export Data to Normalize</f:facet>
+			
+			<a:outputPanel layout="none" id="exportNormalizeErrorMsgs">
+					<s:div styleClass="alert">
+						<s:div rendered="#{not empty exportDataToNormalize.errorMsgs}" id="errNormErrorMsgsDiv">
+							<a:repeat value="#{exportDataToNormalize.errorMsgs}" var="_errMsg">
+								<p>#{_errMsg}</p>
+							</a:repeat>
+						</s:div>
+					</s:div>
+			</a:outputPanel>		
+				
+			<h:form id="exportNormsId">
+				<div>
+					<a:commandButton value="Export Data"
+						action="#{exportDataToNormalize.exportData}" 
+						eventsQueue="normalizeTasks" status="globalWaitStatus"/>
+				</div>
+				
+			</h:form>
+		
+		</rich:panel>
+		
+		<rich:panel>		
+			<f:facet name="header">Import Normalized Data</f:facet>
+			
+			<a:outputPanel layout="none" id="importNormErrorMsgs">
+					<s:div styleClass="alert">
+						<s:div rendered="#{not empty importNormalizedData.errorMsgs}" id="importNorErrorMsgsDiv">
+							<a:repeat value="#{importNormalizedData.errorMsgs}" var="_errMsg">
+								<p>#{_errMsg}</p>
+							</a:repeat>
+						</s:div>
+					</s:div>
+			</a:outputPanel>		
+				
+			<h:form id="importNormalId" enctype="multipart/form-data">
+				<b>Normalize Data XML file: </b> 
+				<s:fileUpload data="#{importNormalizedData.file}" required="true" size="60" requiredMessage="Select XML File">
+				</s:fileUpload>
+					
+				 <a:commandButton  value="Import" action="#{importNormalizedData.importData}"
+				 		eventsQueue="normalizeTasks" status="globalWaitStatus"/>
+				
+			</h:form>
+		
+		</rich:panel>	
+		
+	</ui:define>
+
+</ui:composition>

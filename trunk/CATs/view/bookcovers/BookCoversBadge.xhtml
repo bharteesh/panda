@@ -1,0 +1,92 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<h1>#{catBookCoversHome.instance.id}</h1>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Record Type:</ui:define>
+		<h:outputText value="Book Covers" />
+	</s:decorate>
+	
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Lifecycle:</ui:define>
+		<h:outputText value="#{catBookCoversHome.instance.catLifecycle.label}"/>
+		<a:form>	
+	    		<a:commandLink 
+	    			onclick="if (!checkForSave() ) { return false ; }" 
+	    			id="catbkCoversLifecycleEditButton"				
+		    		action="#{bookCoversLifecycleWizard.changeLifecycle()}"
+					value="Edit"
+					reRender="bookCoversLifecycleOperationsPanels" 
+					oncomplete="#{rich:component('bookCoversLifecycleUpdatePanel')}.show();"
+					disabled="#{!s:hasPermission(catBookCoversHome.instance, 'modify catLifecycle')}"
+					styleClass="button wizard #{!s:hasPermission(catBookCoversHome.instance, 'modify catLifecycle')? 'disabled' : ''}"
+					status="globalWaitStatus"
+					ignoreDupResponses="true"
+					ajaxSingle="true" limitToList="true"/>		
+			</a:form>
+	</s:decorate>
+	
+		
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Book:</ui:define>
+		
+		<s:link view="/books/BooksEdit.xhtml" propagation="none">
+			<f:param name="id" value="#{catBookCoversHome.instance.catBook.id}"/>
+			<h:outputText value="#{catBookCoversHome.instance.catBook.id}"/>
+		</s:link>
+	</s:decorate>
+			
+	<!--  <s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Checksum:</ui:define>
+		<h:outputText value="#{catBookCoversHome.instance.catCvrChecksum}"/>
+	</s:decorate> -->
+	
+
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Fetcher ID:</ui:define>
+		<h:outputText value="#{catBookCoversHome.instance.catCvrFetcherId}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Filepath:</ui:define>
+		<h:outputText value="#{catBookCoversHome.instance.catCvrFilepath}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Filesize:</ui:define>
+		<h:outputText value="#{catBookCoversHome.instance.catCvrFilesize}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Received:</ui:define>
+		<h:outputText value="#{catBookCoversHome.instance.catDateCvrRcvd}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Creator:</ui:define>
+		<h:outputText value="#{catBookCoversHome.instance.catCreator}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Created Date:</ui:define>
+		<h:outputText value="#{catBookCoversHome.instance.catDateCreated}">
+			<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+		</h:outputText>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Modified Date:</ui:define>
+		<h:outputText value="#{catBookCoversHome.instance.catDateModified}">
+			<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+		</h:outputText>
+	</s:decorate>
+
+</s:div>

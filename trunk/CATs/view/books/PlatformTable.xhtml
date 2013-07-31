@@ -1,0 +1,108 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo"> <h:outputText value="Platform Distributions (#{ltmDistributionsList.size})" />
+				</span>
+				<a:commandLink value="X"
+					action="#{sortFiltBean.resetSortFilt('catLtmDistributions'.concat(divId))}"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					reRender="#{divId}ltmDistributionsList" styleClass="button wizard" />
+			</div>
+			 
+							
+	</div>
+	
+		<rich:dataTable id="#{divId}ltmDistributionsList" var="_catLtmDistributions"
+			value="#{ltmDistributionsList}" rendered="#{not empty ltmDistributionsList}" >
+			
+			<rich:column id="#{divId}catStatus" sortBy="#{_catLtmDistributions.catStatus}"
+				filterBy="#{_catLtmDistributions.catStatus}" sortable="true"
+				sortOrder="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionsStatus_sortOrder']}"
+				filterValue="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionsStatus_filterValue']}"> 
+				<f:facet name="header">
+					<h:outputText value="Distribution Status" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catLtmDistributions.id}" />
+					<h:outputText value="#{_catLtmDistributions.catStatus}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="#{divId}catPlatformPreProdDate" sortBy="#{_catLtmDistributions.catPlatformPreProdDate}"
+				filterBy="#{_catLtmDistributions.catPlatformPreProdDate}" sortable="true"
+				sortOrder="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionscatPlatformPreProdDate_sortOrder']}"
+				filterValue="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionscatPlatformPreProdDate_filterValue']}"> 
+				<f:facet name="header">
+					<h:outputText value="Distribution Staging" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catLtmDistributions.id}" />
+					<h:outputText value="#{_catLtmDistributions.catPlatformPreProdDate}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="#{divId}catLiveDate" sortBy="#{_catLtmDistributions.catLiveDate}"
+				filterBy="#{_catLtmDistributions.catLiveDate}" sortable="true"
+				sortOrder="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionscatLiveDate_sortOrder']}"
+				filterValue="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionscatLiveDate_filterValue']}"> 
+				<f:facet name="header">
+					<h:outputText value="Distribution Live" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catLtmDistributions.id}" />
+					<h:outputText value="#{_catLtmDistributions.catLiveDate}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="#{divId}catExportedZipName" sortBy="#{_catLtmDistributions.catExportedZipName}"
+				filterBy="#{_catLtmDistributions.catExportedZipName}" sortable="true"
+				sortOrder="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionscatExportedZipName_sortOrder']}"
+				filterValue="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionscatExportedZipName_filterValue']}"> 
+				<f:facet name="header">
+					<h:outputText value="Distribution Submission Zip" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catLtmDistributions.id}" />
+					<h:outputText value="#{_catLtmDistributions.catExportedZipName}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="#{divId}Id" sortBy="#{_catLtmDistributions.id}"
+				filterBy="#{_catLtmDistributions.id}" sortable="true"
+				sortOrder="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionsId_sortOrder']}"
+				filterValue="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionsId_filterValue']}"> 
+				<f:facet name="header">
+					<h:outputText value="ID" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catLtmDistributions.id}" />
+					<h:outputText value="#{_catLtmDistributions.id}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="#{divId}catDateModified" sortBy="#{_catLtmDistributions.catDateModified}"
+				filterBy="#{_catLtmDistributions.catDateModified}" sortable="true"
+				sortOrder="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionscatDateModified_sortOrder']}"
+				filterValue="#{sortFiltBean['catLtmDistributions'.concat(divId)]['catLtmDistributionscatDateModified_filterValue']}"> 
+				<f:facet name="header">
+					<h:outputText value="Last Modified" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catLtmDistributions.id}" />
+					<h:outputText value="#{_catLtmDistributions.catDateModified}" />
+				</s:link>
+			</rich:column>
+			
+			
+		</rich:dataTable>
+	</div>
+
+</s:div>

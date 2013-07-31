@@ -1,0 +1,56 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+	<h2><h:outputText value="#{createAcqOrdersProblemsWizard.createTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+    		<li class="disabled">1. Permissions</li>
+	    	<li class="disabled">2. Change</li>
+		    <li class="selected">3. Additional</li>
+		    <li class="disabled">4. Results</li>
+		</ul>
+		
+		<div class="cluster smart">
+
+		<p>Please make additional selections(if any).</p>
+
+<s:fragment>
+
+<div class="scroller">
+		<p>You do not have any additional changes to be made.</p>
+</div>
+</s:fragment>
+
+			</div>
+
+		<div class="push"></div>
+
+            <a:commandLink styleClass="button" value="Quit"
+       			eventsQueue="#{divParam}eventsQueue"
+            	status="globalWaitStatus"
+			    reRender="createAcqOrdersProblemswizard" oncomplete="#{rich:component('createAcqOrdersProblemsQuit')}.show(); return false;">
+			</a:commandLink> 
+ 
+			<a:commandLink
+			styleClass="button right" value="Save"
+			eventsQueue="#{divParam}eventsQueue"
+           	status="globalWaitStatus"
+			action="#{createAcqOrdersProblemsWizard.performCreateOperation}" 
+			reRender="createAcqOrdersProblemswizard" />
+			
+			
+			</div>
+</ui:composition>
+

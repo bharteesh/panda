@@ -1,0 +1,371 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats">
+    
+    <div class="smart">
+      <div class="header">
+        <div class="left">
+                <span class="museo">
+        		<h:outputText value="Agreements (#{contractList.size})"/>
+						</span>
+        
+        
+          <a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('catContracts'.concat(divId))}" 
+          	ignoreDupResponses="true" status="globalWaitStatus"  
+          	reRender="#{divId}catContractsList" styleClass="button wizard"
+          	limitToList="true"/>
+        </div>
+    
+			 <div class="right">
+			 <a:commandLink id="createContractsEditButton"
+					ignoreDupResponses="true"
+				    action="#{createContractsWizard.prepCreateOperation(catPublishersHome.instance)}"
+					value="Add Agreement"
+					reRender="createContractsModalPanels" 
+					oncomplete="Richfaces.showModalPanel('createContractsPanel');"
+					styleClass="button wizard #{!s:hasPermission(catContractsHome.instance, 'create CatContracts') ? 'disabled' : ''}"
+					disabled="#{!s:hasPermission(catContractsHome.instance, 'create CatContracts')}"
+					status="globalWaitStatus"
+					limitToList="true">
+					</a:commandLink>
+			</div>
+    </div>
+    	  <rich:dataTable id="#{divId}catContractsList"
+                var="_catContracts"
+              value="#{contractList}"
+            rendered="#{not empty contractList}">
+
+        	
+				<rich:column id="#{divId}catType" sortBy="#{_catContracts.catType}" 
+						filterBy="#{_catContracts.catType}" sortable="true" width="50px"
+	sortOrder="#{sortFiltBean['catContracts'.concat(divId)]['catType_sortOrder']}"
+	filterValue="#{sortFiltBean['catContracts'.concat(divId)]['catType_filterValue']}"
+						>
+		        	<f:facet name="header">
+		        		<h:outputText value="Type"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catType.label}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+				<rich:column id="#{divId}catLifecycle" sortBy="#{_catContracts.catLifecycle}" 
+						filterBy="#{_catContracts.catLifecycle}" sortable="true" width="50px"
+	sortOrder="#{sortFiltBean['catContracts'.concat(divId)]['catLifecycle_sortOrder']}"
+	filterValue="#{sortFiltBean['catContracts'.concat(divId)]['catLifecycle_filterValue']}"
+						>
+		        	<f:facet name="header">
+		        		<h:outputText value="Lifecycle"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catLifecycle.label}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="#{divId}catOutcome" 
+	        				 sortBy="#{_catContracts.catOutcome}" filterBy="#{_catContracts.catOutcome}" 
+	        				 sortable="true" width="50px"
+	sortOrder="#{sortFiltBean['catContracts'.concat(divId)]['catOutcome_sortOrder']}"
+	filterValue="#{sortFiltBean['catContracts'.concat(divId)]['catOutcome_filterValue']}"
+	        				 >
+		        	<f:facet name="header">
+		        		<h:outputText value="Outcome"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catOutcome}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="#{divId}catAgreementVersion" 
+							 sortBy="#{_catContracts.catAgreementVersion}" filterBy="#{_catContracts.catAgreementVersion}" 
+							 sortable="true" width="50px" 
+	sortOrder="#{sortFiltBean['catContracts'.concat(divId)]['catAgreementVersion_sortOrder']}"
+	filterValue="#{sortFiltBean['catContracts'.concat(divId)]['catAgreementVersion_filterValue']}"
+							 >
+		        	<f:facet name="header">
+		        		<h:outputText value="Agreement Version"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catAgreementVersion}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="#{divId}catAgreementDate"
+							 sortBy="#{_catContracts.catAgreementDate}" filterBy="#{_catContracts.catAgreementDate}" 
+							 sortable="true" width="50px" 
+	sortOrder="#{sortFiltBean['catContracts'.concat(divId)]['catAgreementDate_sortOrder']}"
+	filterValue="#{sortFiltBean['catContracts'.concat(divId)]['catAgreementDate_filterValue']}"
+							 >
+		        	<f:facet name="header">
+		        		<h:outputText value="Agreement Date"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catAgreementDate}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="#{divId}catAgreementRevisions" 
+							 sortBy="#{_catContracts.catAgreementRevisions}" filterBy="#{_catContracts.catAgreementRevisions}" 
+							 sortable="true" width="50px" 
+	sortOrder="#{sortFiltBean['catContracts'.concat(divId)]['catAgreementRevisions_sortOrder']}"
+	filterValue="#{sortFiltBean['catContracts'.concat(divId)]['catAgreementRevisions_filterValue']}"
+							 >
+		        	<f:facet name="header">
+		        		<h:outputText value="Revisions"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catAgreementRevisions ? 'Yes' : 'No'}" />    		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="#{divId}catTerminationDate" sortBy="#{_catContracts.catTerminationDate}" 
+        			filterBy="#{_catContracts.catTerminationDate}" sortable="true" width="50px"
+	sortOrder="#{sortFiltBean['catContracts'.concat(divId)]['catTerminationDate_sortOrder']}"
+	filterValue="#{sortFiltBean['catContracts'.concat(divId)]['catTerminationDate_filterValue']}"
+        			>
+		        	<f:facet name="header">
+		        		<h:outputText value="Termination Date"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catTerminationDate}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="#{divId}catDateModified" sortBy="#{_catContracts.catDateModified}" 
+        			filterBy="#{_catContracts.catDateModified}" sortable="true" width="50px"
+	sortOrder="#{sortFiltBean['catContracts'.concat(divId)]['catDateModified_sortOrder']}"
+	filterValue="#{sortFiltBean['catContracts'.concat(divId)]['catDateModified_filterValue']}"
+        			>
+		        	<f:facet name="header">
+		        		<h:outputText value="Last Modified"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catDateModified}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="#{divId}contractsId" sortBy="#{_catContracts.id}" 
+        			filterBy="#{_catContracts.id}" sortable="true" width="50px"
+	sortOrder="#{sortFiltBean['catContracts'.concat(divId)]['contractsId_sortOrder']}"
+	filterValue="#{sortFiltBean['catContracts'.concat(divId)]['contractsId_filterValue']}"
+        			>
+		        	<f:facet name="header">
+		        		<h:outputText value="ID"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.id}" />        		
+		        	</s:link>
+	        	</rich:column>
+<!-- 	        	
+	        	<rich:column id="catRelatedSetCount" 
+	        	 			 sortBy="#{_catContracts.catRelatedSetCount}" filterBy="#{_catContracts.catRelatedSetCount}" 
+	        	 			 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set Count"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRelatedSetCount}" />        		
+		        	</s:link>
+	        	</rich:column>
+ -->
+ <!-- 					
+				<rich:column id="catOnHold" 
+							 sortBy="#{_catContracts.catOnHold}" filterBy="#{_catContracts.catOnHold}" 
+							 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="On Hold"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catOnHold ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+					
+				<rich:column id="catRvsdPreambleSec" 
+							 sortBy="#{_catContracts.catRvsdPreambleSec}" filterBy="#{_catContracts.catRvsdPreambleSec}" 
+							 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Preamble"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdPreambleSec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+				
+				<rich:column id="catRvsdDefinitionsSec" 
+							 sortBy="#{_catContracts.catRvsdDefinitionsSec}" filterBy="#{_catContracts.catRvsdDefinitionsSec}" 
+							 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Definitions"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdDefinitionsSec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+				
+				<rich:column id="catRvsdGrantOfLicenseSec" 
+							 sortBy="#{_catContracts.catRvsdGrantOfLicenseSec}" filterBy="#{_catContracts.catRvsdGrantOfLicenseSec}" 
+							 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Grant Of License"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdGrantOfLicenseSec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="catRvsdPresAndDistrSec" 
+	        				 sortBy="#{_catContracts.catListOnBin}" filterBy="#{_catContracts.catRvsdPresAndDistrSec}" 
+	        				 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Preservation And Distribution"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdPresAndDistrSec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="catRvsdIpOwnerhipSec" 
+	        				 sortBy="#{_catContracts.catRvsdIpOwnerhipSec}" filterBy="#{_catContracts.catRvsdIpOwnerhipSec}" 
+	        				 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Intellectual Property Ownership"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdIpOwnerhipSec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="catRvsdLtdTmLicenseSec" 
+	        				 sortBy="#{_catContracts.catRvsdLtdTmLicenseSec}" filterBy="#{_catContracts.catRvsdLtdTmLicenseSec}" 
+	        				 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Limited Trademark"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdLtdTmLicenseSec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="catRvsdRepAndWrntySec" 
+	        				 sortBy="#{_catContracts.catRvsdRepAndWrntySec}" filterBy="#{_catContracts.catRvsdRepAndWrntySec}" 
+	        				 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Representations And Warranties"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdRepAndWrntySec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="catRvsdTermSec" 
+	        				 sortBy="#{_catContracts.catRvsdTermSec}" filterBy="#{_catContracts.catRvsdTermSec}" 
+	        				 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Terms"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdTermSec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="catRvsdRevenueSharingSec" 
+	        				 width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Revenue Sharing"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+		        		<h:outputText value="#{_catContracts.catRvsdRevenueSharingSec ? 'Yes' : 'No'}" />
+		        	</s:link>
+				</rich:column>
+	        	
+	        	<rich:column id="catRvsdConfidentialitySec" 
+	        				 width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Confidentiality"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+		        		<h:outputText value="#{_catContracts.catRvsdConfidentialitySec ? 'Yes' : 'No'}" />
+		        	</s:link>
+				</rich:column>
+				
+				<rich:column id="catRvsdDlvryOfPublctnSec" 
+							 sortBy="#{_catContracts.catRvsdDlvryOfPublctnSec}" filterBy="#{_catContracts.catRvsdDlvryOfPublctnSec}" 
+							 sortable="true" width="50px"
+							 rendered="#{flavour eq 'Rights' || flavour eq 'RightsSet'}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Delivery Of Publication"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdDlvryOfPublctnSec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="catRvsdGoverningLawSec" 
+	        				 sortBy="#{_catContracts.catRvsdGoverningLawSec}" filterBy="#{_catContracts.catRvsdGoverningLawSec}" 
+	        				 sortable="true" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Governing Law"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+						<h:outputText value="#{_catContracts.catRvsdGoverningLawSec ? 'Yes' : 'No'}" />        		
+		        	</s:link>
+	        	</rich:column>
+	        	
+	        	<rich:column id="catRvsdNoticesSec" 
+	        				 width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Notices"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+		        		<h:outputText value="#{_catContracts.catRvsdNoticesSec ? 'Yes' : 'No'}" />
+		        	</s:link>
+				</rich:column>
+				
+				<rich:column id="catRvsdContractMiscSec" 
+							 width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Miscellaneous"/>
+		        	</f:facet>
+		        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		        		<f:param name="id" value="#{_catContracts.id}"/>
+		        		<h:outputText value="#{_catContracts.catRvsdContractMiscSec ? 'Yes' : 'No'}" />   
+		        	</s:link>
+				</rich:column>
+-->				
+				
+        	</rich:dataTable>
+        	
+    	</div>
+    	
+    	
+    
+</s:div>

@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+
+	<s:fragment rendered="#{contractsLifecycleWizard.origInstance.catType eq 'Csp' or 
+										 contractsLifecycleWizard.origInstance.catType eq 'Backfile'}">		
+		<div class="title results">
+			<h1><h:outputText value="Original Agreement (#{contractsLifecycleWizard.updatedContracts.size})"/></h1>
+			<p>You successfully <b>Terminated</b> this Agreement and transferred all of its content to another Agreement (see below).</p>
+		</div> 	 		 	
+			<ui:include src="advContractsLifecycle_resultsContractsTable.xhtml">
+				<ui:param name="value" value="#{contractsLifecycleWizard.updatedContracts}"/>
+			</ui:include>
+	</s:fragment>
+	
+	<s:fragment rendered="#{contractsLifecycleWizard.origInstance.catType eq 'Books'}">			
+		<div class="title results">
+			<h1><h:outputText value="Original Agreement (#{contractsLifecycleWizard.updatedContracts.size})"/></h1>
+			<p>You successfully <b>Terminated</b> this Agreement.</p>
+		</div> 	 		 	
+		<ui:include src="advContractsLifecycle_resultsContractsTable.xhtml">
+			<ui:param name="value" value="#{contractsLifecycleWizard.updatedContracts}"/>
+		</ui:include>
+	</s:fragment>	
+	
+	<s:fragment rendered="#{not empty contractsLifecycleWizard.newContractValid}">	
+		<div class="title results" >
+			<h1><h:outputText value="New Agreement (#{contractsLifecycleWizard.newContractValid.size})"/></h1>
+			<p>You successfully transferred all of the original Agreement's content to this Agreement.</p>
+		</div>	  	 		 	
+			<ui:include src="advContractsLifecycle_resultsContractsTable.xhtml">
+				<ui:param name="value" value="#{contractsLifecycleWizard.newContractValid}"/>
+			</ui:include>
+	</s:fragment>	
+		
+	<s:fragment rendered="#{not empty contractsLifecycleWizard.contractDtlsValid}">	
+					<div class="title eligible">
+						<h1><h:outputText value="Original Agreement Details (#{contractsLifecycleWizard.contractDtlsValid.size})"/></h1>					
+						<p>You successfully moved all of the content from these Agreement Details to another Agreement.</p>
+					</div>		 	
+					<ui:include src="advContractsLifecycle_resultsContractDtlsTable.xhtml">
+						<ui:param name="value" value="#{contractsLifecycleWizard.contractDtlsValid}"/>
+					</ui:include>
+	</s:fragment>
+	<s:fragment rendered="#{not empty contractsLifecycleWizard.newContractDtlsList}">	
+					<div class="title eligible">
+						<h1><h:outputText value="New Agreement Details (#{contractsLifecycleWizard.newContractDtlsList.size})"/></h1>
+						<p>You successfully created these Agreement Details.</p>
+					</div>
+					<div class="push"></div>		 	
+					<ui:include src="advContractsLifecycle_resultsContractDtlsTable.xhtml">
+						<ui:param name="value" value="#{contractsLifecycleWizard.newContractDtlsList}"/>
+					</ui:include>				
+	</s:fragment>
+	<s:fragment rendered="#{not empty contractsLifecycleWizard.contractDtlsInvalid}">	
+					<div class="title ineligible">
+						<h1><h:outputText value="Agreement Details (#{contractsLifecycleWizard.contractDtlsInvalid.size})"/></h1>						
+							<p>You were not able to advance the following Agreement Details because the component was on hold,
+								or the content covered by the Agreement Detail is already covered by another Agreement of the same type, or the agreement detail was already past LIFECYCLE.
+								The system did not change any information on the parent component, the agreement details, or associated publisher roles.</p>						
+					</div>		 	
+					<ui:include src="advContractsLifecycle_resultsContractDtlsTable.xhtml">
+						<ui:param name="value" value="#{contractsLifecycleWizard.contractDtlsInvalid}"/>
+					</ui:include>
+	</s:fragment>	
+	
+	
+	<s:fragment rendered="#{not empty contractsLifecycleWizard.pubRolesList}">	
+					<div class="title eligible">
+						<h1><h:outputText value="New Licensors (#{contractsLifecycleWizard.pubRolesList.size})"/></h1>						
+							<p>You successfully added the new publisher(s) and licensor(s).</p>						
+					</div>		 		 		 	
+					<ui:include src="/contractdetails/wizard_resultsPubRolesTable.xhtml">
+						<ui:param name="value" value="#{contractsLifecycleWizard.pubRolesList}"/>
+					</ui:include> 
+	</s:fragment>
+	<s:fragment rendered="#{not empty contractsLifecycleWizard.pubRolesHistoricalList}">	
+					<div class="title eligible">
+						<h1><h:outputText value="Original Licensors (#{contractsLifecycleWizard.pubRolesHistoricalList.size})"/></h1>						
+							<p>You successfully marked the original licensors as historical licensors.</p>						
+					</div>		 		 		 	
+					<ui:include src="/contractdetails/wizard_resultsPubRolesHistTable.xhtml">
+						<ui:param name="value" value="#{contractsLifecycleWizard.pubRolesHistoricalList}"/>
+					</ui:include> 
+	</s:fragment>
+</ui:composition>

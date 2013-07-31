@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{catDisciplinesBulkOperations.bulkTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1. Permissions</li>
+		<li class="disabled">2. Change</li>
+		<li class="selected">3. Additional</li>
+		<li class="disabled">4. Results</li>
+	</ul>
+
+
+	<div class="cluster smart">
+		
+<s:fragment	rendered="#{not empty catDisciplinesBulkOperations.bulkOptionalProperties}">
+		
+		
+				<s:fragment rendered="#{catDisciplinesBulkOperations.bulkOptionalProperties.contains('catOnHoldReason') and (catDisciplinesBulkOperations.bulkInstance.catOnHold)}">
+					<p>Enter the new value to apply to all the eligible records you selected.</p>
+					<s:decorate id="catOnHoldReason_div" template="../layout/edit.xhtml">
+						<ui:define name="label">On Hold Reason</ui:define>
+						<h:inputText id="catOnHoldReason" size="25" maxlength="255"
+							value="#{catDisciplinesBulkOperations.bulkInstance.catOnHoldReason}" required="true"></h:inputText>
+					</s:decorate>
+				</s:fragment>
+				<s:fragment	rendered="#{catDisciplinesBulkOperations.bulkOptionalProperties.contains('catOnHoldReason') and !(cmptsBulkOperations.bulkInstance.catOnHold)}">
+					<p>There are no additional properties required in order to continue.</p>
+				</s:fragment>
+				
+			</s:fragment> 
+			
+			<s:fragment rendered="#{empty catDisciplinesBulkOperations.bulkOptionalProperties}">
+			<p>There are no additional properties required in order to continue.</p>
+			</s:fragment>
+	</div>
+	<div class="push"></div>
+	
+	<a:commandLink  styleClass="button" value="Quit" reRender="catDisciplinesListWizard" oncomplete="#{rich:component('catDisciplinesBulkQuit')}.show(); return false;" eventsQueue="bulkDisciplines" status="globalWaitStatus" ignoreDupResponses="true"    >
+	</a:commandLink> 
+	<a:commandLink  styleClass="button right" value="Continue" action="#{catDisciplinesBulkOperations.performBulkOperation}" reRender="catDisciplinesListWizard" eventsQueue="bulkDisciplines" status="globalWaitStatus" ignoreDupResponses="true"   /> 
+	
+	
+	</div>
+</ui:composition>

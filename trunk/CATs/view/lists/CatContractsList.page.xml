@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd" login-required="true">
+<begin-conversation join="true"/>
+  <param name="flavour" value="#{catContractsList.flavour}"/>
+
+
+   <param name="firstResult" value="#{catContractsList.firstResult}"/>
+   <param name="sort" value="#{catContractsList.orderColumn}"/>
+   <param name="dir" value="#{catContractsList.orderDirection}"/>
+   <param name="logic" value="#{catContractsList.restrictionLogicOperator}"/>
+
+
+
+   <param name="nulltestpath" value="#{catContractsList.nullTestColumn}"/>
+   <param name="nulltestcond" value="#{catContractsList.nullTestCondition}"/>
+
+
+   <param name="from"/>
+   <param name="id" value="#{catContractsList.catContracts.id}"/>
+   <param name="catAgreementVersion" value="#{catContractsList.catContracts.catAgreementVersion}"/>
+   <param name="catCreator" value="#{catContractsList.catContracts.catCreator}"/>
+   <param name="catLifecycle" value="#{catContractsList.catContracts.catLifecycle}"/>
+   <param name="catNoteChangeBy" value="#{catContractsList.catContracts.catNoteChangeBy}"/>
+   <param name="catOutcome" value="#{catContractsList.catContracts.catOutcome}"/>
+   <param name="catSharepointContractLink" value="#{catContractsList.catContracts.catSharepointContractLink}"/>
+
+
+<!-- catContractsList -->
+<param name="catAgreementDate" value="#{catContractsList.catContracts.catAgreementDate}"/>
+
+
+<!-- catContractsList -->
+<param name="catNoteChangeDate" value="#{catContractsList.catContracts.catNoteChangeDate}"/>
+
+
+<!-- catContractsList -->
+<param name="catDateCreated" value="#{catContractsList.catContracts.catDateCreated}"/>
+
+
+<!-- catContractsList -->
+<param name="catTerminationDate" value="#{catContractsList.catContracts.catTerminationDate}"/>
+
+<param name="relatedSetCount" value="#{catContractsList.catContracts.relatedSetCount}"/>
+
+</page>

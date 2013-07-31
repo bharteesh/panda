@@ -1,0 +1,190 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+
+	<ui:param name="entityType" value="platformDistributions" />
+	<ui:param name="moremenu" value="moremenu"/>
+	
+	<ui:define name="body">
+
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatLtmDistributionList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catLtmDistributionsList}"></ui:param>
+			<ui:param name="divId" value="1" />
+		</ui:include>
+
+		<a:form>
+
+			<s:div id="header" styleclass="header">
+
+				<div class="left">
+					<span class="museo"> <h:outputText
+							value="Platform Distributions
+(#{empty catLtmDistributionsList.resultList ? 0 : (catLtmDistributionsList.paginated ? catLtmDistributionsList.resultCount : catLtmDistributionsList.resultList.size)})"></h:outputText>
+					</span>
+
+
+					<h:selectOneMenu name="flavour"
+						value="#{catLtmDistributionsList.flavour}">
+						<s:selectItems value="#{catLtmDistributionsList.flavours}" var="i"
+							itemValue="#{i}" label="#{catLtmDistributionsList.flavourLabel(i)}" />
+						<a:support event="onchange"
+							action="#{catLtmDistributionsList.updateUserSkinPreferences}"
+							oncomplete="javascript: location.href='catLtmDistributionsList.seam'" ignoreDupResponses="true"
+							eventsQueue="ltmDistributionsListQueue" ajaxSingle="true" />
+					</h:selectOneMenu>
+					<s:link id="clearSearch" status="globalWaitStatus"
+						ignoreDupResponses="true" styleClass="button wizard"
+						action="#{catLtmDistributionsList.reset}" value="X" ajaxSingle="true"
+						propagation="none"
+						oncomplete="javascript: location.href='catLtmDistributionsList.seam'">
+						<f:param name="flavour" value="#{catLtmDistributionsList.flavour}" />
+					</s:link>
+				</div>
+				<div class="right">
+					<ui:include src="adhocReportSelect.xhtml">
+						<ui:param name="entityQuery" value="#{catLtmDistributionsList}"/>
+					</ui:include>
+				</div>
+				
+
+			</s:div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/Animated-Hourglass.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+
+				<h:dataTable id="catLtmDistributionsList" var="_catLtmDistributions"
+					value="#{catLtmDistributionsList.resultList}" rowClasses="odd,even"
+					styleClass="mainListClass">				
+
+					
+					<cats:column linkToId="#{_catLtmDistributions.id}"
+						rendered="#{catLtmDistributionsList.listFlavour['catBooks.id']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Book CAT ID"
+						propertyPath="catLtmDistributions.catBook.id"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catBooks.id}"
+						propertyName="catBooks.id" sortable="true" value="#{_catLtmDistributions.catBooks.id}" />
+						
+		 			<cats:column linkToId="#{_catLtmDistributions.id}"
+						rendered="#{catLtmDistributionsList.listFlavour['catBooks.bestEisbn13']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="EISBN13"
+						propertyPath="catLtmDistributions.catBooks.bestEisbn13"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catBooks.bestEisbn13}"
+						propertyName="catBooks.bestEisbn13" sortable="true"
+						value="#{_catLtmDistributions.catBooks.bestEisbn13}" >
+					</cats:column>
+						
+					<cats:column linkToId="#{_catLtmDistributions.id}"
+						enumList="#{listsForEnums.catPipelineReport_Status}"
+						rendered="#{catLtmDistributionsList.listFlavour['catBooks.pipelineStatusValue']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Book Pipeline Status"
+						propertyPath="catLtmDistributions.catBooks.pipelineStatusValue"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catBooks.pipelineStatusValue}"
+						propertyName="catBooks.pipelineStatusValue" sortable="true"
+						value="#{_catLtmDistributions.catBooks.pipelineStatusValue.label}" rollup="true" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catLtmDistributions.id}"
+						rendered="#{catLtmDistributionsList.listFlavour['catBooks.booksPublishers']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Book Publisher"
+						propertyPath="catLtmDistributions.catBooks.booksPublishers"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catBooks.booksPublishers}"
+						propertyName="catBooks.booksPublishers" sortable="true"
+						value="#{_catLtmDistributions.catBooks.booksPublishers}" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catLtmDistributions.id}"
+						rendered="#{catLtmDistributionsList.listFlavour['catBooks.bestTitle']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Book Title"
+						propertyPath="catLtmDistributions.catBooks.bestTitle"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catBooks.bestTitle}"
+						propertyName="catBooks.bestTitle" sortable="true"
+						value="#{_catLtmDistributions.catBooks.bestTitle}" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catLtmDistributions.id}"
+						enumList="#{listsForEnums.catLtmDistributions_Status}"
+						rendered="#{catLtmDistributionsList.listFlavour['catStatus']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Distribution Status"
+						propertyPath="catLtmDistributions.catStatus"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catStatus}"
+						propertyName="catStatus" sortable="true"
+						value="#{_catLtmDistributions.catStatus.label}" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catLtmDistributions.id}"
+						rendered="#{catLtmDistributionsList.listFlavour['catPlatformPreProdDate']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Distribution Staging"
+						propertyPath="catLtmDistributions.catPlatformPreProdDate"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catPlatformPreProdDate}"
+						propertyName="catPlatformPreProdDate" sortable="true"
+						value="#{_catLtmDistributions.catPlatformPreProdDate}" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catLtmDistributions.id}"
+						rendered="#{catLtmDistributionsList.listFlavour['catLiveDate']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Distribution Live"
+						propertyPath="catLtmDistributions.catLiveDate"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catLiveDate}"
+						propertyName="catLiveDate" sortable="true"
+						value="#{_catLtmDistributions.catLiveDate}" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catLtmDistributions.id}"
+						rendered="#{catLtmDistributionsList.listFlavour['catExportedZipName']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Distribution Submission Zip"
+						propertyPath="catLtmDistributions.catExportedZipName"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catExportedZipName}"
+						propertyName="catExportedZipName" sortable="true"
+						value="#{_catLtmDistributions.catExportedZipName}" >
+					</cats:column>
+					
+					<cats:column linkToId="#{_catLtmDistributions.id}" styleClass="id"
+						rendered="#{catLtmDistributionsList.listFlavour['id']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Distribution ID"
+						propertyPath="catLtmDistributions.id"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.id}"
+						propertyName="id" sortable="true" value="#{_catLtmDistributions.id}" />
+						
+					<cats:column linkToId="#{_catLtmDistributions.id}"
+						rendered="#{catLtmDistributionsList.listFlavour['catDateModified']}"
+						entityList="#{catLtmDistributionsList}" propertyLabel="Last Modified"
+						propertyPath="catLtmDistributions.catDateModified"
+						propertyValue="#{catLtmDistributionsList.catLtmDistributions.catDateModified}"
+						propertyName="catDateModified" sortable="true"
+						value="#{_catLtmDistributions.catDateModified}" >
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+						
+	 				
+					
+				</h:dataTable>
+			</div>
+		</a:form>
+
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatLtmDistributionList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catLtmDistributionsList}"></ui:param>
+			<ui:param name="divId" value="2" />
+		</ui:include>
+
+		<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+		<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catLtmDistributionsList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+	</ui:define>
+</ui:composition>

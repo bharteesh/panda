@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <begin-conversation join="true"/>
+ <param name="flavour" value="#{catContributorsList.flavour}"/>
+ <param name="firstResult" value="#{catContributorsList.firstResult}"/>
+ <param name="sort" value="#{catContributorsList.orderColumn}"/>
+ <param name="dir" value="#{catContributorsList.orderDirection}"/>
+ <param name="logic" value="#{catContributorsList.restrictionLogicOperator}"/>
+ <param name="from"/>
+ 
+ <param name="nulltestpath" value="#{catContributorsList.nullTestColumn}"/>
+ <param name="nulltestcond" value="#{catContributorsList.nullTestCondition}"/>
+ 
+ 
+</page>

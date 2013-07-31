@@ -1,0 +1,378 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="../layout/template.xhtml">
+
+
+	<ui:param name="entityType" value="sets"/>
+
+<ui:define name="badge">
+	<ui:include src="SetsBadge.xhtml" />
+</ui:define>
+
+<ui:define name="body">
+	<h:form id="setsEditForm">
+		<div id="globalStatusDiv" style="display: none;" >
+		<img src="../img/loading.gif" /></div>
+		<a:status id="globalWaitStatus" forceId="true" layout="none"
+			onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+			onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+    <rich:tabPanel id="maintab" 
+    	switchType="ajax" 
+    	styleClass="tab" 
+    	contentClass="tab_content"
+    	selectedTab="#{catSetsHome.selectedTab}" 
+    	>
+		<rich:tab  label="Title History" id="tab1" name="tab1" eventsQueue="setsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+			reRender="thLayout,rightsLayout, acqLayout, checkinSrcLayout, digiLayout, wallLayout"
+			action="#{catSetsHome.updateUserTabPreferences('tab1')}">
+	        <ui:include src="SetsTitleHistoryTab.xhtml" />
+        </rich:tab>
+	    <rich:tab label="Rights" id="tab2" name="tab2" eventsQueue="setsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+	    	reRender="thLayout,rightsLayout, acqLayout, checkinSrcLayout, digiLayout, wallLayout"
+	    	action="#{catSetsHome.updateUserTabPreferences('tab2')}">
+ 	       <ui:include src="SetsRightsTab.xhtml" />
+        </rich:tab>
+        <rich:tab label="Acquisitions" id="tab3" name="tab3" eventsQueue="setsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+        	reRender="thLayout,rightsLayout, acqLayout, checkinSrcLayout, digiLayout, wallLayout"
+        	action="#{catSetsHome.updateUserTabPreferences('tab3')}">
+ 	       <ui:include src="SetsAcquisitionsTab.xhtml" />
+        </rich:tab>
+        <rich:tab label="Check-In Source" id="tab4" name="tab4" eventsQueue="setsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+        	reRender="thLayout,rightsLayout, acqLayout, checkinSrcLayout, digiLayout, wallLayout"
+        	action="#{catSetsHome.updateUserTabPreferences('tab4')}">
+ 	       <ui:include src="SetsCheckInSourceTab.xhtml" />
+        </rich:tab>
+        <rich:tab label="Digitization" id="tab5" name="tab5" eventsQueue="setsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+        	reRender="thLayout,rightsLayout, acqLayout, checkinSrcLayout, digiLayout, wallLayout"
+        	action="#{catSetsHome.updateUserTabPreferences('tab5')}">
+ 	       <ui:include src="SetsDigitizationTab.xhtml" />
+        </rich:tab>
+        <rich:tab label="Wall" id="tab6" name="tab6" eventsQueue="setsEditQueue" status="globalWaitStatus"  oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+        	reRender="thLayout,rightsLayout, acqLayout, checkinSrcLayout, digiLayout, wallLayout"
+        	action="#{catSetsHome.updateUserTabPreferences('tab6')}">
+ 	       <ui:include src="SetsWallTab.xhtml" />
+        </rich:tab>
+        <rich:tab label="Legacy" id="tab7" name="tab7" eventsQueue="setsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+        	reRender="thLayout,rightsLayout, acqLayout, checkinSrcLayout, digiLayout, wallLayout"
+        	action="#{catSetsHome.updateUserTabPreferences('tab7')}">
+ 	       <ui:include src="SetsLegacyTab.xhtml" />
+        </rich:tab>
+        <rich:tab label="Audit" id="tab8" name="tab8" eventsQueue="setsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+        	reRender="thLayout,rightsLayout, acqLayout, checkinSrcLayout, digiLayout, wallLayout"
+        	action="#{catSetsHome.updateUserTabPreferences('tab8')}">
+ 	       <ui:include src="SetsAuditTab.xhtml" />
+        </rich:tab>
+    </rich:tabPanel>
+    
+    <div id="functions">
+	    	<a:commandLink action="#{catSetsHome.update}" 
+	    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+	    		ignoreDupResponses="true" styleClass="button saveOrCancel disabled" 
+	    		value="Save"
+	    		reRender="setsEditForm"
+	    		eventsQueue="setsEditQueue" status="globalWaitStatus"/>
+	    	<a:commandLink action="#{catSetsHome.cancel}" 
+	    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+	    		ignoreDupResponses="true" ajaxSingle="true" styleClass="button saveOrCancel disabled" 
+	    		value="Cancel"
+	    		eventsQueue="setsEditQueue" status="globalWaitStatus"/>
+	    		
+	</div>
+    </h:form>
+    
+<a:form>
+
+<a:outputPanel layout="none" id="thLayout">
+	<s:div id="TitleHistoryTables" rendered="#{empty catSetsHome.selectedTab or catSetsHome.selectedTab eq 'tab1'}">
+		<!--  TITLE HISTORY  -->
+		<ui:include src="SetsCmptsTable.xhtml">
+	  		<ui:param name="divId" value="thCmptsTableDiv"/>
+	  		<ui:param name="tableId" value="thCmptsTable"/>
+	  		<ui:param name="flavour" value="TitleHistory"/>
+	  		<ui:param name="tableType" value="Components"/>
+	  		<ui:param name="componentList" value="#{catSetsHome.cmptListSortedByStartYear}"/>
+	  	</ui:include>
+	  
+	  <!-- Related Components -->
+	  	<ui:include src="SetsCmptsTable.xhtml">
+	  		<ui:param name="divId" value="thCmptsSetTableDiv"/>
+	  		<ui:param name="tableId" value="thCmptsSetTable"/>
+	  		<ui:param name="flavour" value="TitleHistorySet"/>
+	  		<ui:param name="tableType" value="RelatedComponents"/>
+	  		<ui:param name="componentList" value="#{catSetsHome.relatedComponentList}"/>
+	  	</ui:include>
+    
+	  <!-- Title Rltnshps -->
+	  	<ui:include src="SetsTitleRltnshpsTable.xhtml">
+	  		<ui:param name="divId" value="thTitleRltnshpTableDiv"/>
+	  		<ui:param name="tableId" value="thTitleRltnshpTable"/>
+	  		<ui:param name="flavour" value="TitleHistorySet"/>
+	  		<ui:param name="tableType" value="TitleRltnshps"/>
+	  		<ui:param name="componentList" value="#{catSetsHome.titleRltnshpList}"/>
+	  	</ui:include>
+    
+	</s:div>
+</a:outputPanel>
+<a:outputPanel layout="none" id="rightsLayout">
+	<s:div id="RightsTables" rendered="#{catSetsHome.selectedTab eq 'tab2'}">
+		<!--  RIGHTS -->
+    
+	       <!-- Components -->
+	    <ui:include src="SetsCmptsTable.xhtml">
+	    	<ui:param name="divId" value="rightsCmptsTableDiv"/>
+			<ui:param name="tableId" value="rightsCmptsTable"/>
+			<ui:param name="flavour" value="Rights"/>
+			<ui:param name="tableType" value="Components"/>
+			<ui:param name="componentList" value="#{catSetsHome.cmptListSortedByStartYear}"/>
+		</ui:include>
+		
+		<!-- Related Components -->
+	    <ui:include src="SetsCmptsTable.xhtml">
+	    	<ui:param name="divId" value="rightsCmptsSetTableDiv"/>
+			<ui:param name="tableId" value="rightsCmptsSetTable"/>
+			<ui:param name="flavour" value="Rights"/>
+			<ui:param name="tableType" value="RelatedComponents"/>
+			<ui:param name="componentList" value="#{catSetsHome.relatedComponentList}"/>
+		</ui:include>
+		
+		<ui:include src="SetsContractDetailsTable.xhtml">
+	    	<ui:param name="divId" value="rightsCDTableDiv"/>
+			<ui:param name="tableId" value="rightsCDTable"/>
+		</ui:include>
+		
+		<ui:include src="SetsInvitationsTable.xhtml">
+	    	<ui:param name="divId" value="rightsInvTableDiv"/>
+			<ui:param name="tableId" value="rightsInvTable"/>
+		</ui:include>
+    
+	</s:div>
+</a:outputPanel>
+<a:outputPanel layout="none" id="acqLayout">
+	<s:div id="AcqTables" rendered="#{catSetsHome.selectedTab eq 'tab3'}">
+		<ui:include src="SetsCmptsTable.xhtml">
+	  		<ui:param name="divId" value="acqCmptsTableDiv"/>
+	  		<ui:param name="tableId" value="acqCmptsTable"/>
+	  		<ui:param name="flavour" value="NeededSource"/>
+	  		<ui:param name="tableType" value="Components"/>
+	  		<ui:param name="componentList" value="#{catSetsHome.cmptListSortedByStartYear}"/>
+		  </ui:include>
+		  
+		  <ui:include src="SetsCmptsTable.xhtml">
+		  		<ui:param name="divId" value="acqCmptsTableSetDiv"/>
+		  		<ui:param name="tableId" value="acqCmptsSetTable"/>
+		  		<ui:param name="flavour" value="NeededSource"/>
+		  		<ui:param name="tableType" value="RelatedComponents"/>
+		  		<ui:param name="componentList" value="#{catSetsHome.relatedComponentList}"/>
+		  </ui:include>
+		  
+		  <ui:include src="SetsAcqOrdersTable.xhtml">
+		  		<ui:param name="divId" value="acqOrdersTableDiv"/>
+		  		<ui:param name="tableId" value="acqOrdersTable"/>
+		  </ui:include>
+		  
+		  <ui:include src="SetsIssueShipmentsTable.xhtml">
+		  		<ui:param name="divId" value="acqShipmentsTableDiv"/>
+		  		<ui:param name="tableId" value="acqShipmentsTable"/>
+		  </ui:include>	
+	</s:div>
+</a:outputPanel>
+<a:outputPanel layout="none" id="checkinSrcLayout">
+	<s:div id="CheckinSrcTables" rendered="#{catSetsHome.selectedTab eq 'tab4'}">
+		<!--  CHECK IN SOURCE -->
+	     <ui:include src="SetsAcqOrdersTable.xhtml">
+		  		<ui:param name="divId" value="checkAcqOrdersTableDiv"/>
+		  		<ui:param name="tableId" value="checkAcqOrdersTable"/>
+		  </ui:include>
+		  
+		  <ui:include src="SetsIssueShipmentsTable.xhtml">
+		  		<ui:param name="divId" value="checkShipmentsTableDiv"/>
+		  		<ui:param name="tableId" value="checkShipmentsTable"/>
+		  </ui:include>
+	
+	</s:div>
+</a:outputPanel>
+
+<a:outputPanel layout="none" id="digiLayout">
+	<s:div id="DigiTables" rendered="#{catSetsHome.selectedTab eq 'tab5'}">
+		<!--  DIGITIZATION -->
+	
+		<!-- Components -->
+		  <ui:include src="SetsCmptsTable.xhtml">
+		  		<ui:param name="divId" value="digiCmptsTableDiv"/>
+		  		<ui:param name="tableId" value="digiCmptsTable"/>
+		  		<ui:param name="flavour" value="NeededSource"/>
+		  		<ui:param name="tableType" value="Components"/>
+		  		<ui:param name="componentList" value="#{catSetsHome.cmptListSortedByStartYear}"/>
+		  </ui:include>
+		  
+		  <!-- Related Components -->
+		  <ui:include src="SetsCmptsTable.xhtml">
+		  		<ui:param name="divId" value="digiCmptsTableSetDiv"/>
+		  		<ui:param name="tableId" value="digiCmptsSetTable"/>
+		  		<ui:param name="flavour" value="NeededSource"/>
+		  		<ui:param name="tableType" value="RelatedComponents"/>
+		  		<ui:param name="componentList" value="#{catSetsHome.relatedComponentList}"/>
+		  </ui:include>
+	</s:div>
+</a:outputPanel>
+
+<a:outputPanel layout="none" id="wallLayout">
+	<s:div id="WallTables" rendered="#{catSetsHome.selectedTab eq 'tab6'}">
+		<ui:include src="SetsWallDetailsTable.xhtml">
+	  		<ui:param name="divId" value="wallDetailsTableDiv"/>
+	  		<ui:param name="tableId" value="wallDetailsTable"/>
+		  </ui:include>
+		  
+		  <ui:include src="SetsWallOverridesTable.xhtml">
+		  		<ui:param name="divId" value="wallOverTableDiv"/>
+		  		<ui:param name="tableId" value="wallOverTable"/>
+		  </ui:include>
+		  
+		  <ui:include src="SetsMovingWallFlipsTable.xhtml">
+		  		<ui:param name="divId" value="mvFlipsTableDiv"/>
+		  		<ui:param name="tableId" value="mvFlipsTable"/>
+		  </ui:include>
+	</s:div>
+</a:outputPanel>
+       
+	</a:form>
+	
+    
+    
+    <ui:include src="bulkm_Sets.xhtml">
+    	<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+    </ui:include>
+	<ui:include src="changem_CurrentTitle.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+	<ui:include src="changem_IniDigitization.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+	<ui:include src="createm_SetNote.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>		
+	</ui:include>
+	<ui:include src="addm_Collections.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+	<ui:include src="changem_PublicationStatus.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+	<ui:include src="/walldetails/bulkm_WallDetails.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+		
+    <ui:include src="../components/bulkm_Components.xhtml">
+    	<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+    </ui:include>
+    
+    <ui:include src="../components/editm_NeededSource.xhtml">
+			<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+		</ui:include>
+    
+	<ui:include src="../invitations/bulkm_Invitations.xhtml">
+		<ui:param name="divParam" value="InviBulk"/>
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+	<ui:include src="../invitations/createm_Invitations.xhtml">
+		   	<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+		   <ui:param name="divParam" value="invListSets"/>
+	</ui:include>
+	   
+    <ui:include src="/contractdetails/changeAttrbContractDtls_modal.xhtml">
+    	<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+    </ui:include>
+    <ui:include src="/contractdetails/advLifecycleContractDtls_modal.xhtml">
+    	<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+    </ui:include>
+    
+    <ui:include src="../acqorders/bulkm_CatAcqOrders.xhtml">
+  		   <ui:param name="divParam" value="AcqOrdersList"/>
+  		   <ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+  	</ui:include>
+  	<ui:include src="../acqorders/createm_AcqOrders.xhtml">
+		   <ui:param name="reRenderMe" value="catAcqOrdersListSet"/>
+		   <ui:param name="divParam" value="acqOrdersListSet"/>
+		   <ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+	
+	<ui:include src="../issueshipments/createm_IssueShipments.xhtml">
+		   <ui:param name="reRenderMe" value="catIssueShipSet"/>
+		   <ui:param name="divParam" value="issueShipSet"/>
+		   <ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+  	
+  	<ui:include src="../publisherRolesMulti/createm_PublisherRoles.xhtml">
+  		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+  	</ui:include>
+  	<ui:include src="../titlerelationships/createm_TitleRelationships.xhtml">
+  		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+  	</ui:include>
+  	
+  	<!-- ui:include src="../issueshipments/bulkm_IssueShipments.xhtml">
+  		<ui:param name="divParam" value="issueShipmentsList"/>
+  	/ui:include>
+	-->
+	
+	<ui:include src="/walloverrides/createm_WallOverrides.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+		    	<ui:param name="reRenderMe" value="catWallOverridesList"></ui:param>
+    	<ui:param name="divParam"   value="wallOverridesList"></ui:param>
+	</ui:include>
+	
+	<ui:include src="/movingwallflips/bulkm_MovingWallFlips.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+    <ui:include src="/movingwallflips/createm_MovingWallFlips.xhtml">
+		<ui:param name="reRenderMe" value="catMovingWallFlipsList"/>
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+	<ui:include src="../components/createCmpt_m.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>			
+	<ui:include src="../sets/createSet_m.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+	 <ui:include src="../walldetails/createm_WallDetails.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+		<ui:param name="reRenderMe" value="catWallDtlsList"/>
+		<ui:param name="divParam"   value="wallDtlsList"></ui:param>
+	 </ui:include>
+	 <ui:include src="delinkm_Component.xhtml">
+	 	<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	 </ui:include>
+		
+	<ui:include src="/issueshipments/bulkm_IssueShipments.xhtml">
+		   <ui:param name="divParam" value="IssueShipmentsEditbulkm_IssueShipments"/>
+		   <ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+	<ui:include src="/issueshipments/duplicatem_IssueShipments.xhtml">
+		   <ui:param name="divParam" value="CatIssueShipmentsListduplicatem_IssueShipments"/>
+		   <ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+    <ui:include src="/contractdetails/addContractDetails_modal.xhtml">
+    	<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+    </ui:include>
+    <ui:include src="/onholdreason/updateOnHoldReason_modal.xhtml">
+    	<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+    </ui:include>
+	
+	<ui:include src="../components/editm_ProdStatus.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>			
+	
+	<ui:include src="../components/editm_CspOnboardingStatus.xhtml">
+		<ui:param name="pageURL" value="/sets/SetsEdit.xhtml"/>
+	</ui:include>
+
+
+</ui:define>
+
+<ui:define name="notes">
+	<a:include viewId="SetsNotes.xhtml"  />
+</ui:define>
+</ui:composition>

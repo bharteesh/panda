@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{createTitleRelationshipsWizard.bulkTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="">1. Permissions</li>
+		<li class="">2. Main</li>
+		<li class="selected">3. Select</li>
+		<li class="disabled">4. Results</li>
+	</ul>
+	
+	<div class="cluster smart">
+	<s:fragment rendered="#{not empty createTitleRelationshipsWizard.bulkSelection}">
+	<p><h:outputText value="Title relationships created so far: " /></p>
+		<rich:dataTable value="#{createTitleRelationshipsWizard.bulkSelection}"
+								var="_catTitleRel">
+				<rich:column>
+					<h:outputText value="#{_catTitleRel.catCmptsByCatSecondCmptId.catName}" />
+					<h:outputText value=" merges to form "/>
+					<h:outputText value="#{_catTitleRel.catCmptsByCatFirstCmptId.catName}"/>
+				</rich:column>
+		</rich:dataTable>
+	</s:fragment>
+	
+	
+</div>
+	<div class="push"></div>
+	<a:commandLink styleClass="button" value="Quit" limitToList="true"
+		oncomplete="#{rich:component('createTitleRelnshpsQuit')}.show(); " 
+		eventsQueue="createTRelQueue"
+		status="globalWaitStatus" 
+		ignoreDupResponses="true"/>
+		
+	<a:commandLink styleClass="button" value="Add More" 
+			action="#{createTitleRelationshipsWizard.addMoreCmpts()}" 
+			reRender="createTitleRelnshpsWizard" 
+			eventsQueue="createTRelQueue"
+			status="globalWaitStatus" 
+			ignoreDupResponses="true">
+	</a:commandLink>
+			
+	<s:fragment rendered="#{not empty createTitleRelationshipsWizard.newCmptsBulkSelection}">
+			<a:commandLink styleClass="button right" value="Continue"
+			action="#{createTitleRelationshipsWizard.showResults()}" 
+			reRender="createTitleRelnshpsWizard" 
+			eventsQueue="createTRelQueue"
+			status="globalWaitStatus" 
+			ignoreDupResponses="true"/>
+	</s:fragment>
+	</div>
+</ui:composition>

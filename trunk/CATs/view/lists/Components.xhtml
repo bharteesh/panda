@@ -1,0 +1,700 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+	<ui:param name="entityType" value="cmpt" />
+	
+	<ui:define name="body">
+		
+		<h:outputText
+			value="Components Search Results (#{empty catCmptsList.resultList ? 0 : (catCmptsList.paginated ? catCmptsList.resultCount : catCmptsList.resultList.size)})"></h:outputText>
+
+		<a:form>
+
+			<div class="header">
+			<div class="left"><span class="museo">Components</span> <h:selectOneMenu
+				name="flavour" value="#{catCmptsList.flavour}" onchange="this.form.submit();">
+				<s:selectItems value="#{catCmptsList.flavours}" var="i"
+					itemValue="#{i}" label="#{catCmptsList.flavourLabel(i)}" />
+
+			</h:selectOneMenu></div>
+
+			<div class="right"><h:selectOneMenu id="catCmptsList_bulkOperationsSelect"
+				rendered="#{not empty cmptsBulkOperations.bulkOperationsNames}" value="#{cmptsBulkOperations.bulkOperationsType}">
+				<a:support event="onchange"
+					action="#{cmptsBulkOperations.prepBulkOperations('catCmptsList', 'catCmptsList_bulkOperationsSelect')}"
+					reRender="cmptBulkOperationsPanels"
+					oncomplete="if ( #{rich:element('catCmptsList_bulkOperationsSelect')}.options.selectedIndex != 0 ) { #{rich:component('cmptBulkUpdatePanel')}.show(); } ; return false; " 
+					status="globalWaitStatus" />
+				<s:selectItems value="#{cmptsBulkOperations.bulkOperationsNames}" var="b"
+					label="#{cmptsBulkOperations.bulkOperations[b]}" itemValue="#{b}"
+					noSelectionLabel="Bulk Operations" />
+			</h:selectOneMenu></div>
+			
+			<div class="right">
+				 
+			</div>
+			
+			</div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+			
+			
+			<h:dataTable id="catCmptsList"
+				var="_catCmpts" value="#{catCmptsList.resultList}"
+				rendered="#{not empty catCmptsList.resultList}"
+				rowClasses="odd,even"
+				>
+
+				<rich:column styleClass="checkBoxes" headerClass="checkBoxes"
+					rendered="#{not empty cmptsBulkOperations.bulkOperationsNames}">
+					<f:facet name="header">
+						<h:panelGrid columns="1">
+							<h:outputText value=" " />
+							<input type="checkbox" id="select_all_checkbox"
+								name="select_all_checkbox"
+								onclick="if ( this.checked ) { jQuery('.bulk_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.bulk_checkbox').each(function(){ this.checked = false; }); }" />
+						</h:panelGrid>
+					</f:facet>
+					<span onclick="cancelEventBubbling(event);">
+					<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+						value="#{cmptsBulkOperations.selections[_catCmpts]}" />
+						</span>
+				</rich:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.id}" entityList="#{catCmptsList}"
+					propertyName="id" propertyValue="#{catCmptsList.catCmpts.id}"
+					propertyLabel="Id" propertyPath="catCmpts.id"
+					rendered="#{listFlavour['id']}" sortable="true" />
+
+	
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.licensorValue}"
+					entityList="#{catCmptsList}" propertyLabel="Rollup: Licensor"
+					rendered="#{listFlavour['licensorValue']}"
+					sortable="true" propertyPath="catCmpts.licensorValue"
+					propertyValue="#{catCmptsList.licensorValue}"
+					propertyName="licensorValue"
+					enumList="#{listsForEnums.licensorRollup}" rollup="true" />
+
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}"
+					rendered="#{listFlavour['publisherValue']}"
+					value="#{_catCmpts.publisherValue}" entityList="#{catCmptsList}"
+					propertyLabel="Rollup: Publisher" sortable="true"
+					propertyPath="catCmpts.publisherValue"
+					propertyValue="#{catCmptsList.publisherValue}"
+					propertyName="publisherValue"
+					enumList="#{listsForEnums.publisherRollup}" rollup="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" rendered="#{listFlavour['ridersValue']}"
+					value="#{_catCmpts.ridersValue}" entityList="#{catCmptsList}"
+					propertyLabel="Rollup: Riders" sortable="true"
+					propertyPath="catCmpts.ridersValue"
+					propertyValue="#{catCmptsList.ridersValue}"
+					propertyName="ridersValue" rollup="true" />
+
+
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catAcqDateCompleted}"
+					entityList="#{catCmptsList}" propertyName="catAcqDateCompleted"
+					propertyValue="#{catCmptsList.catCmpts.catAcqDateCompleted}"
+					propertyLabel="Acq Completed"
+					propertyPath="catCmpts.catAcqDateCompleted"
+					rendered="#{listFlavour['catAcqDateCompleted']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catAcqDateStarted}"
+					entityList="#{catCmptsList}" propertyName="catAcqDateStarted"
+					propertyValue="#{catCmptsList.catCmpts.catAcqDateStarted}"
+					propertyLabel="Acq Started"
+					propertyPath="catCmpts.catAcqDateCompleted"
+					rendered="#{listFlavour['catAcqDateStarted']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catArtDarkNote}"
+					entityList="#{catCmptsList}" propertyName="catArtDarkNote"
+					propertyValue="#{catCmptsList.catCmpts.catArtDarkNote}"
+					propertyLabel="Art Dark Note"
+					propertyPath="catCmpts.catArtDarkNote"
+					rendered="#{listFlavour['catArtDarkNote']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catArtDarkNoteChangeBy}"
+					entityList="#{catCmptsList}" propertyName="catArtDarkNoteChangeBy"
+					propertyValue="#{catCmptsList.catCmpts.catArtDarkNoteChangeBy}"
+					propertyLabel="Art Dark Note Changed By"
+					propertyPath="catCmpts.catArtDarkNoteChangeBy"
+					rendered="#{listFlavour['catArtDarkNoteChangeBy']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catArtDarkNoteDateChange}"
+					entityList="#{catCmptsList}"
+					propertyName="catArtDarkNoteDateChange"
+					propertyValue="#{catCmptsList.catCmpts.catArtDarkNoteDateChange}"
+					propertyLabel="Art Dark Note Date Change"
+					propertyPath="catCmpts.catArtDarkNoteDateChange"
+					rendered="#{listFlavour['catArtDarkNoteDateChange']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catCreator}"
+					entityList="#{catCmptsList}" propertyName="catCreator"
+					propertyValue="#{catCmptsList.catCmpts.catCreator}"
+					propertyLabel="Creator" propertyPath="catCmpts.catCreator"
+					rendered="#{listFlavour['catCreator']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catCrntReleasedPageCnt}"
+					entityList="#{catCmptsList}" propertyName="catCrntReleasedPageCnt"
+					propertyValue="#{catCmptsList.catCmpts.catCrntReleasedPageCnt}"
+					propertyLabel="Crnt Released Page Cnt"
+					propertyPath="catCmpts.catCrntReleasedPageCnt"
+					rendered="#{listFlavour['catCrntReleasedPageCnt']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catDateCreated}"
+					entityList="#{catCmptsList}" propertyName="catDateCreated"
+					propertyValue="#{catCmptsList.catCmpts.catDateCreated}"
+					propertyLabel="Date Created" propertyPath="catCmpts.catDateCreated"
+					rendered="#{listFlavour['catDateCreated']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catDateRange}"
+					entityList="#{catCmptsList}" propertyName="catDateRange"
+					propertyValue="#{catCmptsList.catCmpts.catDateRange}"
+					propertyLabel="Date Range" propertyPath="catCmpts.catDateRange"
+					rendered="#{listFlavour['catDateRange']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catDateSentToVendor}"
+					entityList="#{catCmptsList}" propertyName="catDateSentToVendor"
+					propertyValue="#{catCmptsList.catCmpts.catDateSentToVendor}"
+					propertyLabel="Date Sent to Vendor"
+					propertyPath="catCmpts.catDateSentToVendor"
+					rendered="#{listFlavour['catDateSentToVendor']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catEIssn}"
+					entityList="#{catCmptsList}" propertyName="catEIssn"
+					propertyValue="#{catCmptsList.catCmpts.catEIssn}"
+					propertyLabel="E ISSN" propertyPath="catCmpts.catEIssn"
+					rendered="#{listFlavour['catEIssn']}" sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}"
+					value="#{_catCmpts.catEndDateIsAnEstimate ? 'Yes' : 'No'}"
+					entityList="#{catCmptsList}" propertyName="catEndDateIsAnEstimate"
+					propertyValue="#{catCmptsList.catCmpts.catEndDateIsAnEstimate}"
+					propertyLabel="End Date is an Estimate"
+					propertyPath="catCmpts.catEndDateIsAnEstimate"
+					bool="#{listsForEnums.yesNo}"
+					rendered="#{listFlavour['catEndDateIsAnEstimate']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catExcludedRange}"
+					entityList="#{catCmptsList}" propertyName="catExcludedRange"
+					propertyValue="#{catCmptsList.catCmpts.catExcludedRange}"
+					propertyLabel="Excluded Range"
+					propertyPath="catCmpts.catExcludedRange"
+					rendered="#{listFlavour['catExcludedRange']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catGrantCode}"
+					entityList="#{catCmptsList}" propertyName="catGrantCode"
+					propertyValue="#{catCmptsList.catCmpts.catGrantCode}"
+					propertyLabel="Grant Code" propertyPath="catCmpts.catGrantCode"
+					rendered="#{listFlavour['catGrantCode']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catImgDarkNote}"
+					entityList="#{catCmptsList}" propertyName="catImgDarkNote"
+					propertyValue="#{catCmptsList.catCmpts.catImgDarkNote}"
+					propertyLabel="Img Dark Note"
+					propertyPath="catCmpts.catImgDarkNote"
+					rendered="#{listFlavour['catImgDarkNote']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catImgDarkNoteChangeBy}"
+					entityList="#{catCmptsList}" propertyName="catImgDarkNoteChangeBy"
+					propertyValue="#{catCmptsList.catCmpts.catImgDarkNoteChangeBy}"
+					propertyLabel="Img Dark Note Changed By"
+					propertyPath="catCmpts.catImgDarkNoteChangeBy"
+					rendered="#{listFlavour['catImgDarkNoteChangeBy']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catImgDarkNoteDateChange}"
+					entityList="#{catCmptsList}"
+					propertyName="catImgDarkNoteDateChange"
+					propertyValue="#{catCmptsList.catCmpts.catImgDarkNoteDateChange}"
+					propertyLabel="Img Dark Note Date Change"
+					propertyPath="catCmpts.catImgDarkNoteDateChange"
+					rendered="#{listFlavour['catImgDarkNoteDateChange']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}"
+					value="#{_catCmpts.catIncludeInHclRepository ? 'Yes' : 'No'}"
+					entityList="#{catCmptsList}"
+					propertyName="catIncludeInHclRepository"
+					propertyValue="#{catCmptsList.catCmpts.catIncludeInHclRepository}"
+					propertyLabel="Include in HCL Repository"
+					propertyPath="catCmpts.catIncludeInHclRepository"
+					bool="#{listsForEnums.yesNo}"
+					rendered="#{listFlavour['catIncludeInHclRepository']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIncludeInUcRepository.label}"
+					entityList="#{catCmptsList}"
+					propertyName="catIncludeInUcRepository"
+					propertyValue="#{catCmptsList.catCmpts.catIncludeInUcRepository}"
+					propertyLabel="Include in UC Repository"
+					propertyPath="catCmpts.catIncludeInUcRepository"
+					enumList="#{listsForEnums.catCmpts_IncludeInUcRepository}"
+					rendered="#{listFlavour['catIncludeInUcRepository']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIniArt}"
+					entityList="#{catCmptsList}" propertyName="catIniArt"
+					propertyValue="#{catCmptsList.catCmpts.catIniArt}"
+					propertyLabel="Ini Art" propertyPath="catCmpts.catIniArt"
+					rendered="#{listFlavour['catIniArt']}" sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIniCilReleaseStatus.label}"
+					entityList="#{catCmptsList}" propertyName="catIniCilReleaseStatus"
+					propertyValue="#{catCmptsList.catCmpts.catIniCilReleaseStatus}"
+					propertyLabel="Ini CIL Release Status"
+					propertyPath="catCmpts.catIniCilReleaseStatus"
+					enumList="#{listsForEnums.catCmpts_IniCilReleaseStatus_forList}"
+					rendered="#{listFlavour['catIniCilReleaseStatus']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIniReleaseDateActl}"
+					entityList="#{catCmptsList}" propertyName="catIniReleaseDateActl"
+					propertyValue="#{catCmptsList.catCmpts.catIniReleaseDateActl}"
+					propertyLabel="Imi Release Date Actl"
+					propertyPath="catCmpts.catIniReleaseDateActl"
+					rendered="#{listFlavour['catIniReleaseDateActl']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIniReleaseDatePrjd}"
+					entityList="#{catCmptsList}" propertyName="catIniReleaseDatePrjd"
+					propertyValue="#{catCmptsList.catCmpts.catIniReleaseDatePrjd}"
+					propertyLabel="Imi Release Date Prjd"
+					propertyPath="catCmpts.catIniReleaseDatePrjd"
+					rendered="#{listFlavour['catIniReleaseDatePrjd']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIniReleaseDateSchd}"
+					entityList="#{catCmptsList}" propertyName="catIniReleaseDateSchd"
+					propertyValue="#{catCmptsList.catCmpts.catIniReleaseDateSchd}"
+					propertyLabel="Imi Release Date Schd"
+					propertyPath="catCmpts.catIniReleaseDateSchd"
+					rendered="#{listFlavour['catIniReleaseDateSchd']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIniReleaseDeadline}"
+					entityList="#{catCmptsList}" propertyName="catIniReleaseDeadline"
+					propertyValue="#{catCmptsList.catCmpts.catIniReleaseDeadline}"
+					propertyLabel="Imi Release Deadline"
+					propertyPath="catCmpts.catIniReleaseDeadline"
+					rendered="#{listFlavour['catIniReleaseDeadline']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIniReleasePageCnt}"
+					entityList="#{catCmptsList}" propertyName="catIniReleasePageCnt"
+					propertyValue="#{catCmptsList.catCmpts.catIniReleasePageCnt}"
+					propertyLabel="Ini Release Page Cnt"
+					propertyPath="catCmpts.catIniReleasePageCnt"
+					rendered="#{listFlavour['catIniReleasePageCnt']}"
+					sortable="true" />
+
+
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIssnDateReceived}"
+					entityList="#{catCmptsList}" propertyName="catIssnDateReceived"
+					propertyValue="#{catCmptsList.catCmpts.catIssnDateReceived}"
+					propertyLabel="Issn Date Received"
+					propertyPath="catCmpts.catIssnDateReceived"
+					rendered="#{listFlavour['catIssnDateReceived']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIssnDateRequested}"
+					entityList="#{catCmptsList}" propertyName="catIssnDateRequested"
+					propertyValue="#{catCmptsList.catCmpts.catIssnDateRequested}"
+					propertyLabel="Issn Date Requested"
+					propertyPath="catCmpts.catIssnDateRequested"
+					rendered="#{listFlavour['catIssnDateRequested']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIssnNote}"
+					entityList="#{catCmptsList}" propertyName="catIssnNote"
+					propertyValue="#{catCmptsList.catCmpts.catIssnNote}"
+					propertyLabel="ISSN Note" propertyPath="catCmpts.catIssnNote"
+					rendered="#{listFlavour['catIssnNote']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIssnNoteChangeBy}"
+					entityList="#{catCmptsList}" propertyName="catIssnNoteChangeBy"
+					propertyValue="#{catCmptsList.catCmpts.catIssnNoteChangeBy}"
+					propertyLabel="ISSN Note Changed by"
+					propertyPath="catCmpts.catIssnNoteChangeBy"
+					rendered="#{listFlavour['catIssnNoteChangeBy']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIssnNoteDateChange}"
+					entityList="#{catCmptsList}" propertyName="catIssnNoteDateChange"
+					propertyValue="#{catCmptsList.catCmpts.catIssnNoteDateChange}"
+					propertyLabel="Issn Note Date Changed"
+					propertyPath="catCmpts.catIssnNoteDateChange"
+					rendered="#{listFlavour['catIssnNoteDateChange']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIssnRequestNote}"
+					entityList="#{catCmptsList}" propertyName="catIssnRequestNote"
+					propertyValue="#{catCmptsList.catCmpts.catIssnRequestNote}"
+					propertyLabel="ISSN Request Note"
+					propertyPath="catCmpts.catIssnRequestNote"
+					rendered="#{listFlavour['catIssnRequestNote']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{catCmptsList.catCmpts.catIssnRequestedBy}"
+					entityList="#{catCmptsList}" propertyName="catIssnRequestedBy"
+					propertyValue="#{catCmptsList.catCmpts.catIssnRequestedBy}"
+					propertyLabel="ISSN Requested By"
+					propertyPath="catCmpts.catIssnRequestedBy"
+					rendered="#{listFlavour['catIssnRequestedBy']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catIssnStatus}"
+					entityList="#{catCmptsList}" propertyName="catIssnStatus"
+					propertyValue="#{catCmptsList.catCmpts.catIssnStatus}"
+					propertyLabel="ISSN Status" propertyPath="catCmpts.catIssnStatus"
+					rendered="#{listFlavour['catIssnStatus']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catLifecycle.label}"
+					entityList="#{catCmptsList}"
+					propertyValue="#{catCmptsList.catCmpts.catLifecycle}"
+					propertyName="catLifecycle" propertyLabel="Lifecycle"
+					propertyPath="catCmpts.catLifecycle"
+					enumList="#{listsForEnums.setsAndComponentsLifecycle}"
+					rendered="#{listFlavour['catLifecycle']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catListOnBin ? 'Yes' : 'No'}"
+					entityList="#{catCmptsList}" propertyName="catListOnBin"
+					propertyValue="#{catCmptsList.catCmpts.catListOnBin}"
+					propertyLabel="List On Bin?" propertyPath="catCmpts.catListOnBin"
+					bool="#{listsForEnums.yesNo}"
+					rendered="#{listFlavour['catListOnBin']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catLtmJournalCode}"
+					entityList="#{catCmptsList}" propertyName="catLtmJournalCode"
+					propertyValue="#{catCmptsList.catCmpts.catLtmJournalCode}"
+					propertyLabel="Ltm Journal Code"
+					propertyPath="catCmpts.catLtmJournalCode"
+					rendered="#{listFlavour['catLtmJournalCode']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catLtmJournalId}"
+					entityList="#{catCmptsList}" propertyName="catLtmJournalId"
+					propertyValue="#{catCmptsList.catCmpts.catLtmJournalId}"
+					propertyLabel="Ltm Journal ID"
+					propertyPath="catCmpts.catLtmJournalId"
+					rendered="#{listFlavour['catLtmJournalId']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catName}"
+					entityList="#{catCmptsList}" propertyName="catName"
+					propertyValue="#{catCmptsList.catCmpts.catName}"
+					propertyLabel="Name" propertyPath="catCmpts.catName"
+					rendered="#{listFlavour['catName']}" sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catNeededSourceChangeBy}"
+					entityList="#{catCmptsList}" propertyName="catNeededSourceChangeBy"
+					propertyValue="#{catCmptsList.catCmpts.catNeededSourceChangeBy}"
+					propertyLabel="Needed Source Changed By"
+					propertyPath="catCmpts.catNeededSourceChangeBy"
+					rendered="#{listFlavour['catNeededSourceChangeBy']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catNeededSourceDateChange}"
+					entityList="#{catCmptsList}"
+					propertyName="catNeededSourceDateChange"
+					propertyValue="#{catCmptsList.catCmpts.catNeededSourceDateChange}"
+					propertyLabel="Needed Source Date Change"
+					propertyPath="catCmpts.catNeededSourceDateChange"
+					rendered="#{listFlavour['catNeededSourceDateChange']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catNeededSourceList}"
+					entityList="#{catCmptsList}" propertyName="catNeededSourceList"
+					propertyValue="#{catCmptsList.catCmpts.catNeededSourceList}"
+					propertyLabel="Needed Source List"
+					propertyPath="catCmpts.catNeededSourceList"
+					rendered="#{listFlavour['catNeededSourceList']}"
+					sortable="true"
+					notesViewPage="/lists/CatNeededSourceNoteList.xhtml"
+					notesParamName="catCmpts.id" notesParamValue="#{_catCmpts.id}" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catOnHold ? 'Yes' : 'No'}"
+					entityList="#{catCmptsList}" propertyName="catOnHold"
+					propertyValue="#{catCmptsList.catCmpts.catOnHold}"
+					propertyLabel="On Hold?" propertyPath="catCmpts.catOnHold"
+					bool="#{listsForEnums.yesNo}"
+					rendered="#{listFlavour['catOnHold']}" sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catOnHoldReason}"
+					entityList="#{catCmptsList}" propertyName="catOnHoldReason"
+					propertyValue="#{catCmptsList.catCmpts.catOnHoldReason}"
+					propertyLabel="On Hold Reason"
+					propertyPath="catCmpts.catOnHoldReason"
+					rendered="#{listFlavour['catOnHoldReason']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catParticipationDate}"
+					entityList="#{catCmptsList}" propertyName="catParticipationDate"
+					propertyValue="#{catCmptsList.catCmpts.catParticipationDate}"
+					propertyLabel="Participation Date"
+					propertyPath="catCmpts.catParticipationDate"
+					rendered="#{listFlavour['catParticipationDate']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catPrimarySigAuthor}"
+					entityList="#{catCmptsList}" propertyName="catPrimarySigAuthor"
+					propertyValue="#{catCmptsList.catCmpts.catPrimarySigAuthor}"
+					propertyLabel="Primary Sign Author"
+					propertyPath="catCmpts.catPrimarySigAuthor"
+					rendered="#{listFlavour['catPrimarySigAuthor']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catPrimarySigDateCompleted}"
+					entityList="#{catCmptsList}"
+					propertyName="catPrimarySigDateCompleted"
+					propertyValue="#{catCmptsList.catCmpts.catPrimarySigDateCompleted}"
+					propertyLabel="Primary Sign Date Completed"
+					propertyPath="catCmpts.catPrimarySigDateCompleted"
+					rendered="#{listFlavour['catPrimarySigDateCompleted']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catPrintIssn}"
+					entityList="#{catCmptsList}" propertyName="catPrintIssn"
+					propertyValue="#{catCmptsList.catCmpts.catPrintIssn}"
+					propertyLabel="Print ISSN" propertyPath="catCmpts.catPrintIssn"
+					rendered="#{listFlavour['catPrintIssn']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catProductionNote}"
+					entityList="#{catCmptsList}" propertyName="catProductionNote"
+					propertyValue="#{catCmptsList.catCmpts.catProductionNote}"
+					propertyLabel="Production Note"
+					propertyPath="catCmpts.catProductionNote"
+					rendered="#{listFlavour['catProductionNote']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catProductionStatus}"
+					entityList="#{catCmptsList}" propertyName="catProductionStatus"
+					propertyValue="#{catCmptsList.catCmpts.catProductionStatus}"
+					propertyLabel="Production Status"
+					propertyPath="catCmpts.catProductionStatus"
+					rendered="#{listFlavour['catProductionStatus']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catPublctnUnitRange}"
+					entityList="#{catCmptsList}" propertyName="catPublctnUnitRange"
+					propertyValue="#{catCmptsList.catCmpts.catPublctnUnitRange}"
+					propertyLabel="Publication Unit Range"
+					propertyPath="catCmpts.catPublctnUnitRange"
+					rendered="#{listFlavour['catPublctnUnitRange']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}"
+					value="#{_catCmpts.catPublisherSpecifiedName ? 'Yes' : 'No'}"
+					entityList="#{catCmptsList}"
+					propertyName="catPublisherSpecifiedName"
+					propertyValue="#{catCmptsList.catCmpts.catPublisherSpecifiedName}"
+					propertyLabel="Publisher Specified Name?"
+					propertyPath="catCmpts.catPublisherSpecifiedName"
+					bool="#{listsForEnums.yesNo}"
+					rendered="#{listFlavour['catPublisherSpecifiedName']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catRightsExclusions ? 'Yes' : 'No'}"
+					entityList="#{catCmptsList}" propertyName="catRightsExclusions"
+					propertyValue="#{catCmptsList.catCmpts.catRightsExclusions}"
+					propertyLabel="Rights Exclusion?"
+					propertyPath="catCmpts.catRightsExclusions"
+					bool="#{listsForEnums.yesNo}"
+					rendered="#{listFlavour['catRightsExclusions']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catRightsObtained ? 'Yes' : 'No'}"
+					entityList="#{catCmptsList}" propertyName="catRightsObtained"
+					propertyValue="#{catCmptsList.catCmpts.catRightsObtained}"
+					propertyLabel="Rights Obtained?"
+					propertyPath="catCmpts.catRightsObtained"
+					bool="#{listsForEnums.yesNo}"
+					rendered="#{listFlavour['catRightsObtained']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catRightsObtainedBy}"
+					entityList="#{catCmptsList}" propertyName="catRightsObtainedBy"
+					propertyValue="#{catCmptsList.catCmpts.catRightsObtainedBy}"
+					propertyLabel="Rights Obtained By"
+					propertyPath="catCmpts.catRightsObtainedBy"
+					rendered="#{listFlavour['catRightsObtainedBy']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catRightsObtainedDate}"
+					entityList="#{catCmptsList}" propertyName="catRightsObtainedDate"
+					propertyValue="#{catCmptsList.catCmpts.catRightsObtainedDate}"
+					propertyLabel="Rights Obtained Date"
+					propertyPath="catCmpts.catRightsObtainedDate"
+					rendered="#{listFlavour['catRightsObtainedDate']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catSelectionRecommendation}"
+					entityList="#{catCmptsList}"
+					propertyName="catSelectionRecommendation"
+					propertyValue="#{catCmptsList.catCmpts.catSelectionRecommendation}"
+					propertyLabel="Selection Recommendation"
+					propertyPath="catCmpts.catSelectionRecommendation"
+					rendered="#{listFlavour['catSelectionRecommendation']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catSelectionStatus.label}"
+					entityList="#{catCmptsList}" propertyName="catSelectionStatus"
+					propertyValue="#{catCmptsList.catCmpts.catSelectionStatus}"
+					propertyLabel="Selection Staus"
+					propertyPath="catCmpts.catSelectionStatus"
+					enumList="#{listsForEnums.catCmpts_SelectionStatus}"
+					rendered="#{listFlavour['catSelectionStatus']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catSigningDeadlineDate}"
+					entityList="#{catCmptsList}" propertyName="catSigningDeadlineDate"
+					propertyValue="#{catCmptsList.catCmpts.catSigningDeadlineDate}"
+					propertyLabel="Signing Dateline Date"
+					propertyPath="catCmpts.catSigningDeadlineDate"
+					rendered="#{listFlavour['catSigningDeadlineDate']}"
+					sortable="true">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}"
+					value="#{_catCmpts.catStartDateIsAnEstimate ? 'Yes' : 'No'}"
+					entityList="#{catCmptsList}"
+					propertyName="catStartDateIsAnEstimate"
+					propertyValue="#{catCmptsList.catCmpts.catStartDateIsAnEstimate}"
+					propertyLabel="Start Date is an Estimate?"
+					propertyPath="catCmpts.catStartDateIsAnEstimate"
+					bool="#{listsForEnums.yesNo}"
+					rendered="#{listFlavour['catStartDateIsAnEstimate']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catSubtitle}"
+					entityList="#{catCmptsList}" propertyName="catSubtitle"
+					propertyValue="#{catCmptsList.catCmpts.catSubtitle}"
+					propertyLabel="Subtitle" propertyPath="catCmpts.catSubtitle"
+					rendered="#{listFlavour['catSubtitle']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catThOclcNumber}"
+					entityList="#{catCmptsList}" propertyName="catThOclcNumber"
+					propertyValue="#{catCmptsList.catCmpts.catThOclcNumber}"
+					propertyLabel="TH OCLC Number"
+					propertyPath="catCmpts.catThOclcNumber"
+					rendered="#{listFlavour['catThOclcNumber']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catTitleIssn}"
+					entityList="#{catCmptsList}" propertyName="catTitleIssn"
+					propertyValue="#{catCmptsList.catCmpts.catTitleIssn}"
+					propertyLabel="Title ISSN" propertyPath="catCmpts.catTitleIssn"
+					rendered="#{listFlavour['catTitleIssn']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catUpdateBin ? 'Yes' : 'No'}"
+					entityList="#{catCmptsList}" propertyName="catUpdateBin"
+					propertyValue="#{catCmptsList.catCmpts.catUpdateBin}"
+					propertyLabel="Update Bin?" propertyPath="catCmpts.catUpdateBin"
+					bool="#{listsForEnums.yesNo}"
+					rendered="#{listFlavour['catUpdateBin']}"
+					sortable="true" />
+
+				<cats:column linkToId="#{_catRollupsCmpts.cmpts.id}" value="#{_catCmpts.catWebAttributionOverride}"
+					entityList="#{catCmptsList}"
+					propertyName="catWebAttributionOverride"
+					propertyValue="#{catCmptsList.catCmpts.catWebAttributionOverride}"
+					propertyLabel="Web Attribution Override"
+					propertyPath="catCmpts.catWebAttributionOverride"
+					rendered="#{listFlavour['catWebAttributionOverride']}"
+					sortable="true" />
+
+			</h:dataTable></div>
+
+		</a:form>
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/Components.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catCmptsList}"></ui:param>
+		</ui:include>
+
+		<ui:include src="../components/bulkm_Components.xhtml">
+		</ui:include>
+
+
+
+
+		<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+		<rich:jQuery id="flavourjquery" timing="onload" name="orderColumns"
+			selector="#catCmptsList .rich-table-subheader , #catCmptsList .rich-table-row"
+			query="#{listFlavour.getColumnOrderingJQuery()}" />
+
+	</ui:define>
+</ui:composition>

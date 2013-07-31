@@ -1,0 +1,135 @@
+<s:div id="#{divId}chooseContractTblSdiv" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">	
+	
+	<s:div id="#{divId}chooseContractFragment" styleClass="field">	
+			<label>Choose Agreement</label>			
+				<h:inputText id="default_search_newAndActiveContractsList#{divId}" 
+			 			value="#{newAndActiveContractsList.catContracts.publisherValue}"
+			 			onchange="return false;" size="60">		
+			 	<a:support event="onblur"
+                    	eventsQueue="createContDtlsQueue"
+                    	ajaxSingle="true"/>	 			
+				</h:inputText>		
+				<a:commandLink 
+			  		 styleClass="button filter"
+					 value="Filter"
+					 action="#{createContractDetailsWizard.narrowContractsList(rich:findComponent('default_search_newAndActiveContractsList'.concat(divId)).value)}"
+					 reRender="noLayoutContractsList#{divId},noLayoutCmptList#{divId},noLayoutErrorMsgs,editContractDtlsPanel,activateContractDtlsPanel"
+					 status="globalWaitStatus" 
+					 ajaxSingle="true"  ignoreDupResponses="true"
+					 eventsQueue="createContDtlsQueue"
+					 limitToList="true"/>
+	</s:div>				 
+	<div class="smart">
+			<rich:dataTable id="#{divId}catActiveContracts" styleClass="scroller"
+				var="_catContracts" value="#{createContractDetailsWizard.contractsList}"
+				rendered="#{not empty createContractDetailsWizard.contractsList}">
+	
+				<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+					<h:selectBooleanCheckbox styleClass="contract_checkbox"
+						value="#{createContractDetailsWizard.selectionsForContracts[_catContracts]}"
+						onclick="emulateRadios(this, 'contract_checkbox');" >
+						<a:support event="onchange" 
+						ajaxSingle="true"
+						action="#{createContractDetailsWizard.selectParentContract}"
+						reRender="noLayoutContractsList#{divId},noLayoutCmptList#{divId},noLayoutErrorMsgs,editContractDtlsPanel,activateContractDtlsPanel"
+						eventsQueue="createContDtlsQueue"
+						status="globalWaitStatus"
+						limitToList="true"/>
+					</h:selectBooleanCheckbox>
+				</rich:column>					
+				
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="Publisher"
+						propertyName="publisherValue"
+						propertyPath="catContracts.publisherValue"
+						propertyValue="#{newAndActiveContractsList.catContracts.publisherValue}"
+						value="#{_catContracts.publisherValue}"/>		
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="Type"
+						propertyName="catType"
+						propertyPath="catContracts.catType"
+						propertyValue="#{newAndActiveContractsList.catContracts.catType}"
+						value="#{_catContracts.catType.label}"/>			
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="Agreement Date"
+						propertyName="catAgreementDate"
+						propertyPath="catContracts.catAgreementDate"
+						propertyValue="#{newAndActiveContractsList.catContracts.catAgreementDate}"
+						value="#{_catContracts.catAgreementDate}">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+				</cats:wizardColumn>						
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="Lifecycle"
+						propertyName="catLifecycle"
+						propertyPath="catContracts.catLifecycle"
+						propertyValue="#{newAndActiveContractsList.catContracts.catLifecycle}"
+						value="#{_catContracts.catLifecycle.label}"/>					
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="Outcome"
+						propertyName="catOutcome"
+						propertyPath="catContracts.catOutcome"
+						propertyValue="#{newAndActiveContractsList.catContracts.catOutcome}"
+						value="#{_catContracts.catOutcome.label}"/>
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="Termination Date"
+						propertyName="catTerminationDate"
+						propertyPath="catContracts.catTerminationDate"
+						propertyValue="#{newAndActiveContractsList.catContracts.catTerminationDate}"
+						value="#{_catContracts.catTerminationDate}">
+						<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+				</cats:wizardColumn>		
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="CSP Launch"
+						propertyName="catCspLaunchDate"
+						propertyPath="catContracts.catCspLaunchDate"
+						propertyValue="#{newAndActiveContractsList.catContracts.catCspLaunchDate}"
+						value="#{_catContracts.catCspLaunchDate}">
+						<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+				</cats:wizardColumn>	
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="Set Count"
+						propertyName="relatedSetCount"
+						propertyPath="catContracts.relatedSetCount"
+						propertyValue="#{newAndActiveContractsList.catContracts.relatedSetCount}"
+						value="#{_catContracts.relatedSetCount}"/>	
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="Agreement Version"
+						propertyName="catAgreementVersion"
+						propertyPath="catContracts.catAgreementVersion"
+						propertyValue="#{newAndActiveContractsList.catContracts.catAgreementVersion}"
+						value="#{_catContracts.catAgreementVersion}"/>
+				<cats:wizardColumn
+						entityList="#{newAndActiveContractsList}"
+						propertyLabel="ID"
+						propertyName="id"
+						propertyPath="catContracts.id"
+						propertyValue="#{newAndActiveContractsList.catContracts.id}"
+						value="#{_catContracts.id}"/>		
+			</rich:dataTable>
+		</div>
+			<s:div styleClass="blanktable" rendered="#{empty createContractDetailsWizard.parentContract and createContractDetailsWizard.contractsInferred()}">
+				<span>First choose an agreement, then choose one or more components.</span>
+			</s:div>
+			<s:div styleClass="blanktable" rendered="#{empty createContractDetailsWizard.parentContract and not createContractDetailsWizard.contractsInferred()}">
+				<span>Use the filter to narrow down your options.</span>
+			</s:div>
+	</s:div>

@@ -1,0 +1,131 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="bookSubmissionsInformationDiv1">
+
+	<div class="col col1">
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Reason Excluded</ui:define>
+			<h:selectOneMenu name="catReasonExcluded"
+				onchange="enableSaveCancel();" 
+				value="#{catBookSubmissionsHome.instance.catReasonExcluded}"
+				disabled="true">
+				<s:selectItems var="i" itemValue="#{i}" label="#{i.label}" 
+					noSelectionLabel="None..." 
+					value="#{listsForEnums.catBookSubmissions_ReasonExcluded}"/>
+			</h:selectOneMenu>
+		</s:decorate>
+		
+		  <s:decorate template="../layout/edit.xhtml">
+                <ui:define name="label">Sequence</ui:define>
+                <h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catSequenceNo" value="#{catBookSubmissionsHome.instance.catSequenceNo}">
+                </h:inputText>
+          </s:decorate>
+          
+          	    <s:decorate  template="../layout/edit.xhtml">
+                <ui:define name="label">Sent</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd HH:mm:ss" disabled="true"
+                	id="catSentTimestamp" inputClass="datestyle" value="#{catBookSubmissionsHome.instance.catSentTimestamp}"/>
+            </s:decorate>
+                <s:decorate  template="../layout/edit.xhtml">
+                <ui:define name="label">Received</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd HH:mm:ss" disabled="true"
+                	id="catReceivedTimestamp" inputClass="datestyle" value="#{catBookSubmissionsHome.instance.catReceivedTimestamp}"/>
+            </s:decorate>  
+            
+            <s:decorate  template="../layout/edit.xhtml">
+                <ui:define name="label">QC Completed</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd HH:mm:ss" disabled="true"
+                	id="catQcCompletedTimestamp" inputClass="datestyle" value="#{catBookSubmissionsHome.instance.catQcCompletedTimestamp}"/>
+            </s:decorate> 
+            
+            		  <s:decorate template="../layout/edit.xhtml">
+                <ui:define name="label">GMG Version</ui:define>
+                <h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catGmgVersion" value="#{catBookSubmissionsHome.instance.catGmgVersion}">
+                </h:inputText>
+          </s:decorate>
+                      		  <s:decorate template="../layout/edit.xhtml">
+                <ui:define name="label">Conprep Batch</ui:define>
+                <h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catConprepBatch" value="#{catBookSubmissionsHome.instance.catConprepBatch}">
+                </h:inputText>
+          </s:decorate> 	
+          
+                                		  <s:decorate template="../layout/edit.xhtml">
+                <ui:define name="label">Conprep Batch ID</ui:define>
+                <h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catConprepBatchId" value="#{catBookSubmissionsHome.instance.catConprepBatchId}">
+                </h:inputText>
+          </s:decorate>
+	</div>
+		<div class="col col2">
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Vendor's Current Status</ui:define>
+			<h:selectOneMenu name="catCurrentVendorStatus"
+				onchange="enableSaveCancel();" 
+				value="#{catBookSubmissionsHome.instance.catCurrentVendorState}"
+				disabled="true">
+				<s:selectItems var="i" itemValue="#{i}" label="#{i.label}" 
+					noSelectionLabel="None..." 
+					value="#{listsForEnums.catBookSubmissions_VendorState}"/>
+			</h:selectOneMenu>
+		</s:decorate>
+		
+				<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">QC Outcome</ui:define>
+			<h:selectOneMenu name="catCurrentQcOutcome"
+				onchange="enableSaveCancel();" 
+				value="#{catBookSubmissionsHome.instance.catQcOutcome}"
+				disabled="true">
+				<s:selectItems var="i" itemValue="#{i}" label="#{i.label}" 
+					noSelectionLabel="None..." 
+					value="#{listsForEnums.catBookSubmissions_QcOutcome}"/> 
+			</h:selectOneMenu>
+		</s:decorate>
+		
+		         <s:decorate  template="../layout/edit.xhtml">
+                <ui:define name="label">Vendor ETD</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="true"
+                	id="catExpectedDeliveryDate" inputClass="datestyle" value="#{catBookSubmissionsHome.instance.catExpectedDeliveryDate}"/>
+            </s:decorate>
+            				  <s:decorate template="../layout/edit.xhtml">
+                <ui:define name="label">Vendor Team</ui:define>
+                <h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catVendorProdTeam" value="#{catBookSubmissionsHome.instance.catVendorProdTeam}">
+                </h:inputText>
+          </s:decorate>
+          
+          		         <s:decorate  template="../layout/edit.xhtml">
+                <ui:define name="label">Vendor Start</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="true"
+                	id="catVendorProdStartDate" inputClass="datestyle" value="#{catBookSubmissionsHome.instance.catVendorProdStartDate}"/>
+            </s:decorate>
+            
+             <s:decorate  template="../layout/edit.xhtml">
+                <ui:define name="label">Vendor End</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="true"
+                	id="catVendorProdEndDate" inputClass="datestyle" value="#{catBookSubmissionsHome.instance.catVendorProdEndDate}"/>
+            </s:decorate>
+            
+                        		  <s:decorate template="../layout/edit.xhtml">
+                <ui:define name="label">Vendor Notes</ui:define>
+                <h:inputTextarea onchange="enableSaveCancel();"  readonly="true" 
+                	id="catNotes" value="#{catBookSubmissionsHome.instance.catNotes}">
+                </h:inputTextarea>
+          </s:decorate> 	
+		</div>
+		
+ 
+	<div class="push" />
+
+</s:div>

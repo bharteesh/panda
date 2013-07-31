@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="../layout/template.xhtml">
+
+<ui:define name="body">
+
+
+           <rich:panel>
+        <f:facet name="header">Jtrack Assertions</f:facet>
+
+
+    
+<p>fix not in yet</p>
+
+
+
+    	
+<p>fix believed in:</p>
+    	<p>testCat450: <h:outputText value="#{jtrackAssertions.testCat450()}"/> (updated collections from discrepancy report...)</p>
+    	<p>testCat454: <h:outputText value="#{jtrackAssertions.testCat454()}"/></p>
+    	<p>testCat453: <h:outputText value="#{jtrackAssertions.testCat453()}"/></p>
+   		<p>testCat448: <h:outputText value="#{jtrackAssertions.testCat448()}"/></p>
+   		<p>testCat455: <h:outputText value="#{jtrackAssertions.testCat455()}"/></p>
+    	<p>testCat451: <h:outputText value="#{jtrackAssertions.testCat451()}"/></p>
+    	<p>testCat446: <h:outputText value="#{jtrackAssertions.testCat446()}"/></p>
+    	<p>testCat447: <h:outputText value="#{jtrackAssertions.testCat447()}"/></p>
+    	<p>testCat444: <h:outputText value="#{jtrackAssertions.testCat444()}"/></p>
+    	<p>testCat449: <h:outputText value="#{jtrackAssertions.testCat449()}"/></p>
+    	<p>testCat445: <h:outputText value="#{jtrackAssertions.testCat445()}"/> (drop the uniq_jtrack_record_id contract notes<tt>select id, cat_note from cat_contracts where cat_note like '%uniq_%'
+
+--update cat_contracts set cat_note = null where cat_note like '%uniq_%'</tt>)</p>
+    	<br/>
+    	<p>testCat506: <h:outputText value="#{jtrackAssertions.testCat506()}"/></p>
+<p>testCat509: <h:outputText value="#{jtrackAssertions.testCat509()}"/></p>
+<p>testCat510: <h:outputText value="#{jtrackAssertions.testCat510()}"/> became 5 orders...</p>
+<p>testCat512: <h:outputText value="#{jtrackAssertions.testCat512()}"/></p>
+	</rich:panel>
+
+
+
+</ui:define>
+
+</ui:composition>

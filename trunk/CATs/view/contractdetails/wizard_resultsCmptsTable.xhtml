@@ -1,0 +1,108 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:z="http://www.qualcomm.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a="http://richfaces.org/a4j"
+	  xmlns:s="http://jboss.com/products/seam/taglib">
+
+<ui:composition>
+
+<rich:dataTable value="#{value}"
+							var="_catCmpts">
+							<rich:column>
+								<f:facet name="header">Set Name</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.returnSetsFormattedString()}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Component Name</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.catName}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Backfile Summary</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.bfOverallOnboardingStatus}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">CSP Participant</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.catHasCspRelationship ? 'Yes' : 'No'}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">CSP Onboarding</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.catCspOnboardingStatus.label}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">ISSN</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.catPrintIssn}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Extent (Dates)</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.catDateRange}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Rights Exclusions</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.catRightsExclusions? 'Yes' : 'No'}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Participation</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.catParticipationDate}">
+										<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+									</h:outputText>
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Digital Availability Date</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.catCspDigiAvailDate}">
+										<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+									</h:outputText>
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">On Hold</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.catOnHold ? 'Yes' : 'No'}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">ID</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catCmpts.id}"/>
+									<h:outputText value="#{_catCmpts.id}" />
+								</s:link>
+							</rich:column>
+						</rich:dataTable>
+
+
+</ui:composition>
+</html>

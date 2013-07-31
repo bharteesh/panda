@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+	<ui:param name="entityType" value="shipments" />
+
+
+	<ui:define name="badge">
+		<ui:include src="IssueShipmentsBadge.xhtml" />
+	</ui:define>
+
+	<ui:define name="body">
+		<script type="text/javascript">
+	
+		function emulateRadios(chkbx, styleClass) {
+			jQuery('.' + styleClass).each(function(){ 
+				this.checked = false; 
+			}); 
+			chkbx.checked = true;
+		}
+
+		function checkRadios(styleClass, msg) {
+			var retValue = false;
+			jQuery('.' + styleClass).each(function(){ 
+				if(this.checked) {retValue=true;}
+			}); 
+			if(retValue == false){
+				alert(msg);
+			}
+			return retValue;
+		}
+
+	</script>
+
+		<h:form id="catIssueShipmentsHomeEdit">
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/loading.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<rich:tabPanel id="maintab" switchType="ajax"
+				selectedTab="#{catIssueShipmentsHome.selectedTab}" styleClass="tab"
+				contentClass="tab_content">
+
+				<rich:tab label="Information" id="tab1" name="tab1"
+					eventsQueue="catIssueShipmentsEditQueue" status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					reRender="shipmentInfoTabLayout,siblingsTabLayout,legacyTabLayout,auditTabLayout"
+					action="#{catIssueShipmentsHome.updateUserTabPreferences('tab1')}">
+					<ui:include src="IssueShipmentsInformationTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Siblings" id="tab2" name="tab2"
+					eventsQueue="catIssueShipmentsEditQueue" status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					reRender="shipmentInfoTabLayout,siblingsTabLayout,legacyTabLayout,auditTabLayout"
+					action="#{catIssueShipmentsHome.updateUserTabPreferences('tab2')}">
+					<ui:include src="IssueShipmentsSiblingsTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Legacy" id="tab3" name="tab3"
+					eventsQueue="catIssueShipmentsEditQueue" status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					reRender="shipmentInfoTabLayout,siblingsTabLayout,legacyTabLayout,auditTabLayout"
+					action="#{catIssueShipmentsHome.updateUserTabPreferences('tab3')}">
+					<ui:include src="IssueShipmentsLegacyTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Audit trial" id="tab4" name="tab4"
+					eventsQueue="catIssueShipmentsEditQueue" status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					reRender="shipmentInfoTabLayout,siblingsTabLayout,legacyTabLayout,auditTabLayout"
+					action="#{catIssueShipmentsHome.updateUserTabPreferences('tab4')}">
+					<ui:include src="IssueShipmentsAuditTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+
+			<div id="functions">
+				<a:commandLink action="#{catIssueShipmentsHome.remove}"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					disabled="#{!s:hasPermission(catIssueShipmentsHome.instance, 'delete CatIssueShipments') or catIssueShipmentsHome.instance.catLifecycle.label eq 'Completed'}"
+					styleClass="button delete #{!s:hasPermission(catIssueShipmentsHome.instance, 'delete CatIssueShipments') or catIssueShipmentsHome.instance.catLifecycle.label eq 'Completed' ? 'disabled' : ''}"
+					value="Delete" />
+
+				<a:commandLink action="#{catIssueShipmentsHome.update}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" styleClass="button saveOrCancel disabled"
+					value="Save" reRender="catIssueShipmentsHomeEdit"
+					eventsQueue="catIssueShipmentsEditQueue" status="globalWaitStatus" />
+				<a:commandLink action="#{catIssueShipmentsHome.cancel}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" ajaxSingle="true"
+					styleClass="button saveOrCancel disabled" value="Cancel"
+					eventsQueue="catIssueShipmentsEditQueue" status="globalWaitStatus" />
+			</div>
+
+
+		</h:form>
+
+		<a:form>
+
+			<a:outputPanel layout="none" id="shipmentInfoTabLayout">
+				<s:div id="shipmentInfoTabTablesDiv"
+					rendered="#{empty catIssueShipmentsHome.selectedTab or catIssueShipmentsHome.selectedTab eq 'tab1'}">
+					<!--  Empty - No tables  -->
+				</s:div>
+			</a:outputPanel>
+			<a:outputPanel layout="none" id="siblingsTabLayout">
+				<s:div id="siblingsTabTablesDiv"
+					rendered="#{catIssueShipmentsHome.selectedTab eq 'tab2'}">
+					<!--  Siblings shipments  -->
+					<ui:include
+						src="IssueShipmentsSiblingsOtherShipmentsWithSameAcqOrdersTable.xhtml">
+						<ui:param name="divId"
+							value="thIssueShipmentsWithSameAcqOrdersTableDiv" />
+						<ui:param name="tableId"
+							value="thIssueShipmentsWithSameAcqOrdersTable" />
+					</ui:include>
+
+					<ui:include
+						src="IssueShipmentsSiblingsOtherShipmentsWithSameCmptsOrSetsTable.xhtml">
+						<ui:param name="divId"
+							value="thIssueShipmentsWithSameCmptsOrSetsTableDiv" />
+						<ui:param name="tableId"
+							value="thIssueShipmentsWithSameCmptsOrSetsTable" />
+					</ui:include>
+
+				</s:div>
+			</a:outputPanel>
+			<a:outputPanel layout="none" id="legacyTabLayout">
+				<s:div id="legacyTabTablesDiv"
+					rendered="#{catIssueShipmentsHome.selectedTab eq 'tab2'}">
+					<!--  Legacy  -->
+				</s:div>
+			</a:outputPanel>
+			<a:outputPanel layout="none" id="auditTabLayout">
+				<s:div id="auditTabTablesDiv"
+					rendered="#{catIssueShipmentsHome.selectedTab eq 'tab3'}">
+					<!--  Empty - No tables  -->
+				</s:div>
+			</a:outputPanel>
+
+		</a:form>
+
+		<ui:include src="createm_IssueShipments.xhtml">
+			<ui:param name="reRenderMe" value="catIssueShipmentsList" />
+			<ui:param name="divParam"
+				value="IssueShipmentsEditcreatem_IssueShipments" />
+			<ui:param name="pageURL"
+				value="/issueshipments/IssueShipmentsEdit.xhtml" />
+		</ui:include>
+
+		<ui:include src="bulkm_IssueShipments.xhtml">
+			<!-- 'reRenderMe' useful for bulk actions from List screen-->
+			<!--  'divParam' needed for 'eventQueue' name -->
+			<!-- <ui:param name="reRenderMe" value="issueShipmentsList"/> -->
+			<ui:param name="divParam"
+				value="IssueShipmentsEditbulkm_IssueShipments" />
+			<ui:param name="pageURL"
+				value="/issueshipments/IssueShipmentsEdit.xhtml" />
+		</ui:include>
+
+		<ui:include src="duplicatem_IssueShipments.xhtml">
+			<ui:param name="reRenderMe" value="catIssueShipmentsList" />
+			<ui:param name="divParam"
+				value="IssueShipmentsEditduplicatem_IssueShipments" />
+			<ui:param name="pageURL"
+				value="/issueshipments/IssueShipmentsEdit.xhtml" />
+		</ui:include>
+		<ui:include src="/onholdreason/updateOnHoldReason_modal.xhtml">
+			<ui:param name="pageURL"
+				value="/issueshipments/IssueShipmentsEdit.xhtml" />
+		</ui:include>
+
+
+	</ui:define>
+
+	<ui:define name="notes">
+		<ui:include src="IssueShipmentsNotes.xhtml" />
+	</ui:define>
+</ui:composition>
+
+
+
+

@@ -1,0 +1,89 @@
+<s:div xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:s="http://jboss.com/products/seam/taglib" xmlns:a="http://richfaces.org/a4j" xmlns:cats="http://www.ithaka.org/cats" xmlns:rich="http://richfaces.org/rich" id="badge">
+<a:form id="catCollectionsBadgeForm"> 
+
+<!--   <s:decorate id="catSetsName" template="../layout/edit.xhtml">-->
+<!--    <ui:define name="label">Name:</ui:define>-->
+    <h1><h:outputText value="#{catCollectionsHome.instance.catName}"/>
+    <a:commandLink id="collectionNameEditButton"
+    			onclick="if ( ! checkForSave() ) { return false ; }" 
+    			disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catName')}"
+				ignoreDupResponses="true"
+	    		action="#{catCollectionsBulkOperations.changeWithLogWizard('NAME')}"
+				value="Edit"
+				reRender="collectionsModalDiv" 
+				oncomplete="#{rich:component('collectionsBulkUpdatePanel')}.show();"
+				status = "globalWaitStatus"
+				ajaxSingle="true"
+				styleClass="button wizard #{!s:hasPermission(catCollectionsHome.instance, 'modify catName') ? 'disabled' : ''}"/></h1>
+<!--  </s:decorate>-->
+   <s:decorate id="recordType" template="../layout/edit.xhtml">
+    <ui:define name="label">Record Type:</ui:define>
+    <h:outputText value="Collections"/>
+  </s:decorate>
+  <s:decorate id="catSetsId" template="../layout/edit.xhtml">
+    <ui:define name="label">ID:</ui:define>
+    <h:outputText value="#{catCollectionsHome.instance.id}"/>
+  </s:decorate>
+
+  <s:decorate id="catLifecycle" template="../layout/edit.xhtml">
+    <ui:define name="label">Lifecycle:</ui:define>
+    <h:outputText value="#{catCollectionsHome.instance.catLifecycle.label}"/>
+    
+    <a:commandLink id="collectionLifecycleEditButton"
+   				onclick="if ( ! checkForSave() ) { return false ; }"
+				ignoreDupResponses="true"
+	    		action="#{catCollectionsBulkOperations.changeAttribWizard('LIFECYCLE')}"
+				value="Edit"
+				disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catLifecycle')}"
+				reRender="collectionsModalDiv" 
+				oncomplete="#{rich:component('collectionsBulkUpdatePanel')}.show();"
+				status = "globalWaitStatus"
+				ajaxSingle="true"
+				styleClass="button wizard #{!s:hasPermission(catCollectionsHome.instance, 'modify catLifecycle') ? 'disabled' : ''}"/>
+  </s:decorate>
+  <s:decorate id="catType" template="../layout/edit.xhtml">
+    <ui:define name="label">Type:</ui:define>
+    <h:outputText value="#{catCollectionsHome.instance.catType}"/>
+    <a:commandLink id="collectionTypeEditButton"
+   				onclick="if ( ! checkForSave() ) { return false ; }"
+				ignoreDupResponses="true"
+	    		action="#{catCollectionsBulkOperations.changeAttribWizard('TYPE')}"
+				value="Edit"
+				disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catType')}"
+				reRender="collectionsModalDiv" 
+				oncomplete="#{rich:component('collectionsBulkUpdatePanel')}.show();"
+				status = "globalWaitStatus"
+				ajaxSingle="true"
+				styleClass="button wizard #{!s:hasPermission(catCollectionsHome.instance, 'modify catType') ? 'disabled' : ''}"/>
+  </s:decorate>
+	<s:decorate id="catPageBudget_div1" template="../layout/edit.xhtml">
+    	<ui:define name="label">Page Budget</ui:define>
+    <h:outputText value="#{catCollectionsHome.instance.catPageBudget}"/>
+  </s:decorate>
+	<s:decorate id="catAnncmntDateActl_div1" template="../layout/edit.xhtml">
+		<ui:define name="label">Actual Announcement</ui:define>
+		<h:outputText value="#{catCollectionsHome.instance.catAnncmntDateActl}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>		
+	</s:decorate>
+	<s:decorate id="catLaunchDateActl_div1" template="../layout/edit.xhtml">
+		<ui:define name="label">Actual Launch</ui:define>
+		<h:outputText value="#{catCollectionsHome.instance.catLaunchDateActl}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+	</s:decorate>
+	<s:decorate id="catMinPromCmpltnDateSchd_div1" template="../layout/edit.xhtml">
+		<ui:define name="label">Scheduled Promise Completion</ui:define>
+		<h:outputText value="#{catCollectionsHome.instance.catMinPromCmpltnDateSchd}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+	</s:decorate>
+	
+	<s:decorate id="catSetsCountValue_div1" template="../layout/edit.xhtml">
+		<ui:define name="label">Total Sets</ui:define>
+		<h:outputText value="#{catCollectionsHome.instance.setsCountValue}"/>
+	</s:decorate>
+	<s:decorate id="catSetsReleasedCountValue_div1" template="../layout/edit.xhtml">
+		<ui:define name="label">Released Sets</ui:define>
+		<h:outputText value="#{catCollectionsHome.instance.setsReleasedCountValue}"/>
+	</s:decorate>
+  <s:decorate id="catAvgStartYr" template="../layout/edit.xhtml">
+    <ui:define name="label">Average Start Year:</ui:define>
+    <h:outputText value="#{catCollectionsHome.instance.avgStartYearValue}"/>
+  </s:decorate>
+</a:form>
+</s:div>

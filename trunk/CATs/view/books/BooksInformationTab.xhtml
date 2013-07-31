@@ -1,0 +1,208 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="booksInformationDiv1">
+	        
+	<div class="col col1">
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Earliest Year of Publication Roll-Up</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="ruEarPubYearValue" maxlength="4" readonly="true"
+				value="#{catBooksHome.instance.ruEarliestPubYearValue}" />
+		</s:decorate> 
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Vendor Copyright Year</ui:define>	
+			<h:inputText onchange="enableSaveCancel();"
+				id="catVendorCopyrightYear"
+				value="#{catBooksHome.instance.catVendorCopyrightYear}" 
+				maxlength="25"
+				readonly="true"/>
+		</s:decorate>	
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Earliest Publication Year Override</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="catEarPubYearOverride" maxlength="4" validator = "#{catBooksHome.validatePubYearOverride}"
+				value="#{catBooksHome.instance.catEarliestPubYearOverride}" readonly="#{!s:hasPermission(catBooksHome.instance, 'modify catEarliestPubYearOverride')}">
+				
+				<a:support event="onfocus" action="#{catBooksHome.onFocusErlstPubYearOverride}" 
+				 		ajaxSingle="true"
+				 		eventsQueue="booksEditQueue"/>
+               	<a:support event="onblur" action="#{catBooksHome.erlstPubYearOverrideChanged}" 
+				 		ajaxSingle="true"
+				 		eventsQueue="booksEditQueue"/>	
+				 		<s:validate/>			 		
+			</h:inputText>
+					
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">LC Classification</ui:define>	
+			<h:inputText onchange="enableSaveCancel();"
+				id="catLcCallNumber"
+				value="#{catBooksHome.instance.catLcCallNumber}" 
+				maxlength="100"
+				readonly="true"/>
+		</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">LCSH List</ui:define>	
+			<h:inputTextarea onchange="enableSaveCancel();"				
+				readonly="true" 
+				id="catLcshList" 
+				value="#{catBooksHome.instance.catLcSubjectHeadingDisplayList}"/>			
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">LCSH XML</ui:define>	
+			<h:inputTextarea onchange="enableSaveCancel();"				
+				readonly="true" 
+				id="catLcshXml"
+				value="#{catBooksHome.instance.catLcSubjectHeadingFullXml}"/>
+		</s:decorate> 
+		<s:decorate id="catLcExtractionRun_field" template="../layout/edit.xhtml">
+			<ui:define name="label">Vendor MD Extraction Run</ui:define>
+			<h:selectOneMenu onchange="enableSaveCancel();" 
+				disabled="true"
+				name="catLcExtractionRun" value="#{catBooksHome.instance.catLcExtractionRun}">
+				<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+					noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+			</h:selectOneMenu>
+		</s:decorate> 	
+		
+		</div>
+	
+	<div class="col col2">
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">DOI</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="catDoi"
+				value="#{catBooksHome.instance.catDoi}" 
+				maxlength="255"
+				readonly="#{!s:hasPermission(catBooksHome.instance, 'modify catDoi')}"/>
+		</s:decorate> 
+	<!-- 	<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Active Limited Price</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="catLtmIdPrefix"
+				value="#{catBooksHome.instance.catLtdMostRecentPriceDist}" 
+				maxlength="25"
+				readonly="#{!s:hasPermission(catBooksHome.instance, 'modify catLtdMostRecentPriceDist')}"/>
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Active Limited Price Distribution Date</ui:define>
+			<rich:calendar readonly="#{!s:hasPermission(catBooksHome.instance, 'modify catLtdMostRecentPriceDistDate')}" 
+				onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  
+				datePattern="yyyy/MM/dd" disabled="true" id="catContractInfoNoteChangedDateCal" 
+				inputClass="datestyle" value="#{catBooksHome.instance.catLtdMostRecentPriceDistDate}"/>			
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Active Unlimited Price</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="catUnLtmIdPrefix"
+				value="#{catBooksHome.instance.catUnltdMostRecentPriceDist}" 
+				maxlength="25"
+				readonly="#{!s:hasPermission(catBooksHome.instance, 'modify catUnltdMostRecentPriceDist')}"/>
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Active Unlimited Price Distribution Date</ui:define>
+			<rich:calendar readonly="#{!s:hasPermission(catBooksHome.instance, 'modify catUnltdMostRecentPriceDistDate')}" 
+				onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  
+				datePattern="yyyy/MM/dd" disabled="false" id="catContractInfoNoteChangedDateCal" 
+				inputClass="datestyle" value="#{catBooksHome.instance.catUnltdMostRecentPriceDistDate}"/>			
+		</s:decorate>  -->
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Most Recent Publication Date</ui:define>	
+			<h:inputText onchange="enableSaveCancel();"
+				id="catMostRcntPubDate"
+				value="#{catBooksHome.instance.mostRecentPubDate}" 
+				maxlength="25"
+				readonly="true"/>
+		</s:decorate>		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Most Recent Limited Price</ui:define>	
+			<h:inputText onchange="enableSaveCancel();"
+				id="catMostRcntLtdPrice"
+				value="#{catBooksHome.instance.mostRecentLmtdPrice}" 
+				maxlength="25"
+				readonly="true"/>
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Most Recent Unlimited Price</ui:define>	
+			<h:inputText onchange="enableSaveCancel();"
+				id="catMostRcntUnltdPrice"
+				value="#{catBooksHome.instance.mostRecentUnlmtdPrice}" 
+				maxlength="25"
+				readonly="true"/>
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Best PISBN13</ui:define>	
+			<h:inputText onchange="enableSaveCancel();"
+				id="catBestPisbn13"
+				value="#{catBooksHome.instance.bestPisbn13}" 
+				maxlength="25"
+				readonly="true"/>
+		</s:decorate> 
+		 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Best Bisac Code</ui:define>	
+			<h:inputText onchange="enableSaveCancel();"
+				id="catBestBisacCode"
+				value="#{catBooksHome.instance.bestBisacCode}" 
+				maxlength="80"
+				readonly="true"/>
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Most Recent Top Authors and Editors</ui:define>	
+			<h:inputTextarea onchange="enableSaveCancel();"
+				id="catMostRcntAuthEdtrs"
+				value="#{catBooksHome.instance.mostRcntTopAuthsEditors}" 
+				maxlength="512"
+				readonly="true"/>				
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Best Language</ui:define>	
+			<h:inputText onchange="enableSaveCancel();"
+				id="catBestLanguage"
+				value="#{catBooksHome.instance.bestLanguage}" 
+				maxlength="80"
+				readonly="true"/>
+		</s:decorate> 		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Vendor</ui:define>
+			<h:selectOneMenu onchange="enableSaveCancel();"
+				readonly="#{!s:hasPermission(catBooksHome.instance, 'modify catTargetVendor')}"
+				name="catTargetVendor"
+				value="#{catBooksHome.instance.catTargetVendor}">
+				<s:selectItems itemValue="#{i}" label="#{i.catName}"
+					noSelectionLabel="Choose..."
+					value="#{catDigiVendorListList.completeResultList}" var="i" />
+				<s:convertEntity />
+				<a:support event="onfocus" action="#{catBooksHome.onFocusVendor}" 
+				 		ajaxSingle="true" limitToList="true"
+				 		eventsQueue="booksEditQueue"/>
+                <a:support event="onblur" action="#{catBooksHome.targetVendorChanged}" 
+				 		ajaxSingle="true" limitToList="true"
+				 		eventsQueue="booksEditQueue"/>
+			</h:selectOneMenu>			
+		</s:decorate> 
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Omitted Content found by JSTOR</ui:define>
+			<h:inputTextarea onchange="enableSaveCancel();"
+				disabled="#{!s:hasPermission(catBooksHome.instance, 'modify catOmittedContentFndByJstor')}" 
+				id="catOmittedCntFndByJstor"
+				value="#{catBooksHome.instance.catOmittedContentFndByJstor}">
+				<a:support event="onfocus" action="#{catBooksHome.onFocusOmttdContentFndByJstor}" 
+				 		ajaxSingle="true"
+				 		eventsQueue="booksEditQueue"/>
+               	<a:support event="onblur" action="#{catBooksHome.omttdContentFndByJstorChanged}" 
+				 		ajaxSingle="true"
+				 		eventsQueue="booksEditQueue"/>
+			</h:inputTextarea>
+		</s:decorate>
+		
+	</div>
+
+	<div class="push" />
+
+</s:div>

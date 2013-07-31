@@ -1,0 +1,40 @@
+<s:div id="createSourceSentToHclOperationsPanels"
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+
+    <rich:modalPanel id="createSourceSentToHclPanel" styleClass="modal" width="900" height="550">
+        <s:div id="createSourceSentToHclWizardModalDiv">
+		    <a:form ajaxSubmit="true" ajaxSingle="true" id="createSourceSentToHclwizard">
+			    <a:include viewId="#{createSourceSentToHclWizard.currentCreateView}">
+			    <!-- The divParam is currently not used, but if we ,later run into 'div' problem, we can append and add this to the element id(s)-->
+			        <f:param name="divParam" value="#{divParam}createSourceSentToHcl"/>
+			        <f:param name="reRenderMe" value="#{reRenderMe}"/>
+			    </a:include>
+		    </a:form>
+       </s:div>
+    </rich:modalPanel>
+
+    <rich:modalPanel id="createSourceSentToHclQuit" styleClass="modal" width="900" height="550">
+        <s:div id="createSourceSentToHclWizardModalQuitDiv">
+    	    <a:form ajaxSubmit="true" ajaxSingle="true" id="createSourceSentToHclwizardQuit">
+			    <a:include viewId="#{createSourceSentToHclWizard.quitView}">
+			    <!-- The divParam is currently not used, but if we ,later run into 'div' problem, we can append and add this to the element id(s)-->
+			        <f:param name="divParam" value="createSourceSentToHcl"/>
+			        <f:param name="reRenderMe" value="#{reRenderMe}"/>
+			    </a:include>
+		    </a:form>
+	    </s:div>
+    </rich:modalPanel>
+   
+</s:div>

@@ -1,0 +1,378 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<h1>#{catCmptsHome.instance.nameForBadge}</h1>
+
+
+	<rich:simpleTogglePanel id="cmptRelationshipFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptRelationshipFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptRelationshipFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cmptRelationshipFlap')}"
+		reRender="cmptRelationshipFlap" ajaxSingle="true"
+		eventsQueue="cmptsEditQueue" label="Relationships">
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Child of</ui:define>
+			<s:div>
+				<a:form id="childOfForm">
+					<ul class="delinklist">
+						<ui:repeat
+							value="#{catCmptsHome.instance.catComponentSets.toArray()}"
+							var="_catSets" varStatus="_status"
+							rendered="#{not empty catCmptsHome.instance.catComponentSets}">
+							<li><a:commandLink ignoreDupResponses="true"
+									action="#{delinkComponentWizard.prepareDelink(catCmptsHome.instance, _catSets)}"
+									reRender="delinkCmptModalConfirm, delinkCmptModal"
+									status="globalWaitStatus"
+									disabled="#{!s:hasPermission(catCmptsHome.instance, 'remove_reln catComponentSets') or !delinkComponentWizard.isDelinkAllowed(catCmptsHome.instance, _catSets)}"
+									styleClass="button delink #{(!s:hasPermission(catCmptsHome.instance, 'remove_reln catComponentSets') or !delinkComponentWizard.isDelinkAllowed(catCmptsHome.instance, _catSets)) ? 'disabled' : ''}"
+									oncomplete="if(#{_catSets.catCurrentTitle.id eq catCmptsHome.instance.id}) {
+		        						Richfaces.showModalPanel('delinkCmptModal');
+		        		 			}else {
+		        						Richfaces.showModalPanel('delinkCmptModalConfirm');
+		        					}">delink</a:commandLink>
+								<span><s:link view="/sets/SetsEdit.xhtml"
+										propagation="none"
+										value="#{_catSets.catCurrentTitle.nameForBadge}">
+										<f:param name="catSetsId" value="#{_catSets.id}" />
+										<f:param name="id" value="#{_catSets.id}" />
+									</s:link> </span></li>
+						</ui:repeat>
+					</ul>
+					<a:commandLink id="addSetButton" ignoreDupResponses="true"
+						action="#{catCmptsHome.updateUsingWizard('ADDSET')}"
+						value="Link to Set" reRender="cmptBulkOperationsPanels"
+						oncomplete="Richfaces.showModalPanel('cmptBulkUpdatePanel');"
+						styleClass="button complete delink #{!(s:hasPermission(catCmptsHome.instance, 'add_reln catComponentSets') or s:hasPermission(catCmptsHome.instance, 'modify catComponentSets')) ? 'disabled':''}"
+						disabled="#{!(s:hasPermission(catCmptsHome.instance, 'add_reln catComponentSets') or s:hasPermission(catCmptsHome.instance, 'modify catComponentSets'))}"
+						status="globalWaitStatus" eventsQueue="cmptsEditQueue"
+						ajaxSingle="true"
+						onclick="if ( ! checkForSave() ) { return false ; }" />
+				</a:form>
+			</s:div>
+		</s:decorate>
+		<s:decorate id="catTitleRelationships" template="../layout/edit.xhtml">
+			<ui:define name="label">Title Relationships</ui:define>
+			<cats:titleRelationsOfComponent component="#{catCmptsHome.instance}" />
+		</s:decorate>
+	</rich:simpleTogglePanel>
+
+	<rich:simpleTogglePanel id="cmptIdentifierFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptIdentifierFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptIdentifierFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cmptIdentifierFlap')}"
+		reRender="cmptIdentifierFlap" ajaxSingle="true"
+		eventsQueue="cmptsEditQueue"
+		label="Identifiers: #{catCmptsHome.instance.catPrintIssn}">
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Print ISSN</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catPrintIssn}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">EISSN</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catEIssn}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">LTM Journal Code</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catLtmJournalCode}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">LTM Journal ID</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catLtmJournalId}" />
+		</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Publisher's Acronym</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catPublisherAcronym}" />
+		</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Grant Code</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catGrantCode}" />
+		</s:decorate>
+	</rich:simpleTogglePanel>
+
+	<rich:simpleTogglePanel id="cmptPublisherFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptPublisherFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptPublisherFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cmptPublisherFlap')}"
+		reRender="cmptPublisherFlap" ajaxSingle="true"
+		eventsQueue="cmptsEditQueue" label="Publishers">
+		<s:decorate id="catPublisherss" template="../layout/edit.xhtml">
+			<ui:define name="label">Publishers</ui:define>
+			<ui:repeat var="_pub" value="#{catCmptsHome.instance.publisherRoles}">
+				<span>
+					<ul class="list">
+						<li><s:link value="#{_pub.publisherDispalyName}"
+								view="/publishers/PublishersEdit.xhtml" propagation="none">
+								<f:param name="id" value="#{_pub.publisher.id}" />
+							</s:link> <span class="roles"> <h:outputText value="#{_pub.roles}"></h:outputText>
+						</span></li>
+					</ul> </span>
+			</ui:repeat>
+		</s:decorate>
+	</rich:simpleTogglePanel>
+
+	<rich:simpleTogglePanel id="cmptJstorPublicFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptJstorPublicFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptJstorPublicFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cmptJstorPublicFlap')}"
+		reRender="cmptJstorPublicFlap" ajaxSingle="true"
+		eventsQueue="cmptsEditQueue" label="JSTOR Public">
+
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Collections</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.collectionsValue}" />
+
+		</s:decorate>
+
+		<s:decorate id="catDisciplines" template="../layout/edit.xhtml">
+			<ui:define name="label">Disciplines</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.disciplinesValue}" />
+			<a:form>
+				<a:commandLink
+					action="#{addDiscToCmpts.selectionValid.add(catCmptsHome.instance)}"
+					oncomplete="#{rich:component('addDiscToCmptsWizard')}.show(); return false;"
+					value="Add Disciplines" reRender="addDiscToCmptsWizard"
+					styleClass="button wizard #{!(s:hasPermission(catCmptsHome.instance, 'add_reln catComponentDisciplines') or s:hasPermission(catCmptsHome.instance, 'modify catComponentDisciplines')) ? 'disabled' : ''}"
+					disabled="#{!(s:hasPermission(catCmptsHome.instance, 'add_reln catComponentDisciplines') or s:hasPermission(catCmptsHome.instance, 'modify catComponentDisciplines'))}"
+					status="globalWaitStatus" eventsQueue="cmptsEditQueue"
+					ajaxSingle="true"
+					onclick="if ( ! checkForSave() ) { return false ; }" />
+			</a:form>
+		</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+	    	<ui:define name="label">Register and Read Participation</ui:define>
+	    	<h:outputText  value="#{catCmptsHome.instance.regReadValue}"/>
+	    </s:decorate>
+	</rich:simpleTogglePanel>
+	<rich:simpleTogglePanel id="cmptBackfileFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptBackfileFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptBackfileFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cmptBackfileFlap')}"
+		reRender="cmptBackfileFlap" ajaxSingle="true"
+		eventsQueue="cmptEditQueue"
+		label="Backfile: #{catCmptsHome.instance.bfOverallOnboardingStatus}">
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Selection Status</ui:define>
+			<h:outputText
+				value="#{catCmptsHome.instance.catSelectionStatus.label}" />
+			<a:form>
+				<a:commandLink ignoreDupResponses="true"
+					action="#{catCmptsHome.updateUsingWizard('SELSTATUS')}"
+					value="Edit" reRender="cmptBulkOperationsPanels"
+					oncomplete="Richfaces.showModalPanel('cmptBulkUpdatePanel');"
+					styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'modify catSelectionStatus') ? 'disabled' : ''}"
+					disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catSelectionStatus')}"
+					status="globalWaitStatus" eventsQueue="cmptsEditQueue"
+					ajaxSingle="true"
+					onclick="if ( ! checkForSave() ) { return false ; }" />
+			</a:form>
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">BF Production Status</ui:define>
+			<h:outputText
+				value="#{catCmptsHome.instance.catProductionStatus.label}" />
+			<a:form>
+				<a:commandLink id="catProdStatusEditButton"
+					ignoreDupResponses="true"
+					action="#{editCmptProductionStatusWizard.initializeWizard(null)}"
+					value="Edit" reRender="editProdStatusemodalDiv"
+					oncomplete="Richfaces.showModalPanel('editProdStatusWizardModal');"
+					styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'modify catProductionStatus') ? 'disabled':''}"
+					disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catProductionStatus')}"
+					eventsQueue="cmptsEditQueue" ajaxSingle="true"
+					status="globalWaitStatus"
+					onclick="if ( ! checkForSave() ) { return false ; }" />
+			</a:form>
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Withdraw Status</ui:define>
+			<h:outputText
+				value="#{catCmptsHome.instance.catWithdrawStatus.label}" />
+			<a:form>
+				<a:commandLink id="changeWithdrawStatusButton"
+					ignoreDupResponses="true"
+					action="#{catCmptsHome.updateUsingWizard('WITHDRAWSTATUS')}"
+					value="Edit" reRender="cmptBulkOperationsPanels"
+					oncomplete="Richfaces.showModalPanel('cmptBulkUpdatePanel');"
+					styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'modify catWithdrawStatus') ? 'disabled':''}"
+					disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catWithdrawStatus')}"
+					eventsQueue="cmptsEditQueue" ajaxSingle="true"
+					status="globalWaitStatus"
+					onclick="if ( ! checkForSave() ) { return false ; }" />
+			</a:form>
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Set CIL Release Status</ui:define>
+			<h:outputText
+				value="#{catCmptsHome.instance.setCilValue}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Participation Date</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catParticipationDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+		<s:decorate id="catReleaseDate" template="../layout/edit.xhtml">
+			<ui:define name="label">Release Date</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catIniReleaseDateActl}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Termination Date</ui:define>
+			<h:outputText value="Unknown" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Riders</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.ridersValue}" />
+		</s:decorate>
+
+	</rich:simpleTogglePanel>
+
+	<rich:simpleTogglePanel id="cmptCSPFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptCSPFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptCSPFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cmptCSPFlap')}"
+		reRender="cmptCSPFlap" ajaxSingle="true" eventsQueue="cmptEditQueue"
+		label="CSP: #{catCmptsHome.instance.cspOverallOnboardingStatus}">
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">CSP Onboarding</ui:define>
+			<h:outputText
+				value="#{catCmptsHome.instance.cspOverallOnboardingStatus}" />
+		</s:decorate>
+
+		<s:decorate id="catCSPLaunchDate" template="../layout/edit.xhtml">
+			<ui:define name="label">CSP Launch Date</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.cspLaunchDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+	</rich:simpleTogglePanel>
+
+	<rich:simpleTogglePanel id="cmptOnHoldFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptOnHoldFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptOnHoldFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cmptOnHoldFlap')}"
+		reRender="cmptOnHoldFlap" ajaxSingle="true"
+		eventsQueue="cmptEditQueue"
+		label="On Hold: #{catCmptsHome.instance.catOnHold ? 'Yes' : 'No'}">
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold</ui:define>
+			<h:outputText
+				value="#{catCmptsHome.instance.catOnHold ? 'Yes' : 'No'}" />
+			<a:form>
+				<a:commandLink id="catOnHoldEditButton" ignoreDupResponses="true"
+					action="#{catCmptsHome.updateUsingWizard('ONHOLD')}" value="Edit"
+					reRender="cmptBulkOperationsPanels"
+					oncomplete="Richfaces.showModalPanel('cmptBulkUpdatePanel');"
+					styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'modify catOnHold') ? 'disabled' : ''}"
+					disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catOnHold')}"
+					status="globalWaitStatus" eventsQueue="cmptsEditQueue"
+					ajaxSingle="true"
+					onclick="if ( ! checkForSave() ) { return false ; }" />
+			</a:form>
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold Reason</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catOnHoldReason}" />
+			<a:form>
+				<a:commandLink ignoreDupResponses="true"
+					action="#{updateOnHoldReasonWizard.prepUpdateOperation(catCmptsHome.instance)}"
+					value="Edit" reRender="updateOnHoldReasonModalPanels"
+					oncomplete="Richfaces.showModalPanel('updateOnHoldReasonPanel');"
+					styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'modify catOnHold') or not catCmptsHome.instance.catOnHold ? 'disabled':''}"
+					disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catOnHold') or not catCmptsHome.instance.catOnHold}"
+					status="globalWaitStatus" eventsQueue="cmptsEditQueue"
+					ajaxSingle="true"
+					onclick="if ( ! checkForSave() ) { return false ; }" />
+			</a:form>
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold Set By</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catOnHoldSetBy}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold Set Date</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catOnHoldSetDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold Reason Change Date</ui:define>
+			<h:outputText
+				value="#{catCmptsHome.instance.catOnHoldReasonChangeDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+	</rich:simpleTogglePanel>
+
+	<rich:simpleTogglePanel id="cmptsSystemInfoFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptsSystemInfoFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cmptsSystemInfoFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cmptsSystemInfoFlap')}"
+		reRender="cmptsSystemInfoFlap" ajaxSingle="true"
+		eventsQueue="cmptsEditQueue" label="System Information">
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">ID</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.id}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Record Type</ui:define>
+			<h:outputText value="Components" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Lifecycle</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catLifecycle.label}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Creator</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catCreator}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Created Date:</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catDateCreated}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+	</rich:simpleTogglePanel>
+
+	<a:include viewId="addCmptsToSets_modal.xhtml">
+		<f:param name="pageURL" value="Yes" />
+	</a:include>
+	<a:include viewId="addDiscToCmpts_modal.xhtml">
+		<f:param name="pageURL" value="Yes" />
+	</a:include>
+
+</s:div>

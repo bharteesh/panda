@@ -1,0 +1,39 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="JournalsDiv1">
+
+	<!-- START Import Hebrew Journals -->
+	<rich:panel rendered="#{s:hasRole('ADMIN')or s:hasRole('Librarians')}">
+	<section class="task">
+		<h1>Import Hebrew Journals</h1>
+		<section>
+			<h:form id="hebrewJournalsImportID" enctype="multipart/form-data">
+				<dl>
+					<dt>
+						Select Spreadsheet:
+						<s:fileUpload data="#{hebrewJournalsImport.file}" required="true">
+						</s:fileUpload>
+					</dt>
+					<dt>
+						<h:commandButton value="Upload"
+							action="#{hebrewJournalsImport.importSpreadsheet()}" />
+					</dt>
+				</dl>
+			</h:form>
+		</section>
+		<section>
+			<p>Uploads information to create Set and Component records for
+				the Hebrew Journals Project.</p>
+			<p>
+				<a target="_blank"
+					href="../templatespreadsheets/HebrewJournalsTemplate.xlsx">Download
+					Template Spreadsheet</a> to see an example.
+			</p>
+		</section>
+	</section>
+	</rich:panel>
+	<!-- END Import Hebrew Journals -->
+</s:div>

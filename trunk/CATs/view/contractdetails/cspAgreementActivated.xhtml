@@ -1,0 +1,59 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+    <m:from name="CATS" address="#{mailOps.fromEmail}" />
+    <m:to name="#{cspAgreementMailOps.displayName}"><h:outputText value="#{cspAgreementMailOps.email}"/></m:to>
+    <ui:repeat var="_email" value="#{cspAgreementMailOps.ccList}">
+    	<m:cc><h:outputText value="#{_email}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="CSP Agreement Likely"/></m:subject>
+	<m:replyTo address="catssupport@ithaka.org"/>
+    <m:body>
+    	<p><h:outputText value="Dear all" />,</p>
+    	<p>
+    		<h:outputText value="Publishers have signed Letters of Interested expressing the serious intention to have the following journals participate in CSP.
+    		 Please begin Title Histories, assign journal codes, add/revise Admin Tool records as needed for these publishers and journals, and begin any other normal work associated with a publisher signing a CSP Letter of Interest. "/>
+    		<br></br>
+    		<br></br>
+    	</p>
+    	<s:fragment rendered="#{cspAgreementMailOps.cmptsList.size() gt '0'}">
+			<p>
+				<h:outputText value="Newly Enrolled Components"/>
+			</p>
+			<ui:include src="cmptsTableForMail.xhtml">
+			<ui:param name="cmptsList" value="#{cspAgreementMailOps.cmptsList}"/>
+		</ui:include>
+		</s:fragment>
+    	
+    	
+		
+		<s:fragment rendered="#{cspAgreementMailOps.publishersList.size() gt '0'}">
+			<p>
+				<h:outputText value="Newly Enrolled Publishers"/>
+			</p>
+					
+		<ui:include src="publishersTableForMail.xhtml">
+			<ui:param name="publishersList" value="#{cspAgreementMailOps.publishersList}"/>
+		</ui:include>
+		</s:fragment>
+
+    	
+    	<s:fragment rendered="#{cspAgreementMailOps.setsList.size() gt '0'}">
+			<p>
+				<h:outputText value="Newly Enrolled Sets"/>
+			</p>
+			
+					
+    		<ui:include src="setsTableForMail.xhtml">
+			<ui:param name="setsList" value="#{cspAgreementMailOps.setsList}"/>
+		</ui:include>
+		</s:fragment>
+
+		<p>Sincerely,<br/>CATS</p>
+    </m:body>
+</m:message>

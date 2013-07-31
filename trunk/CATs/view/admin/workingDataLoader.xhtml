@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="../layout/template.xhtml">
+
+	<ui:define name="badge">
+		<h1> </h1>
+	</ui:define>
+	<ui:define name="body">
+		
+	    <rich:panel>
+	        <f:facet name="header">workingDataLoader</f:facet>
+	
+	        <h:form id="WorkingDataLoaderForm">
+		
+				<br/>
+				<h:commandButton value="rollup some sets" action="#{WorkingDataLoader.rollupSets}"/>
+				<h:commandButton value="rollup some cmpts" action="#{WorkingDataLoader.rollupComponents}"/>
+				<br/>
+				<h:commandButton value="rollup publishers" action="#{WorkingDataLoader.rollupPublishers}"/>
+				<h:commandButton value="rollup collections" action="#{WorkingDataLoader.rollupCollections}"/>
+			
+				<br/>
+				
+				<h:commandButton value="rollup acq orders" action="#{WorkingDataLoader.rollupAcqOrders}"/>
+				<h:commandButton value="rollup agreements" action="#{WorkingDataLoader.rollupContracts}"/>
+				<h:commandButton value="rollup agreement details" action="#{WorkingDataLoader.rollupContractDtls}"/>
+				<br/>
+				
+				<h:commandButton value="rollup disciplines" action="#{WorkingDataLoader.rollupDisciplines}"/>
+				<h:commandButton value="rollup book series" action="#{WorkingDataLoader.rollupBookSeries}"/>
+				<h:commandButton value="rollup book sets" action="#{WorkingDataLoader.rollupBookSets}"/>
+				<h:commandButton value="rollup books" action="#{WorkingDataLoader.rollupBooks}"/>
+				<h:commandButton value="rollup imprints" action="#{WorkingDataLoader.rollupImprints}"/>
+				<h:commandButton value="rollup everything" action="#{WorkingDataLoader.rollupAllEntities}"/>
+			
+				<h:commandButton value="rollup few books" action="#{WorkingDataLoader.rollupFewBooks}"/>				
+				
+	        </h:form>
+	        
+	        
+	  
+	
+	    </rich:panel>
+	
+		<rich:panel>
+			<f:facet name="header">rollupregenqueue</f:facet>
+			
+			<p>Currently: Active: ${rollupRegenQueue.active}</p>
+			
+			<h:form id="rrqa">
+				<h:commandButton id="activate" value="activate" action="#{rollupRegenQueue.setActive(true)}"/>
+				<h:commandButton id="deactivate" value="deactivate" action="#{rollupRegenQueue.setActive(false)}"/>
+			
+			</h:form>
+		
+		</rich:panel>
+		
+		<rich:panel>
+			<f:facet name="header">make moving wall flips</f:facet>
+			
+			
+			<h:form id="mwFlips">
+				<h:commandButton  value="make movingwallflips for 2012" action="#{createMovingWallFlips.annualCreateMovingWallFlips(1)}"/>
+				<h:commandButton  value="make movingwallflips for 2013" action="#{createMovingWallFlips.annualCreateMovingWallFlips(2)}"/>
+			</h:form>
+		
+		</rich:panel>
+		
+		<rich:panel>
+			<f:facet name="header">User Preferences</f:facet>
+			
+			
+			<h:form id="usersPreferences">
+				<h:commandButton  value="Save Users Preferences" action="#{userPreferences.saveUserPerferences}"/>
+				<h:commandButton  value="Load Users Preferences" action="#{userPreferences.populateUserPreferences}"/>
+			</h:form>
+		
+		</rich:panel>	
+		
+	</ui:define>
+
+</ui:composition>

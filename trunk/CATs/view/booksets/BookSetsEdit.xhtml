@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+
+	<ui:param name="entityType" value="booksets" />
+	<ui:param name="moremenu" value="moremenu" />
+	<ui:define name="badge">
+		<ui:include src="BookSetsBadge.xhtml" />
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="bookSetsEditForm">
+		<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+				
+			<rich:tabPanel 
+				id="maintab" 
+			   	switchType="ajax"
+				styleClass="tab"
+				contentClass="tab_content"
+				selectedTab="#{catBookSetsHome.selectedTab}">
+
+				<rich:tab label="Book Set Information" id="tab1" name="tab1" reRender="infoLayout" eventsQueue="cmptsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catBookSetsHome.updateUserTabPreferences('tab1')}" limitToList="true">
+					<ui:include src="BookSetsInformationTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Books" id="tab2" name="tab2" eventsQueue="cmptsEditQueue" status="globalWaitStatus" 
+					action="#{catBookSetsHome.updateUserTabPreferences('tab2')}" reRender="infoLayout" limitToList="true">
+					<ui:include src="BookSetsBooksTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Audit" id="tab3" name="tab3" eventsQueue="cmptsEditQueue" status="globalWaitStatus" 
+					action="#{catBookSetsHome.updateUserTabPreferences('tab3')}" reRender="infoLayout" limitToList="true">
+					<ui:include src="BookSetsAuditTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Events" id="eventsTab" name="eventsTab" eventsQueue="cmptsEditQueue" reRender="infoLayout" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catBookSetsHome.updateUserTabPreferences('eventsTab')}" limitToList="true">
+					<ui:include src="BookSetsEventsTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+			<div id="functions">
+				<a:commandLink action="#{deleteBookSetsWizard.prepareDelete}"
+					reRender="deleteBookSetsModal"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					disabled="#{!s:hasPermission(catBookSetsHome.instance, 'delete CatBookSets')}"
+					styleClass="button delete #{!s:hasPermission(catBookSetsHome.instance, 'delete CatBookSets') ? 'disabled'  : ''}"
+					value="Delete" 
+					oncomplete="Richfaces.showModalPanel('deleteBookSetsModal');" 
+					limitToList="true"/>
+		    	<a:commandLink action="#{catBookSetsHome.update}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" styleClass="button saveOrCancel disabled" 
+		    		value="Save"
+		    		reRender="bookSetsEditForm"
+		    		eventsQueue="bookSetsEditQueue" status="globalWaitStatus"/>
+		    	<a:commandLink action="#{catBookSetsHome.cancel}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" ajaxSingle="true" styleClass="button saveOrCancel disabled" 
+		    		value="Cancel"
+		    		eventsQueue="bookSetsEditQueue" status="globalWaitStatus"/>
+		    </div>
+		</h:form>
+		
+		<a:form>
+			<a:outputPanel layout="none" id="infoLayout">
+				<s:div id="SetsTitlesTable" rendered="#{empty catBookSetsHome.selectedTab or catBookSetsHome.selectedTab eq 'tab1'}">
+					<ui:include src="BookSetsTitlesTable.xhtml">
+						<ui:param name="divId" value="setsTitlesTableDiv"/>
+					  	<ui:param name="tableId" value="setsTitlesTable"/>
+					  	<ui:param name="bookSetsTitlesList" value="#{catBookSetsHome.bookSetsTitlesList}" />
+					</ui:include>
+				</s:div>
+				
+				<s:div id="PublisherTable" rendered="#{empty catBookSetsHome.selectedTab or catBookSetsHome.selectedTab eq 'tab1'}">
+					<ui:include src="BookSetsPublisherTable.xhtml"  >
+						<ui:param name="divId" value="pubTableDiv"/>
+					  	<ui:param name="tableId" value="pubTable"/>
+					  	<ui:param name="publisherList" value="#{catBookSetsHome.catPublishers}" />
+					</ui:include>
+				</s:div>
+			</a:outputPanel>
+		</a:form>
+	<ui:include src="/bookseriessetstitles/createBookSetTitle_m.xhtml">
+		<ui:param name="pageURL" value="/booksets/BookSetsEdit.xhtml"/>
+	</ui:include>
+		<ui:include src="deletem_BookSets.xhtml">
+	 		<ui:param name="pageURL" value="/booksets/BookSetsEdit.xhtml"/>
+	 	</ui:include>
+		
+	</ui:define>
+	
+		<ui:define name="notes">
+		<ui:include src="BookSetsNotes.xhtml" />
+				<ui:include src="createm_BookSetsNote.xhtml">
+			<ui:param name="pageURL" value="/booksets/BookSetsEdit.xhtml" />
+		</ui:include>
+	</ui:define>
+</ui:composition>

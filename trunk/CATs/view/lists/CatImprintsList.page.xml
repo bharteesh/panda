@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <begin-conversation join="true"/>
+ <param name="flavour" value="#{catImprintsList.flavour}"/>
+ <param name="firstResult" value="#{catImprintsList.firstResult}"/>
+ <param name="sort" value="#{catImprintsList.orderColumn}"/>
+ <param name="dir" value="#{catImprintsList.orderDirection}"/>
+ <param name="logic" value="#{catImprintsList.restrictionLogicOperator}"/>
+ <param name="from"/>
+ <param name="id" value="#{catImprintsList.catImprints.id}"/>
+ <param name="catCreator" value="#{catImprintsList.catImprints.catCreator}"/>
+ <param name="mainName" value="#{catImprintsList.catImprints.mainName}"/>
+ <!-- catImprintsList -->
+ <param name="catDateCreated" value="#{catImprintsList.catImprints.catDateCreated}"/>
+</page>

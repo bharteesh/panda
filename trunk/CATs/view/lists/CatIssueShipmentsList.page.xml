@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <begin-conversation flush-mode="manual" join="true"/>
+ <param name="flavour" value="#{catIssueShipmentsList.flavour}"/>
+ <param name="firstResult" value="#{catIssueShipmentsList.firstResult}"/>
+ <param name="sort" value="#{catIssueShipmentsList.orderColumn}"/>
+ <param name="dir" value="#{catIssueShipmentsList.orderDirection}"/>
+ <param name="logic" value="#{catIssueShipmentsList.restrictionLogicOperator}"/>
+ <param name="from"/>
+ <param name="id" value="#{catIssueShipmentsList.catIssueShipments.id}"/>
+ <param name="catCompletedBy" value="#{catIssueShipmentsList.catIssueShipments.catCompletedBy}"/>
+ <param name="catCoverDateAsPrinted" value="#{catIssueShipmentsList.catIssueShipments.catCoverDateAsPrinted}"/>
+ <param name="catCoverDateRange" value="#{catIssueShipmentsList.catIssueShipments.catCoverDateRange}"/>
+ <param name="catCreator" value="#{catIssueShipmentsList.catIssueShipments.catCreator}"/>
+ <param name="catDisposition" value="#{catIssueShipmentsList.catIssueShipments.catDisposition}"/>
+ <param name="catLifecycle" value="#{catIssueShipmentsList.catIssueShipments.catLifecycle}"/>
+ <param name="catLoanReturnTrackNumber" value="#{catIssueShipmentsList.catIssueShipments.catLoanReturnTrackNumber}"/>
+ <param name="catMaterialFormat" value="#{catIssueShipmentsList.catIssueShipments.catMaterialFormat}"/>
+ <param name="catOutcome" value="#{catIssueShipmentsList.catIssueShipments.catOutcome}"/>
+ <param name="catOwnership" value="#{catIssueShipmentsList.catIssueShipments.catOwnership}"/>
+ <param name="catPublctnUnitRange" value="#{catIssueShipmentsList.catIssueShipments.catPublctnUnitRange}"/>
+ <param name="catQuantity" value="#{catIssueShipmentsList.catIssueShipments.catQuantity}"/>
+ <param name="catReturnObligation" value="#{catIssueShipmentsList.catIssueShipments.catReturnObligation}"/>
+ <param name="catSourceCondition" value="#{catIssueShipmentsList.catIssueShipments.catSourceCondition}"/>
+ <param name="catDateCompleted" value="#{catIssueShipmentsList.catIssueShipments.catDateCompleted}"/>
+ <param name="catLoanReturnDate" value="#{catIssueShipmentsList.catIssueShipments.catLoanReturnDate}"/>
+ <param name="catDateCreated" value="#{catIssueShipmentsList.catIssueShipments.catDateCreated}"/>
+ <param name="catOnHold" value="#{catIssueShipmentsList.catIssueShipments.catOnHold}"/>
+ <param name="setsValue" value="#{catIssueShipmentsList.catIssueShipments.catCmpts.setsValue}"/>
+ <param name="setCspValue" value="#{catIssueShipmentsList.catIssueShipments.catCmpts.setCspValue}"/>
+ <param name="setCilValue" value="#{catIssueShipmentsList.catIssueShipments.catCmpts.setCilValue}"/>
+ <param name="wallValue" value="#{catIssueShipmentsList.catIssueShipments.catCmpts.wallValue}"/>
+ <param name="wallYearValue" value="#{catIssueShipmentsList.catIssueShipments.catCmpts.wallYearValue}"/>
+ <param name="setPublisherNoRolesValue" value="#{catIssueShipmentsList.catIssueShipments.catCmpts.setPublisherNoRolesValue}"/>
+ <param name="catSupplier" value="#{catIssueShipmentsList.catIssueShipments.catAcqOrders.catSupplier}"/>
+ <param name="catSupplierCommitment" value="#{catIssueShipmentsList.catIssueShipments.catAcqOrders.catSupplierCommitment}"/>
+ <param name="catType" value="#{catIssueShipmentsList.catIssueShipments.catAcqOrders.catType}"/>
+</page>

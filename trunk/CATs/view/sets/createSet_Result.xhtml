@@ -1,0 +1,173 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+	
+	
+	<h2><h:outputText value="#{createSetWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Name</li>
+			<li class="">2. Info</li>
+			<li class="selected">3. Results</li>
+		</ul>
+		<div class="cluster smart">
+			<div class="title eligible">
+	            <h1>Sets (1)</h1>
+                <p>You added one set:</p>
+            </div>
+            <div>
+				<rich:dataTable value="#{createSetWizard.newSetsList}" var="_catSets">
+					<rich:column>
+						<f:facet name="header">Set Name</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catSets.id}"/>
+							<h:outputText value="#{_catSets.catCurrentTitle.catName}"/>
+						</s:link>
+						
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Lifecycle</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catSets.id}"/>
+							<h:outputText value="#{_catSets.catLifecycle.label}"/>
+						</s:link>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">Start Year</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catSets.id}"/>
+							<h:outputText value="#{_catSets.catCurrentTitle.catStartYear}">
+								<s:convertDateTime type="date" pattern="yyyy"/>
+							</h:outputText>
+						</s:link>        
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">Publisher (Circa History)</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catSets.id}"/>
+							<h:outputText value="#{_catSets.catThCrntPublisher}"/>
+						</s:link>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">Title History Status</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catSets.id}"/>
+							<h:outputText value="#{_catSets.catThStatus.label}"/>
+						</s:link>
+					</rich:column>
+					
+				</rich:dataTable>
+			</div>
+			
+			<div class="title child eligible">
+              <h1>Components (1)</h1>
+
+              <p>You added one component:</p>
+            </div>
+			
+			<div>
+				<rich:dataTable value="#{createSetWizard.newCmptsList}" var="_catCmpts">
+					<rich:column>
+						<f:facet name="header">Sets</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+							<h:outputText value="#{_catCmpts.catName}"/>
+						</s:link>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">Component Name</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+							<h:outputText value="#{_catCmpts.catName}"/>
+						</s:link>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">Lifecycle</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+							<h:outputText value="#{_catCmpts.catLifecycle.label}"/>
+						</s:link>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">Selection Status</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+							<h:outputText value="#{_catCmpts.catSelectionStatus.label}"/>
+						</s:link>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">BF Prod Status</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+							<h:outputText value="#{_catCmpts.catProductionStatus.label}"/>
+						</s:link>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">Start Year</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+							<h:outputText value="#{_catCmpts.catStartYear}">
+								<s:convertDateTime type="date" pattern="yyyy"/>
+							</h:outputText>
+						</s:link>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">Print ISSN</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+							<h:outputText value="#{_catCmpts.catPrintIssn}"/>
+						</s:link>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">ISSN Request Status</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+							<f:param name="id" value="#{_catCmpts.id}"/>
+							<h:outputText value="#{_catCmpts.catIssnStatus.label}"/>
+						</s:link>
+					</rich:column>
+					
+					
+					
+				</rich:dataTable>
+			</div>
+			
+				
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button right" value="Return"
+			action="#{createSetWizard.createReset}"
+			oncomplete="#{rich:component('createSetWizardModal')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"
+			rendered="#{not empty pageURL}"/>
+			
+		<a:commandLink styleClass="button right" value="Return"
+			action="#{createSetWizard.createReset}"
+			oncomplete="#{rich:component('createSetWizardModal')}.hide(); #{rich:component('createSetQuit')}.hide(); javascript:location.reload(true);" 
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"
+			rendered="#{empty pageURL}"/>
+	</div>
+</ui:composition>

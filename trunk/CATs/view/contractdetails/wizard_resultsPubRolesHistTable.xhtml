@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:z="http://www.qualcomm.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a="http://richfaces.org/a4j"
+	  xmlns:s="http://jboss.com/products/seam/taglib">
+
+<ui:composition>
+
+<rich:dataTable value="#{value}"
+							var="_catPubToCmpts">
+							<rich:column>
+								<f:facet name="header">Publisher</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catPubToCmpts.id}"/>
+									<h:outputText value="#{_catPubToCmpts.catPublishers.catName}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Role</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catPubToCmpts.id}"/>
+									<h:outputText value="#{_catPubToCmpts.catRole.label}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Set</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catPubToCmpts.id}"/>
+									<h:outputText value="#{_catPubToCmpts.catCmpts.setsValue}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Component</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catPubToCmpts.id}"/>
+									<h:outputText value="#{_catPubToCmpts.catCmpts.catName}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">All Or Part Of Cmpt</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catPubToCmpts.id}"/>
+									<h:outputText value="#{_catPubToCmpts.catAllOrPartOfCmpts}" />
+								</s:link>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Content Covered</f:facet>
+								<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+									<f:param name="id" value="#{_catPubToCmpts.id}"/>
+									<h:outputText value="#{_catPubToCmpts.catContentCovered}" />
+								</s:link>
+							</rich:column>
+						</rich:dataTable>
+</ui:composition>
+</html>

@@ -1,0 +1,28 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+    <m:from name="CATS" address="#{mailOps.fromEmail}" />
+    <m:to name="#{contractDtlsMailOps.displayName}"><h:outputText value="#{contractDtlsMailOps.email}"/></m:to>
+    <ui:repeat var="_email" value="#{contractDtlsMailOps.ccList}">
+    	<m:cc><h:outputText value="#{_email}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="Agreement Details Termination Date Scheduled"/></m:subject>
+	<m:replyTo address="catssupport@ithaka.org"/>
+    <m:body>
+    	<p><h:outputText value="Hi #{contractDtlsMailOps.displayName}" />,</p>
+    	<s:fragment rendered="#{contractDtlsMailOps.displayNameNull}">
+			<p>
+				<h:outputText value="These Agreement details had no Title History Negotiator"/>
+			</p>
+		</s:fragment>
+	<ui:include src="contractDtlsTableForMail.xhtml">
+			<ui:param name="contractDtlsList" value="#{contractDtlsMailOps.contractDtlsList}"/>
+		</ui:include>
+		<p>Sincerely,<br/>CATS</p>
+    </m:body>
+</m:message>

@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<rich:modalPanel id="addDiscToCmptsWizard" 
+		width="900" height="550" styleClass="modal">
+		<s:div id="discToCmptmodalDiv">
+			<a:form ajaxSubmit="true" ajaxSingle="true" id="wizard">
+				<a:include viewId="#{addDiscToCmpts.currentView}">
+					<f:param name="pageURL" value="#{pageURL}"/>
+				</a:include>
+			</a:form>
+		</s:div>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="addDiscToCmptsQuit" width="900"
+		height="550" styleClass="modal">
+		<s:div id="discToCmptmodalQuitDiv">
+			<a:form ajaxSubmit="true" ajaxSingle="true" id="addDiscToCmptswizardQuit">
+				<a:include viewId="#{addDiscToCmpts.quitView}">
+					<f:param name="pageURL" value="#{pageURL}"/>
+				</a:include>
+			</a:form>
+		</s:div>
+	</rich:modalPanel>
+
+</ui:composition>

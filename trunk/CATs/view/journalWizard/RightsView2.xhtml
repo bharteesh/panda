@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.rightsWizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Main</li>
+			<li class="selected">2. Additional</li>
+		</ul>
+		<div class="cluster">
+			<p>Additional information is required:</p>
+			<s:decorate id="catIniCilRelStatus_div"	template="../layout/edit.xhtml">
+				<ui:define name="label">Initial CIL Release Status</ui:define>
+				<h:selectOneMenu name="catIniCilRelStatus"
+					value="#{createJournalWizard.rightsCmptInstance.catIniCilReleaseStatus}">
+					<s:selectItems itemValue="#{i}" label="#{i.label}"
+						noSelectionLabel="Choose..."
+						value="#{listsForEnums.catCmpts_IniCilReleaseStatus}" var="i" />
+				</h:selectOneMenu>
+			</s:decorate>
+	
+			<s:decorate id="catParticipationDate_div" template="../layout/edit.xhtml">
+				<ui:define name="label">Participation Date</ui:define>
+				<rich:calendar enableManualInput="true"  datePattern="yyyy/MM/dd" id="catParticipationDate"
+					inputClass="datestyle"
+					value="#{createJournalWizard.rightsCmptInstance.catParticipationDate}" />
+			</s:decorate>
+	
+			<s:decorate id="catRightsExclusion_div" template="../layout/edit.xhtml">
+				<ui:define name="label">Rights Exclusions</ui:define>
+				
+				<h:selectOneMenu name="catRightsExclusion"
+					value="#{createJournalWizard.rightsCmptInstance.catRightsExclusions}" required="true">
+					<s:selectItems value="#{listsForEnums.yesNo}" var="i"
+						itemValue="#{i.value}" label="#{i.label}"
+						noSelectionLabel="Choose..." />
+					<a:support event="onchange" reRender="noLayoutExisting"	ajaxSingle="true" 
+						eventsQueue="journalQueue"
+						status="globalWaitStatus"/>
+				</h:selectOneMenu>
+			</s:decorate>
+	
+			<a:outputPanel layout="none" id="noLayoutExisting">
+				<s:decorate id="catExcludedRange_div" template="../layout/edit.xhtml"
+					rendered="#{createJournalWizard.rightsCmptInstance.catRightsExclusions}">
+					<ui:define name="label">Excluded Range</ui:define>
+					<h:inputTextarea cols="20" id="catExcludedRange" rows="2"
+						value="#{createJournalWizard.rightsCmptInstance.catExcludedRange}"
+						required="true" />
+				</s:decorate>
+			</a:outputPanel>
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('changeRightsQuit')}.show(); return false;"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+		 
+		
+		<a:commandLink styleClass="button right" value="Save and Continue"
+			action="#{createJournalWizard.finishRightsObtained}"
+			reRender="createJournalForm" 
+			oncomplete="#{rich:component('changeRightsWizardModal')}.hide();"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+	</div>
+</ui:composition>

@@ -1,0 +1,228 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats">
+    
+    <div class="smart">
+    	<div class="header">
+				<div class="left">
+        <span class="museo">
+<h:outputText
+						value="Shipments in this Order (#{catAcqOrdersHome.catIssueShipmentses.size})" /></span>
+
+          <a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('issueShipments'.concat(divId))}" ignoreDupResponses="true" status="globalWaitStatus" eventsQueue="catAcqOrdersEditQueue" reRender="#{tableId}" styleClass="button wizard"/>
+				
+				</div>
+
+				<div class="right">
+				<h:selectOneMenu
+					id="catIssueShpmntsBulkOpSelect"
+					rendered="#{not empty catIssueShipmentsBulkOperations.bulkOperationsNames}"
+					value="#{catIssueShipmentsBulkOperations.bulkOperationsType}">
+				<a:support  limitToList="true" event="onchange" 
+					action="#{catIssueShipmentsBulkOperations.prepBulkOperations( 'catIssueShipmentsList', 'catIssueShpmntsBulkOpSelect' )}" 
+					reRender="issueshipmentsbulkOperationsPanels" 
+					oncomplete="if ( #{rich:element('catIssueShpmntsBulkOpSelect')}.options.selectedIndex != 0 ) 
+									{ #{rich:component('issueshipmentsbulkUpdatePanel')}.show(); } ; return false; " 
+					ignoreDupResponses="true"  status="globalWaitStatus"  />
+				<s:selectItems
+					value="#{catIssueShipmentsBulkOperations.bulkOperationsNames}" var="b"
+					label="#{catIssueShipmentsBulkOperations.bulkOperations[b]}"
+					itemValue="#{b}" noSelectionLabel="Bulk Operations" />
+				</h:selectOneMenu> 
+			
+			    <a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }" id="#{divId}createIssueShipmentsEditButton"
+			    	ignoreDupResponses="true"
+        			eventsQueue="catAcqOrdersEditQueue"
+              		status="globalWaitStatus"
+            		ajaxSingle="true"
+    				disabled="#{!s:hasPermission(catAcqOrdersHome.instance, 'add_reln catIssueShipmentses')}"
+                    styleClass="button wizard #{!s:hasPermission(catAcqOrdersHome.instance, 'add_reln catIssueShipmentses') ? 'disabled' : ''}"
+	        	    action="#{createIssueShipmentsWizard.prepCreateOperation(catAcqOrdersHome.instance)}"
+				    value="Add Shipment"
+				    reRender="createIssueShipmentsOperationsPanels,createIssueShipmentswizard,#{tableId}" 
+				    oncomplete="Richfaces.showModalPanel('createIssueShipmentsPanel');"/>
+				    
+			   <a:commandLink id="dupIssueAcqOrdersEditButton"
+				ignoreDupResponses="true"
+    			eventsQueue="catAcqOrdersEditQueue"
+         		status="globalWaitStatus"
+	    		action="#{duplicateIssueShipmentsWizard.duplicateUsingBulk('DUPLICATEISSUESHIPMENTS', duplicateIssueShipmentsWizard.initiatorFromListView)}"
+				value="Copy Shipment"
+				reRender="issueshipmentsduplicateOperationsPanels,catIssueShipmentsList" 
+				oncomplete="Richfaces.showModalPanel('issueshipmentsduplicateUpdatePanel');"
+                styleClass="button wizard #{!s:hasPermission(catIssueShipmentsList.catIssueShipments, 'create CatIssueShipments') ? 'disabled' : ''}"
+                disabled="#{!s:hasPermission(catIssueShipmentsList.catIssueShipments, 'create CatIssueShipments')}"/>
+				</div>
+
+		</div>
+    	  <rich:dataTable id="#{tableId}"
+                var="_issueShipments"
+              value="#{catAcqOrdersHome.catIssueShipmentses}"
+           rendered="#{not empty catAcqOrdersHome.catIssueShipmentses}">
+           
+        	<rich:column rendered="true" width="20px">
+					<f:facet name="header">
+						<input type="checkbox" id="select_all_checkbox1"
+								name="select_all_checkbox"
+								onclick="if ( this.checked ) { jQuery('.#{divId}bulk_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.#{divId}bulk_checkbox').each(function(){ this.checked = false; }); }" />
+					</f:facet>
+					<h:selectBooleanCheckbox styleClass="#{divId}bulk_checkbox"
+						value="#{catIssueShipmentsBulkOperations.selections[_issueShipments]}" />
+				</rich:column>
+           	
+           
+        	<rich:column id="issueShipmentsId" sortBy="#{_issueShipments.id}" filterBy="#{_issueShipments.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['id_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['id_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.id}" />        		
+				</s:link>				
+	        	</rich:column>
+				
+				<rich:column id="issueShipmentsAcqOrderId" sortBy="#{_issueShipments.catAcqOrders.id}" filterBy="#{_issueShipments.catAcqOrders.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['acqOrderId_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['acqOrderId_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Order ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catAcqOrders.id}" />        		
+				</s:link>				
+	        	</rich:column>
+ 	        	
+	        	<rich:column id="issueShipmentsCmptsID" sortBy="#{_issueShipments.catCmpts.id}" filterBy="#{_issueShipments.catCmpts.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['cmptsID_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['cmptsID_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Component ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catCmpts.id}" />        		
+				</s:link>				
+	        	</rich:column>
+				
+				<rich:column id="issueShipmentsCmptsName" sortBy="#{_issueShipments.catCmpts.catName}" filterBy="#{_issueShipments.catCmpts.catName}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['cmptsName_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['cmptsName_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Component Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catCmpts.catName}" />        		
+				</s:link>				
+	        	</rich:column>
+			
+				<rich:column id="issueShipmentsLifecycle" sortBy="#{_issueShipments.catLifecycle}" filterBy="#{_issueShipments.catLifecycle}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['lifecycle_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['lifecycle_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Lifecycle"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catLifecycle.label}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="issueShipmentsOutcome" sortBy="#{_issueShipments.catOutcome}" filterBy="#{_issueShipments.catOutcome}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['outcome_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['outcome_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Outcome"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catOutcome.label}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="issueShipmentsPublctnUnitRange" sortBy="#{_issueShipments.catPublctnUnitRange}" filterBy="#{_issueShipments.catPublctnUnitRange}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['publctnUnitRange_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['publctnUnitRange_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Pub. Units)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catPublctnUnitRange}" />        		
+				</s:link>				
+	        	</rich:column>
+				
+				<rich:column id="issueShipmentsCoverDateRange" sortBy="#{_issueShipments.catCoverDateRange}" filterBy="#{_issueShipments.catCoverDateRange}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['coverDateRange_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['coverDateRange_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Date)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catCoverDateRange}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="issueShipmentsOwnership" sortBy="#{_issueShipments.catOwnership}" filterBy="#{_issueShipments.catOwnership}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['ownership_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['ownership_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Ownership"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catOwnership.label}" />        		
+				</s:link>				
+	        	</rich:column>
+				
+				<rich:column id="issueShipmentsReturnObligation" sortBy="#{_issueShipments.catReturnObligation}" filterBy="#{_issueShipments.catReturnObligation}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['returnObligation_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['returnObligation_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Return Obligation"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catReturnObligation.label}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="issueShipmentsDisposition" sortBy="#{_issueShipments.catDisposition}" filterBy="#{_issueShipments.catDisposition}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['disposition_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['disposition_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Disposition"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catDisposition}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="issueShipmentsOnHold" sortBy="#{_issueShipments.catOnHold}" filterBy="#{_issueShipments.catOnHold}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['issueShipments'.concat(divId)]['onHold_sortOrder']}"
+        	filterValue="#{sortFiltBean['issueShipments'.concat(divId)]['onHold_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="On Hold"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_issueShipments.id}"/>
+					<h:outputText value="#{_issueShipments.catOnHold ? 'Yes' : 'No'}"/>        		
+				</s:link>				
+	        	</rich:column>
+
+        	</rich:dataTable>
+        	
+        	
+        	<!-- note that these are: outside the a:form for the main table, and have their own a:form each. -->
+        	
+    	</div>
+</s:div>

@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{changePublicationStatusWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Change</li>
+			<li class="">2. Digitization</li>
+			<li class="selected">3. Wall</li>
+			<li class="disabled">4. Results</li>
+		</ul>
+		<div class="cluster smart">
+			<h1>DEPRECATED WIZARD</h1>
+			
+			<s:fragment rendered="#{empty changePublicationStatusWizard.wallDetailsList}">
+				<p>There are no <i>Confirmed/Implemented</i> Wall Details for this Set</p>
+			</s:fragment>
+			<s:fragment rendered="#{not empty changePublicationStatusWizard.wallDetailsList}">
+				<rich:dataTable value="#{changePublicationStatusWizard.wallDetailsList}" var="_catWallDtls">
+					<f:facet name="header">
+						<h:outputText
+							value="Confirmed/Implemented Wall Details" />
+					</f:facet>
+			      <rich:column>
+			        <f:facet name="header">Lifecycle</f:facet>
+			        <h:outputText value="#{_catWallDtls.catLifecycle}"/>
+			      </rich:column>
+			      <rich:column>
+			        <f:facet name="header">Wall Type</f:facet>
+			        <h:outputText value="#{_catWallDtls.catWallType}"/>
+			      </rich:column>
+			      <rich:column>
+			        <f:facet name="header">Amendment Date</f:facet>
+			        <h:outputText value="#{_catWallDtls.catEffectiveDate}"/>
+			      </rich:column>
+			      <rich:column>
+			        <f:facet name="header">Moving Wall Value</f:facet>
+			        <h:outputText value="#{_catWallDtls.catMovingValue}"/>
+			      </rich:column>
+			      <rich:column>
+			        <f:facet name="header">Fixed Date</f:facet>
+			        <h:outputText value="#{_catWallDtls.catFixedDate}"/>
+			      </rich:column>
+			      <rich:column>
+			        <f:facet name="header">Ceased Date</f:facet>
+			        <h:outputText value="#{_catWallDtls.catCeasedDate}"/>
+			      </rich:column>
+			
+			    </rich:dataTable>
+			</s:fragment>
+			<br/>
+			<a:commandLink styleClass="button" value="Change Wall Details"
+			action="#{changePublicationStatusWizard.prepChangeWallLifeCycle}"
+			reRender="catWallDtlsListModalDiv" 
+			oncomplete="#{rich:component('changePubStatusModal')}.hide();#{rich:component('catWallDtlsBulkPanel')}.show();"
+			eventsQueue="changePubStatus" status="globalWaitStatus"
+			rendered="#{not empty changePublicationStatusWizard.wallDetailsList}"/>
+			
+			<a:commandLink styleClass="button" value="Change Wall Details"
+			action="#{changePublicationStatusWizard.nextView}"
+			reRender="changePubStatusForm"
+			eventsQueue="changePubStatus" status="globalWaitStatus"
+			rendered="#{empty changePublicationStatusWizard.wallDetailsList}"/>
+			
+		</div>
+	
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			reRender="changePubStatusForm"
+			oncomplete="#{rich:component('changePubStatusQuit')}.show(); return false;"
+			eventsQueue="changePubStatus" status="globalWaitStatus">
+		</a:commandLink> 
+		
+		<a:commandLink styleClass="button right" value="Finish"
+			action="#{changePublicationStatusWizard.finishPubStatus}"
+			reRender="changePubStatusForm" 
+			eventsQueue="changePubStatus" status="globalWaitStatus"/>
+		
+	</div>
+</ui:composition>
+

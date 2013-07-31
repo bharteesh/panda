@@ -1,0 +1,66 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:ui="http://java.sun.com/jsf/facelets" id="checkInSourceDiv34">
+    
+    <div class="col col1">
+        <s:decorate id="catThStatusField335" template="../layout/edit.xhtml">
+            <ui:define name="label">Title History Status</ui:define>
+			<h:outputText value="#{catSetsHome.instance.catThStatus.label}"/>
+			<a:commandLink 
+			ignoreDupResponses="true"
+    		action="#{catSetsHome.updateUsingWizard('THSTATUS')}"
+			value="Edit"
+			reRender="setsBulkOperationsPanels" 
+			oncomplete="Richfaces.showModalPanel('setsBulkUpdatePanel');"
+			styleClass="button wizard #{(!s:hasPermission(catSetsHome.instance, 'modify catThStatus') or (catSetsHome.instance.catThStatus.label eq 'Completed') or (empty catSetsHome.instance.catThNegotiator))? 'disabled' : ''}"
+				disabled="#{(!s:hasPermission(catSetsHome.instance, 'modify catThStatus')) or (catSetsHome.instance.catThStatus.label eq 'Completed') or (empty catSetsHome.instance.catThNegotiator)}"
+			status="globalWaitStatus"
+			eventsQueue="setsEditQueue"
+			ajaxSingle="true"
+			onclick="if ( ! checkForSave() ) { return false ; }"/>
+		</s:decorate>
+         
+         <s:decorate id="catOnGoingDigiField341" template="../layout/edit.xhtml">
+                <ui:define name="label">Ongoing Digitization</ui:define>
+                <h:outputText value="#{catSetsHome.instance.catOnGoingDigi ? 'Yes':'No'}"/>
+			    <a:commandLink 
+				ignoreDupResponses="true"
+	    		action="#{catSetsHome.updateUsingWizard('ONGOINGDIGI')}"
+				value="Edit"
+				reRender="setsBulkOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('setsBulkUpdatePanel');"
+				styleClass="button wizard #{!s:hasPermission(catSetsHome.instance, 'modify catOnGoingDigi') ? 'disabled':''}"
+				disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catOnGoingDigi')}"
+				status="globalWaitStatus"
+				eventsQueue="setsEditQueue"
+				ajaxSingle="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"/>
+				
+             </s:decorate> 
+         
+         
+		</div>
+	    <div class="col col2"> 
+	    	 
+	    	 
+	    	 
+	    	 <s:decorate id="catPublctnFrequencyField342" template="../layout/edit.xhtml">
+	             <ui:define name="label">Frequency</ui:define>
+	             <h:inputTextarea onchange="enableSaveCancel();"  readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catPublctnFrequency')}" 
+	             	id="catPublctnFrequency43" maxlength="100" styleClass="largetextarea" size="25" value="#{catSetsHome.instance.catPublctnFrequency}">
+	             </h:inputTextarea>
+	         </s:decorate>
+        	 
+        	 <s:decorate id="catPublctnStatusField344" template="../layout/edit.xhtml">
+	            <ui:define name="label">Publishing Status</ui:define>
+              <h:selectOneMenu onchange="enableSaveCancel();"  disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catPublctnStatus')}" 
+               		name="catPublctnStatus" value="#{catSetsHome.instance.catPublctnStatus}" required="true">
+			   		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="None..." 
+			   			value="#{listsForEnums.catSets_PublctnStatus}" var="i"/>
+			    </h:selectOneMenu>
+ 			  	
+	          </s:decorate>
+             
+	    </div> 
+	    
+   		<div class="push"/>
+	
+ </s:div>

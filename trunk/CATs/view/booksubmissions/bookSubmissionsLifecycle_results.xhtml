@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{bookSubmissionsLifecycleWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="disabled">1. Change</li>
+			<li class="selected">2. Results</li>
+		</ul>
+		<div class="cluster smart">
+			<h:outputText value="You have successfully updated the following records:"/>
+				<s:fragment rendered="#{not empty bookSubmissionsLifecycleWizard.bookSubmissionsList}">
+					<rich:dataTable value="#{bookSubmissionsLifecycleWizard.bookSubmissionsList}" var="catBookSub">
+							<rich:column>
+								<f:facet name="header">ID</f:facet>
+								<h:outputText value="#{catBookSub.id}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Version ID</f:facet>
+								<h:outputText value="#{catBookSub.catVersion.id}" />
+							</rich:column>		
+							<rich:column>
+								<f:facet name="header">Lifecycle</f:facet>
+								<h:outputText value="#{catBookSub.catLifecycle.label}" />
+							</rich:column>	
+							<rich:column>
+								<f:facet name="header">Reason Excluded</f:facet>
+								<h:outputText value="#{catBookSub.catReasonExcluded.label}" />
+							</rich:column>	
+							<rich:column>
+								<f:facet name="header">On Hold Reason</f:facet>
+								<h:outputText value="#{catBookSub.catOnHoldReason}" />
+							</rich:column>							
+					</rich:dataTable>
+				</s:fragment>
+		</div>
+		
+		
+		
+		<div class="push"></div>
+		
+		<a:commandLink styleClass="button right" value="Return" 
+			action="#{bookSubmissionsLifecycleWizard.wizardReset}" 
+			oncomplete="#{rich:component('bookSubmissionsLifecycleUpdatePanel')}.hide(); javascript:location.reload(true);" 
+			eventsQueue="changeSubLifecycleQueue" status="globalWaitStatus"/>
+	</div>
+</ui:composition>
+

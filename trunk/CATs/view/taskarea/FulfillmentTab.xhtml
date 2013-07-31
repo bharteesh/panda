@@ -1,0 +1,263 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="FulfillmentDiv1">
+	<!-- START Export New Products Feed -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Export New Products Feed (New Framework)</h1>
+			<section>
+				<h:form id="newProductsId" enctype="multipart/form-data">
+					<dl>
+						<dt>Books Spreadsheet Path:
+							<s:fileUpload data="#{catsOnDemandFeeds.file}"
+								required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:outputText value="Is this a Dry Run?" />
+							<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+								value="#{catsOnDemandFeeds.isDryRun}" />
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{catsOnDemandFeeds.generateKtekNewProductsFeed()}" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Exports all pricing and bibliographic data for books that are
+					new to Fulfillment.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/ExportBooksKtekFeedTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Export New Products Feed -->
+	<!-- START Export Unlimited Price Updates Feed -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Export Unlimited Price Update (New Framework)</h1>
+			<section>
+				<h:form id="unltdPriceUpdateId" enctype="multipart/form-data">
+					<dl>
+						<dt>Books Spreadsheet Path:
+							<s:fileUpload data="#{catsOnDemandFeeds.file}"
+								required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:outputText value="Is this a Dry Run?" />
+							<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+								value="#{catsOnDemandFeeds.isDryRun}" />
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{catsOnDemandFeeds.generateKtekUnlimitedPriceFeed()}" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Exports unlimited pricing information for upload to the
+					Fulfillment system.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/ExportBooksKtekFeedTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Export Unlimited Price Updates Feed -->
+	<!-- START Export Full Price  -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Export Full Price Update (New Framework)</h1>
+			<section>
+
+				<h:form id="fullPriceUpdateId" enctype="multipart/form-data">
+					<dl>
+						<dt>Books Spreadsheet Path:
+							<s:fileUpload data="#{catsOnDemandFeeds.file}"
+								required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:outputText value="Is this a Dry Run?" />
+							<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+								value="#{catsOnDemandFeeds.isDryRun}" />
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{catsOnDemandFeeds.generateKtekFullPriceFeed()}" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Exports all pricing information for upload to the Fulfillment
+					system.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/ExportBooksKtekFeedTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Export Full Price -->
+	<!-- START Bibliographic Update Feed -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Export Bibliographic MD Update Feed (New Framework)</h1>
+			<section>
+				<h:form id="bibliographicId" enctype="multipart/form-data">
+					<dl>
+						<dt>Books Spreadsheet Path:
+							<s:fileUpload data="#{catsOnDemandFeeds.file}"
+								required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:outputText value="Is this a Dry Run?" />
+							<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+								value="#{catsOnDemandFeeds.isDryRun}" />
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{catsOnDemandFeeds.generateKtekBibliographicFeed()}" />
+
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Exports everything, except pricing information, for upload to
+					the Fulfillment system.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/ExportBooksKtekFeedTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Bibliographic Update Feed -->
+	<!-- START Export Disciplines Feed -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Export Disciplines Update Feed (New Framework)</h1>
+			<section>
+				<h:form id="discFormId" enctype="multipart/form-data">
+					<dl>
+						<dt>Discipline Spreadsheet Path:
+							<s:fileUpload data="#{catsOnDemandFeeds.file}"
+								required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:outputText value="Is this a Dry Run?" />
+							<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+								value="#{catsOnDemandFeeds.isDryRun}" />
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{catsOnDemandFeeds.generateKtekDisciplinesRegFeed()}" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Exports new or updated CATS Disciplines to an XML format
+					upload to the Fulfillment system.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/ExportDisciplinesKtekFeedTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Export Disciplines Feed -->
+	<!-- START Export Imprints Feed -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Export Imprints Update Feed (New Framework)</h1>
+			<section>
+				<h:form id="imprintsFormId" enctype="multipart/form-data">
+					<dl>
+						<dt>Imprints Spreadsheet Path:
+							<s:fileUpload data="#{catsOnDemandFeeds.file}"
+								required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:outputText value="Is this a Dry Run?" />
+							<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+								value="#{catsOnDemandFeeds.isDryRun}" />
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{catsOnDemandFeeds.generateKtekImprintsFeed()}" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Exports new or updated Imprint records from CATS to an XML
+					format for upload to the Fulfillment system.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/ExportImprintsKtekFeedTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Export Imprints Feed -->
+	<!-- START Export Book Series Feed -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Export Book Series Feed (New Framework)</h1>
+			<section>
+				<h:form id="seriesFormId" enctype="multipart/form-data">
+					<dl>
+						<dt>Book Series Spreadsheet Path:
+							<s:fileUpload data="#{catsOnDemandFeeds.file}"
+								required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:outputText value="Is this a Dry Run?" />
+							<h:selectBooleanCheckbox styleClass="bulk_checkbox"
+								value="#{catsOnDemandFeeds.isDryRun}" />
+						</dt>
+						<dt>
+							<h:commandButton value="Export"
+								action="#{catsOnDemandFeeds.generateKtekSeriesCategoryFeed()}" />
+						</dt>
+					</dl>
+
+				</h:form>
+			</section>
+			<section>
+				<p>Exports Book Series from CATS to an XML format for upload to
+					the Fulfillment system.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/ExportSeriesKtekFeedTemplate.xlsx">Download
+						Template Spreadsheet</a> for an example. 
+				</p>
+				
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Export Book Series Feed -->
+</s:div>

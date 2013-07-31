@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{catWallDtlsBulkOperations.bulkTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1. Permissions</li>
+		<li class="disabled">2. Change</li>
+		<li class="selected">3. Additional</li>
+		<li class="disabled">4. Results</li>
+	</ul>
+
+
+	<div class="cluster">
+		<s:fragment	rendered="#{catWallDtlsBulkOperations.bulkRequiredProperties.contains('catLifecycle')}">
+			<!--  SINGLE RECORD  -->
+			<s:fragment	rendered="#{catWallDtlsBulkOperations.bulkSelection.size eq 1}">
+				<s:fragment	rendered="#{catWallDtlsBulkOperations.bulkInstance.catLifecycle.label eq 'Proposed'}">
+					<p>There are no additional properties in order to continue.</p>
+				</s:fragment>		
+				<s:fragment	rendered="#{catWallDtlsBulkOperations.bulkInstance.catLifecycle.label eq 'Confirmed'}">
+					<s:decorate id="catEffectiveDate_div" template="../layout/edit.xhtml">
+						<ui:define name="label">Amendment Date</ui:define>
+						<rich:calendar enableManualInput="true"  required="true" id="catEffectiveDate"
+							value="#{catWallDtlsBulkOperations.bulkInstance.catEffectiveDate}"
+							datePattern="yyyy/MM/dd" inputClass="datestyle" />
+					</s:decorate>
+				</s:fragment>
+			</s:fragment>
+			<!--  BULK RECORDS  -->
+			<s:fragment	rendered="#{catWallDtlsBulkOperations.bulkSelection.size gt 1}">		
+				<s:fragment	rendered="#{catWallDtlsBulkOperations.bulkInstance.catLifecycle.label eq 'Confirmed'}">
+					<div class="alert">
+						<p class="highlight">Since you are handling these walls in bulk, you have to use the same effective date for all of them. If you want to set different effective dates for some of them, quit this wizard now and advance the lifecycle of those walls individually.
+						</p>
+					</div>
+					<s:decorate id="catEffectiveDate_div1" template="../layout/edit.xhtml">
+						<ui:define name="label">Amendment Date</ui:define>
+						<rich:calendar enableManualInput="true"  required="true" id="catEffectiveDate"
+							value="#{catWallDtlsBulkOperations.bulkInstance.catEffectiveDate}"
+							datePattern="yyyy/MM/dd" inputClass="datestyle" />
+					</s:decorate>
+				</s:fragment>		
+			</s:fragment>				
+			
+			
+			<s:fragment	rendered="#{catWallDtlsBulkOperations.bulkInstance.catLifecycle.label eq 'Implemented'}">
+				<s:decorate id="catImplementationDateActl_div"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Actual Implementation Date</ui:define>
+					<rich:calendar enableManualInput="true"  required="true" id="catImplementationDateActl"
+						value="#{catWallDtlsBulkOperations.bulkInstance.catImplementationDateActl}"
+						datePattern="yyyy/MM/dd" inputClass="datestyle" />
+				</s:decorate>						
+			</s:fragment>
+			
+			<s:fragment	rendered="#{catWallDtlsBulkOperations.bulkInstance.catLifecycle.label eq 'Deprecated'}">
+				<p>There are no additional properties in order to continue.</p>
+			</s:fragment>
+		</s:fragment> 
+	
+		<s:fragment	rendered="#{catWallDtlsBulkOperations.bulkRequiredProperties.contains('catWallType')}">
+	
+	
+			<s:fragment
+				rendered="#{catWallDtlsBulkOperations.bulkInstance.catWallType.label eq 'Moving'}">
+				<s:decorate id="catMovingValue_div" template="../layout/edit.xhtml">
+					<ui:define name="label">Moving Wall Value</ui:define>
+					<h:inputText id="catMovingValue"
+						value="#{catWallDtlsBulkOperations.bulkInstance.catMovingValue}" required="true">
+						<a:support  ajaxSingle="true" bypassUpdates="true" event="onblur" reRender="catMovingValue_div" ignoreDupResponses="true" status="globalWaitStatus" />
+					</h:inputText>
+				</s:decorate>
+			</s:fragment>
+	
+			<s:fragment
+				rendered="#{catWallDtlsBulkOperations.bulkInstance.catWallType.label eq 'Fixed'}">
+				<s:decorate id="catFixedDate_div" template="../layout/edit.xhtml">
+					<ui:define name="label">Fixed Date</ui:define>
+					<rich:calendar enableManualInput="true"  required="true" name="catFixedDate"
+						value="#{catWallDtlsBulkOperations.bulkInstance.catFixedDate}"
+						datePattern="yyyy/MM/dd" inputClass="datestyle" />
+				</s:decorate>
+			</s:fragment>
+	
+			<s:fragment
+				rendered="#{catWallDtlsBulkOperations.bulkInstance.catWallType.label eq 'Ceased'}">
+				<s:decorate id="catCeasedDate_div" template="../layout/edit.xhtml">
+					<ui:define name="label">Ceased Date</ui:define>
+					<rich:calendar enableManualInput="true"  required="true" name="catCeasedDate"
+						value="#{catWallDtlsBulkOperations.bulkInstance.catCeasedDate}"
+						datePattern="yyyy/MM/dd" inputClass="datestyle" />
+				</s:decorate>
+			</s:fragment>
+	
+		</s:fragment>
+	</div>
+	<div class="push"></div>
+	
+	<a:commandLink  styleClass="button" value="Quit" reRender="catWallDtlsListWizard" oncomplete="#{rich:component('catWallDtlsBulkQuit')}.show(); return false;" eventsQueue="bulkWallDetails" status="globalWaitStatus" ignoreDupResponses="true"    >
+	</a:commandLink> 
+	<a:commandLink  styleClass="button right" value="Continue" action="#{catWallDtlsBulkOperations.performBulkOperation}" reRender="catWallDtlsListWizard" rendered="#{not catWallDtlsBulkOperations.isPubStatusSubWizard and not catWallDtlsBulkOperations.isPubStatusSubWizardNew}" eventsQueue="bulkWallDetails" status="globalWaitStatus" ignoreDupResponses="true"   /> 
+	
+	<a:commandLink  styleClass="button right" value="Continue" action="#{catWallDtlsBulkOperations.performBulkOperation}" reRender="catWallDtlsListWizard" rendered="#{catWallDtlsBulkOperations.isPubStatusSubWizard or catWallDtlsBulkOperations.isPubStatusSubWizardNew}" eventsQueue="bulkWallDetails" status="globalWaitStatus" ignoreDupResponses="true"   />
+	
+	</div>
+</ui:composition>

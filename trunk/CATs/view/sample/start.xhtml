@@ -1,0 +1,55 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+      template="../layout/template.xhtml">
+>
+<ui:define name="body">
+
+
+
+<h:form>
+<a:commandLink oncomplete="#{rich:component('panel')}.show();"
+	 value="Open"
+	 reRender="panel"/>
+	 
+	 
+	 <a:commandLink action="#{helloAction.sayHello('/home.xhtml')}" value="doh"/>
+</h:form>
+
+
+<p>
+
+<s:link action="#{LinkTo.linkTo('27927/dcss2ct1')}" propagation="none">LINK
+</s:link>
+
+</p>
+
+ 
+<h:panelGrid id="result">
+   <h:outputText value="#{sampleBean.color}" />
+   <h:outputText value="#{sampleBean.number}" style="COLOR: #{sampleBean.color}"/>
+</h:panelGrid>
+ 
+<rich:modalPanel id="panel">
+   <f:facet name="header">Wizard</f:facet>
+   <f:facet name="controls">
+	<a href="#" onclick="#{rich:component('panel')}.hide();">Close</a>
+   </f:facet>
+   <a:form id="form" ajaxSubmit="true" limitToList="true">
+	<a:outputPanel >
+		<a:include viewId="#{sampleBean.view}" />
+	</a:outputPanel>
+   </a:form>
+</rich:modalPanel>
+</ui:define>
+</ui:composition>

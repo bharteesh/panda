@@ -1,0 +1,37 @@
+<ui:composition
+   xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+
+<!-- needs a subclass of EntityQuery<?> as entityQuery -->
+
+<h:selectOneMenu rendered="#{empty forType}" id="adhoc_reportSelect1" value="#{adHocReports.requestedReportType}">
+  <a:support event="onchange" 
+    action="#{adHocReports.makeReport(entityQuery)}"
+    reRender="adhoc_reportSelect1,messages"
+    oncomplete=" #{rich:element('adhoc_reportSelect1')}.options.selectedIndex = 0; #{adHocReports.resetRequestedReportType()}; return false; " 
+    status="globalWaitStatus"
+  />
+  <s:selectItems  value="#{adHocReports.reportTypeNames}" var="rn" label="#{rn}" itemValue="#{rn}" noSelectionLabel="Request a Report..."/>
+</h:selectOneMenu>
+  
+<h:selectOneMenu rendered="#{not empty forType}" id="adhoc_reportSelect2" value="#{adHocReports.requestedReportType}">
+  <a:support event="onchange" 
+    action="#{adHocReports.makeReport(entityQuery)}"
+    reRender="adhoc_reportSelect2,messages"
+    oncomplete=" #{rich:element('adhoc_reportSelect2')}.options.selectedIndex = 0; #{adHocReports.resetRequestedReportType()}; return false;" 
+    status="globalWaitStatus"
+  />
+  <s:selectItems  value="#{adHocReports.getReportTypeNames(forType)}" var="rn" label="#{rn}" itemValue="#{rn}" noSelectionLabel="Request a Report..."/>
+</h:selectOneMenu>
+
+</ui:composition>

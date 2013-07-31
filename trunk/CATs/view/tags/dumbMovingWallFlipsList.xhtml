@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:z="http://www.qualcomm.com/jsf/core" xmlns:c="http://java.sun.com/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:rich="http://richfaces.org/rich" xmlns:a="http://richfaces.org/a4j" xmlns:s="http://jboss.com/products/seam/taglib">
+  <ui:composition>
+    <rich:dataTable value="#{value}" var="_catMWF">
+      <rich:column>
+        <f:facet name="header">ID</f:facet>
+        <h:outputText value="#{_catMWF.id}"/>
+      </rich:column>
+      <rich:column>
+        <f:facet name="header">Component ID</f:facet>
+        <h:outputText value="#{_catMWF.catCmpts.id}"/>
+      </rich:column>
+      <rich:column>
+        <f:facet name="header">Component Name</f:facet>
+        <h:outputText value="#{_catMWF.catCmpts.catName}"/>
+      </rich:column>
+      <rich:column>
+        <f:facet name="header">Lifecycle</f:facet>
+        <h:outputText value="#{_catMWF.catLifecycle.label}"/>
+      </rich:column>
+
+      <rich:column>
+        <f:facet name="header">Flip Date</f:facet>
+        <h:outputText value="#{_catMWF.catFlipToPublicYear}"/>
+      </rich:column>
+      <rich:column>
+        <f:facet name="header">Release Through</f:facet>
+        <h:outputText value="#{_catMWF.catFlipPublctnDate}"/>
+      </rich:column>
+      <rich:column>
+        <f:facet name="header">Flip Content</f:facet>
+        <h:outputText value="#{_catMWF.catContentRange}"/>
+      </rich:column>
+      <rich:column>
+        <f:facet name="header">Pub. Unit Count</f:facet>
+        <h:outputText value="#{_catMWF.catPublctnUnitCnt}"/>
+      </rich:column>
+      <rich:column>
+        <f:facet name="header">On Hold</f:facet>
+        <h:outputText value="#{_catMWF.catOnHold ? 'Yes' : 'No'}"/>
+      </rich:column>
+
+    </rich:dataTable>
+  </ui:composition>
+</html>

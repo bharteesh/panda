@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd" login-required="true">
+<begin-conversation join="true" flush-mode="manual"/>
+  <param name="flavour" value="#{catWallDtlsList.flavour}"/>
+
+
+   <param name="firstResult" value="#{catWallDtlsList.firstResult}"/>
+   <param name="sort" value="#{catWallDtlsList.orderColumn}"/>
+   <param name="dir" value="#{catWallDtlsList.orderDirection}"/>
+   <param name="logic" value="#{catWallDtlsList.restrictionLogicOperator}"/>
+   
+
+   <param name="from"/>
+   <param name="id" value="#{catWallDtlsList.catWallDtls.id}"/>
+   <param name="sets_id" value="#{catWallDtlsList.catWallDtls.catSets.id}"/>
+   
+   <param name="catMovingValue" value="#{catWallDtlsList.catWallDtls.catMovingValue}"/>
+   
+   <param name="sets_name" value="#{catWallDtlsList.catWallDtls.catSets.catCurrentTitle.catName}"/>
+   <param name="catChangeType" value="#{catWallDtlsList.catWallDtls.catChangeType}"/>
+   <param name="catCreator" value="#{catWallDtlsList.catWallDtls.catCreator}"/>
+   <param name="catLifecycle" value="#{catWallDtlsList.catWallDtls.catLifecycle}"/>
+   <param name="catWallType" value="#{catWallDtlsList.catWallDtls.catWallType}"/>
+
+
+<!-- catWallDtlsList -->
+<param name="catEffectiveDate" value="#{catWallDtlsList.catWallDtls.catEffectiveDate}"/>
+<param name="catDateDeprecated" value="#{catWallDtlsList.catWallDtls.catDateDeprecated}"/>
+<param name="catFixedDate" value="#{catWallDtlsList.catWallDtls.catFixedDate}"/>
+<param name="catCeasedDate" value="#{catWallDtlsList.catWallDtls.catCeasedDate}"/>
+<param name="catImplementationDateSchd" value="#{catWallDtlsList.catWallDtls.catImplementationDateSchd}"/>
+<param name="catImplementationDatePrjd" value="#{catWallDtlsList.catWallDtls.catImplementationDatePrjd}"/>
+<param name="catImplementationDateActl" value="#{catWallDtlsList.catWallDtls.catImplementationDateActl}"/>
+<param name="catDateCreated" value="#{catWallDtlsList.catWallDtls.catDateCreated}"/>
+
+</page>

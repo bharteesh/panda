@@ -1,0 +1,141 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+	<h2><h:outputText value="#{createIssueShipmentsWizard.createTitle}" /></h2>
+	
+		<div id="step1">
+		<s:div rendered="#{createIssueShipmentsWizard.checkIfCreateIssueShipmentLifecycleCompletable() == true}">
+		<ul class="steps">
+				<li class="">1. Choose</li>
+				<li class="selected">2. Main</li>
+				<li class="disabled">3. Parent</li>
+				<li class="disabled">4. Additional</li>
+				<li class="disabled">5. Results</li>
+		</ul>
+		</s:div>
+		<s:div rendered="#{createIssueShipmentsWizard.checkIfCreateIssueShipmentLifecycleCompletable() == false}">
+		<ul class="steps">
+				<li class="">1. Choose</li>
+				<li class="selected">2. Main</li>
+				<li class="disabled">3. Parent</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		</s:div>
+		
+		<div class="cluster smart">
+
+		<p>Please make additional selections.</p>
+
+<s:fragment>
+
+<s:decorate id="catQuantityDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Quantity</ui:define>
+                <h:selectOneMenu id="catQuantity" value="#{createIssueShipmentsWizard.createTransientInstance.catQuantity}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{listsForEnums.catIssueShipments_Quantity}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="catOwnershipDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Ownership</ui:define>
+                <h:selectOneMenu id="catOwnership" value="#{createIssueShipmentsWizard.createTransientInstance.catOwnership}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{listsForEnums.catIssueShipments_Ownership}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="catReturnObligationDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Return Obligation</ui:define>
+                <h:selectOneMenu id="catReturnObligation" value="#{createIssueShipmentsWizard.createTransientInstance.catReturnObligation}">
+		   		    <s:selectItems value="#{listsForEnums.catIssueShipments_ReturnObligation}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+</s:decorate>
+
+
+<s:decorate id="catPublctnUnitRangeDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Extent (Pub Units)</ui:define>
+<h:inputTextarea id="catPublctnUnitRange"
+                 			cols="20"
+                			rows="2"
+                       	value="#{createIssueShipmentsWizard.createTransientInstance.catPublctnUnitRange}"></h:inputTextarea>
+</s:decorate>
+<s:decorate id="catCoverDateRangeDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Extent (Dates)</ui:define>
+<h:inputTextarea id="catCoverDateRange"
+                 			cols="20"
+                			rows="2"
+                       	value="#{createIssueShipmentsWizard.createTransientInstance.catCoverDateRange}"></h:inputTextarea>
+</s:decorate>
+
+<s:decorate id="catNoteDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Note</ui:define>
+<h:inputTextarea id="catNote"
+                 			cols="20"
+                			rows="2"
+                       	value="#{createIssueShipmentsWizard.createTransientInstance.catNote}"></h:inputTextarea>
+</s:decorate>
+
+<s:decorate id="catCoverDateAsPrintedDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Date as Printed</ui:define>
+<h:inputText id="catCoverDateAsPrinted"
+             			size="25"
+                			maxlength="255"
+                       	value="#{createIssueShipmentsWizard.createTransientInstance.catCoverDateAsPrinted}"></h:inputText>
+</s:decorate>
+
+<s:decorate id="catMaterialFormatDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Format</ui:define>
+                <h:selectOneMenu id="catMaterialFormat" value="#{createIssueShipmentsWizard.createTransientInstance.catMaterialFormat}">
+		   		    <s:selectItems value="#{listsForEnums.catIssueShipments_MaterialFormat}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="catSourceConditionDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Condition</ui:define>
+                <h:selectOneMenu id="catSourceCondition" value="#{createIssueShipmentsWizard.createTransientInstance.catSourceCondition}">
+		   		    <s:selectItems value="#{listsForEnums.catIssueShipments_SourceCondition}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+</s:decorate>
+
+</s:fragment>
+
+
+			</div>
+
+		<div class="push"></div>
+
+            <a:commandLink styleClass="button" value="Quit"
+       			eventsQueue="#{divParam}eventsQueue"
+                status="globalWaitStatus"
+			    reRender="createIssueShipmentswizard" oncomplete="#{rich:component('createIssueShipmentsQuit')}.show(); return false;">
+			</a:commandLink> 
+ 
+			<a:commandLink
+			styleClass="button right" value="Continue"
+			eventsQueue="#{divParam}eventsQueue"
+	        status="globalWaitStatus"
+			action="#{createIssueShipmentsWizard.createNext}" 
+			reRender="createIssueShipmentswizard" />
+			
+			
+			</div>
+</ui:composition>
+

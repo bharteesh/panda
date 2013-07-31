@@ -1,0 +1,24 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:ui="http://java.sun.com/jsf/facelets" id="SOMEDiv2">
+
+	<div class="col col1">
+<s:decorate id="catCreator_div2" template="../layout/edit.xhtml">
+<ui:define name="label">Creator</ui:define>
+<h:inputText onchange="enableSaveCancel();" readonly="#{!s:hasPermission(catWallOverridesHome.instance, 'modify catCreator')}" id="catCreator" maxlength="255" size="25" value="#{catWallOverridesHome.instance.catCreator}"/>
+</s:decorate>
+
+<s:decorate id="catDateCreated_div2" template="../layout/edit.xhtml">
+<ui:define name="label">Date Created</ui:define>
+<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catWallOverridesHome.instance, 'modify catDateCreated')}" id="catDateCreated" inputClass="datestyle" value="#{catWallOverridesHome.instance.catDateCreated}"/>
+</s:decorate>
+
+<s:decorate id="catDateCompleted_div2" template="../layout/edit.xhtml">
+<ui:define name="label">Date Completed</ui:define>
+<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catWallOverridesHome.instance, 'modify catDateCompleted')}" id="catDateCompleted" inputClass="datestyle" value="#{catWallOverridesHome.instance.catDateCompleted}"/>
+</s:decorate>
+
+
+</div>
+
+	<div class="push"/>
+
+</s:div>

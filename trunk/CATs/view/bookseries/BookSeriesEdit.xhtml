@@ -1,0 +1,118 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+
+	<ui:param name="entityType" value="bookSeries" />
+	<ui:param name="moremenu" value="moremenu"/>
+	
+	<ui:define name="badge">
+		<ui:include src="BookSeriesBadge.xhtml" />
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="bookSeriesEditForm">
+		<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+				
+			<rich:tabPanel 
+				id="maintab" 
+			   switchType="ajax"
+				styleClass="tab"
+				contentClass="tab_content"
+				selectedTab="#{catBookSeriesHome.selectedTab}">
+
+				<rich:tab label="Book Series Information" id="tab1" name="tab1" eventsQueue="cmptsEditQueue" status="globalWaitStatus"
+					action="#{catBookSeriesHome.updateUserTabPreferences('tab1')}" reRender="infoLayout" limitToList="true">
+					<ui:include src="BookSeriesInformationTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Books" id="tab2" name="tab2" eventsQueue="cmptsEditQueue" status="globalWaitStatus" 
+					action="#{catBookSeriesHome.updateUserTabPreferences('tab2')}" reRender="infoLayout" limitToList="true">
+					<ui:include src="BookSeriesBooksTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Audit" id="tab3" name="tab3" eventsQueue="cmptsEditQueue" status="globalWaitStatus" 
+					action="#{catBookSeriesHome.updateUserTabPreferences('tab3')}" reRender="infoLayout" limitToList="true">
+					<ui:include src="BookSeriesAuditTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Events" id="eventsTab" name="eventsTab" eventsQueue="cmptsEditQueue" status="globalWaitStatus"
+					action="#{catBookSeriesHome.updateUserTabPreferences('eventsTab')}" reRender="infoLayout" limitToList="true">
+					<ui:include src="BookSeriesEventsTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+			<div id="functions">
+			<a:commandLink action="#{deleteBookSeriesWizard.prepareDelete}"
+					reRender="deleteBookSeriesModal"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					disabled="#{!s:hasPermission(catBookSeriesHome.instance, 'delete CatBookSeries')}"
+					styleClass="button delete #{!s:hasPermission(catBookSeriesHome.instance, 'delete CatBookSeries') ? 'disabled'  : ''}"
+					value="Delete" 
+					oncomplete="Richfaces.showModalPanel('deleteBookSeriesModal');" 
+					limitToList="true"/>
+					
+					
+		    	<a:commandLink action="#{catBookSeriesHome.update}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" styleClass="button saveOrCancel disabled" 
+		    		value="Save"
+		    		reRender="bookSeriesEditForm"
+		    		eventsQueue="bookSeriesEditQueue" status="globalWaitStatus" />
+		    	<a:commandLink action="#{catBookSeriesHome.cancel}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" ajaxSingle="true" styleClass="button saveOrCancel disabled" 
+		    		value="Cancel"
+		    		eventsQueue="bookSeriesEditQueue" status="globalWaitStatus"/>
+			</div>
+		</h:form> 
+		
+		<a:form>
+			<a:outputPanel layout="none" id="infoLayout">
+				<s:div id="SeriesTitlesTable" rendered="#{empty catBookSeriesHome.selectedTab or catBookSeriesHome.selectedTab eq 'tab1'}">
+					<ui:include src="BookSeriesTitlesTable.xhtml">
+						<ui:param name="divId" value="seriesTitlesTableDiv"/>
+					  	<ui:param name="tableId" value="seriesTitlesTable"/>
+					  	<ui:param name="bookSeriesTitlesList" value="#{catBookSeriesHome.bookSeriesTitlesList}" />
+					</ui:include>
+				</s:div>
+				
+				<s:div id="PublisherTable" rendered="#{empty catBookSeriesHome.selectedTab or catBookSeriesHome.selectedTab eq 'tab1'}">
+					<ui:include src="BookSeriesPublisherTable.xhtml">
+						<ui:param name="divId" value="pubTableDiv"/>
+					  	<ui:param name="tableId" value="pubTable"/>
+					  	<ui:param name="publisherList" value="#{catBookSeriesHome.catPublishers}"/>
+					</ui:include>
+				</s:div>
+			</a:outputPanel>
+		</a:form>
+		<ui:include src="/bookseries/deletem_BookSeries.xhtml">
+	 		<ui:param name="pageURL" value="/bookseries/BookSeriesEdit.xhtml"/>
+	 	</ui:include>
+	 
+		 <ui:include src="/bookseriessetstitles/createBookSeriesTitle_m.xhtml">
+			<ui:param name="pageURL" value="/bookseries/BookSeriesEdit.xhtml"/>
+		</ui:include>
+		
+		<ui:include src="/bookseries/editExcludem_BookSeries.xhtml">
+			<ui:param name="pageURL" value="/bookseries/BookSeriesEdit.xhtml"/>
+		</ui:include>
+		
+	</ui:define>
+	
+		<ui:define name="notes">
+		<ui:include src="BookSeriesNotes.xhtml" />
+				<ui:include src="createm_BookSeriesNote.xhtml">
+			<ui:param name="pageURL" value="/bookseries/BookSeriesEdit.xhtml" />
+		</ui:include>
+	</ui:define>
+	
+
+
+
+</ui:composition>

@@ -1,0 +1,67 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+
+	<h2><h:outputText value="#{publisherVariantsWizard.wizardTitle}" /></h2>
+	
+		<div id="step1">
+		<s:div>
+			<ul class="steps">
+					<li class="disabled">1. Info</li>
+					<li class="selected">2. Results</li>
+			</ul>
+		</s:div>
+		
+		
+		
+		<div class="cluster smart">
+		
+			<p><h:outputText value="You have created/updated a Variant for the Publisher"/> <em><h:outputText value="#{catPublishersHome.instance.catName}"/></em> </p>
+			
+			<rich:dataTable value="#{publisherVariantsWizard.pubVariantsList}" var="_catVariant">			
+				<rich:column>
+					<f:facet name="header">Variant Name</f:facet>
+					<h:outputText value="#{_catVariant.catName}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">Variant Type</f:facet>
+					<h:outputText value="#{_catVariant.catType.label}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">ID</f:facet>
+					<h:outputText value="#{_catVariant.id}" />
+				</rich:column>
+			</rich:dataTable>
+	
+			
+		</div>
+
+
+		<div class="push"></div>
+			
+			<a:commandLink styleClass="button right" value="Return" 
+			action="#{publisherVariantsWizard.reset}"  limitToList="true"
+			oncomplete="#{rich:component('publisherVariantsWizardModal')}.hide(); javascript:location.reload(true);" 			
+			status="globalWaitStatus" 
+			rendered="#{empty pageURL}"/>
+			
+			<a:commandLink styleClass="button right" value="Return" 
+				action="#{publisherVariantsWizard.reset}"  limitToList="true"
+				oncomplete="#{rich:component('publisherVariantsWizardModal')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+				eventsQueue="bulkOps" status="globalWaitStatus" 
+				ignoreDupResponses="true"
+				rendered="#{not empty pageURL}"/>
+		
+		</div>
+	
+</ui:composition>

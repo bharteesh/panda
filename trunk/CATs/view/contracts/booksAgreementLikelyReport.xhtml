@@ -1,0 +1,38 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+    <m:from name="CATS" address="#{mailOps.fromEmail}" />
+    <m:to name="#{booksAgreementMailOps.displayName}"><h:outputText value="#{booksAgreementMailOps.email}"/></m:to>
+    <ui:repeat var="_email" value="#{booksAgreementMailOps.ccList}">
+    	<m:cc><h:outputText value="#{_email}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="Books Agreement Likely"/></m:subject>
+	<m:replyTo address="catssupport@ithaka.org"/>
+    <m:body>
+    	<p><h:outputText value="Dear all" />,</p>
+    	<p>
+    		<h:outputText value="The following Publishers have signed Letters of Interest expressing the serious intention to participate in Books@JSTOR."/>
+    		<br></br>
+    		<br></br>
+    	</p>
+    	
+		
+		<s:fragment rendered="#{booksAgreementMailOps.publishersList.size() gt '0'}">
+			<p>
+				<h:outputText value="Newly Enrolled Publishers"/>
+			</p>
+					
+		<ui:include src="/contractdetails/publishersTableForMail.xhtml">
+			<ui:param name="publishersList" value="#{booksAgreementMailOps.publishersList}"/>
+		</ui:include>
+		</s:fragment>
+    	
+
+		<p>Sincerely,<br/>CATS</p>
+    </m:body>
+</m:message>

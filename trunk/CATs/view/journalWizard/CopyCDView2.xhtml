@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.copyCDWizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Info</li>
+			<li class="selected">2. Additional</li>
+		</ul>
+		<div class="cluster smart">
+			<s:fragment rendered="#{!createJournalWizard.isCDPartOfCmpt() and !createJournalWizard.clonedContractDtls.catPssExclusions}">
+				<p>No additional information required</p>
+			</s:fragment>
+			
+			<s:fragment rendered="#{createJournalWizard.clonedContractDtls.catPssExclusions}">
+				<s:decorate id="catContractDtlsPssArts" template="../layout/edit.xhtml">
+					<ui:define name="label">PSS Excluded Articles:</ui:define>
+					<h:inputTextarea cols="20" id="catContractDtlsPssText" rows="2" 
+						value="#{createJournalWizard.clonedContractDtls.catPssExcludedArts}" required="true"/>
+				</s:decorate>
+			</s:fragment>	
+			
+			<s:fragment rendered="#{createJournalWizard.isCDPartOfCmpt()}">
+				<s:decorate id="catContractDtlsContent" template="../layout/edit.xhtml">
+					<ui:define name="label">Content Covered:</ui:define>
+					<h:inputTextarea cols="20" id="catContractDtlsContentText" rows="2" 
+						value="#{createJournalWizard.clonedContractDtls.catContentCovered}" required="true"/>
+				</s:decorate>
+			</s:fragment>
+				
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('copyCDQuit')}.show(); return false;"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+		 
+		
+		<a:commandLink styleClass="button right" value="Save and Continue"
+			action="#{createJournalWizard.saveClonedContractDtls}"
+			reRender="createJournalForm"
+			oncomplete="#{rich:component('copyCDWizardModal')}.hide();"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+	</div>
+</ui:composition>

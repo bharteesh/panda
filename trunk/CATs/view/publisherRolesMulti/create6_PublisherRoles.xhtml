@@ -1,0 +1,61 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{createMultiPublisherRolesWizard.createTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps many">
+			<li class="disabled">1. Permissions</li>
+			<li class="disabled">2. Choose Pub</li>
+			<li class="disabled">3. Add</li>
+			<li class="disabled">4. Optional</li>
+			<li class="selected">5. Results</li>
+		</ul>
+		<div class="cluster smart">
+
+		  <p><h:outputText value="You created the record with the following values:"/></p>
+
+
+
+
+			<cats:dumbTablePublishersToCmpts value="#{createMultiPublisherRolesWizard.createdPublisherRolesList}" />
+
+			</div>
+
+			<div class="push"></div>		
+
+
+
+		
+		<a:commandLink styleClass="button right" value="Return"
+			status="globalWaitStatus" ignoreDupResponses="true" 
+   			eventsQueue="#{divParam}eventsQueue"
+			onclick="#{rich:component('createPublisherRolesPanel')}.hide();" 
+			action="#{createMultiPublisherRolesWizard.createReset}" 
+			oncomplete="javascript:location.reload(true);" 
+			rendered="#{empty pageURL}"/>
+		<a:commandLink styleClass="button right" value="Return"
+			status="globalWaitStatus" ignoreDupResponses="true" 
+   			eventsQueue="#{divParam}eventsQueue"
+			onclick="#{rich:component('createPublisherRolesPanel')}.hide();" 
+			action="#{createMultiPublisherRolesWizard.createReset}" 
+			oncomplete="javascript:location.href=formatURL(location.href);" 
+			rendered="#{not empty pageURL}"/>
+
+		
+		</div>
+	
+</ui:composition>
+

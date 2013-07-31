@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+    template="../layout/template.xhtml">
+
+	<ui:define name="badge">
+		  <div id="badge">
+          <h1>Tasks</h1>
+          <div class="field disabled comment">
+			<p>You should see all the CATs tasks that you have permission to use.</p>
+		  </div>
+          </div>
+	</ui:define>
+
+    <ui:define name="body">
+
+		<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+				
+			<rich:tabPanel 
+				id="maintab" 
+			   	switchType="server"
+				contentClass="tab_content"
+				selectedTab="#{catTaskArea.selectedTab}">
+
+				<rich:tab label="Analysis and Reporting" id="anarep" name="anarep" eventsQueue="taskAreaQueue" status="globalWaitStatus"
+					 limitToList="true" action="#{catTaskArea.updateUserTabPreferences('anarep')}"
+					 rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator') or s:hasRole('CM Management')}">
+					<ui:include src="AnalysisAndReportingTab.xhtml" />
+				</rich:tab>
+
+				<rich:tab label="Delivery Platform" id="delplat" name="delplat" eventsQueue="taskAreaQueue" status="globalWaitStatus"
+					 limitToList="true" action="#{catTaskArea.updateUserTabPreferences('delplat')}"
+					 rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator') }">
+					<ui:include src="DeliveryPlatformTab.xhtml" />
+				</rich:tab>
+
+				<rich:tab label="DOIs" id="dois" name="dois" eventsQueue="taskAreaQueue" status="globalWaitStatus"
+					 limitToList="true" action="#{catTaskArea.updateUserTabPreferences('dois')}"
+					 rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+					<ui:include src="DoisTab.xhtml" />
+				</rich:tab>
+
+				<rich:tab label="Fulfillment" id="fulfillment" name="fulfillment" eventsQueue="taskAreaQueue" status="globalWaitStatus"
+					 limitToList="true" action="#{catTaskArea.updateUserTabPreferences('fulfillment')}"
+					 rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+					<ui:include src="FulfillmentTab.xhtml" />
+				</rich:tab>
+
+				<rich:tab label="Imprints" id="imprints" name="imprints" eventsQueue="taskAreaQueue" status="globalWaitStatus"
+					 limitToList="true" action="#{catTaskArea.updateUserTabPreferences('imprints')}"
+					 rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator') or s:hasRole('CD Books')}">
+					<ui:include src="ImprintsTab.xhtml" />
+				</rich:tab>
+
+				<rich:tab label="Journals" id="journals" name="journals" eventsQueue="taskAreaQueue" status="globalWaitStatus"
+					 limitToList="true" action="#{catTaskArea.updateUserTabPreferences('journals')}"
+					 rendered="#{s:hasRole('ADMIN') or s:hasRole('Librarians')}">
+					<ui:include src="JournalsTab.xhtml" />
+				</rich:tab>
+
+				<rich:tab label="SCM" id="SCM" name="SCM" eventsQueue="taskAreaQueue" status="globalWaitStatus"
+					 limitToList="true" action="#{catTaskArea.updateUserTabPreferences('SCM')}"
+					 rendered="#{s:hasRole('ADMIN')  or s:hasRole('CM Content Coordinator') or s:hasRole('CD Books')}">
+					<ui:include src="ScmTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Assets" id="Assets" name="Assets" eventsQueue="taskAreaQueue" status="globalWaitStatus"
+					 limitToList="true" action="#{catTaskArea.updateUserTabPreferences('Assets')}"
+					 rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator') or s:hasRole('CD Books')}">
+					<ui:include src="AssetTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Vendor Submission" id="vendorsub" name="vendorsub" eventsQueue="taskAreaQueue" status="globalWaitStatus"
+					 limitToList="true" action="#{catTaskArea.updateUserTabPreferences('vendorsub')}"
+					 rendered="#{s:hasRole('ADMIN')}">
+					<ui:include src="VendorSubmissionTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:z="http://www.qualcomm.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a="http://richfaces.org/a4j"
+	  xmlns:s="http://jboss.com/products/seam/taglib">
+<ui:composition>
+
+<rich:dataTable value="#{value}"
+							var="_catContractDtls">							
+							<rich:column>
+								<f:facet name="header">Publisher</f:facet>
+								<h:outputText value="#{_catContractDtls.catContracts.publisherValue}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Agreement<br/>Date</f:facet>
+								<h:outputText value="#{_catContractDtls.catContracts.catAgreementDate}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Agreement<br/>Version</f:facet>
+								<h:outputText value="#{_catContractDtls.catContracts.catAgreementVersion}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Sets</f:facet>
+								<ui:repeat value="#{_catContractDtls.catCmpts.catComponentSets.toArray()}" var="_catSets"
+									varStatus="_status" rendered="#{not empty _catContractDtls.catCmpts.catComponentSets}">
+									<h:outputText value="#{_catSets.catCurrentTitle.catName}; " />
+								</ui:repeat>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Component<br/>Name</f:facet>
+								<h:outputText value="#{_catContractDtls.catCmpts.catName}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Agreement Detail&#39;s<br/>Lifecycle</f:facet>
+								<h:outputText value="#{_catContractDtls.catLifecycle.label}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">All or Part</f:facet>
+								<h:outputText value="#{_catContractDtls.catAllOrPartOfCmpt}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Coverage</f:facet>
+								<h:outputText value="#{_catContractDtls.catContentCovered}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">Effective<br/>Date</f:facet>
+								<h:outputText value="#{_catContractDtls.catEffectiveDate}" />
+							</rich:column>
+	</rich:dataTable>
+</ui:composition>
+</html>

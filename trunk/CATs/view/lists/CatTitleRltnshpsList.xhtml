@@ -1,0 +1,257 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:s="http://jboss.com/products/seam/taglib" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:rich="http://richfaces.org/rich" 
+				xmlns:a="http://richfaces.org/a4j" 
+				xmlns:cats="http://www.ithaka.org/cats" 
+				template="../layout/list_template.xhtml">
+
+	<ui:param name="entityType" value="relationships"/>
+	<ui:param name="moremenu" value="moremenu"/>
+
+  <ui:define name="body">
+    <ui:include src="../layout/tablenav.xhtml">
+		<ui:param name="viewPath" value="/lists/CatTitleRltnshpsList.xhtml"></ui:param>
+		<ui:param name="entityList" value="#{catTitleRltnshpsList}"></ui:param>
+		<ui:param name="divId" value="1" />
+	</ui:include>
+    <a:form>
+      
+
+			<div class="header">
+			<div class="left"><span class="museo">
+			<h:outputText
+					value="Title Relationships 
+			(#{empty catTitleRltnshpsList.resultList ? 0 : (catTitleRltnshpsList.paginated ? catTitleRltnshpsList.resultCount : 
+			catTitleRltnshpsList.resultList.size)})"></h:outputText>
+			</span> 
+			  
+			  <h:selectOneMenu name="flavour" value="#{catTitleRltnshpsList.flavour}">
+				<s:selectItems value="#{catTitleRltnshpsList.flavours}" var="i"
+					itemValue="#{i}" label="#{catTitleRltnshpsList.flavourLabel(i)}" />
+				<a:support event="onchange" action="#{catTitleRltnshpsList.updateUserSkinPreferences}"
+								oncomplete="javascript: location.href='CatTitleRltnshpsList.seam'"
+								ignoreDupResponses="true"
+								eventsQueue="titleListQueue"
+								ajaxSingle="true"/>
+			</h:selectOneMenu>
+			<s:link id="clearSearch" status="globalWaitStatus" 
+				ignoreDupResponses="true" styleClass="button wizard" 
+				action="#{catTitleRltnshpsList.reset}"  value="X" propagation="none"
+				oncomplete="javascript: location.href='CatTitleRltnshpsList.seam'">
+				<f:param name="flavour" value="#{catTitleRltnshpsList.flavour}"/>
+			</s:link>
+			</div>
+
+			<div class="right">
+			<ui:include src="adhocReportSelect.xhtml"><ui:param name="entityQuery" value="#{catTitleRltnshpsList}"/></ui:include>		
+			<h:selectOneMenu id="catTitleRltnshpsListBulkOperationsSelect"
+				rendered="#{not empty catTitleRltnshpsBulkOperations.bulkOperationsNames}"
+    				value="#{catTitleRltnshpsBulkOperations.bulkOperationsType}"
+    				>
+				<a:support event="onchange"
+					action="#{catTitleRltnshpsBulkOperations.prepBulkOperations( 'catTitleRltnshpsList', 'catTitleRltnshpsListBulkOperationsSelect' )}"
+					reRender="catTitleRltnshpsListBulkOperationsPanels,catTitleRltnshpsList"
+					oncomplete="if ( #{rich:element('catTitleRltnshpsListBulkOperationsSelect')}.options.selectedIndex != 0 ) { #{rich:component('catTitleRltnshpsListBulkUpdatePanel')}.show(); } ; return false; " 
+					/>
+				<s:selectItems value="#{catTitleRltnshpsBulkOperations.bulkOperationsNames}" var="b"
+					label="#{catTitleRltnshpsBulkOperations.bulkOperations[b]}" itemValue="#{b}"
+					noSelectionLabel="Bulk Operations" />
+			</h:selectOneMenu>			
+			</div>
+									
+			</div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/Animated-Hourglass.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+
+
+<h:dataTable id="catTitleRltnshpsList" var="_catTitleRltnshps" value="#{catTitleRltnshpsList.resultList}" rowClasses="odd,even" styleClass="mainListClass">
+
+<rich:column styleClass="checkBoxes" headerClass="checkBoxes" rendered="#{not empty catTitleRltnshpsBulkOperations.bulkOperationsNames}"><f:facet name="header"><h:panelGrid columns="1"><h:outputText value=" " /><input type="checkbox" id="select_all_checkbox" name="select_all_checkbox" onclick="toggleCheckboxes(this.checked, 'bulk_checkbox');" /></h:panelGrid></f:facet><div onclick="cancelEventBubbling(event);"><h:selectBooleanCheckbox styleClass="bulk_checkbox checkBoxes" value="#{catTitleRltnshpsBulkOperations.selections[_catTitleRltnshps]}" /></div></rich:column>
+        
+        <cats:column styleClass="id" rendered="#{listFlavour['id']}" 
+        	  linkToId="#{_catTitleRltnshps.id}"            
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="ID" 
+              propertyPath="catTitleRltnshps.id" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.id}" 
+              propertyName="id" 
+              sortable="true"  
+          	  value="#{_catTitleRltnshps.id}" 
+        ></cats:column>
+        <cats:column styleClass="catCmptsByCatFirstCmptId.setsValue" rendered="#{listFlavour['catCmptsByCatFirstCmptId.setsValue']}"
+        	  linkToId="#{_catTitleRltnshps.id}"           
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="1st Component Sets" 
+              propertyPath="catTitleRltnshps.catCmptsByCatFirstCmptId.setsValue" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatFirstCmptId.setsValue}" 
+              propertyName="catCmptsByCatFirstCmptId.setsValue" 
+              sortable="true"
+        	  value="#{_catTitleRltnshps.catCmptsByCatFirstCmptId.setsValue}" 
+        ></cats:column>
+        <cats:column styleClass="catCmptsByCatFirstCmptId.id" rendered="#{listFlavour['catCmptsByCatFirstCmptId.id']}"
+        	  linkToId="#{_catTitleRltnshps.id}"           
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="1st Component ID" 
+              propertyPath="catTitleRltnshps.catCmptsByCatFirstCmptId.id" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatFirstCmptId.id}" 
+              propertyName="catCmptsByCatFirstCmptId.id" 
+              sortable="true"
+        	  value="#{_catTitleRltnshps.catCmptsByCatFirstCmptId.id}" 
+        ></cats:column>
+        <cats:column styleClass="catCmptsByCatFirstCmptId.catName" rendered="#{listFlavour['catCmptsByCatFirstCmptId.catName']}"
+        	  linkToId="#{_catTitleRltnshps.id}"            
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="1st Component Name" 
+              propertyPath="catTitleRltnshps.catCmptsByCatFirstCmptId.catName" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatFirstCmptId.catName}" 
+              propertyName="catCmptsByCatFirstCmptId.catName" 
+              sortable="true"
+        	  value="#{_catTitleRltnshps.catCmptsByCatFirstCmptId.catName}" 
+        ></cats:column>
+        <cats:column styleClass="catCmptsByCatFirstCmptId.catPublctnUnitRange" rendered="#{listFlavour['catCmptsByCatFirstCmptId.catPublctnUnitRange']}"
+        	  linkToId="#{_catTitleRltnshps.id}"            
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="1st Component Extent (Pub Units)" 
+              propertyPath="catTitleRltnshps.catCmptsByCatFirstCmptId.catPublctnUnitRange" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatFirstCmptId.catPublctnUnitRange}" 
+              propertyName="catCmptsByCatFirstCmptId.catPublctnUnitRange" 
+              sortable="true"
+        	  value="#{_catTitleRltnshps.catCmptsByCatFirstCmptId.catPublctnUnitRange}" 
+        ></cats:column>
+        <cats:column styleClass="catCmptsByCatFirstCmptId.catDateRange" rendered="#{listFlavour['catCmptsByCatFirstCmptId.catDateRange']}"
+        	  linkToId="#{_catTitleRltnshps.id}"            
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="1st Component Extent (Dates)" 
+              propertyPath="catTitleRltnshps.catCmptsByCatFirstCmptId.catDateRange" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatFirstCmptId.catDateRange}" 
+              propertyName="catCmptsByCatFirstCmptId.catDateRange" 
+              sortable="true"
+        	  value="#{_catTitleRltnshps.catCmptsByCatFirstCmptId.catDateRange}" 
+        ></cats:column>
+        <cats:column styleClass="catCmptsByCatFirstCmptId.catPrintIssn" rendered="#{listFlavour['catCmptsByCatFirstCmptId.catPrintIssn']}"
+        	  linkToId="#{_catTitleRltnshps.id}"
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="1st Component Print ISSN" 
+              propertyPath="catTitleRltnshps.catCmptsByCatFirstCmptId.catPrintIssn" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatFirstCmptId.catPrintIssn}" 
+              propertyName="catCmptsByCatFirstCmptId.catPrintIssn" 
+              sortable="true"
+        	  value="#{_catTitleRltnshps.catCmptsByCatFirstCmptId.catPrintIssn}" 
+        ></cats:column>
+        
+       					
+        <cats:column styleClass="catTitleRltnshpTypes.catName" rendered="#{listFlavour['catTitleRltnshpTypes.catName']}"
+        	  linkToId="#{_catTitleRltnshps.id}"
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="Relationship" 
+              propertyPath="catTitleRltnshps.catTitleRltnshpTypes.catName"
+              enumList="#{listsForEnums.catTitleRltnshpTypes_Name}" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catTitleRltnshpTypes.catName}" 
+              propertyName="catTitleRltnshpTypes.catName" 
+              sortable="true" 
+              value="#{_catTitleRltnshps.catTitleRltnshpTypes.catName.label}" 
+        ></cats:column>
+        
+
+        <cats:column styleClass="catCmptsByCatSecondCmptId.setsValue" rendered="#{listFlavour['catCmptsByCatSecondCmptId.setsValue']}"
+        	  linkToId="#{_catTitleRltnshps.id}"
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="2nd Component Sets" 
+              propertyPath="catTitleRltnshps.catCmptsByCatSecondCmptId.setsValue" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatSecondCmptId.setsValue}" 
+              propertyName="catCmptsByCatSecondCmptId.setsValue" 
+              sortable="true"  
+              value="#{_catTitleRltnshps.catCmptsByCatSecondCmptId.setsValue}" 
+        ></cats:column>
+
+        <cats:column styleClass="catCmptsByCatSecondCmptId.id" rendered="#{listFlavour['catCmptsByCatSecondCmptId.id']}"
+        	  linkToId="#{_catTitleRltnshps.id}"
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="2nd Component ID" 
+              propertyPath="catTitleRltnshps.catCmptsByCatSecondCmptId.id" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatSecondCmptId.id}" 
+              propertyName="catCmptsByCatSecondCmptId.id" 
+              sortable="true"  
+              value="#{_catTitleRltnshps.catCmptsByCatSecondCmptId.id}" 
+        ></cats:column>
+
+        <cats:column styleClass="catCmptsByCatSecondCmptId.catName" rendered="#{listFlavour['catCmptsByCatSecondCmptId.catName']}"
+        	  linkToId="#{_catTitleRltnshps.id}"
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="2nd Component Name" 
+              propertyPath="catTitleRltnshps.catCmptsByCatSecondCmptId.catName" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatSecondCmptId.catName}" 
+              propertyName="catCmptsByCatSecondCmptId.catName" 
+              sortable="true"  
+              value="#{_catTitleRltnshps.catCmptsByCatSecondCmptId.catName}" 
+        ></cats:column>
+
+        <cats:column styleClass="catCmptsByCatSecondCmptId.catPublctnUnitRange" rendered="#{listFlavour['catCmptsByCatSecondCmptId.catPublctnUnitRange']}"
+        	  linkToId="#{_catTitleRltnshps.id}"
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="2nd Component Extent (Pub Units)" 
+              propertyPath="catTitleRltnshps.catCmptsByCatSecondCmptId.catPublctnUnitRange" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatSecondCmptId.catPublctnUnitRange}" 
+              propertyName="catCmptsByCatSecondCmptId.catPublctnUnitRange" 
+              sortable="true"  
+              value="#{_catTitleRltnshps.catCmptsByCatSecondCmptId.catPublctnUnitRange}" 
+        ></cats:column>
+
+        <cats:column styleClass="catCmptsByCatSecondCmptId.catDateRange" rendered="#{listFlavour['catCmptsByCatSecondCmptId.catDateRange']}"
+        	  linkToId="#{_catTitleRltnshps.id}"
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="2nd Component Extent (Dates)" 
+              propertyPath="catTitleRltnshps.catCmptsByCatSecondCmptId.catDateRange" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatSecondCmptId.catDateRange}" 
+              propertyName="catCmptsByCatSecondCmptId.catDateRange" 
+              sortable="true"  
+              value="#{_catTitleRltnshps.catCmptsByCatSecondCmptId.catDateRange}" 
+        ></cats:column>
+
+        <cats:column styleClass="catCmptsByCatSecondCmptId.catPrintIssn" rendered="#{listFlavour['catCmptsByCatSecondCmptId.catPrintIssn']}"
+        	  linkToId="#{_catTitleRltnshps.id}"
+              entityList="#{catTitleRltnshpsList}" 
+              propertyLabel="2nd Component Print ISSN" 
+              propertyPath="catTitleRltnshps.catCmptsByCatSecondCmptId.catPrintIssn" 
+              propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catCmptsByCatSecondCmptId.catPrintIssn}" 
+              propertyName="catCmptsByCatSecondCmptId.catPrintIssn" 
+              sortable="true"  
+              value="#{_catTitleRltnshps.catCmptsByCatSecondCmptId.catPrintIssn}" 
+        ></cats:column>
+        <cats:column linkToId="#{_catTitleRltnshps.id}" sortable="true"
+					rendered="#{catTitleRltnshpsList.listFlavour['catDateModified']}"
+					entityList="#{catTitleRltnshpsList}"
+					propertyLabel="Date Modified"
+					propertyPath="catTitleRltnshps.catDateModified"
+					propertyValue="#{catTitleRltnshpsList.catTitleRltnshps.catDateModified}"
+					propertyName="catDateModified"
+					value="#{_catTitleRltnshps.catDateModified}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+      </h:dataTable></div>
+    </a:form>
+    <ui:include src="../layout/tablenav.xhtml">
+      <ui:param name="viewPath" value="/lists/CatTitleRltnshpsList.xhtml"></ui:param>
+      <ui:param name="entityList" value="#{catTitleRltnshpsList}"></ui:param>
+      <ui:param name="divId" value="2" />
+    </ui:include>
+    
+    
+  
+<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+ <rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catTitleRltnshpsList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+</ui:define>
+</ui:composition>

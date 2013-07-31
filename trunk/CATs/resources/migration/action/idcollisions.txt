@@ -1,0 +1,15 @@
+22573/cts8tm6m	issbotagardannu_2	10.2307/j100801_1
+22573/cts8tvxx	issbotagardannu_4	10.2307/j100801_3
+22573/cts8w94r	anajeconpolisci_6	10.2307/j100653_5
+22573/cts8wq38	eogannaseriphys_7	10.2307/j100708
+22573/cts8wt8r	bullschooriestud	10.2307/j100912_8
+22573/cts8wtgf	bullschoorie	10.2307/j100912_9
+22573/cts90wss	poliresequar_12	10.2307/j100886
+22573/cts90mvc	virglawrevi_11	10.2307/j100403_10
+22573/cts995qm	biquarjconcbri_20	10.2307/j101247_19
+22573/cts94w74	virglawregi	10.2307/j100403_13
+22573/cts951m3	psychsci_15	10.2307/j50000277_14
+22573/cts98d9r	royasiasocgrbi_18	10.2307/j50000267
+22573/cts956nm	najeconpolisci_17	10.2307/j100653_16
+22573/cts9j7b5	psychscipubint_22	10.2307/j50000275_21
+22573/cts9kvrc	demoecon_24	10.2307/j50000732_23

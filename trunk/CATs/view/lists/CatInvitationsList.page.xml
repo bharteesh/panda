@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd" login-required="true">
+<begin-conversation join="true"/>
+
+        <param name="onHold"/>
+        <param name="onHoldReason"/>
+	<param name="lifecycle"/>
+	<param name="negotiator"/>
+	<param name="participationLikelihood"/>
+
+  <param name="flavour" value="#{catInvitationsList.flavour}"/>
+
+
+   <param name="firstResult" value="#{catInvitationsList.firstResult}"/>
+   <param name="sort" value="#{catInvitationsList.orderColumn}"/>
+   <param name="dir" value="#{catInvitationsList.orderDirection}"/>
+   <param name="logic" value="#{catInvitationsList.restrictionLogicOperator}"/>
+
+   <param name="from"/>
+   <param name="id" value="#{catInvitationsList.catInvitations.id}"/>
+   <param name="catCompletedBy" value="#{catInvitationsList.catInvitations.catCompletedBy}"/>
+   <param name="catCreator" value="#{catInvitationsList.catInvitations.catCreator}"/>
+   <param name="catIthakaAsPublisherReason" value="#{catInvitationsList.catInvitations.catIthakaAsPublisherReason}"/>
+   <param name="catLifecycle" value="#{catInvitationsList.catInvitations.catLifecycle}"/>
+   <param name="catNegotiator" value="#{catInvitationsList.catInvitations.catNegotiator}"/>
+   <param name="catOutcome" value="#{catInvitationsList.catInvitations.catOutcome}"/>
+   <param name="catParticipationLikelihood" value="#{catInvitationsList.catInvitations.catParticipationLikelihood}"/>
+   <param name="catReasonDeclined" value="#{catInvitationsList.catInvitations.catReasonDeclined}"/>
+
+
+<!-- catInvitationsList -->
+<param name="catInvitationDateSent" value="#{catInvitationsList.catInvitations.catInvitationDateSent}"/>
+
+
+<!-- catInvitationsList -->
+<param name="catDateCreated" value="#{catInvitationsList.catInvitations.catDateCreated}"/>
+
+<!-- catInvitationsList -->
+<param name="catDateCompleted" value="#{catInvitationsList.catInvitations.catDateCompleted}"/>
+<param name="catOnHold" value="#{catInvitationsList.catInvitations.catOnHold}"/>
+</page>

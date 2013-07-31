@@ -1,0 +1,358 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+
+	<h2><h:outputText value="#{catAcqOrdersBulkOperations.bulkTitle}" /></h2>
+	
+		<div id="step1">
+		<s:div rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGTYPE') or (catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.isCatLifecycleOfValueOrdered(catAcqOrdersBulkOperations.bulkInstance.catLifecycle))}">
+  		<ul class="steps">
+				<li class="">1. Permissions</li>
+				<li class="">2. Change</li>
+				<li class="selected">3. Children</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		</s:div>
+		<s:div rendered="#{not (catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT') or catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGTYPE') or (catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.isCatLifecycleOfValueOrdered(catAcqOrdersBulkOperations.bulkInstance.catLifecycle)))}">
+  		<ul class="steps">
+				<li class="">1. Permissions</li>
+				<li class="">2. Change</li>
+				<li class="selected">3. Additional</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		</s:div>
+		<s:div rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT')}">
+  		<ul class="steps">
+				<li class="">1. Permissions</li>
+				<li class="">2. Change</li>
+				<li class="selected">3. Select</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		</s:div>
+
+		<div class="cluster smart">
+
+<!-- fragments with things to edit per bulkOp -->
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT') and catAcqOrdersBulkOperations.changeParentOrderType == 'Sets'}">
+<s:div id="chooseSetsFragment">
+<p>Choose from the following Sets</p>
+		  <h:inputText id="default_search_catSetsList" value="#{catSetsList.catSets.catCurrentTitle.catName}" size="60" onchange="return false;"/>
+		  <a:commandLink 
+		  		 styleClass="button filter"
+				 value="Filter list on Set Name"
+				 action="#{catAcqOrdersBulkOperations.narrowSetsList(rich:findComponent('default_search_catSetsList').value)}"
+				 reRender="chooseSetsFragment"
+				 status="globalWaitStatus"
+				 />
+				 
+			<div class="scroller">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Sets (#{catSetsList.resultCount})" />
+					</f:facet>
+				</rich:panel>
+
+			  <rich:dataTable id="sets"
+				value="#{catSetsList.resultList}" var="_setsRollup">
+				<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+					<h:selectBooleanCheckbox styleClass="entity_checkbox"
+						value="#{catAcqOrdersBulkOperations.selectionsForEntities[_setsRollup]}"
+						onclick="emulateRadios(this, 'entity_checkbox');" />
+				</rich:column>
+
+		<cats:wizardColumn
+			entityList="#{catSetsList}"
+			propertyLabel="ID"
+			propertyName="id"
+			propertyPath="catSets.id"
+			propertyValue="#{catSetsList.catSets.id}"
+			reRender="sets"
+			value="#{_setsRollup.id}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catSetsList}"
+			propertyLabel="Name"
+			propertyName="catName"
+			propertyPath="catSets.catCurrentTitle.catName"
+			propertyValue="#{catSetsList.catSets.catCurrentTitle.catName}"
+			reRender="sets"
+			value="#{_setsRollup.catCurrentTitle.catName}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catSetsList}"
+			propertyLabel="Lifecycle"
+			propertyName="catLifecycle"
+			propertyPath="catSets.catLifecycle"
+			propertyValue="#{catSetsList.catLifecycle}"
+			reRender="sets"
+			value="#{_setsRollup.catLifecycle}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catSetsList}"
+			propertyLabel="Extent (Dates)"
+			propertyName="catThDateRange"
+			propertyPath="catSets.catThDateRange"
+			propertyValue="#{catSetsList.catSets.catThDateRange}"
+			reRender="sets"
+			value="#{_setsRollup.catThDateRange}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catSetsList}"
+			propertyLabel="On Hold"
+			propertyName="catOnHold"
+			propertyPath="catSets.catOnHold"
+			propertyValue="#{catSetsList.catSets.catOnHold}"
+			reRender="sets"
+			value="#{_setsRollup.catOnHold}"
+		/>
+			</rich:dataTable>
+			</div>
+	</s:div>
+</s:fragment>
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT') and catAcqOrdersBulkOperations.changeParentOrderType == 'Components'}">
+
+
+<s:div id="chooseCmptsFragment">
+<p>Choose from the following Components</p>
+		  <h:inputText id="default_search_catCmptsListAcq" value="#{catCmptsList.catCmpts.catName}" size="60" onchange="return false;"/>
+		  <a:commandLink 
+		  		 styleClass="button filter"
+				 value="Filter list on Component Name"
+				 action="#{catAcqOrdersBulkOperations.narrowCmptsList(rich:findComponent('default_search_catCmptsListAcq').value)}"
+				 reRender="chooseCmptsFragment"
+				 status="globalWaitStatus"
+				 />
+
+			<div class="scroller">
+
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Components (#{catCmptsList.resultCount})" />
+					</f:facet>
+				</rich:panel>
+
+			  <rich:dataTable id="cmpts"
+				value="#{catCmptsList.resultList}" var="_catCmpts">
+				<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+					<h:selectBooleanCheckbox styleClass="entity_checkbox"
+						value="#{catAcqOrdersBulkOperations.selectionsForEntities[_catCmpts]}"
+						onclick="emulateRadios(this, 'entity_checkbox');" />
+				</rich:column>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="ID"
+			propertyName="id"
+			propertyPath="catCmpts.id"
+			propertyValue="#{catCmptsList.catCmpts.id}"
+			reRender="cmpts"
+			value="#{_catCmpts.id}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Name"
+			propertyName="catName"
+			propertyPath="catCmpts.catName"
+			propertyValue="#{catCmptsList.catCmpts.catName}"
+			reRender="cmpts"
+			value="#{_catCmpts.catName}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Lifecycle"
+			propertyName="catLifecycle"
+			propertyPath="catCmpts.catLifecycle"
+			propertyValue="#{catCmptsList.catLifecycle}"
+			reRender="cmpts"
+			value="#{_catCmpts.catLifecycle}"
+		/>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Sets Name"
+			propertyName="setsValue"
+			propertyPath="catCmpts.setsValue"
+			propertyValue="#{catCmptsList.catCmpts.setsValue}"
+			reRender="cmpts"
+			value="#{_catCmpts.setsValue}"
+		/>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Publication Unit Range"
+			propertyName="catPublctnUnitRange"
+			propertyPath="catCmpts.catPublctnUnitRange"
+			propertyValue="#{catCmptsList.catCmpts.catPublctnUnitRange}"
+			reRender="cmpts"
+			value="#{_catCmpts.catPublctnUnitRange}"
+		/>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Date Range"
+			propertyName="catDateRange"
+			propertyPath="catCmpts.catDateRange"
+			propertyValue="#{catCmptsList.catCmpts.catDateRange}"
+			reRender="cmpts"
+			value="#{_catCmpts.catDateRange}"
+		/>
+
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Print ISSN"
+			propertyName="catPrintIssn"
+			propertyPath="catCmpts.catPrintIssn"
+			propertyValue="#{catCmptsList.catCmpts.catPrintIssn}"
+			reRender="cmpts"
+			value="#{_catCmpts.catPrintIssn}"
+		/>
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="On Hold"
+			propertyName="catOnHold"
+			propertyPath="catCmpts.catOnHold"
+			propertyValue="#{catCmptsList.catCmpts.catOnHold}"
+			reRender="cmpts"
+			value="#{_catCmpts.catOnHold}"
+		/>
+
+
+
+
+
+
+			</rich:dataTable>
+			</div>
+	</s:div>
+
+</s:fragment>
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.bulkOptionalProperties.contains('catOutcome') and catAcqOrdersBulkOperations.isCatLifecycleOfValueCompleted(catAcqOrdersBulkOperations.bulkInstance.catLifecycle)}">
+<div class="scroller">
+	<p>Choose one of the following.</p>
+	
+			<s:decorate id="catOutcome_div" template="../layout/edit.xhtml">
+				<ui:define name="label">Outcome</ui:define>
+                <h:selectOneMenu id="catOutcome" value="#{catAcqOrdersBulkOperations.bulkInstance.catOutcome}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{listsForEnums.catAcqOrders_Outcome}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+			</s:decorate>
+</div>
+</s:fragment>
+
+
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGTYPE')}">
+<div class="scroller">
+	<p>Do you want to use the same type and return obligation for all of this order's shipments? Warning: You will overwrite any information previously entered for the shipments.</p>
+	
+			<s:decorate id="applyValuesToChildren_div" template="../layout/edit.xhtml">
+				<ui:define name="label">Update shipments</ui:define>
+                <h:selectOneMenu id="applyValuesToChildren" value="#{catAcqOrdersBulkOperations.applyValuesToChildren}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{catAcqOrdersBulkOperations.listForEnumLikeValuesToChildren.keySet()}" var="i" itemValue="#{i}"
+		                 label="#{catAcqOrdersBulkOperations.listForEnumLikeValuesToChildren.get(i)}" noSelectionLabel="Choose..." />
+                    <a:support event="onchange"
+                    eventsQueue="#{divParam}eventsQueue" 
+                    status="globalWaitStatus"
+                    reRender="noLayoutExistingFromApplyValuesToChildren" ajaxSingle="true"/>
+		       </h:selectOneMenu>
+			</s:decorate>
+			
+            <a:outputPanel layout="none" id="noLayoutExistingFromApplyValuesToChildren">
+            <s:div id="catIssueShipments_invalid_div" rendered="#{not empty catAcqOrdersBulkOperations.unModifiableIssueShipmentsList and catAcqOrdersBulkOperations.applyValuesToChildren}">
+			<p><h:outputText
+				value="Values cannot be applied to the following issue-shipment records, since you "/><em><h:outputText
+				value="do not"/></em><h:outputText
+				value=" have permission to change "/>
+			<h:outputText
+				value="#{catAcqOrdersBulkOperations.unModifiableIssueShipmentsList.size()}" /><h:outputText
+				value=" of "/> 
+				<h:outputText
+				value="#{catAcqOrdersBulkOperations.unModifiableIssueShipmentsList.size() + catAcqOrdersBulkOperations.modifiableIssueShipmentsList.size()}" /><h:outputText
+				value=" records."/></p>
+
+			<cats:dumbTableIssueShipments value="#{catAcqOrdersBulkOperations.unModifiableIssueShipmentsList}" />
+            </s:div>            
+            <s:div id="catIssueShipments_valid_div" rendered="#{not empty catAcqOrdersBulkOperations.modifiableIssueShipmentsList and catAcqOrdersBulkOperations.applyValuesToChildren}">
+			<p><h:outputText
+				value="Values will be applied to the following issue-shipment records, since you have permission to change "/> 
+			<h:outputText
+				value="#{catAcqOrdersBulkOperations.modifiableIssueShipmentsList.size()}" /><h:outputText
+				value=" of "/> 
+				<h:outputText
+				value="#{catAcqOrdersBulkOperations.unModifiableIssueShipmentsList.size() + catAcqOrdersBulkOperations.modifiableIssueShipmentsList.size()}" /><h:outputText
+				value=" records."/></p>
+
+			<cats:dumbTableIssueShipments value="#{catAcqOrdersBulkOperations.modifiableIssueShipmentsList}" />
+            </s:div>
+            <s:div id="catIssueShipments_permissions_check_div" rendered="#{true}">            
+			<p><h:outputText
+				value="Permissions determined by the following checks: "/>
+			</p>
+		    <rich:dataOrderedList value="#{catAcqOrdersBulkOperations.issueShipmentsChangeablePermissionChecks}"
+			    var="_check">
+			    <h:outputText value="#{_check}" />
+		    </rich:dataOrderedList>
+		    </s:div>
+            </a:outputPanel>
+            
+            
+</div>
+</s:fragment>
+
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('ONHOLD')}">
+<div class="scroller">
+	<p>You do not have any additional information to be selected.</p>
+</div>
+</s:fragment>
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and !catAcqOrdersBulkOperations.isCatLifecycleOfValueCompleted(catAcqOrdersBulkOperations.bulkInstance.catLifecycle)}">
+<div class="scroller">
+	<p>You do not have any additional information to be selected.</p>
+</div>
+</s:fragment>
+
+
+			</div>
+
+		<div class="push"></div>
+
+
+                <a:commandLink styleClass="button" value="Quit"
+			eventsQueue="#{divParam}eventsQueue"
+			status="globalWaitStatus"
+			reRender="acqorderswizard" oncomplete="#{rich:component('acqordersbulkUpdateQuit')}.show(); return false;">
+			</a:commandLink> 
+
+
+		<a:commandLink id="saveWithOnclickValidation"
+		rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT')}"
+		styleClass="button right" value="Save"
+		eventsQueue="#{divParam}eventsQueue"
+		status="globalWaitStatus"
+		onclick="if(checkRadios('entity_checkbox', 'Please select an entry') == false) {return false}"
+		action="#{catAcqOrdersBulkOperations.performBulkOperation}" reRender="acqorderswizard" />
+
+
+		<a:commandLink id="saveWithoutOnclickValidation"
+		rendered="#{not catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT')}"
+		styleClass="button right" value="Save"
+		eventsQueue="#{divParam}eventsQueue"
+		status="globalWaitStatus"
+		action="#{catAcqOrdersBulkOperations.performBulkOperation}" reRender="acqorderswizard" />
+
+			</div>
+	
+</ui:composition>

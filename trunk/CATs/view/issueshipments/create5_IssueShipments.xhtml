@@ -1,0 +1,86 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{createIssueShipmentsWizard.createTitle}" /></h2>
+	
+		<div id="step1">
+		<s:div rendered="#{createIssueShipmentsWizard.checkIfCreateIssueShipmentLifecycleCompletable() == true}">
+		<ul class="steps">
+				<li class="">1. Choose</li>
+				<li class="">2. Main</li>
+				<li class="">3. Parent</li>
+				<li class="">4. Additional</li>
+				<li class="selected">5. Results</li>
+		</ul>
+		</s:div>
+		<!-- This will not be rendered for this page, based on conditions -->
+		<s:div rendered="#{createIssueShipmentsWizard.checkIfCreateIssueShipmentLifecycleCompletable() == false}">
+		<ul class="steps">
+				<li class="">1. Choose</li>
+				<li class="">2. Main</li>
+				<li class="">3. Parent</li>
+				<li class="selected">4. Results</li>
+		</ul>
+		</s:div>
+		
+		<div class="cluster smart">
+
+		  <p><h:outputText value="You created the following record(s):"/></p>
+
+			<cats:dumbTableIssueShipments value="#{createIssueShipmentsWizard.createdIssueShipmentsList}" />
+
+			</div>
+
+			<div class="push"></div>		
+
+
+
+<!-- If part of sub-wizard DO NOT refresh/reload, the combined parent-child wizard action(s) may not be complete yet -->		
+		<a:commandLink id="finishAsSubwizard"
+		    rendered="#{createIssueShipmentsWizard.isSubWizard == true}"
+		    styleClass="button right" 
+		    value="Return"
+   			eventsQueue="#{divParam}eventsQueue"
+            status="globalWaitStatus"
+			onclick="#{rich:component('createIssueShipmentsPanel')}.hide();" 
+			action="#{createIssueShipmentsWizard.createReset}" 
+			reRender="createIssueShipmentswizard,#{reRenderMe}"/>
+		
+		<a:commandLink id="finishAsNormalwizard"
+		    rendered="#{createIssueShipmentsWizard.isSubWizard == false and empty pageURL}"
+		    styleClass="button right" 
+		    value="Return"
+   			eventsQueue="#{divParam}eventsQueue"
+            status="globalWaitStatus"
+			onclick="#{rich:component('createIssueShipmentsPanel')}.hide();" 
+			action="#{createIssueShipmentsWizard.createReset}" 
+			oncomplete="javascript:location.reload(true);" 
+			reRender="createIssueShipmentswizard,#{reRenderMe}"/>
+		
+		<a:commandLink id="finishAsNormalwizard1"
+		    rendered="#{createIssueShipmentsWizard.isSubWizard == false and not empty pageURL}"
+		    styleClass="button right" 
+		    value="Return"
+   			eventsQueue="#{divParam}eventsQueue"
+            status="globalWaitStatus"
+			onclick="#{rich:component('createIssueShipmentsPanel')}.hide();" 
+			action="#{createIssueShipmentsWizard.createReset}" 
+			oncomplete="javascript:location.href=formatURL(location.href);"/>
+
+		
+		</div>
+	
+</ui:composition>
+

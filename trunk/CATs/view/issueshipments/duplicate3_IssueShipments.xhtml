@@ -1,0 +1,251 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+
+	<h2><h:outputText value="#{duplicateIssueShipmentsWizard.duplicateTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps many">
+			<!-- 	<li class="">1. Permissions</li> -->
+				<li class="">1. Parent</li>
+				<li class="selected">2. Change</li>
+				<li class="disabled">3. Additional</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+
+<s:fragment>
+<div class="cluster duplicate">
+<div class="title">
+		<p>Edit the original and the copy as needed.</p>
+            <h2>Field</h2>
+            <h2>Original</h2>
+            <h2>Copy</h2>
+</div>
+<s:decorate id="dummyDecorate_01" template="../layout/edit.xhtml">
+<!--  DO NOT remove this, otherwise the first row will be invisible(hidden) ?? -->
+</s:decorate><br/><br />
+<s:decorate id="catComponentDecorate" template="../layout/edit.xhtml">
+    		<ui:define name="label">Component Name</ui:define>
+                        <!-- originalTransientInstance-catCmpts is READ-ONLY -->
+                        <span><h:outputText value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catCmpts.catName}"/></span>
+                        <span><h:outputText value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catCmpts.catName}"/></span>
+</s:decorate>
+<s:decorate id="catLifecycleDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Lifecycle</ui:define>
+                        <!-- originalTransientInstance-catLifecycle is READ-ONLY -->
+                        <span><h:outputText value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catLifecycle}"/></span>
+                        <h:selectOneMenu 
+                            id="catLifecycle_copy" 
+                            value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catLifecycle}"
+                            requiredMessage="Please make a selection !!" 
+			                required="true">
+   		                    <s:selectItems value="#{listsForEnums.catIssueShipments_Lifecycle}" var="i" itemValue="#{i}"
+                                   label="#{i}" noSelectionLabel="Choose..." />
+                                    <a:support event="onchange" reRender="catOutcomedecorate,catMaterialFormatDecorate,catSourceConditiondecorate" action="#{duplicateIssueShipmentsWizard.setFormatOutcomeSourcedefaultValues}"
+                        eventsQueue="#{divParam}eventsQueue" 
+                        status="globalWaitStatus"
+                        ajaxSingle="true"/>
+                        </h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="catPublctnUnitRangeDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Extent (Pub Units)</ui:define>
+                        <span><h:inputTextarea id="catPublctnUnitRange_org" cols="20" rows="2" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catPublctnUnitRange}"/></span>
+                        <h:inputTextarea id="catPublctnUnitRange_copy" cols="20" rows="2" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catPublctnUnitRange}"/>
+</s:decorate>
+
+<s:decorate id="catCoverDateRangeDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Extent (Dates)</ui:define>
+                        <span><h:inputTextarea id="catCoverDateRange_org" cols="20" rows="2" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catCoverDateRange}"/></span>
+                        <h:inputTextarea id="catCoverDateRange_copy" cols="20" rows="2" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catCoverDateRange}"/>
+</s:decorate>
+
+<s:decorate id="catCoverDateAsPrintedDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Date as Printed</ui:define>
+                        <span><h:inputText id="catCoverDateAsPrinted_org" maxlength="255" size="25" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catCoverDateAsPrinted}"/></span>
+                        <h:inputText id="catCoverDateAsPrinted_copy" maxlength="255" size="25" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catCoverDateAsPrinted}"/>
+</s:decorate>
+
+<s:decorate id="catQuantityDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Quantity</ui:define>
+                        <span><h:selectOneMenu id="catQuantity_org" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catQuantity}"
+                                 requiredMessage="Please make a selection !!" 
+			                     required="true">
+		   		                 <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_Quantity}" var="i"/>
+		                      </h:selectOneMenu>
+                        </span>
+                        <h:selectOneMenu id="catQuantity_copy" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catQuantity}"
+                              requiredMessage="Please make a selection !!" 
+			                  required="true">
+		   		              <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_Quantity}" var="i"/>
+		                </h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="catOwnershipDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Ownership</ui:define>
+                        <span><h:selectOneMenu id="catOwnership_org" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catOwnership}"
+                                    requiredMessage="Please make a selection !!" 
+			                        required="true">
+		   		                   <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_Ownership}" var="i"/>
+		                      </h:selectOneMenu>
+                        </span>
+                        <h:selectOneMenu id="catOwnership_copy" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catOwnership}"
+                             requiredMessage="Please make a selection !!" 
+			                 required="true">
+		   		            <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_Ownership}" var="i"/>
+		                </h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="catReturnObligationDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Return Obligation</ui:define>
+                        <span><h:selectOneMenu id="catReturnObligation_org" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catReturnObligation}">
+		   		                  <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_ReturnObligation}" var="i"/>
+		                      </h:selectOneMenu>
+                        </span>
+                        <h:selectOneMenu id="catReturnObligation_copy" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catReturnObligation}">
+		   		           <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_ReturnObligation}" var="i"/>
+		                </h:selectOneMenu>
+</s:decorate>
+<s:decorate id="catOutcomedecorate" template="../layout/edit.xhtml">
+				<ui:define name="label">Outcome</ui:define>
+				<span><h:selectOneMenu id="catOutcome" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catOutcome}">
+		   		    <s:selectItems value="#{listsForEnums.catIssueShipments_Outcome}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />                    
+		       		</h:selectOneMenu>
+                        </span>
+               <span> <h:selectOneMenu id="catOutcome_copy" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catOutcome}">
+		   		    <s:selectItems value="#{listsForEnums.catIssueShipments_Outcome}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />                    
+		       		</h:selectOneMenu>
+		       </span>
+			</s:decorate>
+<s:decorate id="catMaterialFormatDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Material Format</ui:define>
+                        <span><h:selectOneMenu id="catMaterialFormat_org" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catMaterialFormat}">
+		   		                  <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_MaterialFormat}" var="i"/>
+		                      </h:selectOneMenu>
+                        </span>
+                        <h:selectOneMenu id="catMaterialFormat_copy" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catMaterialFormat}">
+		   		           <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_MaterialFormat}" var="i"/>
+		                </h:selectOneMenu>
+</s:decorate>
+
+			    <s:decorate id="catSourceConditiondecorate" template="../layout/edit.xhtml">
+    				<ui:define name="label">Source Condition</ui:define>
+                    <span><h:selectOneMenu id="catSourceCondition" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catSourceCondition}" >
+		   	    	    	<s:selectItems value="#{listsForEnums.catIssueShipments_SourceCondition}" var="i" itemValue="#{i}"
+		                     label="#{i.label}" noSelectionLabel="Choose..." />
+		           		</h:selectOneMenu>
+		           </span>
+		            <span><h:selectOneMenu id="catSourceCondition_copy" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catSourceCondition}" >
+		   	    	    	<s:selectItems value="#{listsForEnums.catIssueShipments_SourceCondition}" var="i" itemValue="#{i}"
+		                     label="#{i.label}" noSelectionLabel="Choose..." />
+		           		</h:selectOneMenu>
+		           </span>
+			    </s:decorate>
+			
+<s:decorate id="catReprints" template="../layout/edit.xhtml">
+			<ui:define name="label">Reprints</ui:define>
+                        <span><h:selectOneMenu id="catReprints_org" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catReprints}"
+                        	   requiredMessage="Please make a selection !!" 
+			                   required="true">
+		   		                  <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_Reprints}" var="i"/>
+		                      </h:selectOneMenu>
+                        </span>
+                        <h:selectOneMenu id="catReprints_copy" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catReprints}"
+                        requiredMessage="Please make a selection !!" 
+			            required="true">
+		   		           <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_Reprints}" var="i"/>
+		                </h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="catDispositionDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Disposition</ui:define>
+                        <span><h:selectOneMenu id="catDisposition_org" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catDisposition}">
+		   		                  <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_Disposition}" var="i"/>
+		                      </h:selectOneMenu>
+                        </span>
+                        <h:selectOneMenu id="catDisposition_copy" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catDisposition}">
+		   		           <s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catIssueShipments_Disposition}" var="i"/>
+		                </h:selectOneMenu>
+</s:decorate>
+
+<span class="doubledatepickerfix">
+	<s:decorate id="catLoanReturnDateDecorate" template="../layout/edit.xhtml">			
+				<ui:define name="label">Return Date</ui:define>
+    	    	<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd" id="catLoanReturnDate_org" inputClass="datestyle" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catLoanReturnDate}"/>
+            	<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd" id="catLoanReturnDate_copy" inputClass="datestyle" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catLoanReturnDate}"/>
+	</s:decorate>
+</span>
+
+<s:decorate id="catLoanReturnTrackNumberDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Return Tracking</ui:define>
+                        <span><h:inputText id="catLoanReturnTrackNumber_org" maxlength="255" size="25" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catLoanReturnTrackNumber}"/></span>
+                        <h:inputText id="catLoanReturnTrackNumber_copy" maxlength="255" size="25" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catLoanReturnTrackNumber}"/>
+</s:decorate>
+
+<s:decorate id="catNoteDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">Note</ui:define>
+                        <span><h:inputTextarea id="catNote_org" cols="20" rows="2" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catNote}"/></span>
+                        <h:inputTextarea id="catNote_copy" cols="20" rows="2" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catNote}"/>
+</s:decorate>
+
+<s:decorate id="catOnHoldDecorate" template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold</ui:define>
+                        <span><h:selectOneMenu id="catOnHold_org" value="#{duplicateIssueShipmentsWizard.originalTransientInstance.catOnHold}"
+                                  requiredMessage="Please make a selection !!" 
+			                      required="true">
+		   		                  <s:selectItems value="#{listsForEnums.yesNo}" var="i" itemValue="#{i.value}"
+		                               label="#{i.label}" noSelectionLabel="Choose..." />
+                              </h:selectOneMenu>
+                        </span>
+                        <h:selectOneMenu id="catOnHold_copy" value="#{duplicateIssueShipmentsWizard.duplicateTransientInstance.catOnHold}"
+                              requiredMessage="Please make a selection !!" 
+			                  required="true">
+		   		              <s:selectItems value="#{listsForEnums.yesNo}" var="i" itemValue="#{i.value}"
+		                           label="#{i.label}" noSelectionLabel="Choose..." />
+                        </h:selectOneMenu>
+</s:decorate>
+
+</div>
+</s:fragment>
+
+
+		<div class="push"></div>
+
+
+                <a:commandLink styleClass="button" value="Quit"
+			eventsQueue="#{divParam}eventsQueue"
+			status="globalWaitStatus"
+			reRender="issueshipmentsduplicatewizard" oncomplete="#{rich:component('issueshipmentsduplicateUpdateQuit')}.show(); return false;">
+			</a:commandLink> 
+
+		<a:commandLink id="continueWithoutOnclickValidation" 
+		rendered="#{duplicateIssueShipmentsWizard.isCatOnHoldOfValueTrue(duplicateIssueShipmentsWizard.originalTransientInstance.catOnHold)}"
+		styleClass="button right" value="Continue"
+		eventsQueue="#{divParam}eventsQueue"
+		status="globalWaitStatus"
+		action="#{duplicateIssueShipmentsWizard.duplicateNext}"
+		reRender="issueshipmentsduplicatewizard" />
+		
+		<a:commandLink id="saveWithoutOnclickValidation"
+		rendered="#{!duplicateIssueShipmentsWizard.isCatOnHoldOfValueTrue(duplicateIssueShipmentsWizard.originalTransientInstance.catOnHold)}"
+		styleClass="button right" value="Save"
+		eventsQueue="#{divParam}eventsQueue"
+		status="globalWaitStatus"
+		action="#{duplicateIssueShipmentsWizard.performDuplicateOperation}" reRender="issueshipmentsduplicatewizard" />
+		
+
+			</div>
+	
+</ui:composition>

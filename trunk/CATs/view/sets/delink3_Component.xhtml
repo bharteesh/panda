@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{delinkComponentWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">		
+		<li class="disabled">1. Change</li>
+		<li class="selected">2. Results</li>
+	</ul>
+		<div class="cluster smart">				
+				<div class="title eligible">
+					<h1><h:outputText value="Sets (#{delinkComponentWizard.setsList.size})"/></h1>
+					<p>You delinked component <em><h:outputText value="#{delinkComponentWizard.targetCmpt.catName}"/></em> from set <em><h:outputText value="#{delinkComponentWizard.oldCurrentTitle.catName}"/></em> and changed the current title.</p>
+				</div>	 				
+						<rich:dataTable id="catSets"
+								var="_catSets" value="#{delinkComponentWizard.setsList}">						
+								
+								<rich:column>
+									<f:facet name="header">Set Name</f:facet>
+									<h:outputText value="#{_catSets.catCurrentTitle.catName}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Components</f:facet>
+									<h:outputText value="#{_catSets.catCurrentTitle.catName}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Component Count</f:facet>
+									<h:outputText value="#{_catSets.catSetsComponentsList.size}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Extent (Pub Units)</f:facet>
+									<h:outputText value="#{_catSets.catThPublctnUnitRange}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Extent (Dates)</f:facet>
+									<h:outputText value="#{_catSets.catThDateRange}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Set Lifecycle</f:facet>
+									<h:outputText value="#{_catSets.catLifecycle.label}" />
+								</rich:column>							
+					
+							</rich:dataTable>	
+					<div class="push"></div>
+					<div class="title eligible">
+							<h1><h:outputText value="Components (#{delinkComponentWizard.targetCmptList.size})"/></h1>
+							<p>You delinked component <em><h:outputText value="#{delinkComponentWizard.targetCmpt.catName}"/></em> from set <em><h:outputText value="#{delinkComponentWizard.oldCurrentTitle.catName}"/></em></p>
+					</div>		
+								<rich:dataTable id="catCmpts"
+								var="_catCmpts" value="#{delinkComponentWizard.targetCmptList}">
+								
+								<rich:column>
+									<f:facet name="header">Component Name</f:facet>
+									<h:outputText value="#{_catCmpts.catName}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Print ISSN</f:facet>
+									<h:outputText value="#{_catCmpts.catPrintIssn}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">ISSN Request Status</f:facet>
+									<h:outputText value="#{_catCmpts.catIssnStatus.label}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Start Year</f:facet>
+									<h:outputText value="#{_catCmpts.catStartYear}">
+										<s:convertDateTime type="date" pattern="yyyy"/>
+									</h:outputText>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Extent (Pub Units)</f:facet>
+									<h:outputText value="#{_catCmpts.catPublctnUnitRange}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Extent (Dates)</f:facet>
+									<h:outputText value="#{_catCmpts.catDateRange}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Lifecycle</f:facet>
+									<h:outputText value="#{_catCmpts.catLifecycle.label}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Selection Status</f:facet>
+									<h:outputText value="#{_catCmpts.catSelectionStatus}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">BF Prod Status</f:facet>
+									<h:outputText value="#{_catCmpts.catProductionStatus}" />
+								</rich:column>					
+					
+							</rich:dataTable>
+					
+			</div>					
+		<div class="push"></div>
+			
+		<a:commandLink styleClass="button right" value="Return" status="globalWaitStatus" ignoreDupResponses="true"
+			oncomplete="#{rich:component('delinkCmptModal')}.hide(); javascript:location.reload(true);"
+			rendered="#{empty pageURL}"/>
+			
+		<a:commandLink styleClass="button right" value="Return" status="globalWaitStatus" ignoreDupResponses="true"
+			oncomplete="#{rich:component('delinkCmptModal')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+			rendered="#{not empty pageURL}"/>	
+	</div> 
+</ui:composition>
+

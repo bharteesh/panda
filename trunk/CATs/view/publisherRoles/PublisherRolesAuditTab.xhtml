@@ -1,0 +1,22 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" 
+xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:a="http://richfaces.org/a4j" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:rich="http://richfaces.org/rich" 
+xmlns:ui="http://java.sun.com/jsf/facelets" id="SOMEDiv2">
+
+<s:decorate id="catChangeBy_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Changed by</ui:define>
+<h:outputText  id="catChangedBy" value="#{catPublishersToCmptsHome.instance.catChangeBy}"/>
+</s:decorate>
+
+<s:decorate id="catDateChange_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Changed</ui:define>
+<h:outputText  id="catDateChange"  value="#{catPublishersToCmptsHome.instance.catDateChange}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+</s:decorate>
+
+
+	<div class="push"/>
+	
+</s:div>

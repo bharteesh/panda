@@ -1,0 +1,19 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:h="http://java.sun.com/jsf/html"
+    >
+
+    <m:from name="CATS" address="#{mailOps.fromEmail}" />
+    <m:to name="#{mailOps.displayName}"><h:outputText value="#{mailOps.email}"/></m:to>
+    <m:subject><h:outputText value="Report Generation Success: #{mailOps.props['reportName']}"/></m:subject>
+	<m:replyTo address="catssupport@ithaka.org"/>
+    <m:body>
+        <p><h:outputText value="Dear #{mailOps.displayName}" />,</p>
+		<p><h:outputText value="The #{mailOps.props['reportName']} you requested recently from CATS is available now:"/></p>
+		
+		<p><h:outputText value="#{mailOps.props['reportUrl']}"/></p>
+		
+		<p>Please note that this link won't work forever, at some point old versions of reports get deleted off the server.</p>
+		<p>Sincerely,<br/>CATS</p>
+    </m:body>
+</m:message>

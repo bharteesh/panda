@@ -1,0 +1,62 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:ui="http://java.sun.com/jsf/facelets" id="contractInfoDiv">
+
+	<div class="col col1">
+	<s:decorate id="catContractInfoVersion" template="../layout/edit.xhtml">
+		<ui:define name="label">Agreement Version:</ui:define>
+		<h:inputText onchange="enableSaveCancel();"  readonly="#{!s:hasPermission(catContractsHome.instance, 'modify catAgreementVersion')}" value="#{catContractsHome.instance.catAgreementVersion}"/>
+	</s:decorate> 
+	<s:decorate id="catContractInfoDate" template="../layout/edit.xhtml">
+		<ui:define name="label">Agreement Date:</ui:define>
+		<rich:calendar readonly="#{!s:hasPermission(catContractsHome.instance, 'modify catAgreementDate')}" onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="false" id="catContractInfoNoteChangedDateCal" inputClass="datestyle" value="#{catContractsHome.instance.catAgreementDate}"/>
+	</s:decorate> 
+	<s:decorate id="catContractCspLaunchDate" template="../layout/edit.xhtml" rendered="#{catContractsHome.instance.catType eq 'Csp'}">
+		<ui:define name="label">CSP Launch Date:</ui:define>
+		<h:outputText value="#{catContractsHome.instance.catCspLaunchDate}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+	</s:decorate> 
+	<s:decorate id="catContractInfoRevisions" template="../layout/edit.xhtml" rendered="#{catContractsHome.instance.catType eq 'Backfile'}">
+		<ui:define name="label">Revisions:</ui:define>
+		<h:outputText value="#{catContractsHome.instance.catAgreementRevisions ? 'Yes' : 'No'}"/>
+	</s:decorate> 
+	<s:decorate id="catContractInfoPdf" template="../layout/edit.xhtml">
+		<ui:define name="label">PDF:</ui:define>
+		<h:inputText onchange="enableSaveCancel();"  readonly="#{!s:hasPermission(catContractsHome.instance, 'modify catSharepointContractLink')}" value="#{catContractsHome.instance.catSharepointContractLink}"/>
+	</s:decorate> 
+	</div>
+	<div class="col col2">
+	<s:decorate id="catContractInfoNote" template="../layout/edit.xhtml">
+		<ui:define name="label">Note</ui:define>
+		<h:inputTextarea onchange="enableSaveCancel();"  cols="20" readonly="#{!s:hasPermission(catContractsHome.instance, 'modify catNote')}" id="catContractInfoNote" rows="2" value="#{catContractsHome.instance.catNote}">
+			<a:support event="onfocus" action="#{catContractsHome.onFocusNote}" ajaxSingle="true" eventsQueue="contractsEditQ"/>
+			<a:support event="onblur" action="#{catContractsHome.noteChanged}" ajaxSingle="true" eventsQueue="contractsEditQ"/>
+		</h:inputTextarea>
+	</s:decorate> 
+	<s:decorate id="catContractInfoNoteChangedBy" template="../layout/edit.xhtml">
+		<ui:define name="label">Note Changed By</ui:define>
+		<h:outputText onchange="enableSaveCancel();"  value="#{catContractsHome.instance.catNoteChangeBy}"/>
+	</s:decorate> 
+	<s:decorate id="catContractInfoNoteChangedDate" template="../layout/edit.xhtml">
+		<ui:define name="label">Note Date Changed</ui:define>
+		<rich:calendar  onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="true" id="catContractInfoNoteChangedDateCal" inputClass="datestyle" value="#{catContractsHome.instance.catNoteChangeDate}"/>
+	</s:decorate>            
+    <s:decorate id="catContractInfoTerminationDate" template="../layout/edit.xhtml">
+           <ui:define name="label">Termination Date</ui:define>
+           <h:outputText value="#{catContractsHome.instance.catTerminationDate}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+    </s:decorate>       
+    <s:decorate id="catContractInfoDeclinedBy" template="../layout/edit.xhtml">
+           <ui:define name="label">Declined By</ui:define>
+           <h:outputText value="#{catContractsHome.instance.catDeclinedBy}"/>
+    </s:decorate>   
+    <s:decorate id="catContractInfoDeclinedNotes" template="../layout/edit.xhtml">
+           <ui:define name="label">Reason Declined</ui:define>
+           <h:inputTextarea readonly="true" cols="20" rows="2" value="#{catContractsHome.instance.catDeclinedNotes}"/>
+    </s:decorate>           
+    <s:decorate id="catContractInfoDeclinedDate" template="../layout/edit.xhtml">
+           <ui:define name="label">Declined Date</ui:define>
+           <h:outputText value="#{catContractsHome.instance.catDateDeclined}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+    </s:decorate> 
+	
+	</div>
+
+	<div class="push"/>	  
+	 
+</s:div>

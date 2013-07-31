@@ -1,0 +1,114 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{setsBulkOperations.bulkTitle}" /></h2>
+	
+	<div id="step1">
+	<s:fragment rendered="#{setsBulkOperations.isActionAllowed}">
+		<s:div>
+			<ul class="steps">
+				<li class="selected">1. Permissions</li>
+				<li class="disabled">2. Change</li>
+				<li class="disabled">3. Additional</li>
+				<li class="disabled">4. Results</li>
+			</ul>
+		</s:div>
+		
+		<div class="cluster smart">
+		
+			<p><h:outputText
+				value="You have selected  #{setsBulkOperations.bulkInvalid.size() + setsBulkOperations.bulkSelection.size()}   records to change." /></p>
+		
+			<s:fragment rendered="#{not empty setsBulkOperations.bulkInvalid}">
+				<p>
+					<h:outputText value="You " />
+					<em><h:outputText value="do not" /></em><h:outputText value=" have permission to change " />
+					<h:outputText value="#{setsBulkOperations.bulkInvalid.size()}" /> <h:outputText value=" of " /> 
+					<h:outputText value="#{setsBulkOperations.bulkInvalid.size() + setsBulkOperations.bulkSelection.size()}" />
+					<h:outputText value=" records." />
+				</p>
+		
+				<cats:dumbTableSets value="#{setsBulkOperations.bulkInvalid}" />
+			</s:fragment> 
+			<s:fragment rendered="#{not empty setsBulkOperations.bulkSelection}">
+				<p><h:outputText value="You have permission to change " /> <h:outputText
+					value="#{setsBulkOperations.bulkSelection.size()}" /><h:outputText
+					value=" of " /> <h:outputText
+					value="#{setsBulkOperations.bulkInvalid.size() + setsBulkOperations.bulkSelection.size()}" /><h:outputText
+					value=" records. " /></p>
+		
+				<cats:dumbTableSets value="#{setsBulkOperations.bulkSelection}" />
+			</s:fragment>
+		
+			<p>Permissions determined by the following checks:</p>
+			<rich:dataOrderedList
+				value="#{setsBulkOperations.bulkPermissionChecks}" var="_check">
+				<h:outputText value="#{_check}" />
+			</rich:dataOrderedList>
+		</div>
+	
+	
+		<div class="push"></div>
+		<s:fragment rendered="#{not empty setsBulkOperations.bulkSelection}">
+			<a:commandLink styleClass="button" value="Quit"
+				action="#{setsBulkOperations.bulkReset}"
+				oncomplete="#{rich:component('setsBulkUpdatePanel')}.hide();"
+				reRender="#{setsBulkOperations.bulkOpsSelectFieldId}"
+				eventsQueue="bulkOps" 
+				status="globalWaitStatus"/> 
+			<a:commandLink
+				styleClass="button right" value="Continue"
+				action="#{setsBulkOperations.bulkNext}" reRender="setsWizardForm"
+				eventsQueue="bulkOps" status="globalWaitStatus" />
+		</s:fragment>
+		
+		<s:fragment rendered="#{empty setsBulkOperations.bulkSelection}">
+			<a:commandLink styleClass="button right" value="Return"
+				action="#{setsBulkOperations.bulkReset}"
+				oncomplete="#{rich:component('setsBulkUpdatePanel')}.hide();"
+				reRender="#{setsBulkOperations.bulkOpsSelectFieldId}"
+				eventsQueue="bulkOps" 
+				status="globalWaitStatus"/> 
+		</s:fragment>
+		
+	</s:fragment>
+	
+	<s:fragment rendered="#{(setsBulkOperations.bulkType.equals('TAG') and not setsBulkOperations.isActionAllowed)}">
+		<div class="cluster smart">
+		<p>Currently Add Tag operation is not allowed from bulk operations</p>
+		</div>
+		<div class="push"></div>
+		<a:commandLink styleClass="button" value="Return"
+			action="#{setsBulkOperations.bulkReset}"
+			oncomplete="#{rich:component('setsBulkUpdatePanel')}.hide();"
+			reRender="#{setsBulkOperations.bulkOpsSelectFieldId}"
+			eventsQueue="bulkOps" 
+			status="globalWaitStatus"/> 
+	</s:fragment>	
+	
+	<s:fragment rendered="#{(setsBulkOperations.bulkType.equals('ADDCMPT') and not setsBulkOperations.isActionAllowed)}">
+		<div class="cluster smart">
+		<p> Using this action, Components can be added to one Set at a time. You have selected #{setsBulkOperations.bulkSelection.size()} Sets.</p>
+		<p>Please Select one Set.</p>
+		</div>
+		<div class="push"></div>
+		<a:commandLink styleClass="button right" value="Return"
+			action="#{setsBulkOperations.bulkReset}"
+			oncomplete="#{rich:component('setsBulkUpdatePanel')}.hide();"
+			reRender="#{setsBulkOperations.bulkOpsSelectFieldId}"
+			eventsQueue="bulkOps" 
+			status="globalWaitStatus"/> 
+	</s:fragment>
+		
+	</div>
+	
+</ui:composition>

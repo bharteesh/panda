@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+	<ui:param name="entityType" value="contractdetails" />
+	<ui:param name="moremenu" value="moremenu" />
+
+	<ui:define name="badge">
+		<ui:include src="ContractDetailsBadge.xhtml" />
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="ContractDetailsEditForm">
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/loading.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+			<rich:tabPanel id="maintab" switchType="ajax" styleClass="tab"
+				selectedTab="#{catContractDtlsHome.selectedTab}"
+				contentClass="tab_content">
+				<rich:tab label="Agreement Details" id="tab1" name="tab1"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catContractDtlsHome.updateUserTabPreferences('tab1')}">
+					<ui:include src="ContractDetailsTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Audit" id="tab3" name="tab3"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catContractDtlsHome.updateUserTabPreferences('tab3')}">
+					<ui:include src="ContractDetailsAuditTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+			<div id="functions">
+				<a:commandLink action="#{catContractDtlsHome.update}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" styleClass="button saveOrCancel disabled"
+					value="Save" reRender="ContractDetailsEditForm"
+					eventsQueue="contractDtlsEditQueue" status="globalWaitStatus"  limitToList="true"/>
+				<a:commandLink action="#{catContractDtlsHome.cancel}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" ajaxSingle="true"
+					styleClass="button saveOrCancel disabled" value="Cancel"
+					eventsQueue="contractDtlsEditQueue" status="globalWaitStatus" />
+			</div>
+
+		</h:form>
+		<ui:include
+			src="/contractdetails/advLifecycleContractDtls_modal.xhtml">
+			<ui:param name="pageURL"
+				value="/contracts/ContractDetailsRecord.xhtml" />
+		</ui:include>
+		<ui:include src="/contractdetails/changeAttrbContractDtls_modal.xhtml">
+			<ui:param name="pageURL"
+				value="/contracts/ContractDetailsRecord.xhtml" />
+		</ui:include>
+		<ui:include src="/contractdetails/createm_ContractDtlsNote.xhtml">
+			<ui:param name="pageURL"
+				value="/contracts/ContractDetailsRecord.xhtml" />
+		</ui:include>
+	</ui:define>
+	<ui:define name="notes">
+		<ui:include src="ContractDetailsNotes.xhtml" />
+	</ui:define>
+</ui:composition>

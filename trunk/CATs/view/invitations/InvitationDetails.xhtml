@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+	<ui:param name="entityType" value="invitations" />
+	<ui:param name="moremenu" value="moremenu" />
+
+
+	<ui:define name="head">
+		<script type="text/javascript">
+            function prepOnHoldActionBeforeDisplay(onHoldActionResultLongObjectId)
+            {
+            	// alert(onHoldLongObjectId);
+            	var unameOnHoldActionResult = document.getElementById(onHoldActionResultLongObjectId);
+            	// alert(unameOnHoldActionResult);
+            	// alert('Before resetting');
+            	// alert(unameOnHoldActionResult.value);
+            	unameOnHoldActionResult.value = '0';
+            	// alert('After resetting');
+            	// alert(unameOnHoldActionResult.value);
+            }
+      </script>
+	</ui:define>
+
+	<ui:define name="badge">
+		<ui:include src="InvitationDetailsBadge.xhtml">
+			<ui:param name="divId" value="InvitationDetailsBadgeDiv" />
+			<ui:param name="informationDiv" value="informationDiv" />
+			<ui:param name="auditDiv" value="auditDiv" />
+		</ui:include>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="invitationDetailsForm">
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/loading.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<rich:tabPanel id="maintab" switchType="ajax" styleClass="tab"
+				selectedTab="#{catInvitationsHome.selectedTab}"
+				contentClass="tab_content">
+				<rich:tab label="Invitation Information" id="tab1" name="tab1"
+					eventsQueue="catInvitationsEditQueue" status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					reRender="invLayout"
+					action="#{catInvitationsHome.updateUserTabPreferences('tab1')}">
+					<ui:include src="InvitationDetailsInformationTab.xhtml">
+						<ui:param name="informationDiv" value="informationDiv" />
+					</ui:include>
+				</rich:tab>
+				<rich:tab label="Audit" id="tab8" name="tab8"
+					eventsQueue="catInvitationsEditQueue" status="globalWaitStatus"
+					reRender="invLayout"
+					action="#{catInvitationsHome.updateUserTabPreferences('tab8')}"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();">
+					<ui:include src="InvitationDetailsAuditTab.xhtml">
+						<ui:param name="auditDiv" value="auditDiv" />
+					</ui:include>
+				</rich:tab>
+			</rich:tabPanel>
+
+			<div id="functions">
+				<a:commandLink action="#{catInvitationsHome.update}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" styleClass="button saveOrCancel disabled"
+					value="Save" reRender="invitationDetailsForm"
+					eventsQueue="contractsEditQueue" status="globalWaitStatus" />
+				<a:commandLink action="#{catInvitationsHome.cancel}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" ajaxSingle="true"
+					styleClass="button saveOrCancel disabled" value="Cancel"
+					eventsQueue="invEditQueue" status="globalWaitStatus" />
+			</div>
+
+		</h:form>
+		<a:form>
+			<a:outputPanel layout="none" id="invLayout">
+				<s:div id="ContractDtlsTable"
+					rendered="#{empty catInvitationsHome.selectedTab or catInvitationsHome.selectedTab eq 'tab1'}">
+					<ui:include src="InvitationDetailsOtherInvitationsTable.xhtml">
+						<ui:param name="divId" value="thOtherInvitationsTableDiv" />
+						<ui:param name="tableId" value="thOtherInvitationsTable" />
+					</ui:include>
+				</s:div>
+			</a:outputPanel>
+		</a:form>
+		<ui:include src="../invitations/createm_Invitations.xhtml">
+			<!-- 'reRenderMe' useful for bulk actions from List screen-->
+			<!--  'divParam' needed for 'eventQueue' name -->
+			<ui:param name="divParam"
+				value="InvitationDetailscreatem_Invitations" />
+			<ui:param name="pageURL" value="Yes" />
+		</ui:include>
+
+
+		<ui:include src="../invitations/bulkm_Invitations.xhtml">
+			<ui:param name="divParam" value="InvitationDetailsbulkm_Invitations" />
+			<ui:param name="pageURL" value="Yes" />
+		</ui:include>
+
+		<ui:include src="../invitations/createm_InvitationNote.xhtml">
+			<!-- 'reRenderMe' useful for bulk actions from List screen-->
+			<!--  'divParam' needed for 'eventQueue' name -->
+			<!-- ui:param name="reRenderMe" value="catInvitationsList"/ -->
+			<ui:param name="divParam"
+				value="InvitationDetailscreatem_InvitationNote" />
+			<ui:param name="reRenderMe" value="tadDivId,notesId,notesList1" />
+			<ui:param name="pageURL" value="Yes" />
+		</ui:include>
+
+		<ui:include src="/onholdreason/updateOnHoldReason_modal.xhtml">
+			<ui:param name="pageURL" value="Yes" />
+		</ui:include>
+
+	</ui:define>
+
+	<ui:define name="notes">
+		<ui:include src="InvitationDetailsNotes.xhtml" />
+	</ui:define>
+
+
+</ui:composition>

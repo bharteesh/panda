@@ -1,0 +1,59 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<h1>#{catBookVersionsHome.instance.id}</h1>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Record Type:</ui:define>
+		<h:outputText value="Book PDFs" />
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Book:</ui:define>
+			<s:link view="/books/BooksEdit.xhtml" propagation="none">
+				<f:param name="id" value="#{catBookVersionsHome.instance.catBook.id}"/>
+				<h:outputText value="#{catBookVersionsHome.instance.catBook.id}"/>
+			</s:link>
+	</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Lifecycle:</ui:define>
+		<h:outputText value="#{catBookVersionsHome.instance.catLifecycle.label}"/>
+		<a:form>	
+	    		<a:commandLink 
+	    			onclick="if ( ! checkForSave() ) { return false ; }" 
+	    			id="catBkVerLifecycleEditButton"				
+		    		action="#{bookVersionLifecycleWizard.changeLifecycle()}"
+					value="Edit"
+					reRender="bookVersionLifecycleOperationsPanels" 
+					oncomplete="#{rich:component('bookVersionLifecycleUpdatePanel')}.show();"
+					disabled="#{!s:hasRole('CM Content Coordinator') or catBookVersionsHome.instance.catLifecycle.label eq 'Fossil'}"
+					styleClass="button wizard #{!s:hasRole('CM Content Coordinator') or catBookVersionsHome.instance.catLifecycle.label eq 'Fossil'? 'disabled' : ''}"
+					status="globalWaitStatus"
+					ignoreDupResponses="true"
+					ajaxSingle="true" limitToList="true"/>		
+		</a:form>
+	</s:decorate>
+		
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">ID:</ui:define>
+		<h:outputText value="#{catBookVersionsHome.instance.id}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Creator:</ui:define>
+		<h:outputText value="#{catBookVersionsHome.instance.catCreator}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Created Date:</ui:define>
+		<h:outputText value="#{catBookVersionsHome.instance.catDateCreated}">
+			<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+		</h:outputText>
+	</s:decorate>
+
+</s:div>

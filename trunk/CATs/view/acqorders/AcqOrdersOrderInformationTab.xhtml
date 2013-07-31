@@ -1,0 +1,120 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:ui="http://java.sun.com/jsf/facelets" id="SOMEDiv1">
+
+	<div class="col col1">
+
+<s:decorate id="catPublctnUnitRange_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Extent (Pub Units)</ui:define>
+		<h:inputTextarea readonly="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catPublctnUnitRange')}" cols="20" required="false" id="catPublctnUnitRange"
+				rows="2" value="#{catAcqOrdersHome.instance.catPublctnUnitRange}" 
+				onchange="enableSaveCancel();"/>
+</s:decorate>
+
+<s:decorate id="catCoverDateRange_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Extent (Dates)</ui:define>
+
+		<h:inputTextarea readonly="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catCoverDateRange')}" cols="20" required="false" id="catCoverDateRange"
+				rows="2" value="#{catAcqOrdersHome.instance.catCoverDateRange}" 
+				onchange="enableSaveCancel();"/>
+</s:decorate>
+
+<s:decorate id="catSupplier_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Supplier</ui:define>
+		<h:inputTextarea readonly="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catSupplier')}" cols="20" required="true" id="catSupplier"
+				rows="2" value="#{catAcqOrdersHome.instance.catSupplier}" 
+				onchange="enableSaveCancel();"/>
+</s:decorate>
+
+<s:decorate id="catSupplierContact_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Supplier Contact Information</ui:define>
+		<h:inputTextarea readonly="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catSupplierContact')}" cols="20" required="false" id="catSupplierContact"
+				rows="2" value="#{catAcqOrdersHome.instance.catSupplierContact}" 
+				onchange="enableSaveCancel();"/>
+</s:decorate>
+
+<s:decorate id="catSupplierCommitment_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Supplier Commitment</ui:define>
+<h:selectOneMenu disabled="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catSupplierCommitment')}" name="catSupplierCommitment" value="#{catAcqOrdersHome.instance.catSupplierCommitment}"
+onchange="enableSaveCancel();">
+  		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catAcqOrders_SupplierCommitment(catAcqOrdersHome.instance)}" var="i"/>
+</h:selectOneMenu>
+</s:decorate>
+
+</div>
+
+<div class="col col2">  
+
+<s:decorate id="catPostMasterAddress_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Postmaster Address</ui:define>
+		<h:inputTextarea readonly="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catPostMasterAddress')}" cols="20" required="false" id="catPostMasterAddress"
+				rows="2" value="#{catAcqOrdersHome.instance.catPostMasterAddress}" 
+				onchange="enableSaveCancel();"/>
+</s:decorate>
+
+<s:decorate id="catQuantity_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Quantity</ui:define>
+<h:selectOneMenu disabled="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catQuantity')}" name="catQuantity" value="#{catAcqOrdersHome.instance.catQuantity}"
+onchange="enableSaveCancel();">
+		   		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catAcqOrders_Quantity(catAcqOrdersHome.instance)}" var="i"/>
+		       </h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="catType_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Type</ui:define>
+  <h:outputText value="#{catAcqOrdersHome.instance.catType.label}"/>
+			<a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }" id="orderInformationTabCatTypeEditButton"
+				ignoreDupResponses="true"
+     			eventsQueue="catAcqOrdersEditQueue"
+         		status="globalWaitStatus"
+           		ajaxSingle="true"
+	    		action="#{catAcqOrdersHome.updateUsingWizard('CHNGTYPE')}"
+				value="Edit"
+				reRender="acqordersbulkOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('acqordersbulkUpdatePanel');"
+                styleClass="button wizard #{!s:hasPermission(catAcqOrdersHome.instance, 'modify catType') ? 'disabled' : ''}"
+                disabled="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catType')}"/>
+
+</s:decorate>
+
+<s:decorate id="catReturnObligation_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Return Obligation</ui:define>
+  <h:outputText value="#{catAcqOrdersHome.instance.catReturnObligation.label}"/>
+			<a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }" id="orderInformationTabCatReturnObligationEditButton"
+				ignoreDupResponses="true"
+     			eventsQueue="catAcqOrdersEditQueue"
+         		status="globalWaitStatus"
+           		ajaxSingle="true"
+	    		action="#{catAcqOrdersHome.updateUsingWizard('CHNGTYPE')}"
+				value="Edit"
+				reRender="acqordersbulkOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('acqordersbulkUpdatePanel');"
+                styleClass="button wizard #{!s:hasPermission(catAcqOrdersHome.instance, 'modify catType') ? 'disabled' : ''}"
+                disabled="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catType')}"/>
+</s:decorate>
+
+<s:decorate id="catReprints_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Reprints</ui:define>
+<h:selectOneMenu disabled="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catReprints')}" name="catReprints" value="#{catAcqOrdersHome.instance.catReprints}"
+onchange="enableSaveCancel();">
+		   		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catAcqOrders_Reprints(catAcqOrdersHome.instance)}" var="i"/>
+		       </h:selectOneMenu>
+</s:decorate>
+
+<s:decorate id="catNotReceivedNote_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Not Received</ui:define>
+		<h:inputTextarea readonly="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catNotReceivedNote')}" cols="20" required="false" id="catNotReceivedNote"
+				rows="2" value="#{catAcqOrdersHome.instance.catNotReceivedNote}" 
+				onchange="enableSaveCancel();"/>
+</s:decorate>
+
+<s:decorate id="catNotificationThreshold_div1" template="../layout/edit.xhtml">
+                <ui:define name="label">Notification Threshold (Months)</ui:define>
+                <h:inputText readonly="#{!s:hasPermission(catAcqOrdersHome.instance, 'modify catNotificationThreshold')}" id="catNotificationThreshold" value="#{catAcqOrdersHome.instance.catNotificationThreshold}"
+                onchange="enableSaveCancel();">
+                </h:inputText>
+            </s:decorate>
+
+</div>
+
+	<div class="push"/>
+	
+</s:div>

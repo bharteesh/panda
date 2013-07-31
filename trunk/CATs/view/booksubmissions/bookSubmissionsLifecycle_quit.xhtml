@@ -1,0 +1,54 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{bookSubmissionsLifecycleWizard.wizardTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+				<li class="">Quit</li>
+		</ul>
+		<div class="cluster smart">
+
+		  <p>Are you sure you want to quit? Changes will <em>not</em> be made.</p>
+
+			</div>
+			
+			<div class="push"></div>
+			
+			
+	
+		<a:commandLink styleClass="button" value="Yes, Quit"   status="globalWaitStatus" ignoreDupResponses="true"
+			eventsQueue="advBkSubLfclQueue"
+			oncomplete="#{rich:component('bookSubmissionsLifecycleUpdatePanel')}.hide(); #{rich:component('bookSubmissionsLifecycleUpdateQuit')}.hide(); javascript:location.reload(true);" 
+			action="#{bookSubmissionsLifecycleWizard.wizardReset}" 
+			limitToList="true"
+			rendered="#{empty pageURL}"/>
+		
+		<a:commandLink styleClass="button" value="Yes, Quit"   status="globalWaitStatus" ignoreDupResponses="true"
+			eventsQueue="advBkSubLfclQueue"
+			oncomplete="#{rich:component('bookSubmissionsLifecycleUpdatePanel')}.hide(); #{rich:component('bookSubmissionsLifecycleUpdateQuit')}.hide(); javascript:location.href=formatURL(location.href);" 
+			action="#{bookSubmissionsLifecycleWizard.wizardReset}" 
+			limitToList="true"
+			rendered="#{not empty pageURL}"/>
+		
+		<a:commandLink styleClass="button right" value="No, Return"  status="globalWaitStatus" ignoreDupResponses="true"
+			eventsQueue="advBkSubLfclQueue"
+			oncomplete="#{rich:component('bookSubmissionsLifecycleUpdateQuit')}.hide();" 
+			 limitToList="true">
+			</a:commandLink>
+		</div>
+	
+</ui:composition>
+

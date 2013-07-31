@@ -1,0 +1,15 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+    <m:from name="CATS" address="#{reportsOps.fromEmail}" />
+    <m:to name="#{ldapOps.displayName}"><h:outputText value="#{ldapOps.emailAddress}"/></m:to>
+    <m:subject>TEST TEST TEST</m:subject>
+
+    <m:body>
+        <p><h:outputText value="Dear #{ldapOps.displayName}" />,</p>
+		<p>Here's a message!</p>
+		<p>Sncrly,</p>
+		<p>CATS</p>
+    </m:body>
+</m:message>

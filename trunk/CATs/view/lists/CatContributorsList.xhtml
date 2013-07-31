@@ -1,0 +1,179 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+
+	<ui:param name="entityType" value="contributors" />
+	<ui:param name="moremenu" value="moremenu"/>
+	
+	<ui:define name="body">
+
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatContributorsList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catContributorsList}"></ui:param>
+			<ui:param name="divId" value="1" />
+		</ui:include>
+
+		<a:form>
+
+			<s:div id="header" styleclass="header">
+
+				<div class="left">
+					<span class="museo"> <h:outputText
+							value="Contributors
+(#{empty catContributorsList.resultList ? 0 : (catContributorsList.paginated ? catContributorsList.resultCount : catContributorsList.resultList.size)})"></h:outputText>
+					</span>
+
+
+				 	<h:selectOneMenu name="flavour"
+						value="#{catContributorsList.flavour}">
+						<s:selectItems value="#{catContributorsList.flavours}" var="i"
+							itemValue="#{i}" label="#{catContributorsList.flavourLabel(i)}" />
+						<a:support event="onchange"
+							action="#{catContributorsList.updateUserSkinPreferences}"
+							oncomplete="javascript: location.href='CatContributorsList.seam'" ignoreDupResponses="true"
+							eventsQueue="contributorsListQueue" ajaxSingle="true" />
+					</h:selectOneMenu> 
+					<s:link id="clearSearch" status="globalWaitStatus"
+						ignoreDupResponses="true" styleClass="button wizard"
+						action="#{catContributorsList.reset}" value="X" ajaxSingle="true"
+						propagation="none"
+						oncomplete="javascript: location.href='CatContributorsList.seam'">
+						<f:param name="flavour" value="#{catContributorsList.flavour}" />
+					</s:link>
+				</div>
+				<div class="right">
+					<ui:include src="adhocReportSelect.xhtml">
+						<ui:param name="entityQuery" value="#{catContributorsList}"/>
+					</ui:include>
+				</div>
+				
+
+			</s:div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/Animated-Hourglass.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+
+				<h:dataTable id="catContributorsList" var="_catContributors"
+					value="#{catContributorsList.resultList}" rowClasses="odd,even"
+					styleClass="mainListClass">	
+					
+					<cats:column linkToId="#{_catContributors.id}" styleClass="catSurname"
+						rendered="#{catContributorsList.listFlavour['catSurname']}"
+						entityList="#{catContributorsList}" propertyLabel="Last Name"
+						propertyPath="catContributors.catSurname"
+						propertyValue="#{catContributorsList.catContributors.catSurname}"
+						propertyName="catSurname" sortable="true" value="#{_catContributors.catSurname}" />
+									
+					<cats:column linkToId="#{_catContributors.id}" styleClass="catGivenNames"
+						rendered="#{catContributorsList.listFlavour['catGivenNames']}"
+						entityList="#{catContributorsList}" propertyLabel="First Name"
+						propertyPath="catContributors.catGivenNames"
+						propertyValue="#{catContributorsList.catContributors.catGivenNames}"
+						propertyName="catGivenNames" sortable="true" value="#{_catContributors.catGivenNames}" />
+			
+					<cats:column linkToId="#{_catContributors.id}" styleClass="catStringName"
+						rendered="#{catContributorsList.listFlavour['catStringName']}"
+						entityList="#{catContributorsList}" propertyLabel="String Name"
+						propertyPath="catContributors.catStringName"
+						propertyValue="#{catContributorsList.catContributors.catStringName}"
+						propertyName="catStringName" sortable="true" value="#{_catContributors.catStringName}" /> 
+						
+					<cats:column sortable="true" linkToId="#{_catContributors.id}"
+						enumList="#{listsForEnums.catContributors_OnixRole}"
+						rendered="#{listFlavour['catOnixRole']}"
+						entityList="#{catContributorsList}"
+						propertyLabel="Onix Role"
+						propertyPath="catContributors.catOnixRole"
+						propertyValue="#{catContributorsList.catContributors.catOnixRole}"
+						propertyName="catOnixRole"
+						value="#{_catContributors.catOnixRole.label}">
+					</cats:column>  
+					
+					<cats:column linkToId="#{_catContributors.id}" styleClass="catBestIsbn13"
+						rendered="#{catContributorsList.listFlavour['catBooks.bestEisbn13']}"
+						entityList="#{catContributorsList}" propertyLabel="Book Best ISBN13"
+						propertyPath="catContributors.catScm.catBooks.bestEisbn13"
+						propertyValue="#{catContributorsList.catContributors.catScm.catBooks.bestEisbn13}"
+						propertyName="catBooks.bestEisbn13" sortable="true" value="#{_catContributors.catScm.catBooks.bestEisbn13}" /> 
+						
+				<cats:column linkToId="#{_catContributors.id}" styleClass="catBestTitle"
+						rendered="#{catContributorsList.listFlavour['catBooks.bestTitle']}"
+						entityList="#{catContributorsList}" propertyLabel="Book Best Title"
+						propertyPath="catContributors.catScm.catBooks.bestTitle"
+						propertyValue="#{catContributorsList.catContributors.catScm.catBooks.bestTitle}"
+						propertyName="catBooks.bestTitle" sortable="true" value="#{_catContributors.catScm.catBooks.bestTitle}" /> 
+						
+				<cats:column linkToId="#{_catContributors.id}" styleClass="catBooksPublishers"
+						rendered="#{catContributorsList.listFlavour['catBooks.booksPublishers']}"
+						entityList="#{catContributorsList}" propertyLabel="Book Publishers"
+						propertyPath="catContributors.catScm.catBooks.booksPublishers"
+						propertyValue="#{catContributorsList.catContributors.catScm.catBooks.booksPublishers}"
+						propertyName="catBooks.booksPublishers" sortable="true" value="#{_catContributors.catScm.catBooks.booksPublishers}" /> 
+						
+				<cats:column linkToId="#{_catContributors.id}" styleClass="catScmId"
+						rendered="#{catContributorsList.listFlavour['catScm.id']}"
+						entityList="#{catContributorsList}" propertyLabel="SCM ID"
+						propertyPath="catContributors.catScm.id"
+						propertyValue="#{catContributorsList.catContributors.catScm.id}"
+						propertyName="catScm.id" sortable="true" value="#{_catContributors.catScm.id}" /> 
+													
+					<cats:column linkToId="#{_catContributors.id}" styleClass="id"
+						rendered="#{catContributorsList.listFlavour['id']}"
+						entityList="#{catContributorsList}" propertyLabel="ID"
+						propertyPath="catContributors.id"
+						propertyValue="#{catContributorsList.catContributors.id}"
+						propertyName="id" sortable="true" value="#{_catContributors.id}" />
+				
+				<cats:column linkToId="#{_catContributors.id}" sortable="true"
+					rendered="#{catContributorsList.listFlavour['catDateCreated']}"
+					entityList="#{catContributorsList}"
+					propertyLabel="Date Created"
+					propertyPath="catContributors.catDateCreated"
+					propertyValue="#{catContributorsList.catContributors.catDateCreated}"
+					propertyName="catDateCreated"
+					value="#{_catContributors.catDateCreated}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+						
+				<cats:column linkToId="#{_catContributors.id}" sortable="true"
+					rendered="#{catContributorsList.listFlavour['catDateModified']}"
+					entityList="#{catContributorsList}"
+					propertyLabel="Date Modified"
+					propertyPath="catContributors.catDateModified"
+					propertyValue="#{catContributorsList.catContributors.catDateModified}"
+					propertyName="catDateModified"
+					value="#{_catContributors.catDateModified}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+						
+					
+				</h:dataTable>
+			</div>
+		</a:form>
+
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatContributorsList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catContributorsList}"></ui:param>
+			<ui:param name="divId" value="2" />
+		</ui:include>
+
+		<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+		<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catContributorsList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+	</ui:define>
+</ui:composition>

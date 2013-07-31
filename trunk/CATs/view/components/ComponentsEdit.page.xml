@@ -1,0 +1,48 @@
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/lists/CmptsRollupsList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{catCmptsHome.wire}"/>
+
+   <param name="catCmptsFrom"/>
+   <param name="id" value="#{catCmptsHome.catCmptsId}"/>
+   <param name="catCmptsId" value="#{catCmptsHome.catCmptsId}"/>
+   <param name="catDigiVendorListFrom"/>
+   <param name="catDigiVendorListId" value="#{catDigiVendorListHome.catDigiVendorListId}"/>
+   <param name="notesSortOrder" value="#{catCmptsHome.notesSortOrder}"/>
+   <param name="selectedTab" value="#{catCmptsHome.selectedTab}"/>
+
+   <navigation from-action="#{catCmptsHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/components/ComponentsEdit.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{catCmptsHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/components/ComponentsEdit.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{catCmptsHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/lists/CmptsRollupsList.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation>
+            <rule if-outcome="cancel" >
+                <end-conversation before-redirect="true"/>
+         <redirect view-id="/components/ComponentsEdit.xhtml"/>
+    </rule>
+     </navigation>
+
+
+</page>

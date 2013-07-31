@@ -1,0 +1,147 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText
+		value="#{createMovingWallFlipsWizard.createTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="selected">1. Select</li>
+		<li class="disabled">2. Main</li>
+		<li class="disabled">3. Additional</li>
+		<li class="disabled">4. Results</li>
+	</ul>
+	<div class="cluster smart"><s:fragment
+		rendered="#{empty createMovingWallFlipsWizard.cmptsToAddTo}">
+
+
+		<s:div id="chooseCmptsFragment">
+
+
+			<h:outputText value="Search Components by name:" />
+			<h:inputText id="default_search_catCmptsList"
+				value="#{catCmptsThatCanMWFList.catCmpts.catName}" onchange="return false;"
+				size="60">
+			</h:inputText>
+
+			<a:commandLink styleClass="button filter" value="Go"
+				action="#{createMovingWallFlipsWizard.narrowList(rich:findComponent('default_search_catCmptsList').value)}"
+				reRender="chooseCmptsFragment" status="globalWaitStatus"
+				ignoreDupResponses="true" />
+
+<p>(Only Components of Sets with an Implemented Moving-Wall Wall Details are listed)</p>
+			<div class="scroller"><rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Components (#{catCmptsThatCanMWFList.resultCount})" />
+				</f:facet>
+			</rich:panel> 
+			
+			
+			<rich:dataTable id="cmpts" value="#{catCmptsThatCanMWFList.resultList}"
+				var="_catCmpts">
+
+
+				<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+					<s:fragment>
+						<h:selectBooleanCheckbox
+							styleClass="cmpts_checkbox"
+							value="#{createMovingWallFlipsWizard.selectionsForCmpts[_catCmpts]}"
+							onclick="emulateRadios(this, 'cmpts_checkbox');" />
+					</s:fragment>
+				</rich:column>
+
+				<cats:wizardColumn entityList="#{catCmptsThatCanMWFList}" propertyLabel="ID"
+					propertyName="id" propertyPath="catCmpts.id"
+					propertyValue="#{catCmptsList.catCmpts.id}" reRender="cmpts"
+					value="#{_catCmpts.id}" />
+				<cats:wizardColumn entityList="#{catCmptsThatCanMWFList}" propertyLabel="Name"
+					propertyName="catName" propertyPath="catCmpts.catName"
+					propertyValue="#{catCmptsList.catCmpts.catName}" reRender="cmpts"
+					value="#{_catCmpts.catName}" />
+				<cats:wizardColumn entityList="#{catCmptsThatCanMWFList}"
+					propertyLabel="Lifecycle" propertyName="catLifecycle"
+					propertyPath="catCmpts.catLifecycle"
+					propertyValue="#{catCmptsList.catLifecycle}" reRender="cmpts"
+					value="#{_catCmpts.catLifecycle}" />
+
+				<cats:wizardColumn entityList="#{catCmptsThatCanMWFList}"
+					propertyLabel="Sets Name" propertyName="setsValue"
+					propertyPath="catCmpts.setsValue"
+					propertyValue="#{catCmptsList.catCmpts.setsValue}"
+					reRender="cmpts" value="#{_catCmpts.setsValue}" />
+				<cats:wizardColumn entityList="#{catCmptsThatCanMWFList}"
+					propertyLabel="Publication Unit Range"
+					propertyName="catPublctnUnitRange"
+					propertyPath="catCmpts.catPublctnUnitRange"
+					propertyValue="#{catCmptsList.catCmpts.catPublctnUnitRange}"
+					reRender="cmpts" value="#{_catCmpts.catPublctnUnitRange}" />
+					
+				<cats:wizardColumn entityList="#{catCmptsThatCanMWFList}"
+					propertyLabel="Date Range" propertyName="catDateRange"
+					propertyPath="catCmpts.catDateRange"
+					propertyValue="#{catCmptsList.catCmpts.catDateRange}"
+					reRender="cmpts" value="#{_catCmpts.catDateRange}" />
+				
+				<cats:wizardColumn entityList="#{catCmptsThatCanMWFList}"
+					propertyLabel="Print ISSN" propertyName="catPrintIssn"
+					propertyPath="catCmpts.catPrintIssn"
+					propertyValue="#{catCmptsList.catCmpts.catPrintIssn}"
+					reRender="cmpts" value="#{_catCmpts.catPrintIssn}" />
+				<cats:wizardColumn entityList="#{catCmptsThatCanMWFList}"
+					propertyLabel="On Hold" propertyName="catOnHold"
+					propertyPath="catCmpts.catOnHold"
+					propertyValue="#{catCmptsList.catCmpts.catOnHold}" reRender="cmpts"
+					value="#{_catCmpts.catOnHold ? 'Yes' : 'No'}" />
+
+
+
+
+
+
+			</rich:dataTable></div>
+		</s:div>
+
+	</s:fragment> <s:fragment
+		rendered="#{not empty createMovingWallFlipsWizard.cmptsToAddTo}">
+		<p><h:outputText
+			value="You have chosen to make a Moving Wall Flip for the Component " /><em><h:outputText
+			value="#{createMovingWallFlipsWizard.cmptsToAddTo.catName}" /></em>.</p>
+	</s:fragment></div>
+
+	<div class="push"></div>
+
+	<a:commandLink styleClass="button" value="Quit"
+		reRender="createMovingWallFlipswizard,#{reRenderMe}"
+		action="#{createMovingWallFlipsWizard.createReset}"
+		oncomplete="#{rich:component('createMovingWallFlipsPanel')}.hide();"
+		eventsQueue="createMovingWallFlips" status="globalWaitStatus"
+		ignoreDupResponses="true">
+	</a:commandLink> <s:fragment
+		rendered="#{not empty createMovingWallFlipsWizard.cmptsToAddTo}">
+		<a:commandLink styleClass="button right" value="Continue"
+			action="#{createMovingWallFlipsWizard.createNext}"
+			reRender="createMovingWallFlipswizard"
+			eventsQueue="createMovingWallFlips" status="globalWaitStatus"
+			ignoreDupResponses="true" />
+	</s:fragment> <s:fragment
+		rendered="#{empty createMovingWallFlipsWizard.cmptsToAddTo}">
+		<a:commandLink styleClass="button right" value="Continue"
+			onclick="if(checkRadios('cmpts_checkbox', 'Please select a Component') == false) {return false}"
+			action="#{createMovingWallFlipsWizard.createNext}"
+			reRender="createMovingWallFlipswizard"
+			eventsQueue="createMovingWallFlips" status="globalWaitStatus"
+			ignoreDupResponses="true">
+		</a:commandLink>
+	</s:fragment></div>
+</ui:composition>
+

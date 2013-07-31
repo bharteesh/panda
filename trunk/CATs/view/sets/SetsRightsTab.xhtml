@@ -1,0 +1,73 @@
+
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:ui="http://java.sun.com/jsf/facelets" id="rightsDiv78">
+    
+    	<div class="col col1">
+    		<s:decorate id="catSigningDeadlineDateField179" template="../layout/edit.xhtml">
+                <ui:define name="label">Signing Deadline</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd" 
+                	disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catSigningDeadlineDate')}" 
+                	id="catSigningDeadlineDate80" inputClass="datestyle" value="#{catSetsHome.instance.catSigningDeadlineDate}"/>
+        	</s:decorate>
+        	
+        	<s:decorate id="catThNegotiatorField181" template="../layout/edit.xhtml">
+                <ui:define name="label">Negotiator</ui:define>
+                 <h:selectOneMenu onchange="enableSaveCancel();"  disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catThNegotiator')}"
+                	id="catThNegotiator82" value="#{catSetsHome.instance.catThNegotiator}">
+					<s:selectItems	value="#{roler.getUsersInRole('CD Negotiations')}" var="i"
+						itemValue="#{i}" label="#{i}" noSelectionLabel="Choose..." />
+				</h:selectOneMenu>
+			</s:decorate>
+            
+		    <s:decorate id="catThStatusField183" template="../layout/edit.xhtml">
+               <ui:define name="label">Title History Status</ui:define>
+				<h:outputText value="#{catSetsHome.instance.catThStatus.label}"/>
+				<a:commandLink 
+				ignoreDupResponses="true"
+	    		action="#{catSetsHome.updateUsingWizard('THSTATUS')}"
+				value="Edit"
+				reRender="setsBulkOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('setsBulkUpdatePanel');"
+				styleClass="button wizard #{(!s:hasPermission(catSetsHome.instance, 'modify catThStatus') or (catSetsHome.instance.catThStatus.label eq 'Completed') or (empty catSetsHome.instance.catThNegotiator))? 'disabled' : ''}"
+				disabled="#{(!s:hasPermission(catSetsHome.instance, 'modify catThStatus')) or (catSetsHome.instance.catThStatus.label eq 'Completed') or (empty catSetsHome.instance.catThNegotiator)}"
+				status="globalWaitStatus"
+				eventsQueue="setsEditQueue"
+				ajaxSingle="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"/>
+			</s:decorate>
+            	
+       </div>
+        <div class="col col2">  
+          <s:decorate id="catThPageCntField184" template="../layout/edit.xhtml">
+                <ui:define name="label">Page Count Est.</ui:define>
+                <h:inputText onchange="enableSaveCancel();"  readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catThPageCnt')}" 
+                	id="catThPageCnt85" value="#{catSetsHome.instance.catThPageCnt}">
+                </h:inputText>
+            </s:decorate>
+			
+			 <s:decorate id="catThPageCntESTAccuracy2" template="../layout/edit.xhtml">
+                <ui:define name="label">Page Count Estimate Accuracy Rating</ui:define>
+                <h:selectOneMenu onchange="enableSaveCancel();"  disabled="#{!s:hasPermission(catSetsHome.instance, 'modify catThPageCntEstAccuracy')}" 
+                	name="catThPageCntEstAccuracy" value="#{catSetsHome.instance.catThPageCntEstAccuracy}">
+			   		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="None..." 
+			   			value="#{listsForEnums.catSets_ThPageCntEstAccuracy}" var="i"/>
+				</h:selectOneMenu>
+            </s:decorate>  
+		
+            <s:decorate id="catAcqContactField186" template="../layout/edit.xhtml">
+                <ui:define name="label">Acquisition Contact</ui:define>
+                <h:inputTextarea onchange="enableSaveCancel();"  cols="20" readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catAcqContact')}" 
+                	id="catAcqContact86" rows="2" value="#{catSetsHome.instance.catAcqContact}"/>
+            </s:decorate>
+            
+            <s:decorate id="catAcqKickOffNoteField187" template="../layout/edit.xhtml">
+                <ui:define name="label">Acquisition Kick-Off</ui:define>
+                <h:inputTextarea onchange="enableSaveCancel();"  cols="20" readonly="#{!s:hasPermission(catSetsHome.instance, 'modify catAcqKickOffNote')}" 
+                	id="catAcqKickOffNote88" rows="2" value="#{catSetsHome.instance.catAcqKickOffNote}"/>
+            </s:decorate>
+	      </div>
+	      <div class="push"/>
+	    
+    
+ 
+</s:div>

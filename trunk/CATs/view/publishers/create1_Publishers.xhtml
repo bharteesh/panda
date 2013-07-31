@@ -1,0 +1,142 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2>
+		<h:outputText value="#{createPublishersWizard.createTitle}" />
+	</h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Change</li>
+			<li class="disabled">2. Additional</li>
+			<li class="disabled">3. Results</li>
+		</ul>
+		<div class="cluster smart">
+
+			<p>Enter the new value to apply to the publisher record.</p>
+
+			<s:fragment
+				rendered="#{createPublishersWizard.createRequiredProperties.contains('catName')}">
+				<s:decorate id="catNameDiv" template="../layout/edit.xhtml">
+					<ui:define name="label">Name</ui:define>
+					<h:inputText id="catName" size="25" maxlength="255"
+						requiredMessage="Required" required="true"
+						value="#{createPublishersWizard.createTransientInstance.catName}">
+						<a:support event="onblur" eventsQueue="#{divParam}eventsQueue"
+							ajaxSingle="true" limitToList="true" />
+					</h:inputText>
+					<span class="comments"> <a:commandLink
+							styleClass="button find"
+							value="Check for Duplicates"
+							action="#{createPublishersWizard.checkForDuplicates}"
+							reRender="noLayoutNoDups, noLayoutHasDups"
+							eventsQueue="#{divParam}eventsQueue" status="globalWaitStatus"
+							ajaxSingle="true" limitToList="true" />
+					</span>
+				</s:decorate>
+
+
+				<a:outputPanel layout="none" id="noLayoutNoDups">
+					<s:div
+						rendered="#{createPublishersWizard.checkForDup and !createPublishersWizard.hasDups}"
+						styleClass="alert eligible">
+						<p>There are no publishers with this name.</p>
+					</s:div>
+				</a:outputPanel>
+
+				<a:outputPanel layout="none" id="noLayoutHasDups">
+					<s:div
+						rendered="#{createPublishersWizard.checkForDup and createPublishersWizard.hasDups}"
+						styleClass="alert">
+						<p>
+							<strong>#{createPublishersWizard.duplicatePublishers.size}</strong>
+							publishers share a similar name. Click <strong>Continue</strong> if
+							you want to proceed anyway.
+						</p>
+					</s:div>
+					<s:div
+						rendered="#{createPublishersWizard.checkForDup and createPublishersWizard.hasDups}"
+						styleClass="smart scroller">
+
+
+						<rich:dataTable id="publishersTableWiz" var="_catPub"
+							value="#{createPublishersWizard.duplicatePublishers}"
+							rowClasses="odd,even">
+
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Name" />
+								</f:facet>
+								<h:outputText value="#{_catPub.catName}" />
+							</rich:column>
+							
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="ID" />
+								</f:facet>
+								<h:outputText value="#{_catPub.id}" />
+							</rich:column>
+
+						</rich:dataTable>
+					</s:div>
+
+				</a:outputPanel>
+			</s:fragment>
+
+			<s:fragment
+				rendered="#{createPublishersWizard.createRequiredProperties.contains('catCountry')}">
+				<s:decorate id="catCountryDiv" template="../layout/edit.xhtml">
+					<ui:define name="label">Country</ui:define>
+					<h:selectOneMenu name="Country"
+						value="#{createPublishersWizard.createTransientInstance.catCountry}"
+						requiredMessage="Required" required="true">
+						<s:selectItems value="#{listsForEnums.catPublishers_Country}"
+							var="i" itemValue="#{i}" label="#{i.label}"
+							noSelectionLabel="None..." />
+					</h:selectOneMenu>
+				</s:decorate>
+			</s:fragment>
+			<s:fragment
+				rendered="#{createPublishersWizard.createRequiredProperties.contains('catOrganizationType')}">
+				<s:decorate id="catOrganizationTypeDiv"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Organization Type</ui:define>
+					<h:selectOneMenu name="OrganizationType"
+						value="#{createPublishersWizard.createTransientInstance.catOrganizationType}"
+						requiredMessage="Required" required="true">
+						<s:selectItems
+							value="#{listsForEnums.catPublishers_OrganizationType}" var="i"
+							itemValue="#{i}" label="#{i.label}" noSelectionLabel="None..." />
+					</h:selectOneMenu>
+				</s:decorate>
+			</s:fragment>
+		</div>
+
+		<div class="push"></div>
+
+		<a:commandLink styleClass="button" value="Quit"
+			status="globalWaitStatus" ignoreDupResponses="true"
+			eventsQueue="#{divParam}eventsQueue"
+			reRender="createPublishersWizard"
+			oncomplete="#{rich:component('createPublishersQuit')}.show(); return false;">
+		</a:commandLink>
+
+		<a:commandLink styleClass="button right" value="Continue"
+			status="globalWaitStatus" ignoreDupResponses="true"
+			eventsQueue="#{divParam}eventsQueue"
+			action="#{createPublishersWizard.createNext}"
+			reRender="createPublishersWizard" />
+	</div>
+
+</ui:composition>
+

@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createCollectionWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Main</li>
+			<li class="disabled">2. Results</li>
+		</ul>
+		<div class="cluster">
+		<s:decorate id="catName_div1" template="../layout/edit.xhtml">
+			<ui:define name="label">Name</ui:define>
+			<h:inputText id="catName" maxlength="255" size="25" value="#{createCollectionWizard.createInstance.catName}"/>
+		</s:decorate>
+		<s:decorate id="catType_div1" template="../layout/edit.xhtml">
+			<ui:define name="label">Type</ui:define>
+				<h:selectOneMenu name="catType" value="#{createCollectionWizard.createInstance.catType}">
+				   		<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." value="#{listsForEnums.catCollections_Type}" var="i"/>
+				</h:selectOneMenu>
+		</s:decorate>
+		</div>
+	
+		<div class="push"></div>
+		
+		<a:commandLink styleClass="button" value="Quit" status="globalWaitStatus" ignoreDupResponses="true"
+			oncomplete="#{rich:component('createCollectionQuitModal')}.show(); return false;"/>
+			
+		<a:commandLink styleClass="button right" value="Create"  status="globalWaitStatus" ignoreDupResponses="true"
+			action="#{createCollectionWizard.createNext}"
+				reRender="createCollectionForm" />
+	</div>
+</ui:composition>
+

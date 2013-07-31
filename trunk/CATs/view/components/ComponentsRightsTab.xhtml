@@ -1,0 +1,166 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="rightsDiv">
+
+	<div class="col col1">
+		<s:decorate id="catSelectionStatus_div6"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Selection Status</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catSelectionStatus.label}" />
+			<a:commandLink 
+				ignoreDupResponses="true"
+	    		action="#{catCmptsHome.updateUsingWizard('SELSTATUS')}"
+				value="Edit"
+				reRender="cmptBulkOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('cmptBulkUpdatePanel');"
+				styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'modify catSelectionStatus') ? 'disabled' : ''}"
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catSelectionStatus')}"
+				status="globalWaitStatus"
+				eventsQueue="cmptsEditQueue"
+				ajaxSingle="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"/>
+		</s:decorate> 
+		<s:decorate id="catRightsObtained_div6"	template="../layout/edit.xhtml">
+			<ui:define name="label">BF Rights Obtained</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catRightsObtained ? 'Yes' : 'No'}" />
+			<a:commandLink 
+				ignoreDupResponses="true"
+	    		action="#{catCmptsHome.updateUsingWizard('RIGHTS')}"
+				value="Edit"
+				reRender="cmptBulkOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('cmptBulkUpdatePanel');"
+				styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'modify catRightsObtained') ? 'disabled' : ''}"
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catRightsObtained')}"
+				status="globalWaitStatus"
+				eventsQueue="cmptsEditQueue"
+				ajaxSingle="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"/>
+		</s:decorate> 
+		<s:decorate id="catParticipationDate_div6"	template="../layout/edit.xhtml">
+			<ui:define name="label">Participation Date</ui:define>
+			<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd"
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catParticipationDate')}"
+				id="catParticipationDate6" inputClass="datestyle"
+				value="#{catCmptsHome.instance.catParticipationDate}" />
+		</s:decorate> 
+		
+		<s:decorate id="catStartYear_div6"	template="../layout/edit.xhtml">
+			<ui:define name="label">Start Year</ui:define>
+			<h:inputText value="#{catCmptsHome.instance.catStartYear}" onchange="enableSaveCancel();" ><s:convertDateTime type="date" pattern="yyyy"/></h:inputText>
+		</s:decorate>
+
+		<s:decorate id="catRightsExclusions_div6"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Rights Exclusions</ui:define>
+			<h:selectOneMenu onchange="enableSaveCancel();" 
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catRightsExclusions')}"
+				name="catRightsExclusions"
+				value="#{catCmptsHome.instance.catRightsExclusions}">
+				<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+					noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+			</h:selectOneMenu>
+		</s:decorate> 
+		<s:decorate id="catExcludedRange_div6" template="../layout/edit.xhtml">
+			<ui:define name="label">Excluded Range</ui:define>
+			<h:inputTextarea onchange="enableSaveCancel();"  cols="20" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catExcludedRange')}" 
+				 id="catExcludedRange6" rows="2" value="#{catCmptsHome.instance.catExcludedRange}"/>
+		</s:decorate> 
+		<s:decorate id="catWebAttributionOverride_div6"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Web Attribution Override</ui:define>
+			<h:inputTextarea onchange="enableSaveCancel();" cols="20" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catWebAttributionOverride')}" 
+				 id="catWebAttributionOverride6" rows="2" value="#{catCmptsHome.instance.catWebAttributionOverride}"/>
+		</s:decorate>
+		
+		<s:decorate id="catEarlyJournalStatus_div"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Early Journal Content Status</ui:define>
+			<h:selectOneMenu onchange="enableSaveCancel();" 
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catEarlyJournalContentStatus')}"
+				name="catEarlyJournalStatus"
+				value="#{catCmptsHome.instance.catEarlyJournalContentStatus}">
+				<s:selectItems itemValue="#{i}" label="#{i.label}"
+					noSelectionLabel="Choose..." value="#{listsForEnums.catCmpts_EarlyJournalContentStatus}" var="i" />
+			</h:selectOneMenu>
+		</s:decorate> 
+	</div>
+	<div class="col col2">
+		<s:decorate id="catImgDarkNote_div6"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Image Darkening</ui:define>
+			<h:inputTextarea onchange="enableSaveCancel();" cols="20" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catImgDarkNote')}" 
+				 id="catImgDarkNote6" rows="2" value="#{catCmptsHome.instance.catImgDarkNote}">
+				 
+				 <a:support event="onfocus" action="#{catCmptsHome.onFocusImgDarkNote}" 
+				 	ajaxSingle="true"
+				 	eventsQueue="cmptsEditQueue"/>
+				 <a:support event="onblur" action="#{catCmptsHome.imgDarkNoteChanged}" 
+				 	ajaxSingle="true"
+				 	eventsQueue="cmptsEditQueue"/>
+				 
+			</h:inputTextarea>
+		</s:decorate> 
+		<s:decorate id="catImgDarkNoteChangeBy_div6"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Image Darkening Changed By</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catImgDarkNoteChangeBy}" />
+			<!-- <h:inputText
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catImgDarkNoteChangeBy')}"
+				id="catImgDarkNoteChangeBy6" maxlength="255" size="25"
+				value="#{catCmptsHome.instance.catImgDarkNoteChangeBy}" /> -->
+		</s:decorate> 
+		<s:decorate id="catImgDarkNoteDateChange_div6"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Image Darkening Date Changed</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catImgDarkNoteDateChange}" ><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+			<!-- <rich:calendar enableManualInput="true"  datePattern="yyyy/MM/dd"
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catImgDarkNoteDateChange')}"
+				id="catImgDarkNoteDateChange6" inputClass="datestyle"
+				value="#{catCmptsHome.instance.catImgDarkNoteDateChange}" />-->
+		</s:decorate> 
+		<s:decorate id="catArtDarkNote_div6" template="../layout/edit.xhtml">
+			<ui:define name="label">Article Darkening</ui:define>
+			<h:inputTextarea onchange="enableSaveCancel();" cols="20" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catArtDarkNote')}" 
+				 id="catArtDarkNote6" rows="2" value="#{catCmptsHome.instance.catArtDarkNote}">
+				 
+				  <a:support event="onfocus" action="#{catCmptsHome.onFocusArtDarkNote}" 
+				 	ajaxSingle="true"
+				 	eventsQueue="cmptsEditQueue"/>
+				 <a:support event="onblur" action="#{catCmptsHome.artDarkNoteChanged}" 
+				 	ajaxSingle="true"
+				 	eventsQueue="cmptsEditQueue"/>
+				 
+			</h:inputTextarea>
+		</s:decorate> 
+		<s:decorate id="catArtDarkNoteChangeBy_div6"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Article Darkening Changed By</ui:define>
+			<!-- <h:inputText
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catArtDarkNoteChangeBy')}"
+				id="catArtDarkNoteChangeBy6" maxlength="255" size="25"
+				value="#{catCmptsHome.instance.catArtDarkNoteChangeBy}" /> -->
+			<h:outputText value="#{catCmptsHome.instance.catArtDarkNoteChangeBy}" />
+		</s:decorate> 
+		<s:decorate id="catArtDarkNoteDateChange_div6"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Article Darkening Date Changed</ui:define>
+			<!-- <rich:calendar enableManualInput="true"  datePattern="yyyy/MM/dd"
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catArtDarkNoteDateChange')}"
+				id="catArtDarkNoteDateChange6" inputClass="datestyle"
+				value="#{catCmptsHome.instance.catArtDarkNoteDateChange}" /> -->
+			<h:outputText value="#{catCmptsHome.instance.catArtDarkNoteDateChange}" ><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+		</s:decorate>
+	</div>
+
+	<div class="push" />
+
+	
+
+</s:div>

@@ -1,0 +1,29 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:a="http://richfaces.org/a4j" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:rich="http://richfaces.org/rich" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="SOMEDiv2">
+
+<!-- Smart tables for issue_shipments, acq_orders_problems -->
+	<ui:include src="SetsContractsTable.xhtml">
+	  		<ui:param name="divId" value="thContractsTableDiv"/>
+	  		<ui:param name="tableId" value="thContractsTable"/>
+	  		<ui:param name="contractList" value="#{catPublishersHome.catContractses}"/>
+	</ui:include>
+
+	  <ui:include src="InvitationDetailsOtherInvitationsTable.xhtml">
+	  		<ui:param name="divId" value="thOtherInvitationsTableDiv"/>
+	  		<ui:param name="tableId" value="thOtherInvitationsTable"/>
+	  		<ui:param name="invitationList" value="#{catPublishersHome.catInvitationses}"/>
+	  </ui:include>
+	  
+	  		<ui:include src="BookAgreementDetailsTable.xhtml"> 
+					<ui:param name="divId" value="bookAgreementDtlsTableDiv" />
+					<ui:param name="tableId" value="bookAgreementDtlsTable" />
+					<ui:param name="bookAgreementDtlsList"
+						value="#{catPublishersHome.bookAgreementDtlsList}" />
+				</ui:include>
+
+</s:div>

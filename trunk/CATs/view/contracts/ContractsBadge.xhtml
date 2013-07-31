@@ -1,0 +1,327 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:rich="http://richfaces.org/rich">
+
+
+
+	<h1>#{catContractsHome.instance.id}</h1>
+
+	<rich:simpleTogglePanel id="bConPubFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConPubFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConPubFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'bConPubFlap')}"
+		reRender="bConPubFlap" ajaxSingle="true" limitToList="true"
+		eventsQueue="contEditQueue" label="Publishers">
+		<s:decorate id="contractsPublishersRollups"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Publishers</ui:define>
+
+			<ui:repeat var="_pub"
+				value="#{catContractsHome.instance.catPublishersList}">
+				<span>
+					<ul class="list">
+						<li><s:link value="#{_pub.catName}"
+								view="/publishers/PublishersEdit.xhtml" propagation="none">
+								<f:param name="id" value="#{_pub.id}" />
+							</s:link></li>
+					</ul>
+				</span>
+			</ui:repeat>
+		</s:decorate>
+		<s:decorate id="catDistributorValue" template="../layout/edit.xhtml">
+			<ui:define name="label">Distributor</ui:define>
+			<s:div>
+				<a:form id="delinkForm">
+					<ul class="delinklist">
+						<ui:repeat var="_pub"
+							value="#{catContractsHome.instance.catDistributorContractId.catPublishersList}">
+							<li>
+								<span><s:link value="#{_pub.catName}"
+										view="/publishers/PublishersEdit.xhtml" propagation="none">
+										<f:param name="id" value="#{_pub.id}" />
+									</s:link></span></li>
+									
+						</ui:repeat>
+					</ul>
+						<a:commandLink id="deleteDistributorButton"
+									action="#{changeDistributorValueWizard.prepareUnlink()}"
+									disabled="#{catContractsHome.instance.distributorValue eq null}"
+									reRender="changeDistributorValuePanels"
+									oncomplete="#{rich:component('changeDistributorValuePanel')}.show();"
+									styleClass="button delink #{!s:hasPermission(catContractsHome.instance, 'modify catDistributorContractId') or (catContractsHome.instance.distributorValue eq null) ? 'disabled' : ''}"
+									status="globalWaitStatus" ignoreDupResponses="true"
+									ajaxSingle="true" limitToList="true">
+								</a:commandLink> 
+						<a:commandLink ignoreDupResponses="true"
+							action="#{changeDistributorValueWizard.startWizard()}"
+							value="Edit" reRender="changeDistributorValuePanels"
+							oncomplete="#{rich:component('changeDistributorValuePanel')}.show();"
+							styleClass="button wizard #{!s:hasPermission(catContractsHome.instance, 'modify catDistributorContractId') ? 'disabled' : ''}"
+							disabled="#{!s:hasPermission(catContractsHome.instance, 'modify catDistributorContractId')}"
+							status="globalWaitStatus" eventsQueue="contEditQueue"
+							ajaxSingle="true"
+							onclick="if ( ! checkForSave() ) { return false ; }" /> 
+				</a:form>
+				</s:div>
+		</s:decorate>
+	</rich:simpleTogglePanel>
+
+	<rich:simpleTogglePanel id="bConGenFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConGenFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConGenFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'bConGenFlap')}"
+		reRender="bConGenFlap" ajaxSingle="true" limitToList="true"
+		eventsQueue="contEditQueue"
+		label="General (#{catContractsHome.instance.catType.label} / #{catContractsHome.instance.catLifecycle.label})">
+
+		<s:decorate id="contractsCatType" template="../layout/edit.xhtml">
+			<ui:define name="label">Type</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catType.label}" />
+		</s:decorate>
+		<s:decorate id="catLifecycle" template="../layout/edit.xhtml">
+			<ui:define name="label">Lifecycle</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catLifecycle.label}" />
+			<a:form>
+				<a:commandLink onclick="if ( ! checkForSave() ) { return false ; }"
+					id="catContLifecycleEditButton"
+					action="#{contractsLifecycleWizard.prepAdvanceLifecycle('LIFECYCLE')}"
+					value="Edit" reRender="contractsLifecycleOperationsPanels"
+					oncomplete="#{rich:component('contractsLifecycleUpdatePanel')}.show();"
+					disabled="#{!s:hasPermission(catContractsHome.instance, 'modify catLifecycle')}"
+					styleClass="button wizard #{!s:hasPermission(catContractsHome.instance, 'modify catLifecycle') ? 'disabled' : ''}"
+					status="globalWaitStatus" ignoreDupResponses="true"
+					ajaxSingle="true" limitToList="true" />
+			</a:form>
+		</s:decorate>
+		
+		<s:decorate id="catBksPortico" template="../layout/edit.xhtml" rendered="#{catContractsHome.instance.catType eq 'Books'}">
+			<ui:define name="label">Books at JSTOR in Portico</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catBooksPortico ? 'Yes' : 'No'}" />
+			<a:form>
+				<a:commandLink 
+					ignoreDupResponses="true"
+	    			action="#{changeBooksPorticoFieldsWizard.startWizard()}"
+					value="Edit"
+					reRender="changeBooksPorticoFieldsPanels" 
+					oncomplete="#{rich:component('changeBooksPorticoFieldsPanel')}.show();"
+					styleClass="button wizard #{!s:hasPermission(catContractsHome.instance, 'modify catBooksPortico') ? 'disabled' : ''}"
+					disabled="#{!s:hasPermission(catContractsHome.instance, 'modify catBooksPortico')}"
+					status="globalWaitStatus"
+					eventsQueue="contEditQueue"
+					ajaxSingle="true"
+					onclick="if ( ! checkForSave() ) { return false ; }"/>
+			</a:form>
+		</s:decorate>		
+		
+		<s:decorate id="catBksPorticoAnnexDate" template="../layout/edit.xhtml" rendered="#{catContractsHome.instance.catType eq 'Books'}">
+			<ui:define name="label">Books Portico Annex Countersigned</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catBooksPorticoAnnexDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+		
+		<s:decorate id="catBksDDA" template="../layout/edit.xhtml" rendered="#{catContractsHome.instance.catType eq 'Books'}">
+			<ui:define name="label">DDA</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catBksDDA ? 'Yes' : 'No'}" />			
+		</s:decorate>
+		
+		<s:decorate id="catLicensorAsWritten" template="../layout/edit.xhtml">
+			<ui:define name="label">Licensor Name as Written</ui:define>
+			<h:outputText
+				value="#{catContractsHome.instance.catLicensorAsWritten}"></h:outputText>
+		</s:decorate>
+		
+		<s:decorate id="bksLaunchDate" template="../layout/edit.xhtml" rendered="#{catContractsHome.instance.catType eq 'Books'}">
+			<ui:define name="label">Books Launch Date</ui:define>
+			<h:outputText value="#{catContractsHome.instance.booksLaunchDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+		
+		<s:decorate id="catLaunchDateb" template="../layout/edit.xhtml" rendered="#{catContractsHome.instance.catType eq 'Csp'}">
+			<ui:define name="label">Launch Date</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catCspLaunchDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+		<s:decorate id="catContractDate" template="../layout/edit.xhtml">
+			<ui:define name="label">Agreement Date Signed</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catAgreementDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+		<s:decorate id="catAgreementDatePubSigned"
+			template="../layout/edit.xhtml"
+			rendered="#{catContractsHome.instance.catType eq 'Books'}">
+			<ui:define name="label">Date Agreement Signed by Publisher</ui:define>
+			<h:outputText
+				value="#{catContractsHome.instance.catAgreementDatePubSigned}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+		<s:decorate id="catContractInfoTerminationDate"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Termination Date</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catTerminationDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+		<s:decorate id="catOutCome" template="../layout/edit.xhtml">
+			<ui:define name="label">Outcome</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catOutcome.label}" />
+		</s:decorate>
+
+	</rich:simpleTogglePanel>
+
+
+
+	<rich:simpleTogglePanel id="bConBfFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConBfFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConBfFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'bConBfFlap')}"
+		reRender="bConBfFlap" ajaxSingle="true" limitToList="true"
+		rendered="#{catContractsHome.instance.catType eq 'Backfile'}"
+		eventsQueue="contEditQueue" label="Backfile">
+
+		<s:decorate id="catContractVersion" template="../layout/edit.xhtml">
+			<ui:define name="label">Agreement Version</ui:define>
+			<h:outputText
+				value="#{catContractsHome.instance.catAgreementVersion}" />
+		</s:decorate>
+
+		<s:decorate id="catRevisions" template="../layout/edit.xhtml"
+			rendered="#{catContractsHome.instance.catType eq 'Backfile'}">
+			<ui:define name="label">Revisions</ui:define>
+			<h:outputText
+				value="#{catContractsHome.instance.catAgreementRevisions? 'Yes' : 'No'}" />
+		</s:decorate>
+
+		<s:decorate id="catRiders" template="../layout/edit.xhtml"
+			rendered="#{catContractsHome.instance.catType eq 'Backfile'}">
+			<ui:define name="label">Riders</ui:define>
+			<h:outputText value="#{catContractsHome.instance.riderNames}" />
+		</s:decorate>
+	</rich:simpleTogglePanel>
+
+	<rich:simpleTogglePanel id="bConCspFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConCspFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConCspFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'bConCspFlap')}"
+		reRender="bConCspFlap" ajaxSingle="true" limitToList="true"
+		rendered="#{catContractsHome.instance.catType eq 'Csp'}"
+		eventsQueue="contEditQueue" label="CSP">
+
+		<s:decorate id="catLaunchDatec" template="../layout/edit.xhtml">
+			<ui:define name="label">Launch Date</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catCspLaunchDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+		<s:decorate id="catSetCountc" template="../layout/edit.xhtml">
+			<ui:define name="label">Set Count</ui:define>
+			<h:outputText value="#{catContractsHome.instance.relatedSetCount}" />
+		</s:decorate>
+	</rich:simpleTogglePanel>
+
+
+	<rich:simpleTogglePanel id="bConHoldFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConHoldFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConHoldFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'bConHoldFlap')}"
+		reRender="bConHoldFlap" ajaxSingle="true" limitToList="true"
+		eventsQueue="contEditQueue"
+		label="On Hold (#{catContractsHome.instance.catOnHold ? 'Yes' : 'No'})">
+
+		<s:decorate id="catOnHold" template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold</ui:define>
+			<h:outputText
+				value="#{catContractsHome.instance.catOnHold ? 'Yes' : 'No'}" />
+			<a:form>
+				<a:commandLink id="catOnHoldEditButton"
+					onclick="if ( ! checkForSave() ) { return false ; }"
+					status="globalWaitStatus" ignoreDupResponses="true" value="Edit"
+					reRender="changeContractsOnHoldPanels"
+					oncomplete="Richfaces.showModalPanel('changeContractsOnHoldPanel');"
+					styleClass="button wizard #{!s:hasPermission(catContractsHome.instance, 'modify catOnHold') ? 'disabled' : ''}"
+					disabled="#{!s:hasPermission(catContractsHome.instance, 'modify catOnHold')}"
+					ajaxSingle="true" limitToList="true" />
+			</a:form>
+		</s:decorate>
+
+		<s:decorate id="catOnHoldReason" template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold Reason</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catOnHoldReason}" />
+			<a:form>
+				<a:commandLink ignoreDupResponses="true"
+					action="#{updateOnHoldReasonWizard.prepUpdateOperation(catContractsHome.instance)}"
+					value="Edit" reRender="updateOnHoldReasonModalPanels"
+					oncomplete="Richfaces.showModalPanel('updateOnHoldReasonPanel');"
+					styleClass="button wizard #{!s:hasPermission(catContractsHome.instance, 'modify catOnHold') or not catContractsHome.instance.catOnHold ? 'disabled':''}"
+					disabled="#{!s:hasPermission(catContractsHome.instance, 'modify catOnHold') or not catContractsHome.instance.catOnHold}"
+					status="globalWaitStatus" ajaxSingle="true" limitToList="true"
+					onclick="if ( ! checkForSave() ) { return false ; }" />
+			</a:form>
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold Set By</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catOnHoldSetBy}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold Set Date</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catOnHoldSetDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">On Hold Reason Change Date</ui:define>
+			<h:outputText
+				value="#{catContractsHome.instance.catOnHoldReasonChangeDate}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+	</rich:simpleTogglePanel>
+
+
+	<rich:simpleTogglePanel id="bConSysFlap" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConSysFlap')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'bConSysFlap') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'bConSysFlap')}"
+		reRender="bConSysFlap" ajaxSingle="true" limitToList="true"
+		eventsQueue="contEditQueue" label="System Information">
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">ID</ui:define>
+			<h:outputText value="#{catContractsHome.instance.id}" />
+		</s:decorate>
+		<s:decorate id="contractsRecType" template="../layout/edit.xhtml">
+			<ui:define name="label">Record Type</ui:define>
+			<h:outputText value="Agreements" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Creator</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catCreator}" />
+		</s:decorate>
+
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Created Date</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catDateCreated}">
+				<s:convertDateTime type="date" pattern="yyyy/MM/dd" />
+			</h:outputText>
+		</s:decorate>
+
+	</rich:simpleTogglePanel>
+
+
+</s:div>

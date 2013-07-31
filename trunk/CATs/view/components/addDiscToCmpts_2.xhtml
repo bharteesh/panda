@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+
+
+	<h2>#{addDiscToCmpts.wizardTitle}</h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="">1. Permissions</li>
+		<li class="selected">2. Change</li>
+		<li class="disabled">3. Results</li>
+	</ul>
+	<div class="cluster">
+
+	
+	<rich:listShuttle id="discPickList" 
+			  targetValue="#{addDiscToCmpts.currentDisciplines}" 
+			  sourceValue="#{addDiscToCmpts.otherDisciplines}"
+			  targetCaptionLabel="Current Disciplines"
+			  sourceCaptionLabel="All Other Disciplines"
+			  var="_disc"
+			  converter="#{org.jboss.seam.ui.EntityConverter}"
+			  sourceListWidth="315" targetListWidth="315" listsHeight="350">
+	    <rich:column>
+                <h:outputText value="#{_disc.catName}"></h:outputText>
+            </rich:column>
+	    <rich:column>
+                <h:outputText value="#{_disc.catType}"></h:outputText>
+            </rich:column>
+	</rich:listShuttle>
+	
+
+	</div>
+
+	<div class="push"></div>
+
+	<a:commandLink styleClass="button" value="Quit"  limitToList="true"
+		oncomplete="#{rich:component('addDiscToCmptsQuit')}.show(); return false;"
+		eventsQueue="wizardQueue" status="globalWaitStatus">
+	</a:commandLink>
+	 
+	<a:commandLink styleClass="button right" value="Save"
+		action="#{addDiscToCmpts.next}" reRender="wizard" limitToList="true"
+		eventsQueue="wizardQueue" status="globalWaitStatus"/></div>
+</ui:composition>
+

@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps many">
+			<li class="disabled">...</li>
+			<li class="">3. Title Relationships</li>
+			<li class="selected">4. Contracts</li>
+			<li class="disabled">5. Rights</li>
+			<li class="disabled">...</li>
+			<li class="disabled">8. Results</li>
+		</ul>
+		
+		<div class="cluster smart">
+			
+			<s:fragment rendered="#{createJournalWizard.hasPermissionCopyContractDtls}">
+				<p>You may now copy agreement details for the new component from another component in the set. 
+				Select an agreement detail and hit Copy, or hit continue to skip adding an agreement detail and continue creating the journal.</p>
+				<div class="scroller">
+					<rich:dataTable id="ContractDetailsTable" var="_catContractDetails"
+						value="#{createJournalWizard.eligibleContractDtlsList}">
+						
+						<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+						<h:selectBooleanCheckbox styleClass="entity_checkbox"
+							value="#{createJournalWizard.selectionsForContractDtls[_catContractDetails]}"
+							onclick="emulateRadios(this, 'entity_checkbox');" />
+						</rich:column>
+						<rich:column id="contDetailId">
+							<f:facet name="header">
+								<h:outputText value="ID"/>
+							</f:facet>
+							<h:outputText value="#{_catContractDetails.id}" />
+						</rich:column>
+			
+						<rich:column id="contDetailContractId" >
+							<f:facet name="header">
+								<h:outputText value="Agreement ID" />
+							</f:facet>
+							<h:outputText value="#{_catContractDetails.catContracts.id}" />
+						</rich:column>
+			
+						<rich:column id="contDetailPublisherName" >
+							<f:facet name="header">
+								<h:outputText value="Publisher Name" />
+							</f:facet>
+							<h:outputText value="#{_catContractDetails.catContracts.catPublishers.catName}" />
+						</rich:column>
+						
+						<rich:column id="contDetailCmptId" >
+							<f:facet name="header">
+								<h:outputText value="Component ID" />
+							</f:facet>
+							<h:outputText value="#{_catContractDetails.catCmpts.id}" />
+						</rich:column>
+			
+						<rich:column id="contDetailCmptName" >
+							<f:facet name="header">
+								<h:outputText value="Component Name" />
+							</f:facet>
+							<h:outputText value="#{_catContractDetails.catCmpts.catName}" />
+						</rich:column>
+			
+						<rich:column id="contDetailLifeCycle" >
+							<f:facet name="header">
+								<h:outputText value="Lifecycle" />
+							</f:facet>
+							<h:outputText value="#{_catContractDetails.catLifecycle.label}" />
+						</rich:column>
+						
+						
+						
+					</rich:dataTable>
+				</div>
+			</s:fragment>		
+			
+			<s:fragment rendered="#{!createJournalWizard.hasPermissionCopyContractDtls}">
+				<p> You do not have permission to work with agreements or there are no other components in this Set with active agreement details.
+				Hit Continue to continue creating the journal.</p>
+			</s:fragment>
+			
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('createJournalQuit')}.show(); return false;"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+			
+		<s:fragment rendered="#{createJournalWizard.hasPermissionCopyContractDtls}">	
+			<a:commandLink styleClass="button right" value="Continue"
+				action="#{createJournalWizard.showRightsObtainedView}"
+				reRender="createJournalForm" 
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"
+				/>
+			<a:commandLink styleClass="button right" value="Copy"
+				action="#{createJournalWizard.initCopyCDWizard}"
+				reRender="copyCDForm" 
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"
+				oncomplete="Richfaces.showModalPanel('copyCDWizardModal');"
+				onclick="if(checkRadios('entity_checkbox', 'Please select an Agreement Detail') == false) {return false};"/>
+			
+		</s:fragment>
+		 
+		<s:fragment rendered="#{!createJournalWizard.hasPermissionCopyContractDtls}">	
+			<a:commandLink styleClass="button right" value="Continue"
+				action="#{createJournalWizard.showRightsObtainedView}"
+				reRender="createJournalForm" 
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"/>
+		</s:fragment>
+	</div>
+</ui:composition>

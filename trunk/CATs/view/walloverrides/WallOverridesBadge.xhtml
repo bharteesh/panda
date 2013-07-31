@@ -1,0 +1,58 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<h1>#{catWallOverridesHome.instance.id}</h1>
+	<s:decorate id="recordType" template="../layout/edit.xhtml">
+		<ui:define name="label">Record Type:</ui:define>
+		<h:outputText value="Wall Overrides" />
+	</s:decorate>
+
+	<s:decorate id="catSetsId" template="../layout/edit.xhtml">
+		<ui:define name="label">Child of:</ui:define>
+		<s:link value="#{catWallOverridesHome.instance.catSets.catCurrentTitle.catName}"  view="/sets/SetsEdit.xhtml">
+				<f:param name="id" value="#{catWallOverridesHome.instance.catSets.id}"/>
+			</s:link>
+	</s:decorate>
+
+
+	<s:decorate id="catLifecycle" template="../layout/edit.xhtml">
+		<ui:define name="label">Lifecycle:</ui:define>
+		<h:outputText value="#{catWallOverridesHome.instance.catLifecycle}" />
+		
+		
+		<a:form>
+    	<a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }"  disabled="#{!s:hasPermission(catWallOverridesHome.instance, 'modify catLifecycle')}" 
+    	id="advanceLifecycleWallOverridesTypeButton" ignoreDupResponses="true" 
+    	action="#{catWallOverridesBulkOperations.prepAdvance(catWallOverridesHome.instance)}" value="Advance Lifecylce" reRender="catWallOverridesListModalDiv" 
+    	oncomplete="#{rich:component('catWallOverridesListBulkUpdatePanel')}.show();" 
+    	styleClass="button wizard #{s:hasPermission(catWallOverridesHome.instance, 'modify catLifecycle') ? '' : 'disabled'}" status="globalWaitStatus"  ajaxSingle="true"  />
+				</a:form>
+		
+	</s:decorate>
+
+<s:decorate id="catOutcome" template="../layout/edit.xhtml">
+<ui:define name="label">Outcome:</ui:define>
+<h:outputText value="#{catWallOverridesHome.instance.catOutcome}"/>
+</s:decorate>
+
+<s:decorate id="catDisplayThroughDate" template="../layout/edit.xhtml">
+<ui:define name="label">Display Through:</ui:define>
+<h:outputText value="#{catWallOverridesHome.instance.catDisplayThroughDate}"/>
+</s:decorate>
+
+<s:decorate id="catDateCompleted" template="../layout/edit.xhtml">
+<ui:define name="label">Date Completed:</ui:define>
+<h:outputText value="#{catWallOverridesHome.instance.catDateCompleted}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+</s:decorate>
+
+
+
+
+
+</s:div>

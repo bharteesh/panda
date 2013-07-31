@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{newJournalIdWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Info</li>
+			<li class="selected">2. Results</li>
+		</ul>
+		
+			<div class="cluster smart">
+
+		  <p>You have added a Literatum Journal ID (<h:outputText value="#{newJournalIdWizard.cmpt.catLtmJournalId}"></h:outputText>) to this Component: <h:outputText value="#{newJournalIdWizard.cmpt.id}"></h:outputText> </p>
+
+			</div> 
+		
+		
+		<div class="push"></div>
+	
+
+		 
+		
+		<a:commandLink styleClass="button right" value="Return"
+			action="#{newJournalIdWizard.reset()}"
+			oncomplete="#{rich:component('newJournalIdWizardModal')}.hide(); #{rich:component('newJournalIdQuit')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');" 
+			reRender="newJournalIdForm"
+			eventsQueue="newJournalQueue"
+			status="globalWaitStatus"/>
+
+		
+	</div>
+</ui:composition>
+

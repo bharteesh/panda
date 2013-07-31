@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps many">
+			<li class="selected">1. Info</li>
+			<li class="disabled">2. Selection Status</li>
+			<li class="disabled">3. Title Relationships</li>
+			<li class="disabled">...</li>
+			<li class="disabled">8. Results</li>
+		</ul>
+		<div class="cluster">
+				<s:fragment rendered="#{createJournalWizard.newOrExistingSet eq 'new'}">
+					<p>Enter as much information as you know about the Set, then continue to save your changes.</p>
+				</s:fragment>
+				<s:fragment rendered="#{createJournalWizard.newOrExistingSet eq 'existing'}">
+					<p>Revise information about the Set as needed, then continue to save your changes.</p>
+				</s:fragment>
+				<s:fragment rendered="#{createJournalWizard.newOrExistingSet eq 'existing'}">
+			         <s:decorate id="catThPublctnUnitRangeField" template="../layout/edit.xhtml">
+			              <ui:define name="label">Extent (Pub. Units)</ui:define>
+			              <h:inputTextarea cols="20" 
+			              	readonly="#{!s:hasPermission(createJournalWizard.catSetsHome.instance, 'modify catThPublctnUnitRange')}" 
+			              	id="catThPublctnUnitRange" rows="2" value="#{createJournalWizard.catSetsHome.instance.catThPublctnUnitRange}"/>
+			         </s:decorate>
+			         <s:decorate id="catThDateRangeField" template="../layout/edit.xhtml">
+			              <ui:define name="label">Extent (Dates)</ui:define>
+			              <h:inputTextarea onchange="" cols="20" 
+			              	readonly="#{!s:hasPermission(createJournalWizard.catSetsHome.instance, 'modify catThDateRange')}" 
+			              	id="catThDateRange" rows="2" value="#{createJournalWizard.catSetsHome.instance.catThDateRange}"/>
+			         </s:decorate>
+				</s:fragment>
+				
+				<s:fragment rendered="#{createJournalWizard.newOrExistingSet eq 'new'}">
+					<s:decorate id="catThCrntPubField1" template="../layout/edit.xhtml">
+			              <ui:define name="label">Publisher (circa Title History)</ui:define>
+			              <h:inputTextarea cols="20" 
+			              	readonly="#{!s:hasPermission(createJournalWizard.catSetsHome.instance, 'modify catThCrntPublisher')}" 
+			              	id="catThCrntPublisher1" rows="2" value="#{createJournalWizard.catSetsHome.instance.catThCrntPublisher}"/>
+			         </s:decorate>
+					
+					<s:decorate id="catThPublctnUnitRangeField1" template="../layout/edit.xhtml">
+			              <ui:define name="label">Extent (Pub. Units)</ui:define>
+			              <h:inputTextarea cols="20" 
+			              	readonly="#{!s:hasPermission(createJournalWizard.catSetsHome.instance, 'modify catThPublctnUnitRange')}" 
+			              	id="catThPublctnUnitRange1" rows="2" value="#{createJournalWizard.catSetsHome.instance.catThPublctnUnitRange}"/>
+			         </s:decorate>
+			         
+					<s:decorate id="catThDateRangeField1" template="../layout/edit.xhtml">
+			              <ui:define name="label">Extent (Dates)</ui:define>
+			              <h:inputTextarea onchange="" cols="20" 
+			              	readonly="#{!s:hasPermission(createJournalWizard.catSetsHome.instance, 'modify catThDateRange')}" 
+			              	id="catThDateRange1" rows="2" value="#{createJournalWizard.catSetsHome.instance.catThDateRange}"/>
+			         </s:decorate>
+			         
+			         
+			         
+			         <s:decorate id="catSigningDeadlineDateField1" template="../layout/edit.xhtml">
+		                <ui:define name="label">Signing Deadline</ui:define>
+		                <rich:calendar enableManualInput="true"  datePattern="yyyy/MM/dd" 
+		                	disabled="#{!s:hasPermission(createJournalWizard.catSetsHome.instance, 'modify catSigningDeadlineDate')}" 
+		                	id="catSigningDeadlineDate1" inputClass="datestyle" value="#{createJournalWizard.catSetsHome.instance.catSigningDeadlineDate}"/>
+		        	</s:decorate>
+				</s:fragment>
+			
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('createJournalQuit')}.show(); return false;"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+		 
+		
+		<a:commandLink styleClass="button right" value="Save and Continue"
+			action="#{createJournalWizard.saveSetInfo}"
+			reRender="createJournalForm" 
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+	</div>
+</ui:composition>

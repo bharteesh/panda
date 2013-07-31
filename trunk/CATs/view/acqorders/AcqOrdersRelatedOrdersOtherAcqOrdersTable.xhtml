@@ -1,0 +1,272 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats">
+    
+    <div class="smart">
+    	<div class="header">
+				<div class="left">
+        <span class="museo">
+<h:outputText
+						value="Other Orders for this Journal (#{catAcqOrdersHome.otherAcqOrdersList.size})" /></span>
+
+          <a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('otherAcqOrders'.concat(divId))}" ignoreDupResponses="true" status="globalWaitStatus" eventsQueue="catAcqOrdersEditQueue" reRender="#{tableId}" styleClass="button wizard"/>
+				
+				
+				</div>
+
+				<div class="right">
+			<a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }" id="#{tableId}createAcqOrdersEditButton"
+				ignoreDupResponses="true"
+     			eventsQueue="catAcqOrdersEditQueue"
+         		status="globalWaitStatus"
+           		ajaxSingle="true"
+			    action="#{createAcqOrdersWizard.prepCreateOperation(catAcqOrdersHome.instance.catCmpts)}"
+				value="Add Order"
+				reRender="createAcqOrdersOperationsPanels,#{tableId}" 
+				oncomplete="Richfaces.showModalPanel('createAcqOrdersPanel');"
+                styleClass="button wizard #{!s:hasPermission(catAcqOrdersHome.instance, 'create CatAcqOrders') ? 'disabled' : ''}"
+                disabled="#{!s:hasPermission(catAcqOrdersHome.instance, 'create CatAcqOrders')}" 
+                rendered="#{not empty catAcqOrdersHome.instance.catCmpts}"/>
+             
+             <a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }" id="#{tableId}createAcqOrdersEditButtonSet"
+				ignoreDupResponses="true"
+     			eventsQueue="catAcqOrdersEditQueue"
+         		status="globalWaitStatus"
+           		ajaxSingle="true"
+			    action="#{createAcqOrdersWizard.prepCreateOperation(catAcqOrdersHome.instance.catSets)}"
+				value="Add Order"
+				reRender="createAcqOrdersOperationsPanels,#{tableId}" 
+				oncomplete="Richfaces.showModalPanel('createAcqOrdersPanel');"
+                styleClass="button wizard #{!s:hasPermission(catAcqOrdersHome.instance, 'create CatAcqOrders') ? 'disabled' : ''}"
+                disabled="#{!s:hasPermission(catAcqOrdersHome.instance, 'create CatAcqOrders')}" 
+                rendered="#{not empty catAcqOrdersHome.instance.catSets}"/>
+
+				</div>
+		</div>
+		
+    	  <rich:dataTable id="#{tableId}"
+                var="_otherAcqOrders"
+              value="#{catAcqOrdersHome.otherAcqOrdersList}"
+           rendered="#{not empty catAcqOrdersHome.otherAcqOrdersList}">
+        	
+        	<rich:column rendered="false" width="20px">
+					<f:facet name="header">
+						<input type="checkbox" id="select_all_checkbox1"
+								name="select_all_checkbox"
+								onclick="if ( this.checked ) { jQuery('.#{divId}bulk_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.#{divId}bulk_checkbox').each(function(){ this.checked = false; }); }" />
+					</f:facet>
+					<h:selectBooleanCheckbox styleClass="#{divId}bulk_checkbox"
+						value="#{catAcqOrdersBulkOperations.selections[_otherAcqOrders]}" />
+				</rich:column>
+           	
+           
+        	<rich:column id="otherAcqOrdersId" sortBy="#{_otherAcqOrders.id}" filterBy="#{_otherAcqOrders.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['id_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['id_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.id}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersLifecycle" sortBy="#{_otherAcqOrders.catLifecycle}" filterBy="#{_otherAcqOrders.catLifecycle}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['lifecycle_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['lifecycle_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Lifecycle"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catLifecycle.label}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersOutcome" sortBy="#{_otherAcqOrders.catOutcome}" filterBy="#{_otherAcqOrders.catOutcome}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['outcome_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['outcome_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Outcome"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catOutcome.label}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersType" sortBy="#{_otherAcqOrders.catType}" filterBy="#{_otherAcqOrders.catType}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['type_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['type_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Type"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catType.label}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersReturnObligation" sortBy="#{_otherAcqOrders.catReturnObligation}" filterBy="#{_otherAcqOrders.catReturnObligation}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['returnObligation_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['returnObligation_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Return Obligation"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catReturnObligation.label}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersReprints" sortBy="#{_otherAcqOrders.catReprints}" filterBy="#{_otherAcqOrders.catReprints}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['reprints_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['reprints_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Reprints"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catReprints.label}" />        		
+				</s:link>				
+	        	</rich:column>
+ 	        	
+				<rich:column id="otherAcqOrdersSetId" sortBy="#{_otherAcqOrders.catSets.id}" filterBy="#{_otherAcqOrders.catSets.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['setId_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['setId_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catSets.id}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersSetName" sortBy="#{_otherAcqOrders.catSets.catCurrentTitle.catName}" filterBy="#{_otherAcqOrders.catSets.catCurrentTitle.catName}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['setName_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['setName_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catSets.catCurrentTitle.catName}" />        		
+				</s:link>				
+	        	</rich:column>
+	        	<rich:column id="otherAcqOrdersCmptsID" sortBy="#{_otherAcqOrders.catCmpts.id}" filterBy="#{_otherAcqOrders.catCmpts.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['cmptsID_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['cmptsID_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Component ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catCmpts.id}" />        		
+				</s:link>				
+	        	</rich:column>
+				
+				<rich:column id="otherAcqOrdersCmptsName" sortBy="#{_otherAcqOrders.catCmpts.catName}" filterBy="#{_otherAcqOrders.catCmpts.catName}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['cmptsName_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['cmptsName_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Component Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catCmpts.catName}" />        		
+				</s:link>				
+	        	</rich:column>
+	
+				<rich:column id="otherAcqOrdersSupplier" sortBy="#{_otherAcqOrders.catSupplier}" filterBy="#{_otherAcqOrders.catSupplier}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['supplier_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['supplier_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Supplier"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catSupplier}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersSupplierCommitment" sortBy="#{_otherAcqOrders.catSupplierCommitment}" filterBy="#{_otherAcqOrders.catSupplierCommitment}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['supplierCommitment_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['supplierCommitment_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Supplier Commitment"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catSupplierCommitment.label}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersPublctnUnitRange" sortBy="#{_otherAcqOrders.catPublctnUnitRange}" filterBy="#{_otherAcqOrders.catPublctnUnitRange}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['publctnUnitRange_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['publctnUnitRange_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Pub. Units)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catPublctnUnitRange}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersCoverDateRange" sortBy="#{_otherAcqOrders.catCoverDateRange}" filterBy="#{_otherAcqOrders.catCoverDateRange}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['coverDateRange_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['coverDateRange_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Date)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catCoverDateRange}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersOpenShipmentsCount" sortBy="#{_otherAcqOrders.openShipmentsCount}" filterBy="#{_otherAcqOrders.openShipmentsCount}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['openShipmentsCount_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['openShipmentsCount_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Open Shipments"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.openShipmentsCount}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersCompletedShipmentsCount" sortBy="#{_otherAcqOrders.completedShipmentsCount}" filterBy="#{_otherAcqOrders.completedShipmentsCount}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['completedShipmentsCount_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['completedShipmentsCount_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Completed Shipments"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.completedShipmentsCount}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersOpenProblemsCount" sortBy="#{_otherAcqOrders.openProblemsCount}" filterBy="#{_otherAcqOrders.openProblemsCount}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['openProblemsCount_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['openProblemsCount_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Open Problems"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.openProblemsCount}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherAcqOrdersOnHold" sortBy="#{_otherAcqOrders.catOnHold}" filterBy="#{_otherAcqOrders.catOnHold}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherAcqOrders'.concat(divId)]['onHold_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherAcqOrders'.concat(divId)]['onHold_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="On Hold"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherAcqOrders.id}"/>
+					<h:outputText value="#{_otherAcqOrders.catOnHold ? 'Yes' : 'No'}"/>        		
+				</s:link>				
+	        	</rich:column>
+        	</rich:dataTable>
+      	
+    	</div>
+</s:div>

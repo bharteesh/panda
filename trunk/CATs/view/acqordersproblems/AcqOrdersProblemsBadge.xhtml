@@ -1,0 +1,85 @@
+<s:div xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:s="http://jboss.com/products/seam/taglib" xmlns:a="http://richfaces.org/a4j" xmlns:cats="http://www.ithaka.org/cats" xmlns:rich="http://richfaces.org/rich" id="badge">
+
+<a:form id="catAcqOrdersBadgeForm">
+<h1>#{catAcqOrdersProblemsHome.instance.id}</h1>
+
+  <s:decorate id="recordType" template="../layout/edit.xhtml">
+    <ui:define name="label">Record Type:</ui:define>
+    <h:outputText value="Acquisition Order Problems"/>
+  </s:decorate>
+
+
+  <s:decorate id="catAcqOrdersId" template="../layout/edit.xhtml">
+    <ui:define name="label">Child of:</ui:define>
+          <li>
+    <h:outputText value="Acquisition Order ("/>
+	      		<s:link view="/acqorders/AcqOrdersEdit.xhtml" id="orderDetails" propagation="none" value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.id}">
+	       		<f:param name="catAcqOrdersId" value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.id}"/>
+                </s:link>
+	<h:outputText value=")"/>                
+	      </li>
+  </s:decorate>
+
+  <s:decorate id="catLifecycle" template="../layout/edit.xhtml">
+    <ui:define name="label">Lifecycle:</ui:define>
+    <h:outputText value="#{catAcqOrdersProblemsHome.instance.catLifecycle.label}"/>
+			<a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }" id="catLifecycleEditButton"
+				ignoreDupResponses="true"
+     			eventsQueue="catAcqOrdersProblemsEditQueue"
+         		status="globalWaitStatus"
+         		ajaxSingle="true"
+	    		action="#{catAcqOrdersProblemsHome.updateUsingWizard('ADVANCE')}"
+				value="Edit"
+				reRender="acqordersproblemsbulkOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('acqordersproblemsbulkUpdatePanel');"
+                styleClass="button wizard #{!s:hasPermission(catAcqOrdersProblemsHome.instance, 'modify catLifecycle') ? 'disabled' : ''}"
+                disabled="#{!s:hasPermission(catAcqOrdersProblemsHome.instance, 'modify catLifecycle')}"/>
+  </s:decorate>
+
+  <s:decorate id="catType" template="../layout/edit.xhtml">
+    <ui:define name="label">Type:</ui:define>
+    <h:outputText value="#{catAcqOrdersProblemsHome.instance.catType.label}"/>
+  </s:decorate>
+
+  <s:decorate id="catSetsId" template="../layout/edit.xhtml">
+    <ui:define name="label">Set ID:</ui:define>
+    <h:outputText value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.catSets.id}"/>
+  </s:decorate>
+
+  <s:decorate id="catSetsName" template="../layout/edit.xhtml">
+    <ui:define name="label">Set Name:</ui:define>
+    <h:outputText value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.catSets.catCurrentTitle.catName}"/>
+  </s:decorate>
+
+  <s:decorate id="catCmptsId" template="../layout/edit.xhtml">
+    <ui:define name="label">Component ID:</ui:define>
+    <h:outputText value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.catCmpts.id}"/>
+  </s:decorate>
+
+  <s:decorate id="catCmptsName" template="../layout/edit.xhtml">
+    <ui:define name="label">Component Name:</ui:define>
+    <h:outputText value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.catCmpts.catName}"/>
+  </s:decorate>
+  
+ <s:decorate id="productionStatusValue" template="../layout/edit.xhtml">
+    <ui:define name="label">Journal Production Status:</ui:define>
+    <h:outputText value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.parentProdStatusValue.label}"/>
+  </s:decorate> 
+  
+  <s:decorate id="catSupplierName" template="../layout/edit.xhtml">
+    <ui:define name="label">Supplier Name:</ui:define>
+	<h:outputText value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.catSupplier}" />
+  </s:decorate>
+
+  <s:decorate id="catSupplierContact" template="../layout/edit.xhtml">
+    <ui:define name="label">Supplier Contact:</ui:define>
+    <h:outputText value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.catSupplierContact}" />
+  </s:decorate>
+  
+  <s:decorate id="acqOrderPublisherValue" template="../layout/edit.xhtml">
+    <ui:define name="label">Publisher:</ui:define>
+    <h:outputText value="#{catAcqOrdersProblemsHome.instance.catAcqOrders.publisherValue}" />
+  </s:decorate>
+
+</a:form>
+</s:div>

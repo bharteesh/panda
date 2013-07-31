@@ -1,0 +1,265 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{createContractsWizard.createTitle}" /></h2>
+	
+		<div id="step1">		
+			<ul class="steps">
+		    	<li class="selected">1. Info</li>
+			    <li class="disabled">2. Results</li>
+			</ul>
+		<div class="cluster">
+		<a:outputPanel layout="none" id="noLayoutErrorMsgs">
+				<s:div styleClass="alert">
+					<s:div rendered="#{not empty createContractsWizard.errorMsgs}" id="errorMsgsDiv">
+						<a:repeat value="#{createContractsWizard.errorMsgs}" var="_errMsg">
+							<p>#{_errMsg}</p>
+						</a:repeat>
+					</s:div>
+				</s:div>
+		</a:outputPanel>
+		<a:outputPanel layout="none" id="addedPublishersPanel">
+		<s:div id="addedPublishersDiv" styleClass="field" rendered="#{createContractsWizard.addedPublishersList.size gt 0}">
+			<label>Added Publishers</label>
+			<span class="actuallist">
+			<rich:dataTable var="_pub" value="#{createContractsWizard.addedPublishersList}">	    	
+	    	 	<rich:column>
+	    	 		<h:outputText value="#{_pub.catName}"></h:outputText>
+	    	 	</rich:column>
+		    	<rich:column>
+		    		<a:commandLink styleClass="button delete2" action="#{createContractsWizard.removePublisher(_pub)}"
+						 reRender="addedPublishersPanel, publishersTable"
+						 status="globalWaitStatus"		
+						 ajaxSingle="true"
+						 ignoreDupResponses="true"
+						 limitToList="true">						
+					</a:commandLink>		    	
+		    	</rich:column>	
+	    	</rich:dataTable>
+	    	</span>
+		</s:div>
+		</a:outputPanel>
+		
+		<a:outputPanel layout="none" id="choosePublishersPanel">
+		<s:div id="choosePublishersFragment"  styleClass="field">		
+			
+			
+			<label>Choose Publishers</label>
+					
+			<h:inputText id="default_search_catPublishersList" 
+			 			value="#{catPublishersList.catPublishers.catName}"
+			 			onchange="return false;" size="60">		
+			 	<a:support event="onblur"  	ajaxSingle="true" eventsQueue="#{divParam}eventsQueue"/>	 			
+			</h:inputText>
+	
+			<a:commandLink 
+			  		 styleClass="button filter"
+					 value="Filter"
+					 action="#{createContractsWizard.narrowList(rich:findComponent('default_search_catPublishersList').value)}"
+					 reRender="createContractsWizard"
+					 status="globalWaitStatus"
+					 ajaxSingle="true" 
+					 eventsQueue="#{divParam}eventsQueue"
+					 ignoreDupResponses="true"
+					 limitToList="true"/>
+			
+			 
+			<div class="smart">
+			<rich:dataTable id="publishersTable" rendered="#{createContractsWizard.publishersList.size gt 0}"
+				value="#{createContractsWizard.publishersList}" var="_publisher">
+				<rich:column>
+					<a:commandLink value="Add" 
+						 action="#{createContractsWizard.addPublisher(_publisher)}"
+						 reRender="choosePublishersPanel, addedPublishersPanel, noLayoutErrorMsgs, publishersTable"
+						 status="globalWaitStatus"
+						 disabled="#{createContractsWizard.disableAddButton(_publisher)}"	
+						 styleClass="button add #{createContractsWizard.disableAddButton(_publisher) ? 'disabled' : ''}"					 
+						 ajaxSingle="true" 
+						 eventsQueue="#{divParam}eventsQueue"
+						 ignoreDupResponses="true"
+						 limitToList="true">
+					</a:commandLink>
+				</rich:column>
+				
+				<cats:wizardColumn entityList="#{catPublishersList}"
+					propertyLabel="Publisher Name" propertyName="catName"
+					propertyPath="catPublishers.catName"
+					propertyValue="#{catPublishersList.catPublishers.catName}"
+					value="#{_publisher.catName}" />
+				<cats:wizardColumn entityList="#{catPublishersList}"
+					propertyLabel="Organization Type"
+					propertyName="catOrganizationType"
+					propertyPath="catPublishers.catOrganizationType"
+					propertyValue="#{catPublishersList.catOrganizationType.label}"
+					value="#{_publisher.catOrganizationType.label}" />
+				<cats:wizardColumn entityList="#{catPublishersList}"
+					propertyLabel="Country" propertyName="catCountry"
+					propertyPath="catPublishers.catCountry"
+					propertyValue="#{catPublishersList.catPublishers.catCountry.label}"
+					value="#{_publisher.catCountry.label}" />
+				<cats:wizardColumn entityList="#{catPublishersList}"
+					propertyLabel="ID" propertyName="id"
+					propertyPath="catPublishers.id"
+					propertyValue="#{catPublishersList.catPublishers.id}"
+					value="#{_publisher.id}" />
+			</rich:dataTable>			
+			</div>
+		</s:div>			
+			<s:div id="blankTableId" styleClass="blanktable" rendered="#{createContractsWizard.addedPublishersList.size eq 0}">
+				<span>First choose a publisher to create an agreement.</span>
+			</s:div>
+		</a:outputPanel>
+		
+		<div class="title change">
+	        <h1>Info</h1>
+	        <p>Fill out basic information about the Agreement.</p>
+	    </div>
+		
+		<s:decorate id="catContractType" template="../layout/edit.xhtml">
+			<ui:define name="label">Agreement Type</ui:define>
+			<h:selectOneMenu name="catType" value="#{createContractsWizard.createContractsInstance.catType}" required="true">
+				<s:selectItems itemValue="#{i}" label="#{i.label}" value="#{listsForEnums.catContracts_CatType}" var="i"/>
+				<a:support event="onchange" action="#{createContractsWizard.setupDefaultValues()}" reRender="typeFieldsPanel,lifecycleFieldsPanel,porticoFieldsPanel" ajaxSingle="true" status="globalWaitStatus" limitToList="true"/>	
+			</h:selectOneMenu>
+			<span class="comments">Which JSTOR product does this agreement cover?</span>
+		</s:decorate> 
+		
+		<a:outputPanel layout="none" id="typeFieldsPanel">
+			<s:div id="catAgreementVersionDiv" rendered="#{createContractsWizard.createContractsInstance.catType.label eq 'Backfile'}">			
+				<s:decorate id="catAgreementVersion" template="../layout/edit.xhtml">
+						<ui:define name="label">Agreement Version</ui:define>
+						<h:inputText value="#{createContractsWizard.createContractsInstance.catAgreementVersion}" required="true"/>
+						<span class="comments">Version of Backfile Agreement</span>
+				</s:decorate> 
+			</s:div>
+			<s:div id="cspLaunchDateDiv" rendered="#{createContractsWizard.createContractsInstance.catType.label eq 'CSP'}">					
+				<s:decorate id="catCspLaunchDate" template="../layout/edit.xhtml" styleClass="lastdate">
+					<ui:define name="label">Launch Date</ui:define>
+					<rich:calendar required="true" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="false" id="catContractCspLaunchDateCal" inputClass="datestyle" value="#{createContractsWizard.createContractsInstance.catCspLaunchDate}"/>
+				</s:decorate> 
+			</s:div>
+			
+			<s:div id="booksLifecycleDiv" rendered="#{createContractsWizard.createContractsInstance.catType.label eq 'Books'}">
+				<s:decorate id="catContractBooksLifecycle" template="../layout/edit.xhtml">
+					<ui:define name="label">Agreement Lifecycle</ui:define>
+					<h:selectOneMenu name="catLifeycle" value="#{createContractsWizard.createContractsInstance.catLifecycle}" required="true">
+						<s:selectItems itemValue="#{i}" label="#{i.label}" value="#{listsForEnums.catContracts_Lifecycle_createBooksList}" var="i"/>
+						<a:support event="onchange" action="#{createContractsWizard.setupDefaultValues()}" reRender="lifecycleFieldsPanel,porticoFieldsPanel" ajaxSingle="true" status="globalWaitStatus" limitToList="true"/>	
+					</h:selectOneMenu>
+					<span class="comments">Choose <strong>LOI Sent</strong> if the Letter of Interest was sent to the publisher. Choose <strong>LOI Signed</strong> if you are confident the publisher will sign the Agreement. Choose <strong>Active</strong> if the publisher has already signed the Agreement. Use <strong>New</strong> if you are uncertain.</span>
+				</s:decorate>
+			</s:div> 			
+			</a:outputPanel>
+						
+		
+		<a:outputPanel layout="block" id="porticoFieldsPanel">
+			<s:div id="booksPorticoDiv" rendered="#{createContractsWizard.createContractsInstance.catType.label eq 'Books' and 
+														createContractsWizard.createContractsInstance.catLifecycle.label eq 'Active'}">
+				<s:decorate id="catBksPorticoId" template="../layout/edit.xhtml">
+					<ui:define name="label">Books at JSTOR in Portico</ui:define>
+					<h:selectOneMenu name="catBksPorticoSel" value="#{createContractsWizard.createContractsInstance.catBooksPortico}" required="true">
+						<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+							noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+						<a:support event="onchange" reRender="porticoFieldsPanel" ajaxSingle="true" status="globalWaitStatus" limitToList="true"/>	
+					</h:selectOneMenu>
+					<span class="comments">Are the publisher's Books at JSTOR books participating in Portico?</span>
+				</s:decorate>
+			</s:div>
+						
+			<s:div id="booksPorticoPanelDiv" rendered="#{createContractsWizard.createContractsInstance.catBooksPortico}">
+				<s:decorate id="catBksPorticoAnnexId" template="../layout/edit.xhtml">
+					<ui:define name="label">Books at JSTOR Portico Annex Countersigned</ui:define>
+					<span class="read_only"><rich:calendar required="true" enableManualInput="true" datePattern="yyyy/MM/dd" disabled="false" 
+						id="catContractBkPorticoAnnexDateCal" inputClass="datestyle" value="#{createContractsWizard.createContractsInstance.catBooksPorticoAnnexDate}"/></span>
+					<span class="comments">Date when ITHAKA countersigned the Portico Annex for this publisher's Books at JSTOR books.</span>
+				</s:decorate>
+			</s:div>
+			<s:div id="booksDDA" rendered="#{createContractsWizard.createContractsInstance.catType.label eq 'Books' and 
+														createContractsWizard.createContractsInstance.catLifecycle.label eq 'Active'}">
+				<s:decorate id="catContractBooksDDA" template="../layout/edit.xhtml">
+					<ui:define name="label">DDA</ui:define>
+					<h:selectOneMenu name="catLifeycle" value="#{createContractsWizard.createContractsInstance.catBksDDA}" required="true">
+						<s:selectItems itemValue="#{i.value}" label="#{i.label}" value="#{listsForEnums.yesNo}" var="i"/>
+						<a:support event="onchange" action="#{createContractsWizard.setupDefaultValues()}" reRender="lifecycleFieldsPanel" ajaxSingle="true" status="globalWaitStatus" limitToList="true"/>	
+					</h:selectOneMenu>
+					<span class="comments">Is the publisher participating in DDA?</span>
+				</s:decorate>
+			</s:div> 
+		</a:outputPanel>
+				
+		<a:outputPanel layout="block" id="lifecycleFieldsPanel">
+			<s:div id="booksLikelyDiv" rendered="#{createContractsWizard.createContractsInstance.catType.label eq 'Books'}">
+				<s:decorate id="catContractBkInfoLoiSent" template="../layout/edit.xhtml" styleClass="lastdate" 
+												rendered="#{createContractsWizard.createContractsInstance.catLifecycle.label eq 'LOI Sent' or 
+													createContractsWizard.createContractsInstance.catLifecycle.label eq 'LOI Signed' or 
+														createContractsWizard.createContractsInstance.catLifecycle.label eq 'Active'}">
+					<ui:define name="label">LOI Date Sent</ui:define>
+					<span class="read_only"><rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd" disabled="false" id="catContractBkInfoLoiSentCal" inputClass="datestyle" value="#{createContractsWizard.createContractsInstance.catLoiDateSent}"/></span>
+					<span class="comments">Date when the Letter of Interest was sent to the publisher</span>
+				</s:decorate> 
+				
+				<s:decorate id="catContractBkInfoLoiSigned" template="../layout/edit.xhtml" styleClass="lastdate" 
+												rendered="#{createContractsWizard.createContractsInstance.catLifecycle.label eq 'LOI Signed' or 
+														createContractsWizard.createContractsInstance.catLifecycle.label eq 'Active'}">
+					<ui:define name="label">LOI Date Countersigned</ui:define>
+					<span class="read_only"><rich:calendar enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="false" id="catContractBkInfoLoiSignedCal" inputClass="datestyle" value="#{createContractsWizard.createContractsInstance.catLoiDateRecvd}"/></span>
+					<span class="comments">Date when the Letter of Interest was countersigned</span>
+				</s:decorate> 		
+				
+				<s:decorate id="catContractBkInfoDateSent" template="../layout/edit.xhtml"  styleClass="lastdate" rendered="#{createContractsWizard.createContractsInstance.catLifecycle.label eq 'LOI Signed' or 
+														createContractsWizard.createContractsInstance.catLifecycle.label eq 'Active'}">
+					<ui:define name="label">Agreement Date Sent</ui:define>
+					<span class="read_only"><rich:calendar enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="false" id="catContractInfoAgDateSentCal" inputClass="datestyle" value="#{createContractsWizard.createContractsInstance.catAgreementDateSent}"/></span>
+					<span class="comments">Date when Agreement was sent to publisher</span>
+				</s:decorate> 
+			</s:div>	
+			<s:div id="activeAgreementDateDiv" rendered="#{createContractsWizard.createContractsInstance.catLifecycle.label eq 'Active'}">							
+				<s:decorate id="activeAgreementDate" template="../layout/edit.xhtml" styleClass="lastdate">
+					<ui:define name="label">Agreement Date Signed</ui:define>
+					<rich:calendar required="true" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="false" id="catContractAgreementDateCal" inputClass="datestyle" value="#{createContractsWizard.createContractsInstance.catAgreementDate}"/>
+				</s:decorate> 
+				
+			</s:div>
+			<s:div id="catAgreementDatePubSignedDiv" rendered="#{(createContractsWizard.createContractsInstance.catType.label eq 'Books') and
+			(createContractsWizard.createContractsInstance.catLifecycle.label eq 'Active' or
+			 createContractsWizard.createContractsInstance.catLifecycle.label eq 'LOI Signed' or
+			  createContractsWizard.createContractsInstance.catLifecycle.label eq 'LOI Sent')}">
+										
+				<s:decorate id="catAgreementDatePubSigned" template="../layout/edit.xhtml" styleClass="lastdate">
+					<ui:define name="label">Date Agreement Signed by Publisher</ui:define>
+					<rich:calendar required="false" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="false" id="catContractCspLaunchDateCal" inputClass="datestyle" value="#{createContractsWizard.createContractsInstance.catAgreementDatePubSigned}"/>
+				</s:decorate> 
+	
+		</s:div>	
+		</a:outputPanel>
+			</div>
+
+		<div class="push"></div>
+		 
+            <a:commandLink styleClass="button" value="Quit"
+       			eventsQueue="#{divParam}eventsQueue" status="globalWaitStatus" ignoreDupResponses="true"
+			    oncomplete="#{rich:component('createContractsQuit')}.show(); return false;"
+			    ajaxsingle="true" limitToList="true">
+			</a:commandLink> 
+ 
+			<a:commandLink
+			styleClass="button right" value="Save" ignoreDupResponses="true"
+			eventsQueue="#{divParam}eventsQueue" status="globalWaitStatus"
+			action="#{createContractsWizard.createNext}" 
+			reRender="createContractsWizard" limitToList="true"/>		
+
+			</div>
+</ui:composition>
+

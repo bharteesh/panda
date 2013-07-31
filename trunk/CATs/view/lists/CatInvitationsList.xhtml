@@ -1,0 +1,241 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+
+
+	<ui:param name="entityType" value="invitations"/>
+	<ui:param name="moremenu" value="moremenu" />
+
+  <ui:define name="body">
+	<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatInvitationsList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catInvitationsList}"></ui:param>
+			<ui:param name="divId" value="1"/>
+	</ui:include>		
+
+		<a:form>
+			<s:div id="header" styleClass="header">			
+				<div class="left">
+				<span class="museo"><h:outputText
+			value="Invitations (#{empty catInvitationsList.resultList ? 0 : (catInvitationsList.paginated ? catInvitationsList.resultCount : catInvitationsList.resultList.size)})">
+		</h:outputText></span>
+
+						<h:selectOneMenu name="flavour" value="#{catInvitationsList.flavour}">
+							<s:selectItems value="#{catInvitationsList.flavours}" var="i"
+								itemValue="#{i}" label="#{catInvitationsList.flavourLabel(i)}" />
+							<a:support event="onchange" action="#{catInvitationsList.updateUserSkinPreferences}"
+								oncomplete="javascript: location.href='CatInvitationsList.seam'"
+								ignoreDupResponses="true"
+								eventsQueue="invsListQueue"
+								ajaxSingle="true"/>			
+						</h:selectOneMenu>
+				<s:link id="clearSearch" status="globalWaitStatus" 
+					ignoreDupResponses="true" styleClass="button wizard" 
+					action="#{catInvitationsList.reset}"  value="X" propagation="none"
+					oncomplete="javascript: location.href='CatInvitationsList.seam'">
+					<f:param name="flavour" value="#{catInvitationsList.flavour}"/> 	
+				</s:link>
+				</div>
+
+			<div class="right">
+			<a:commandLink id="createInvitationsEditButton"
+				ignoreDupResponses="true"
+			    action="#{createInvitationsWizard.prepCreateOperation('CREATEINVITATIONS')}"
+				value="Add Invitation"
+				reRender="createInvitationsOperationsPanels,catInvitationsList" 
+				oncomplete="Richfaces.showModalPanel('createInvitationsPanel');"
+				status="globalWaitStatus"
+				
+				disabled="#{!s:hasPermission(catInvitationsHome.instance, 'create CatInvitations')}"
+				
+				styleClass="button wizard #{!s:hasPermission(catInvitationsHome.instance, 'create CatInvitations') ? 'disabled' : ''}"/>
+			
+				<ui:include src="adhocReportSelect.xhtml"><ui:param name="entityQuery" value="#{catInvitationsList}"/></ui:include>
+
+			
+
+</div>
+			</s:div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/Animated-Hourglass.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+			
+			<div class="push"/>
+			
+	<div id="mainlistscroller">
+      <h:dataTable id="catInvitationsList" 
+            var="_catInvitations" 
+            value="#{catInvitationsList.resultList}" 
+            rowClasses="odd,even"
+            styleClass="mainListClass">
+      
+		<rich:column styleClass="checkBoxes" headerClass="checkBoxes" rendered="false">
+					<f:facet name="header">
+						<h:panelGrid columns="1">
+							<h:outputText value=" " />
+							<input type="checkbox" id="select_all_checkbox"
+								name="select_all_checkbox"
+								onclick="if ( this.checked ) { jQuery('.bulk_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.bulk_checkbox').each(function(){ this.checked = false; }); }" />
+						</h:panelGrid>
+					</f:facet>
+					<span onclick="cancelEventBubbling(event);">
+					<h:selectBooleanCheckbox styleClass="bulk_checkbox checkBoxes"
+						value="#{invitaionsBulkOperations.selections[_catInvitations]}" />
+						</span>
+		</rich:column>
+        
+        <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.id}" entityList="#{catInvitationsList}" 
+             propertyName="id" propertyValue="#{catInvitationsList.catInvitations.id}" 
+             propertyLabel="ID" propertyPath="catInvitations.id" 
+             rendered="#{catInvitationsList.listFlavour['id']}" sortable= "true"/>
+        
+        <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catCompletedBy}" entityList="#{catInvitationsList}" 
+             propertyName="catCompletedBy" propertyValue="#{catInvitationsList.catInvitations.catCompletedBy}" 
+             propertyLabel="Completed By" propertyPath="catInvitations.catCompletedBy" 
+             rendered="#{catInvitationsList.listFlavour['catCompletedBy']}" sortable= "true"/>
+        
+        <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catCreator}" entityList="#{catInvitationsList}" 
+             propertyName="catCreator" propertyValue="#{catInvitationsList.catInvitations.catCreator}" 
+             propertyLabel="Creator" propertyPath="catInvitations.catCreator" 
+             rendered="#{catInvitationsList.listFlavour['catCreator']}" sortable= "true"/>
+        
+        <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catDateCompleted}" entityList="#{catInvitationsList}" 
+             propertyName="catDateCompleted"      propertyValue="#{catInvitationsList.catInvitations.catDateCompleted}" 
+             propertyLabel="Date Completed" propertyPath="catInvitations.catDateCompleted" 
+             rendered="#{catInvitationsList.listFlavour['catDateCompleted']}" sortable= "true">
+             <s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+        </cats:column>
+        
+        <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catDateCreated}" entityList="#{catInvitationsList}" 
+             propertyName="catDateCreated"      propertyValue="#{catInvitationsList.catInvitations.catDateCreated}" 
+             propertyLabel="Date Created" propertyPath="catInvitations.catDateCreated" 
+             rendered="#{catInvitationsList.listFlavour['catDateCreated']}" sortable= "true">
+             <s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+        </cats:column>
+        
+        <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catInvitationDateSent}" entityList="#{catInvitationsList}" 
+             propertyName="catInvitationDateSent"      propertyValue="#{catInvitationsList.catInvitations.catInvitationDateSent}" 
+             propertyLabel="Date Sent" propertyPath="catInvitations.catInvitationDateSent" 
+             rendered="#{catInvitationsList.listFlavour['catInvitationDateSent']}" sortable= "true">
+             <s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+        </cats:column>
+        
+        <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catIthakaAsPublisherReason.label}" entityList="#{catInvitationsList}" 
+             propertyName="catIthakaAsPublisherReason" propertyValue="#{catInvitationsList.catInvitations.catIthakaAsPublisherReason}" 
+             propertyLabel="Reason ITHAKA is invitee" propertyPath="catInvitations.catIthakaAsPublisherReason" 
+             enumList="#{listsForEnums.catInvitations_IthakaAsPublisherReason}"
+             rendered="#{catInvitationsList.listFlavour['catIthakaAsPublisherReason']}" sortable= "true"/>
+        
+        <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catLifecycle.label}" entityList="#{catInvitationsList}" 
+             propertyName="catLifecycle" propertyValue="#{catInvitationsList.catInvitations.catLifecycle}" 
+             propertyLabel="Lifecycle" propertyPath="catInvitations.catLifecycle" 
+             enumList="#{listsForEnums.catInvitations_Lifecycle}"
+             rendered="#{catInvitationsList.listFlavour['catLifecycle']}" sortable= "true"/>
+        
+        <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catNegotiator}" entityList="#{catInvitationsList}" 
+             propertyName="catNegotiator" propertyValue="#{catInvitationsList.catInvitations.catNegotiator}" 
+             propertyLabel="Negotiator" propertyPath="catInvitations.catNegotiator" 
+             rendered="#{catInvitationsList.listFlavour['catNegotiator']}" sortable= "true"/>
+        
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catOnHold ? 'Yes' : 'No'}" entityList="#{catInvitationsList}" 
+             propertyName="catOnHold" propertyValue="#{catInvitationsList.catInvitations.catOnHold}" 
+             propertyLabel="On Hold" propertyPath="catInvitations.catOnHold" 
+             enumList="#{listsForEnums.yesNo}"
+             rendered="#{catInvitationsList.listFlavour['catOnHold']}" sortable= "true"/>
+        
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catOnHoldReason}" entityList="#{catInvitationsList}" 
+            propertyName="catOnHoldReason" propertyValue="#{catInvitationsList.catInvitations.catOnHoldReason}" 
+            propertyLabel="On Hold Reason" propertyPath="catInvitations.catOnHoldReason" 
+            rendered="#{catInvitationsList.listFlavour['catOnHoldReason']}" sortable= "true"/>
+        
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catOutcome.label}" entityList="#{catInvitationsList}" 
+            propertyName="catOutcome" propertyValue="#{catInvitationsList.catInvitations.catOutcome}" 
+            propertyLabel="Outcome" propertyPath="catInvitations.catOutcome" 
+            enumList="#{listsForEnums.catInvitations_Outcome}"
+            rendered="#{catInvitationsList.listFlavour['catOutcome']}" sortable= "true"/>
+        
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catParticipationLikelihood.label}" entityList="#{catInvitationsList}" 
+            propertyName="catParticipationLikelihood" propertyValue="#{catInvitationsList.catInvitations.catParticipationLikelihood}" 
+            propertyLabel="Participation" propertyPath="catInvitations.catParticipationLikelihood" 
+            enumList="#{listsForEnums.catInvitations_ParticipationLikelihood}"
+            rendered="#{catInvitationsList.listFlavour['catParticipationLikelihood']}" sortable= "true"/>
+    
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catPublishers.id}" entityList="#{catInvitationsList}" 
+            propertyName="catPublishers.id" propertyValue="#{catInvitationsList.catInvitations.catPublishers.id}" 
+            propertyLabel="Publisher ID" propertyPath="catInvitations.catPublishers.id" 
+            rendered="#{catInvitationsList.listFlavour['catPublishers.id']}" sortable= "true"/>
+        
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catPublishers.catName}" entityList="#{catInvitationsList}" 
+            propertyName="catPublishers.catName" propertyValue="#{catInvitationsList.catInvitations.catPublishers.catName}" 
+            propertyLabel="Publisher Name" propertyPath="catInvitations.catPublishers.catName" 
+            rendered="#{catInvitationsList.listFlavour['catPublishers.catName']}" sortable= "true"/>
+        
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catReasonDeclined.label}" entityList="#{catInvitationsList}" 
+            propertyName="catReasonDeclined" propertyValue="#{catInvitationsList.catInvitations.catReasonDeclined}" 
+            propertyLabel="Reason Declined" propertyPath="catInvitations.catReasonDeclined" 
+            enumList="#{listsForEnums.catInvitations_ReasonDeclined}"
+            rendered="#{catInvitationsList.listFlavour['catReasonDeclined']}" sortable= "true"/>
+        
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catReasonDeclinedNote}" entityList="#{catInvitationsList}" 
+            propertyName="catReasonDeclinedNote" propertyValue="#{catInvitationsList.catInvitations.catReasonDeclinedNote}" 
+            propertyLabel="Reason Declined Note" propertyPath="catInvitations.catReasonDeclinedNote" 
+            rendered="#{catInvitationsList.listFlavour['catReasonDeclinedNote']}" sortable= "true"/>
+        
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catSets.id}" entityList="#{catInvitationsList}" 
+            propertyName="catSets.id" propertyValue="#{catInvitationsList.catInvitations.catSets.id}" 
+            propertyLabel="Set ID" propertyPath="catInvitations.catSets.id" 
+            rendered="#{catInvitationsList.listFlavour['catSets.id']}" sortable= "true"/>
+        
+       
+       <cats:column linkToId="#{_catInvitations.id}" value="#{_catInvitations.catSets.catCurrentTitle.catName}" entityList="#{catInvitationsList}" 
+            propertyName="catSets.catCurrentTitle.catName" propertyValue="#{catInvitationsList.catInvitations.catSets.catCurrentTitle.catName}" 
+            propertyLabel="Set Name" propertyPath="catInvitations.catSets.catCurrentTitle.catName" 
+            rendered="#{catInvitationsList.listFlavour['catSets.catCurrentTitle.catName']}" sortable= "true"/>
+
+<cats:column linkToId="#{_catInvitations.id}" sortable="true"
+					rendered="#{catInvitationsList.listFlavour['catDateModified']}"
+					entityList="#{catInvitationsList}"
+					propertyLabel="Date Modified"
+					propertyPath="catInvitations.catDateModified"
+					propertyValue="#{catInvitationsList.catInvitations.catDateModified}"
+					propertyName="catDateModified"
+					value="#{_catInvitations.catDateModified}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+
+      </h:dataTable>
+	</div>
+	</a:form>
+		
+	<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatInvitationsList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catInvitationsList}"></ui:param>
+			<ui:param name="divId" value="2"/>
+	</ui:include>
+			
+	<ui:include src="../invitations/createm_Invitations.xhtml">
+		   <ui:param name="reRenderMe" value="catInvitationsList"/>
+		   <ui:param name="divParam" value="invitationsList"/>
+	</ui:include>
+
+	
+	<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+	<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catInvitationsList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+
+  </ui:define>
+
+</ui:composition>
+<!-- Ranga End of this page, remove other stuffs below -->
+
+

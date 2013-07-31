@@ -1,0 +1,183 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps many">
+			<li class="selected">1. Info</li>
+			<li class="disabled">2. Selection Status</li>
+			<li class="disabled">3. Title Relationships</li>
+			<li class="disabled">...</li>
+			<li class="disabled">8. Results</li>
+		</ul>
+		<div class="cluster">
+			
+				<p>Enter as much information as you know about the component, then continue to save your changes.</p>
+				
+					<s:decorate id="catIniArt_div7" template="../layout/edit.xhtml">
+						<ui:define name="label">Initial Article</ui:define>
+						<h:inputText
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catIniArt')}"
+							id="catIniArt7" maxlength="20" size="25"
+							value="#{createJournalWizard.catCmptsHome.instance.catIniArt}" />
+						<span class="comments">Part of speech: the, a, la,el </span>
+					</s:decorate>
+					<s:decorate id="catName_div7" template="../layout/edit.xhtml">
+						<ui:define name="label">Name</ui:define>
+						<h:inputTextarea cols="20"
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catName')}"
+							id="catName7" rows="2"
+							value="#{createJournalWizard.catCmptsHome.instance.catName}" required="true"/>
+					</s:decorate> 
+					<s:decorate id="catSubtitle_div7" template="../layout/edit.xhtml">
+						<ui:define name="label">Subtitle</ui:define>
+						<h:inputTextarea cols="20"
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catSubtitle')}"
+							id="catSubtitle7" rows="2"
+							value="#{createJournalWizard.catCmptsHome.instance.catSubtitle}" />
+					</s:decorate> 
+					<s:decorate id="catPublisherSpecifiedName_div7"
+						template="../layout/edit.xhtml">
+						<ui:define name="label">Name Specified by Publisher</ui:define>
+						<h:selectOneMenu
+							disabled="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catPublisherSpecifiedName')}"
+							name="catPublisherSpecifiedName"
+							value="#{createJournalWizard.catCmptsHome.instance.catPublisherSpecifiedName}" required="true">
+							<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+								noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+						</h:selectOneMenu>
+					</s:decorate> 
+					
+					<s:decorate id="catPublctnUnitRange_div1"
+						template="../layout/edit.xhtml">
+						<ui:define name="label">Extent (Pub Units)</ui:define>
+						<h:inputText
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catPublctnUnitRange')}"
+							id="catPublctnUnitRange1" maxlength="200" size="25"
+							value="#{createJournalWizard.catCmptsHome.instance.catPublctnUnitRange}" />
+					</s:decorate> 
+					<s:decorate id="catDateRange_div1" template="../layout/edit.xhtml">
+						<ui:define name="label">Extent (Dates)</ui:define>
+						<h:inputText
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catDateRange')}"
+							id="catDateRange1" maxlength="200" size="25"
+							value="#{createJournalWizard.catCmptsHome.instance.catDateRange}" />
+					</s:decorate> 
+					<s:decorate id="catStartDateIsAnEstimate_div1"
+						template="../layout/edit.xhtml">
+						<ui:define name="label">Start Date is an estimate?</ui:define>
+						<h:selectOneMenu
+							disabled="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catStartDateIsAnEstimate')}"
+							name="catStartDateIsAnEstimate"
+							value="#{createJournalWizard.catCmptsHome.instance.catStartDateIsAnEstimate}">
+							<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+								noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+						</h:selectOneMenu>
+					</s:decorate> 
+					<s:decorate id="catEndDateIsAnEstimate_div1"
+						template="../layout/edit.xhtml">
+						<ui:define name="label">End Date is an estimate?</ui:define>
+						<h:selectOneMenu
+							disabled="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catEndDateIsAnEstimate')}"
+							name="catEndDateIsAnEstimate"
+							value="#{createJournalWizard.catCmptsHome.instance.catEndDateIsAnEstimate}">
+							<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+								noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+						</h:selectOneMenu>
+					</s:decorate> 
+					<s:decorate id="catPrintIssn_div1" template="../layout/edit.xhtml">
+						<ui:define name="label">Print ISSN</ui:define>
+						<h:inputText
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catPrintIssn')}"
+							id="catPrintIssn1" maxlength="50" size="25"
+							value="#{createJournalWizard.catCmptsHome.instance.catPrintIssn}" />
+						<span class="comments">Include dashes and capitalize X:1234-567X </span>
+					</s:decorate>
+				
+					<s:decorate id="catEIssn_div1" template="../layout/edit.xhtml">
+						<ui:define name="label">EISSN</ui:define>
+						<h:inputText
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catEIssn')}"
+							id="catEIssn1" maxlength="14" size="25"
+							value="#{createJournalWizard.catCmptsHome.instance.catEIssn}" />
+					</s:decorate>
+					<s:decorate id="catTitleIssn_div1" template="../layout/edit.xhtml">
+						<ui:define name="label">Title ISSN</ui:define>
+						<h:inputText
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catTitleIssn')}"
+							id="catTitleIssn1" maxlength="14" size="25"
+							value="#{createJournalWizard.catCmptsHome.instance.catTitleIssn}" />
+						<span class="comments">Single ISSN for all versions of the journal, print and electronic. </span>
+					</s:decorate>
+					<s:decorate id="catIssnNote_div7" template="../layout/edit.xhtml">
+						<ui:define name="label">ISSN Note</ui:define>
+						<h:inputTextarea cols="20"
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catIssnNote')}"
+							id="catIssnNote7" rows="2"
+							value="#{createJournalWizard.catCmptsHome.instance.catIssnNote}" />
+					</s:decorate> 
+					<s:decorate id="catIssnStatus_div7" template="../layout/edit.xhtml">
+						<ui:define name="label">ISSN Request Status</ui:define>
+						<h:selectOneMenu
+							disabled="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catIssnStatus')}"
+							name="catIssnStatus" value="#{createJournalWizard.catCmptsHome.instance.catIssnStatus}">
+							<s:selectItems itemValue="#{i}" label="#{i.label}"
+								noSelectionLabel="Choose..."
+								value="#{listsForEnums.catCmpts_CatIssnStatus}" var="i" />
+						</h:selectOneMenu>
+					</s:decorate> 
+					<s:decorate id="catThOclcNumber_div7" template="../layout/edit.xhtml">
+						<ui:define name="label">OCLC Number</ui:define>
+						<h:inputText
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catThOclcNumber')}"
+							id="catThOclcNumber7" maxlength="50" size="25"
+							value="#{createJournalWizard.catCmptsHome.instance.catThOclcNumber}" />
+					</s:decorate> 
+					<s:decorate id="catGrantCode_div7" template="../layout/edit.xhtml">
+						<ui:define name="label">Grant Code</ui:define>
+						<h:inputText
+							readonly="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catGrantCode')}"
+							id="catGrantCode7" maxlength="255" size="25"
+							value="#{createJournalWizard.catCmptsHome.instance.catGrantCode}" />
+					</s:decorate>
+					<s:decorate id="catSelectionRecommendation_div7"
+						template="../layout/edit.xhtml">
+						<ui:define name="label">Recommend for JSTOR?</ui:define>
+						<h:selectOneMenu
+							disabled="#{!s:hasPermission(createJournalWizard.catCmptsHome.instance, 'modify catSelectionRecommendation')}"
+							name="catSelectionRecommendation"
+							value="#{createJournalWizard.catCmptsHome.instance.catSelectionRecommendation}">
+							<s:selectItems itemValue="#{i}" label="#{i.label}"
+								noSelectionLabel="Choose..."
+								value="#{listsForEnums.catCmpts_SelectionRecommendation}" var="i" />
+						</h:selectOneMenu>
+					</s:decorate>
+				
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('createJournalQuit')}.show(); return false;"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+		 
+		
+		<a:commandLink styleClass="button right" value="Save and Continue"
+			action="#{createJournalWizard.saveComponentInfo}"
+			reRender="createJournalForm" 
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+	</div>
+</ui:composition>

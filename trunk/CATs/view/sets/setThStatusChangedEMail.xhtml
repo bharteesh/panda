@@ -1,0 +1,37 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+    <m:from name="CATS" address="#{mailOps.fromEmail}" />
+    <m:to name="#{setsMailOps.displayName}"><h:outputText value="#{setsMailOps.email}"/></m:to>
+    <ui:repeat var="_email" value="#{setsMailOps.ccList}">
+    	<m:cc><h:outputText value="#{_email}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="Sets: Title History '#{setsMailOps.thStatus}'"/></m:subject>
+	<m:replyTo address="catssupport@ithaka.org"/>
+    <m:body>
+    	<p><h:outputText value="Hi #{setsMailOps.displayName}" />,</p>
+    	<s:fragment rendered="#{setsMailOps.thStatus eq 'Completed'}">
+			<p>
+				<h:outputText value="Title History Status of following Set(s) are set to "/>
+				<b><h:outputText value="#{setsMailOps.thStatus}:"/></b>
+			</p>
+		</s:fragment>
+		
+		<s:fragment rendered="#{setsMailOps.thStatus eq 'Requested'}">
+			<p>
+				<h:outputText value="In last 24 hours, Title History Status of following Set(s) are set to "/>
+				<b><h:outputText value="#{setsMailOps.thStatus}"/></b> 
+			</p>
+		</s:fragment>
+		
+		<ui:include src="SetsTableForMail.xhtml">
+			<ui:param name="setsList" value="#{setsMailOps.setsList}"/>
+		</ui:include>
+		<p>Sincerely,<br/>CATS</p>
+    </m:body>
+</m:message>

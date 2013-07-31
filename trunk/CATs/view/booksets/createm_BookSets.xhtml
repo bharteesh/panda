@@ -1,0 +1,39 @@
+<s:div id="createBookSetsPanels"
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+    <rich:modalPanel id="createBookSetsPanel" styleClass="modal" width="900" height="580">
+        <s:div id="createBookSetWizardModalDiv">
+		    <a:form ajaxSubmit="true" ajaxSingle="true" id="createBookSetswizardForm">
+			    <a:include viewId="#{createBookSetsWizard.currentCreateView}">
+			    <!-- The divParam is currently not used, but if we ,later run into 'div' problem, we can append and add this to the element id(s)-->
+			        <f:param name="divParam" value="#{divParam}createBookSets"/>
+			        <f:param name="pageURL" value="#{pageURL}"/>
+			    </a:include>
+		    </a:form>
+       </s:div>
+    </rich:modalPanel>
+
+    <rich:modalPanel id="createBookSetsQuit" styleClass="modal" width="900" height="550">
+        <s:div id="createBookSetsWizardModalQuitDiv">
+    	    <a:form ajaxSubmit="true" ajaxSingle="true" id="createIBookSetsQuitForm">
+			    <a:include viewId="#{createBookSetsWizard.quitView}">
+			    <!-- The divParam is currently not used, but if we ,later run into 'div' problem, we can append and add this to the element id(s)-->
+			        <f:param name="divParam" value="createBookSets"/>
+			        <f:param name="pageURL" value="#{pageURL}"/>
+			    </a:include>
+		    </a:form>
+	    </s:div>
+    </rich:modalPanel>
+   
+</s:div>

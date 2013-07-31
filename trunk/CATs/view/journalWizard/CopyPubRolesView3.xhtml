@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.copyPubRolesWizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Select</li>
+			<li class="">2. Change</li>
+			<li class="selected">3. Result</li>
+		</ul>
+		<div class="cluster smart">
+		
+			<s:fragment rendered="#{empty createJournalWizard.clonedPubRolesList}">
+				<p><font color="red"> Record not created. Information exactly duplicated another record. </font></p>
+			</s:fragment>
+			
+			<s:fragment rendered="#{not empty createJournalWizard.clonedPubRolesList}">
+			<p>The following Publisher Role was successfully added to <b>#{createJournalWizard.catCmptsHome.instance.catName}</b></p>
+			<div class="scroller">
+				<rich:dataTable id="CmptPubRolesResult" var="_cmptPubRoles"
+					value="#{createJournalWizard.clonedPubRolesList}">
+					
+					<rich:column >
+						<f:facet name="header">
+							<h:outputText value="ID"/>
+						</f:facet>
+						<h:outputText value="#{_cmptPubRoles.id}" />
+					</rich:column>
+					
+					<rich:column >
+						<f:facet name="header">
+							<h:outputText value="Publisher"/>
+						</f:facet>
+						<h:outputText value="#{_cmptPubRoles.catPublishers.catName}" />
+					</rich:column>
+					
+					<rich:column >
+						<f:facet name="header">
+							<h:outputText value="Component ID"/>
+						</f:facet>
+						<h:outputText value="#{_cmptPubRoles.catCmpts.id}" />
+					</rich:column>
+					
+					<rich:column >
+						<f:facet name="header">
+							<h:outputText value="Component Name"/>
+						</f:facet>
+						<h:outputText value="#{_cmptPubRoles.catCmpts.catName}" />
+					</rich:column>
+					
+					<rich:column >
+						<f:facet name="header">
+							<h:outputText value="Role"/>
+						</f:facet>
+						<h:outputText value="#{_cmptPubRoles.catRole.label}" />
+					</rich:column>
+					
+					<rich:column >
+						<f:facet name="header">
+							<h:outputText value="All or Part of Component"/>
+						</f:facet>
+						<h:outputText value="#{_cmptPubRoles.catAllOrPartOfCmpts.label}" />
+					</rich:column>
+					
+					<rich:column >
+						<f:facet name="header">
+							<h:outputText value="Coverage"/>
+						</f:facet>
+						<h:outputText value="#{_cmptPubRoles.catContentCovered}" />
+					</rich:column>
+					
+				</rich:dataTable>
+			</div>
+			</s:fragment>
+			
+			
+		</div>
+		
+		<div class="push"></div>
+		
+		<a:commandLink styleClass="button right" value="Return"
+			action="#{createJournalWizard.resetPubRoles}"
+			reRender="createJournalForm"
+			oncomplete="#{rich:component('copyPubRolesWizardModal')}.hide();"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+		
+	</div>
+</ui:composition>

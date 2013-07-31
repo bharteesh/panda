@@ -1,0 +1,282 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+
+	<ui:param name="entityType" value="bookSubmissions" />
+	<ui:param name="moremenu" value="moremenu" />
+
+	<ui:define name="body">
+
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatBookSubmissionsList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catBookSubmissionsList}"></ui:param>
+			<ui:param name="divId" value="1" />
+		</ui:include>
+
+		<a:form>
+			<s:div id="bsheader" styleclass="header">
+
+				<div class="left">
+					<span class="museo"> <h:outputText
+							value="Book Submissions
+(#{empty catBookSubmissionsList.resultList ? 0 : (catBookSubmissionsList.paginated ? catBookSubmissionsList.resultCount : catBookSubmissionsList.resultList.size)})"></h:outputText>
+					</span>
+
+
+					<h:selectOneMenu name="flavour"
+						value="#{catBookSubmissionsList.flavour}">
+						<s:selectItems value="#{catBookSubmissionsList.flavours}" var="i"
+							itemValue="#{i}"
+							label="#{catBookSubmissionsList.flavourLabel(i)}" />
+						<a:support event="onchange"
+							action="#{catBookSubmissionsList.updateUserSkinPreferences}"
+							oncomplete="javascript: location.href='CatBookSubmissionsList.seam'" ignoreDupResponses="true"
+							eventsQueue="bookSubmissionsListQueue" ajaxSingle="true" />
+					</h:selectOneMenu>
+					<s:link id="clearSearch" status="globalWaitStatus"
+						ignoreDupResponses="true" styleClass="button wizard"
+						action="#{catBookSubmissionsList.reset}" value="X"
+						ajaxSingle="true" propagation="none"
+						oncomplete="javascript: location.href='CatBookSubmissionsList.seam'">
+						<f:param name="flavour" value="#{catBookSubmissionsList.flavour}" />
+					</s:link>
+				</div>
+				<div class="right">
+					<ui:include src="adhocReportSelect.xhtml">
+						<ui:param name="entityQuery" value="#{catBookSubmissionsList}" />
+					</ui:include>
+
+				</div>
+			</s:div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/Animated-Hourglass.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+
+				<h:dataTable id="catBookSubmissionsList"
+					var="_catBookSubmissions"
+					value="#{catBookSubmissionsList.resultList}" rowClasses="odd,even"
+					styleClass="mainListClass">
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['id']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="ID"
+						propertyPath="catBookSubmissions.id"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.id}"
+						propertyName="id" sortable="true"
+						value="#{_catBookSubmissions.id}" />
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						enumList="#{listsForEnums.catBookSubmissions_ReasonExcluded}"
+						rendered="#{catBookSubmissionsList.listFlavour['catReasonExcluded']}"
+						entityList="#{catBookSubmissionsList}"
+						propertyLabel="Reason Excluded"
+						propertyPath="catBookSubmissions.catReasonExcluded"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catReasonExcluded}"
+						propertyName="catReasonExcluded"
+						sortable="true"
+						value="#{_catBookSubmissions.catReasonExcluded.label}" />
+
+
+
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catVersion.id']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Version ID"
+						propertyPath="catBookSubmissions.catVersion.id"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catVersion.id}"
+						propertyName="catVersion.id" sortable="true"
+						value="#{_catBookSubmissions.catVersion.id}" />
+
+
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catSequenceNo']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Sequence"
+						propertyPath="catBookSubmissions.catSequenceNo"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catSequenceNo}"
+						propertyName="catSequenceNo" sortable="true"
+						value="#{_catBookSubmissions.catSequenceNo}" />
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						enumList="#{listsForEnums.catBookSubmissions_Lifecycle}"
+						rendered="#{catBookSubmissionsList.listFlavour['catLifecycle']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Status"
+						propertyPath="catBookSubmissions.catLifecycle"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catLifecycle}"
+						propertyName="catLifecycle" sortable="true"
+						value="#{_catBookSubmissions.catLifecycle.label}" />
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catSentTimestamp']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Sent"
+						propertyPath="catBookSubmissions.catSentTimestamp"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catSentTimestamp}"
+						propertyName="catSentTimestamp" sortable="true"
+						value="#{_catBookSubmissions.catSentTimestamp}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catReceivedTimestamp']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Received"
+						propertyPath="catBookSubmissions.catReceivedTimestamp"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catReceivedTimestamp}"
+						propertyName="catReceivedTimestamp" sortable="true"
+						value="#{_catBookSubmissions.catReceivedTimestamp}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catQcCompletedTimestamp']}"
+						entityList="#{catBookSubmissionsList}"
+						propertyLabel="QC Completed"
+						propertyPath="catBookSubmissions.catQcCompletedTimestamp"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catQcCompletedTimestamp}"
+						propertyName="catQcCompletedTimestamp" sortable="true"
+						value="#{_catBookSubmissions.catQcCompletedTimestamp}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catVendor.catName']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Vendor"
+						propertyPath="catBookSubmissions.catVendor.catName"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catVendor.catName}"
+						propertyName="catVendor.catName" sortable="true"
+						value="#{_catBookSubmissions.catVendor.catName}" />
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						enumList="#{listsForEnums.catBookSubmissions_VendorState}"
+						rendered="#{catBookSubmissionsList.listFlavour['catCurrentVendorState']}"
+						entityList="#{catBookSubmissionsList}"
+						propertyLabel="Vendor's Current State"
+						propertyPath="catBookSubmissions.catCurrentVendorState"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catCurrentVendorState}"
+						propertyName="catCurrentVendorState" sortable="true"
+						value="#{_catBookSubmissions.catCurrentVendorState.label}" />
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						enumList="#{listsForEnums.catBookSubmissions_QcOutcome}"
+						rendered="#{catBookSubmissionsList.listFlavour['catQcOutcome']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="QC Outcome"
+						propertyPath="catBookSubmissions.catQcOutcome"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catQcOutcome}"
+						propertyName="catQcOutcome" sortable="true"
+						value="#{_catBookSubmissions.catQcOutcome.label}" />
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catExpectedDeliveryDate']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Vendor ETD"
+						propertyPath="catBookSubmissions.catExpectedDeliveryDate"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catExpectedDeliveryDate}"
+						propertyName="catExpectedDeliveryDate" sortable="true"
+						value="#{_catBookSubmissions.catExpectedDeliveryDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+					</cats:column>
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catVendorProdTeam']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Vendor Team"
+						propertyPath="catBookSubmissions.catVendorProdTeam"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catVendorProdTeam}"
+						propertyName="catVendorProdTeam" sortable="true"
+						value="#{_catBookSubmissions.catVendorProdTeam}" />
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catVendorProdStartDate']}"
+						entityList="#{catBookSubmissionsList}"
+						propertyLabel="Vendor Start"
+						propertyPath="catBookSubmissions.catVendorProdStartDate"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catVendorProdStartDate}"
+						propertyName="catVendorProdStartDate" sortable="true"
+						value="#{_catBookSubmissions.catVendorProdStartDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+					</cats:column>
+
+					<cats:column linkToId="#{_catBookSubmissions.id}"
+						rendered="#{catBookSubmissionsList.listFlavour['catVendorProdEndDate']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Vendor End"
+						propertyPath="catBookSubmissions.catVendorProdEndDate"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catVendorProdEndDate}"
+						propertyName="catVendorProdEndDate" sortable="true"
+						value="#{_catBookSubmissions.catVendorProdEndDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+					</cats:column>
+
+
+					<cats:column linkToId="#{_catBookSubmissions.id}" sortable="true"
+						rendered="#{catBookSubmissionsList.listFlavour['catGmgVersions']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="GMG Version"
+						propertyPath="catBookSubmissions.catGmgVersion"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catGmgVersion}"
+						propertyName="catGmgVersion"
+						value="#{_catBookSubmissions.catGmgVersion}">
+					</cats:column>
+
+					<cats:column linkToId="#{_catBookSubmissions.id}" sortable="true"
+						rendered="#{catBookSubmissionsList.listFlavour['catNotes']}"
+						entityList="#{catBookSubmissionsList}"
+						propertyLabel="Vendor Notes"
+						propertyPath="catBookSubmissions.catNotes"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catNotes}"
+						propertyName="catNotes" value="#{_catBookSubmissions.catNotes}">
+					</cats:column>
+
+					<cats:column linkToId="#{_catBookSubmissions.id}" sortable="true"
+						rendered="#{catBookSubmissionsList.listFlavour['catCreator']}"
+						entityList="#{catBookSubmissionsList}" propertyLabel="Creator"
+						propertyPath="catBookSubmissions.catCreator"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catCreator}"
+						propertyName="catCreator"
+						value="#{_catBookSubmissions.catCreator}">
+					</cats:column>
+
+
+					<cats:column linkToId="#{_catBookSubmissions.id}" sortable="true"
+						rendered="#{catBookSubmissionsList.listFlavour['catDateCreated']}"
+						entityList="#{catBookSubmissionsList}"
+						propertyLabel="Date Created"
+						propertyPath="catBookSubmissions.catDateCreated"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catDateCreated}"
+						propertyName="catDateCreated"
+						value="#{_catBookSubmissions.catDateCreated}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+					</cats:column>
+
+
+					<cats:column linkToId="#{_catBookSubmissions.id}" sortable="true"
+						rendered="#{catBookSubmissionsList.listFlavour['catDateModified']}"
+						entityList="#{catBookSubmissionsList}"
+						propertyLabel="Date Modified"
+						propertyPath="catBookSubmissions.catDateModified"
+						propertyValue="#{catBookSubmissionsList.catBookSubmissions.catDateModified}"
+						propertyName="catDateModified"
+						value="#{_catBookSubmissions.catDateModified}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+					</cats:column>
+
+				</h:dataTable>
+			</div>
+		</a:form>
+
+		<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+		<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catBookSubmissionsList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+		
+	</ui:define>
+</ui:composition>

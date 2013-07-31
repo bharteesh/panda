@@ -1,0 +1,39 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="AssetDiv1">
+	<!-- START Manual Asset Loader -->
+	<ui:debug />
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator') or s:hasRole('CD Books')}">
+		<section class="task">
+			<h1>Manual Asset Loader</h1>
+			<section>
+				<h:form id="assetId" enctype="multipart/form-data">
+					<dl>
+						<dt>Spreadsheet Path:
+							<s:fileUpload data="#{manualAssetCreator.file}" required="true">
+							</s:fileUpload>
+							
+						</dt>
+						<dt>
+							<h:commandButton id="uploadAssetButton" value="Upload"
+								action="#{manualAssetCreator.assetImport()}" render="assetId" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+			<p>Allows for manual asset record creation.
+			</p>
+			<p>
+				<a target="_blank"
+					href="../templatespreadsheets/AssetLoaderTemplate.xlsx">Download
+					Template Spreadsheet</a> 
+			</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Manual Asset Loader -->
+</s:div>

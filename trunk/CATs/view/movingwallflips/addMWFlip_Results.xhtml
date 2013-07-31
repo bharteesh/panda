@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createMovingWallFlipsWizard.createTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Info</li>
+			<li class="selected">2. Results</li>
+		</ul>
+		<div class="cluster smart">
+			<s:fragment rendered="#{not empty createMovingWallFlipsWizard.createdMwfList}">
+				<s:div styleClass="title eligible">
+			        <h1>Moving Wall Flip (1)</h1>
+			        <p>You successfully created one Moving Wall Flip for Component <strong>#{createMovingWallFlipsWizard.cmptsToAddTo.catName}</strong>.</p>
+			    </s:div>
+			    <div class="push">
+		        	<rich:dataTable value="#{createMovingWallFlipsWizard.createdMwfList}" var="_mwFlip">
+						<rich:column>
+							<f:facet name="header">Component Name</f:facet>
+							<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+								<f:param name="id" value="#{_mwFlip.id}"/>
+								<h:outputText value="#{_mwFlip.catCmpts.catName}" />
+							</s:link>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Set Name</f:facet>
+							<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+								<f:param name="id" value="#{_mwFlip.id}"/>
+								<h:outputText value="#{_mwFlip.catCmpts.setsValue}" />
+							</s:link>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Lifecycle</f:facet>
+							<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+								<f:param name="id" value="#{_mwFlip.id}"/>
+								<h:outputText value="#{_mwFlip.catLifecycle.label}" />
+							</s:link>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Flip Date</f:facet>
+							<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+								<f:param name="id" value="#{_mwFlip.id}"/>
+								<h:outputText value="#{_mwFlip.catFlipToPublicYear}">
+									<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+								</h:outputText>
+							</s:link>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Release Through</f:facet>
+							<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+								<f:param name="id" value="#{_mwFlip.id}"/>
+								<h:outputText value="#{_mwFlip.catFlipPublctnDate}">
+									<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+								</h:outputText>
+							</s:link>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">ID</f:facet>
+							<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+								<f:param name="id" value="#{_mwFlip.id}"/>
+								<h:outputText value="#{_mwFlip.id}"/>
+							</s:link>
+						</rich:column>
+					</rich:dataTable>
+				</div>
+			</s:fragment>
+			
+			<s:fragment rendered="#{empty createMovingWallFlipsWizard.createdMwfList}">
+				<s:div styleClass="title ineligible">
+			        <h1>Moving Wall Flip</h1>
+			        <p>
+			          You were not able to create Moving Wall Flip for Component 
+			          <strong>#{createMovingWallFlipsWizard.cmptsToAddTo.catName}</strong> because 
+			          the component already has Moving Wall Flip for the year 
+			          <strong>#{createMovingWallFlipsWizard.flipToPublicYear}</strong>, or 
+			          there are no Implemented Moving Wall Detail, or the Moving Value on the Wall Detail is 0.
+			        </p>
+			    </s:div>
+			</s:fragment>
+		</div>
+		<div class="push"></div> 
+
+		<a:commandLink styleClass="button right" value="Return" 
+			action="#{createMovingWallFlipsWizard.createReset}" 
+			oncomplete="#{rich:component('createMovingWallFlipsPanel')}.hide();" 
+			rendered="#{empty pageURL}" 
+			eventsQueue="bulkMovingWallFlips" 
+			status="globalWaitStatus" 
+			ignoreDupResponses="true"    />
+		<a:commandLink
+			styleClass="button right" value="Return" 
+			action="#{createMovingWallFlipsWizard.createReset}" 
+			oncomplete="#{rich:component('createMovingWallFlipsPanel')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+			rendered="#{not empty pageURL}" 
+			eventsQueue="bulkMovingWallFlips" 
+			status="globalWaitStatus" 
+			ignoreDupResponses="true"    />
+	</div>
+</ui:composition>

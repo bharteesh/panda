@@ -1,0 +1,231 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+		
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo">
+					<h:outputText value="Agreement Details for this Component (#{catCmptsHome.contractDetailsList.size})" />
+				</span>
+				<a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('conDetails'.concat(divId))}" 
+					ignoreDupResponses="true" status="globalWaitStatus"  reRender="#{tableId}" 
+					styleClass="button wizard"
+					eventsQueue="cmptsEditQueue"/>				
+				
+			</div>
+			<div class="right">
+				<h:selectOneMenu id="contDtlsBulkOperationsSelect" 
+					value="#{contractDetailsWizard.wizardType}"
+					rendered="#{not empty catCmptsHome.contractDetailsList}"
+					onfocus="if ( ! checkForSave() ) { return false ; }">
+				<a:support 
+					event="onchange" 
+					action="#{contractDetailsWizard.prepBulkOperation()}"
+					reRender="contDtlsLifecycleOperationsPanels,contDtlsChangeAttrPanels"					 
+					oncomplete="if ( #{rich:element('contDtlsBulkOperationsSelect')}.options[this.options.selectedIndex].value == 'RIDERS' )	{									
+									 #{rich:component('contDtlsAttrUpdatePanel')}.show();	
+								} ;
+								if ( #{rich:element('contDtlsBulkOperationsSelect')}.options[this.options.selectedIndex].value == 'CDLIFECYCLE' )	{									
+									 #{rich:component('contLifecycleUpdatePanel')}.show();	
+								} ; return false; "
+					status="globalWaitStatus"
+					eventsQueue="cmptsEditQueue"	/>
+				<s:selectItems value="#{contractDetailsWizard.bulkOperationsNames}" var="b"
+					label="#{contractDetailsWizard.bulkOperations[b]}" itemValue="#{b}"
+					noSelectionLabel="Bulk Operations" />
+				</h:selectOneMenu>
+				
+				<a:commandLink id="createContractDtlsEditButton"
+							ignoreDupResponses="true"
+						    action="#{createContractDetailsWizard.prepCreateBulkOperationFromCmpts(null)}"
+							value="Add Agreement Detail"
+							reRender="addContractDtlsModalPanels" 
+							oncomplete="Richfaces.showModalPanel('addContractDtlsPanel');"							
+							disabled="#{!s:hasPermission(catCmptsHome.instance, 'add_reln contractDetails')}"
+							styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'add_reln contractDetails') ? 'disabled' : ''}"
+							status="globalWaitStatus" 
+							onclick="if ( ! checkForSave() ) { return false ; }"/>
+					
+			</div>
+		</div>
+		<rich:dataTable id="#{tableId}" var="_catContractDetails"
+			value="#{catCmptsHome.contractDetailsList}"
+			rendered="#{not empty catCmptsHome.contractDetailsList}">
+			
+			<rich:column rendered="#{not empty contractDetailsWizard.bulkOperationsNames}" width="20px">
+				<f:facet name="header">
+					<input type="checkbox" id="select_all_checkbox1"
+							name="select_all_checkbox"
+							onclick="if ( this.checked ) { jQuery('.#{divId}bulk_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.#{divId}bulk_checkbox').each(function(){ this.checked = false; }); }" />
+				</f:facet>
+				<h:selectBooleanCheckbox styleClass="#{divId}bulk_checkbox"
+					value="#{contractDetailsWizard.selections[_catContractDetails]}" />
+			</rich:column>
+
+			<rich:column id="contDetailContractType" sortBy="#{_catContractDetails.catContracts.catType}"
+				filterBy="#{_catContractDetails.catContracts.catType}" sortable="true"
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['catType_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['catType_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Agreement Type" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catContracts.catType.label}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailPublisherName" sortBy="#{_catContractDetails.catContracts.publisherValue}"
+				filterBy="#{_catContractDetails.catContracts.publisherValue}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd3_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd3_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Publisher Name" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catContracts.publisherValue}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailSets" sortBy="#{_catContractDetails.catCmpts.setsValue}"
+				filterBy="#{_catContractDetails.catCmpts.setsValue}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd4_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd4_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Sets" />
+				</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_catContractDetails.id}"/>
+						<h:outputText value="#{_catContractDetails.catCmpts.setsValue}" />
+					</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailCmptId" sortBy="#{_catContractDetails.catCmpts.id}"
+				filterBy="#{_catContractDetails.catCmpts.id}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd5_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd5_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Component ID" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catCmpts.id}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailCmptName" sortBy="#{_catContractDetails.catCmpts.catName}"
+				filterBy="#{_catContractDetails.catCmpts.catName}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd6_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd6_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Component Name" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catCmpts.catName}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailLifeCycle" sortBy="#{_catContractDetails.catLifecycle}"
+				filterBy="#{_catContractDetails.catLifecycle}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd7_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd7_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Lifecycle" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catLifecycle.label}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailOutcome" sortBy="#{_catContractDetails.catOutcome}"
+				filterBy="#{_catContractDetails.catOutcome}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd8_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd8_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Outcome" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catOutcome.label}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailEffectDate" sortBy="#{_catContractDetails.catEffectiveDate}"
+				filterBy="#{_catContractDetails.catEffectiveDate}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd9_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd9_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Effective Date" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catEffectiveDate}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailAllPart" sortBy="#{_catContractDetails.catAllOrPartOfCmpt}"
+				filterBy="#{_catContractDetails.catAllOrPartOfCmpt}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd10_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd10_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Covers All/Part of Component" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catAllOrPartOfCmpt.label}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailContent" sortBy="#{_catContractDetails.catContentCovered}"
+				filterBy="#{_catContractDetails.catContentCovered}" sortable="true"
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd12_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd12_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Content Covered" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catContentCovered}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="contDetailId" sortBy="#{_catContractDetails.id}"
+				filterBy="#{_catContractDetails.id}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd1_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd1_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.id}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="contDetailContractId" sortBy="#{_catContractDetails.catContracts.id}"
+				filterBy="#{_catContractDetails.catContracts.id}" sortable="true" 
+				sortOrder="#{sortFiltBean['conDetails'.concat(divId)]['cd2_sortOrder']}"
+				filterValue="#{sortFiltBean['conDetails'.concat(divId)]['cd2_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Agreement ID" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catContractDetails.id}"/>
+					<h:outputText value="#{_catContractDetails.catContracts.id}" />
+				</s:link>
+			</rich:column>
+		</rich:dataTable>
+
+	</div>
+
+
+
+</s:div>

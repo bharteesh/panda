@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{setsBulkOperations.bulkTitle}" /></h2>
+
+	<div id="step1"><s:div>
+		<ul class="steps">
+			<li class="">Permissions</li>
+			<li class="selected">Change</li>
+			<li class="disabled">Results</li>
+		</ul>
+	</s:div>
+
+	<div class="cluster">
+	
+	<div class="title change">
+                            <h1> Info</h1>
+                            <p>Select the new title history status:</p>
+                          </div>
+	
+	<s:decorate id="catThStatusDeco"
+		template="../layout/edit.xhtml">
+		<ui:define name="label">Title History Status</ui:define>
+		<h:selectOneMenu name="catThStatusField" 
+			value="#{setsBulkOperations.bulkInstance.catThStatus}"
+			required="true">
+			<s:selectItems value="#{setsBulkOperations.appropriateThStatus}" var="i"
+				itemValue="#{i}" label="#{i.label}" noSelectionLabel="Select One" />
+			<a:support event="onchange" reRender="requestedFrag,assignedFrag,inProgressFrag,completedFrag" 
+				limitToList="true" ajaxSingle="true" status="globalWaitStatus" />
+		</h:selectOneMenu>
+	</s:decorate> 
+	
+<a:outputPanel id="requestedFrag" layout="none">
+		<rich:panel 
+			rendered="#{not empty setsBulkOperations.bulkInstance.catThStatus and setsBulkOperations.bulkInstance.catThStatus.label eq 'Requested'}">
+			
+			<s:decorate id="catThDueDateDeco" template="../layout/edit.xhtml">
+				<ui:define name="label">Title History Due Date</ui:define>
+				<rich:calendar enableManualInput="true"  id="catThDueDate" datePattern="yyyy/MM/dd"  
+                		inputClass="datestyle" required="true" value="#{setsBulkOperations.catThDueDate}"/>
+			</s:decorate>
+			
+			<s:decorate id="catThRequestedByDeco" template="../layout/edit.xhtml">
+				<ui:define name="label">Title History Requested By</ui:define>
+				<h:outputText value="#{credentials.username}"/>
+			</s:decorate>
+			
+			<s:decorate id="catThRequestedDateDeco" template="../layout/edit.xhtml">
+				<ui:define name="label">Title History Request Date</ui:define>
+				<h:outputText value="#{setsBulkOperations.catThRequestedDate}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+			</s:decorate>
+
+		</rich:panel>
+</a:outputPanel>
+<a:outputPanel id="assignedFrag" layout="none">
+
+		<rich:panel 
+			rendered="#{not empty setsBulkOperations.bulkInstance.catThStatus and (setsBulkOperations.bulkInstance.catThStatus.label eq 'Assigned' or setsBulkOperations.bulkInstance.catThStatus.label eq 'Completed')}">
+			
+			<s:decorate id="catThAuthorDeco"
+				template="../layout/edit.xhtml">
+				<ui:define name="label">Author</ui:define>
+				<h:selectOneMenu id="catThAuthor"
+					value="#{setsBulkOperations.bulkInstance.catThAuthor}"
+					required="true">
+					<s:selectItems value="#{roler.getUsersInRole('Librarians')}"
+						var="i" itemValue="#{i}" label="#{i}"
+						noSelectionLabel="Select One" />
+				</h:selectOneMenu>
+			</s:decorate>
+			
+			<s:decorate id="catThAssignedByDeco" template="../layout/edit.xhtml" rendered="#{not empty setsBulkOperations.bulkInstance.catThStatus and setsBulkOperations.bulkInstance.catThStatus.label eq 'Assigned'}">
+				<ui:define name="label">Title History Assigned By</ui:define>
+				<h:outputText value="#{credentials.username}"/>
+			</s:decorate>
+			
+			<s:decorate id="catThAssignedDateDeco" template="../layout/edit.xhtml" rendered="#{not empty setsBulkOperations.bulkInstance.catThStatus and setsBulkOperations.bulkInstance.catThStatus.label eq 'Assigned'}">
+				<ui:define name="label">Date Assigned</ui:define>
+				<h:outputText value="#{setsBulkOperations.catThAssignedDate}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+			</s:decorate>
+			
+		</rich:panel>
+</a:outputPanel>
+<a:outputPanel id="inProgressFrag" layout="none">
+		<rich:panel 
+			rendered="#{not empty setsBulkOperations.bulkInstance.catThStatus and setsBulkOperations.bulkInstance.catThStatus.label eq 'In Progress'}">
+			<!--  nothing!  -->
+		</rich:panel>
+</a:outputPanel>
+<a:outputPanel id="completedFrag" layout="none">
+		<rich:panel 
+			rendered="#{not empty setsBulkOperations.bulkInstance.catThStatus and setsBulkOperations.bulkInstance.catThStatus.label eq 'Completed'}">
+			
+			<s:decorate id="catThDateCompletedDeco" template="../layout/edit.xhtml">
+				<ui:define name="label">Date Completed</ui:define>
+				<h:outputText value="#{setsBulkOperations.catThDateCompleted}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+			</s:decorate>
+			
+		</rich:panel>
+</a:outputPanel>
+	
+	</div>
+
+	<div class="push"></div>
+
+	<a:commandLink styleClass="button" value="Quit"
+		oncomplete="#{rich:component('setsBulkUpdateQuit')}.show(); return false;"
+		eventsQueue="bulkOps" status="globalWaitStatus" ajaxSingle="true" /> 
+		
+		
+		
+		<a:commandLink
+		styleClass="button right" value="Save"
+		action="#{setsBulkOperations.bulkNext}" reRender="setsWizardForm"
+		eventsQueue="bulkOps" status="globalWaitStatus" /></div>
+</ui:composition>

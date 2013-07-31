@@ -1,0 +1,147 @@
+<s:div id="otherCmptFilterTable" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats"
+    styleClass="scroller">
+    
+    
+	<rich:dataTable id="cmpts"
+		value="#{createIssueShipmentsWizard.cmptList}" var="_catCmpts">
+		<rich:column styleClass="checkBoxes" headerClass="checkBoxes" rendered="#{createIssueShipmentsWizard.wizardInvokedFrom ne createIssueShipmentsWizard.INVOKED_FROM_SETS_RECORD}">
+			<h:selectBooleanCheckbox styleClass="entity_checkbox"
+				value="#{createIssueShipmentsWizard.selectionsForCmpts[_catCmpts]}"
+				onclick="emulateRadios(this, 'entity_checkbox');" >
+				<a:support event="onchange" 
+					action="#{createIssueShipmentsWizard.selectParentCmpt}"
+					reRender="noLayoutCmptList,noLayoutOrdersList,noLayoutErrorMsgs"
+					eventsQueue="createShipmentQueue"
+					status="globalWaitStatus"
+					ajaxSingle="true" rendered="#{createIssueShipmentsWizard.wizardInvokedFrom eq createIssueShipmentsWizard.INVOKED_FROM_SHIPMENT_LIST}"/>
+			</h:selectBooleanCheckbox>
+		</rich:column>
+		
+		<rich:column styleClass="checkBoxes" headerClass="checkBoxes" rendered="#{createIssueShipmentsWizard.wizardInvokedFrom eq createIssueShipmentsWizard.INVOKED_FROM_SETS_RECORD}">
+			<h:selectBooleanCheckbox styleClass="entity_checkbox"
+				value="#{createIssueShipmentsWizard.selectionsForCmpts[_catCmpts]}"
+				onclick="emulateRadios(this, 'entity_checkbox');" >
+				<a:support event="onchange" 
+					action="#{createIssueShipmentsWizard.selectParentCmptFromSets}"
+					reRender="noLayoutOrdersList,noLayoutErrorMsgs"
+					eventsQueue="createShipmentQueue"
+					status="globalWaitStatus"
+					ajaxSingle="true" rendered="#{createIssueShipmentsWizard.wizardInvokedFrom eq createIssueShipmentsWizard.INVOKED_FROM_SETS_RECORD}"/>
+			</h:selectBooleanCheckbox>
+		</rich:column>
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Set Name"
+			propertyName="setsValue"
+			propertyPath="catCmpts.setsValue"
+			propertyValue="#{catCmptsList.catCmpts.setsValue}"
+			reRender="cmpts"
+			value="#{_catCmpts.setsValue}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="ISSN (Current)"
+			propertyName="setCurrentIssnValue"
+			propertyPath="catCmpts.setCurrentIssnValue"
+			propertyValue="#{catCmptsList.catCmpts.setCurrentIssnValue}"
+			reRender="cmpts"
+			value="#{_catCmpts.setCurrentIssnValue}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Set BF Onboarding Status"
+			propertyName="setBFOnboardingStatus"
+			propertyPath="catCmpts.setBFOnboardingStatus"
+			propertyValue="#{catCmptsList.catCmpts.setBFOnboardingStatus}"
+			reRender="cmpts"
+			value="#{_catCmpts.setBFOnboardingStatus}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Component Name"
+			propertyName="catName"
+			propertyPath="catCmpts.catName"
+			propertyValue="#{catCmptsList.catCmpts.catName}"
+			reRender="cmpts"
+			value="#{_catCmpts.catName}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="ISSN"
+			propertyName="catPrintIssn"
+			propertyPath="catCmpts.catPrintIssn"
+			propertyValue="#{catCmptsList.catCmpts.catPrintIssn}"
+			reRender="cmpts"
+			value="#{_catCmpts.catPrintIssn}"/>
+			
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Participation"
+			propertyName="catParticipationDate"
+			propertyPath="catCmpts.catParticipationDate"
+			propertyValue="#{catCmptsList.catCmpts.catParticipationDate}"
+			reRender="cmpts"
+			value="#{_catCmpts.catParticipationDate}">
+			<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+		</cats:wizardColumn>	
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="BF Prod Status"
+			propertyName="catProductionStatus"
+			propertyPath="catCmpts.catProductionStatus"
+			propertyValue="#{catCmptsList.catProductionStatus}"
+			reRender="cmpts"
+			value="#{_catCmpts.catProductionStatus.label}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Wall Type"
+			propertyName="wallValue"
+			propertyPath="catCmpts.wallValue"
+			propertyValue="#{catCmptsList.catCmpts.wallValue}"
+			reRender="cmpts"
+			value="#{_catCmpts.wallValue}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Wall Year"
+			propertyName="wallYearValue"
+			propertyPath="catCmpts.wallYearValue"
+			propertyValue="#{catCmptsList.catCmpts.wallYearValue}"
+			reRender="cmpts"
+			value="#{_catCmpts.wallYearValue}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Set CSP"
+			propertyName="setCspValue"
+			propertyPath="catCmpts.setCspValue"
+			propertyValue="#{catCmptsList.catCmpts.setCspValue}"
+			reRender="cmpts"
+			value="#{_catCmpts.setCspValue}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catCmptsList}"
+			propertyLabel="Set CIL"
+			propertyName="setCilValue"
+			propertyPath="catCmpts.setCilValue"
+			propertyValue="#{catCmptsList.catCmpts.setCilValue}"
+			reRender="cmpts"
+			value="#{_catCmpts.setCilValue}"/>
+		
+	</rich:dataTable>
+	<s:div styleClass="blanktable" rendered="#{empty createIssueShipmentsWizard.cmptList}">
+		<span>First, choose the component your shipment belongs to, then choose the order.</span>
+	</s:div>
+    
+	
+ </s:div>

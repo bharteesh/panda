@@ -1,0 +1,128 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+	<h2><h:outputText value="#{createAcqOrdersWizard.createTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+				<li class="">1. Change</li>
+				<li class="selected">2. Main</li>
+				<li class="disabled">3. Additional</li>
+				<li class="disabled">4. Lifecycle</li>
+				<li class="disabled">5. Results</li>
+		</ul>
+		
+		<div class="cluster smart">
+
+		<p>Fill out order information.</p>
+
+
+<s:fragment>
+
+<s:decorate id="catPublctnUnitRangeDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Extent (Pub Units)</ui:define>
+<h:inputTextarea id="catPublctnUnitRange"
+             			cols="20"
+                		rows="2"
+                       	value="#{createAcqOrdersWizard.createTransientInstance.catPublctnUnitRange}"></h:inputTextarea>
+</s:decorate>
+<s:decorate id="catCoverDateRangeDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Extent (Dates)</ui:define>
+<h:inputTextarea id="catCoverDateRange"
+             			cols="20"
+                		rows="2"
+                       	value="#{createAcqOrdersWizard.createTransientInstance.catCoverDateRange}"></h:inputTextarea>
+</s:decorate>
+<s:decorate id="catSupplierDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Supplier</ui:define>
+<h:inputTextarea id="catSupplier"
+             			cols="20"
+                		rows="2"
+                        requiredMessage="Please enter a value !!" 
+		                required="true"                			
+                       	value="#{createAcqOrdersWizard.createTransientInstance.catSupplier}"></h:inputTextarea>
+</s:decorate>
+<s:decorate id="catSupplierContactDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Supplier Contact</ui:define>
+<h:inputTextarea id="catSupplierContact"
+             			cols="20"
+                		rows="2"
+                       	value="#{createAcqOrdersWizard.createTransientInstance.catSupplierContact}"></h:inputTextarea>
+</s:decorate>
+<s:decorate id="catPostMasterAddressDiv" template="../layout/edit.xhtml">
+<ui:define name="label">PostMaster Address</ui:define>
+<h:inputTextarea id="catPostMasterAddress"
+             			cols="20"
+                		rows="2"
+                       	value="#{createAcqOrdersWizard.createTransientInstance.catPostMasterAddress}"></h:inputTextarea>
+</s:decorate>
+<s:decorate id="catSupplierCommitmentDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Supplier Commitment</ui:define>
+                <h:selectOneMenu id="catSupplierCommitment" value="#{createAcqOrdersWizard.createTransientInstance.catSupplierCommitment}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{listsForEnums.catAcqOrders_SupplierCommitment}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+</s:decorate>
+<s:decorate id="catQuantityDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Quantity</ui:define>
+                <h:selectOneMenu id="catQuantity" value="#{createAcqOrdersWizard.createTransientInstance.catQuantity}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{listsForEnums.catAcqOrders_Quantity}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+</s:decorate>
+<s:decorate id="catReprintsDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Reprints</ui:define>
+                <h:selectOneMenu id="catReprints" value="#{createAcqOrdersWizard.createTransientInstance.catReprints}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{listsForEnums.catAcqOrders_Reprints}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+</s:decorate>
+<s:decorate id="catNotificationThresholdDiv" template="../layout/edit.xhtml">
+<ui:define name="label">Notification Threshold</ui:define>
+<h:inputText id="catNotificationThreshold"
+             			size="3"
+                			maxlength="3"
+                       	value="#{createAcqOrdersWizard.createTransientInstance.catNotificationThreshold}"></h:inputText>
+</s:decorate>
+
+</s:fragment>
+
+
+			</div>
+
+		<div class="push"></div>
+
+            <a:commandLink styleClass="button" value="Quit"
+       			eventsQueue="#{divParam}eventsQueue"
+            	status="globalWaitStatus"
+			    reRender="createAcqOrderswizard" oncomplete="#{rich:component('createAcqOrdersQuit')}.show(); return false;">
+			</a:commandLink> 
+ 
+			<a:commandLink
+			styleClass="button right" value="Continue"
+			eventsQueue="#{divParam}eventsQueue"
+           	status="globalWaitStatus"
+			action="#{createAcqOrdersWizard.createNext}" 
+			reRender="createAcqOrderswizard" />
+			
+			
+			</div>
+</ui:composition>
+

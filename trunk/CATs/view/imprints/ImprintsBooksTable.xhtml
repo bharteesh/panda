@@ -1,0 +1,155 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo"> <h:outputText value="Books (#{booksList.size})" />
+				</span>
+				<a:commandLink value="X" 
+					action="#{sortFiltBean.resetSortFilt('catBooks'.concat(divId))}"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					reRender="#{divId}catBooksList" styleClass="button wizard" />
+			</div>
+			<div class="right">
+				<a:commandLink  limitToList="true" status="globalWaitStatus"
+					action="#{booksToImprintWizard.prepCreateOperation(catImprintsHome.instance)}" 
+					ajaxSingle="true" ignoreDupResponses="true" 
+					value="Add Book" 
+					reRender="booksToImprintPanels" 
+					oncomplete="#{rich:component('booksToImprintWizardModal')}.show(); return false;" 
+					
+                    styleClass="button wizard"
+					onclick="if ( ! checkForSave() ) { return false ; }"/>	
+			</div>
+	</div>
+		<rich:dataTable id="#{divId}catBooksList" var="_catBooks"
+			value="#{booksList}" rendered="#{not empty booksList}">
+			
+			<rich:column id="#{divId}id" sortBy="#{_catBooks.id}"
+				filterBy="#{_catBooks.id}" sortable="true"
+				sortOrder="#{sortFiltBean['catBooks'.concat(divId)]['catBooksId_sortOrder']}"
+				filterValue="#{sortFiltBean['catBooks'.concat(divId)]['catBooksId_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBooks.id}" />
+					<h:outputText value="#{_catBooks.id}" />
+				</s:link>
+			</rich:column>				
+			
+			<rich:column id="#{divId}bestTitle" sortBy="#{_catBooks.bestTitle}"
+				filterBy="#{_catBooks.bestTitle}" sortable="true"
+				sortOrder="#{sortFiltBean['catBooks'.concat(divId)]['catBooksBestTitle_sortOrder']}"
+				filterValue="#{sortFiltBean['catBooks'.concat(divId)]['catBooksBestTitle_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Best Title" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBooks.id}" />
+					<h:outputText value="#{_catBooks.bestTitle}" />
+				</s:link>
+			</rich:column>		
+			
+			<rich:column id="#{divId}catRecordRefId" sortBy="#{_catBooks.catRecordRefId}"
+				filterBy="#{_catBooks.catRecordRefId}" sortable="true"
+				sortOrder="#{sortFiltBean['catBooks'.concat(divId)]['catBooksRecRefId_sortOrder']}"
+				filterValue="#{sortFiltBean['catBooks'.concat(divId)]['catBooksRecRefId_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Record Reference ID" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBooks.id}" />
+					<h:outputText value="#{_catBooks.catRecordRefId}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="#{divId}bestEisbn13" sortBy="#{_catBooks.bestEisbn13}"
+				filterBy="#{_catBooks.bestEisbn13}" sortable="true"
+				sortOrder="#{sortFiltBean['catBooks'.concat(divId)]['catBooksBestEisbn13_sortOrder']}"
+				filterValue="#{sortFiltBean['catBooks'.concat(divId)]['catBooksBestEisbn13_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Best EISBN13" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBooks.id}" />
+					<h:outputText value="#{_catBooks.bestEisbn13}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="#{divId}targetVendor" sortBy="#{_catBooks.catTargetVendor.catName}"
+				filterBy="#{_catBooks.catTargetVendor.catName}" sortable="true"
+				sortOrder="#{sortFiltBean['catBooks'.concat(divId)]['catBooksTargetVendor_sortOrder']}"
+				filterValue="#{sortFiltBean['catBooks'.concat(divId)]['catBooksTargetVendor_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Target Vendor" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBooks.id}" />
+					<h:outputText value="#{_catBooks.catTargetVendor.catName}" />
+				</s:link>
+			</rich:column>	
+
+			<rich:column id="#{divId}booksPublishers" sortBy="#{_catBooks.booksPublishers}"
+				filterBy="#{_catBooks.booksPublishers}" sortable="true"
+				sortOrder="#{sortFiltBean['catBooks'.concat(divId)]['catBooksBooksPublishers_sortOrder']}"
+				filterValue="#{sortFiltBean['catBooks'.concat(divId)]['catBooksBooksPublishers_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Publishers" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBooks.id}" />
+					<h:outputText value="#{_catBooks.booksPublishers}" />
+				</s:link>
+			</rich:column>	
+
+			<rich:column id="#{divId}seriesTitle" sortBy="#{_catBooks.seriesTitle}"
+				filterBy="#{_catBooks.seriesTitle}" sortable="true"
+				sortOrder="#{sortFiltBean['catBooks'.concat(divId)]['catBooksSeriesTitle_sortOrder']}"
+				filterValue="#{sortFiltBean['catBooks'.concat(divId)]['catBooksSeriesTitle_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Series Title" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBooks.id}" />
+					<h:outputText value="#{_catBooks.seriesTitle}" />
+				</s:link>
+			</rich:column>	
+			
+			<rich:column id="#{divId}dateCreated" sortBy="#{_catBooks.catDateCreated}"
+				filterBy="#{_catBooks.catDateCreated}" sortable="true"
+				sortOrder="#{sortFiltBean['catBooks'.concat(divId)]['catBooksDateCreated_sortOrder']}"
+				filterValue="#{sortFiltBean['catBooks'.concat(divId)]['catBooksDateCreated_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Date Created" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBooks.id}" />
+					<h:outputText value="#{_catBooks.catDateCreated}" />
+				</s:link>
+			</rich:column>	
+			<rich:column>
+			<a:commandLink 			    			
+			    			id="deleteBookButton"				
+				    		action="#{booksToImprintWizard.prepDeleteBook(_catBooks)}"	
+				    		disabled="false"
+				    		reRender="booksToImprintPanels"
+							oncomplete="#{rich:component('booksToImprintWizardModal')}.show();"
+							value="Delete"							
+							styleClass="button delete"
+							status="globalWaitStatus"
+							ignoreDupResponses="true"
+							ajaxSingle="true"
+							limitToList="true">					
+			</a:commandLink>
+			</rich:column>
+		</rich:dataTable>
+	</div>
+
+</s:div>

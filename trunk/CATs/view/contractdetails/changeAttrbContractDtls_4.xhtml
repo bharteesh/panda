@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{contractDetailsWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1. Permissions</li>
+		<li class="disabled">2.Change</li>
+		<li class="disabled">3.Additional</li>
+		<li class="selected">4.Results</li>
+	</ul>
+
+	<div class="cluster smart">
+	<s:fragment rendered="#{not empty contractDetailsWizard.oldContractDtlsList}">
+		<p><h:outputText	value="You have updated the following #{contractDetailsWizard.oldContractDtlsList.size()} record(s):" /></p>			
+			<cats:dumbTableContractDetails	value="#{contractDetailsWizard.oldContractDtlsList}" />
+	</s:fragment></div>
+	<div class="push"></div>
+	<a:commandLink styleClass="button right" value="Return" limitToList="true" action="#{contractDetailsWizard.wizardReset}" 
+		oncomplete="#{rich:component('contDtlsAttrUpdatePanel')}.hide(); javascript:location.reload(true)" rendered="#{empty pageURL}"
+		status="globalWaitStatus" ignoreDupResponses="true"/>
+		
+	<a:commandLink styleClass="button right" value="Return" limitToList="true" action="#{contractDetailsWizard.wizardReset}" 
+		oncomplete="#{rich:component('contDtlsAttrUpdatePanel')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');" rendered="#{not empty pageURL}"
+		status="globalWaitStatus" ignoreDupResponses="true"/>
+	</div>
+</ui:composition>

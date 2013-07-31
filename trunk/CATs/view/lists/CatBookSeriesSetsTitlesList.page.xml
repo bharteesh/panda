@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd" login-required="true">
+<begin-conversation join="true"/>
+  <param name="flavour" value="#{catBookSeriesSetsTitlesList.flavour}"/>
+
+
+   <param name="firstResult" value="#{catBookSeriesSetsTitlesList.firstResult}"/>
+   <param name="sort" value="#{catBookSeriesSetsTitlesList.orderColumn}"/>
+   <param name="dir" value="#{catBookSeriesSetsTitlesList.orderDirection}"/>
+   <param name="logic" value="#{catBookSeriesSetsTitlesList.restrictionLogicOperator}"/>
+
+
+
+   <param name="nulltestpath" value="#{catBookSeriesSetsTitlesList.nullTestColumn}"/>
+   <param name="nulltestcond" value="#{catBookSeriesSetsTitlesList.nullTestCondition}"/>
+
+
+   <param name="from"/>
+   <param name="id" value="#{catBookSeriesSetsTitlesList.catBookSeriesSetsTitles.id}"/>
+   
+</page>

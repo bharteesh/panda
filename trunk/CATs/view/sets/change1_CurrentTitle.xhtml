@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{changeCurrentTitleWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Select</li>
+			<li class="disabled">2. Results</li>
+		</ul>
+		<div class="cluster smart">
+			<rich:panel>
+				<f:facet name="header">
+	        		<h:outputText value="Components"/>
+	        	</f:facet> 
+			</rich:panel>
+			<rich:dataTable id="catCmptsOfSet"
+				var="_catCmpts" value="#{catSetsHome.instance.catSetsComponentsList}"
+				rowClasses="odd,even">
+				
+				
+				
+				<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+					<s:fragment>
+						<h:selectBooleanCheckbox styleClass="bulk_checkbox_addCurTitle"
+							value="#{changeCurrentTitleWizard.selectedCmpts[_catCmpts]}"
+							onclick="emulateRadios(this, 'bulk_checkbox_addCurTitle');" />
+					</s:fragment>
+				</rich:column>
+	
+				<rich:column id="id">
+					<f:facet name="header">
+						<h:outputText value="ID" />
+					</f:facet>
+					<h:outputText value="#{_catCmpts.id}" />
+				</rich:column>
+				<rich:column id="catName">
+					<f:facet name="header">
+						<h:outputText value="Name" />
+					</f:facet>
+					<h:outputText value="#{_catCmpts.catName}" />
+				</rich:column>
+				<rich:column id="catLifecycle">
+					<f:facet name="header">
+						<h:outputText value="Lifecycle" />
+					</f:facet>
+					<h:outputText value="#{_catCmpts.catLifecycle}" />
+				</rich:column>
+	
+				<rich:column id="setName">
+					<f:facet name="header">
+						<h:outputText value="Sets" />
+					</f:facet>
+					<h:outputText value="#{_catCmpts.setsValue}" />
+				</rich:column>
+	
+				<rich:column id="catDateRange">
+					<f:facet name="header">
+						<h:outputText value="Date Range" />
+					</f:facet>
+					<h:outputText value="#{_catCmpts.catDateRange}" />
+				</rich:column>
+				<rich:column id="catPrintIssn">
+					<f:facet name="header">
+						<h:outputText value="Print ISSN" />
+					</f:facet>
+					<h:outputText value="#{_catCmpts.catPrintIssn}" />
+				</rich:column>
+				<rich:column id="catOnHold">
+					<f:facet name="header">
+						<h:outputText value="On Hold" />
+					</f:facet>
+					<h:outputText value="#{_catCmpts.catOnHold ? 'Yes' : 'No'}" />
+				</rich:column>
+
+			</rich:dataTable>
+		
+		</div>
+	
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			reRender="changeCurrentTitleForm"
+			oncomplete="#{rich:component('changeCurrentTitleQuit')}.show(); return false;"
+			eventsQueue="changeCrntTitle" status="globalWaitStatus">
+		</a:commandLink> 
+		
+		<a:commandLink styleClass="button right" value="Save"
+			action="#{changeCurrentTitleWizard.updateCurrentTitle}"
+			reRender="changeCurrentTitleForm" 
+			onclick="if(checkRadios('bulk_checkbox_addCurTitle', 'Please select a Component') == false) {return false};"
+			eventsQueue="changeCrntTitle" status="globalWaitStatus"/>
+	</div>
+</ui:composition>
+

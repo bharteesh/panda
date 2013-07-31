@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd" login-required="true">
+<begin-conversation join="true"/>
+
+	<param name="listOnBin"/>
+	<param name="updateBin"/>
+
+  <param name="flavour" value="#{catCmptsList.flavour}"/>
+
+   <param name="firstResult" value="#{catCmptsList.firstResult}"/>
+   <param name="sort" value="#{catCmptsList.orderColumn}"/>
+   <param name="dir" value="#{catCmptsList.orderDirection}"/>
+   <param name="logic" value="#{catCmptsList.restrictionLogicOperator}"/><!--
+
+   <param name="rollupSort" value="#{catCmptsList.rollupOrderProperty}"/>
+   <param name="rollupDir" value="#{catCmptsList.rollupOrderDirection}"/>
+
+   --><param name="from"/>
+   <param name="id" value="#{catCmptsList.catCmpts.id}"/>
+   <param name="catArtDarkNoteChangeBy" value="#{catCmptsList.catCmpts.catArtDarkNoteChangeBy}"/>
+   <param name="catCreator" value="#{catCmptsList.catCmpts.catCreator}"/>
+   <param name="catDateRange" value="#{catCmptsList.catCmpts.catDateRange}"/>
+   <param name="catEIssn" value="#{catCmptsList.catCmpts.catEIssn}"/>
+   <param name="catExcludedRange" value="#{catCmptsList.catCmpts.catExcludedRange}"/>
+   <param name="catGrantCode" value="#{catCmptsList.catCmpts.catGrantCode}"/>
+   <param name="catImgDarkNoteChangeBy" value="#{catCmptsList.catCmpts.catImgDarkNoteChangeBy}"/>
+   <param name="catIncludeInHclRepository" value="#{catCmptsList.catCmpts.catIncludeInHclRepository}"/>
+   <param name="catIncludeInUcRepository" value="#{catCmptsList.catCmpts.catIncludeInUcRepository}"/>
+   <param name="catIniArt" value="#{catCmptsList.catCmpts.catIniArt}"/>
+   <param name="catIniCilReleaseStatus" value="#{catCmptsList.catCmpts.catIniCilReleaseStatus}"/>
+   <param name="catIssnNoteChangeBy" value="#{catCmptsList.catCmpts.catIssnNoteChangeBy}"/>
+   <param name="catIssnRequestedBy" value="#{catCmptsList.catCmpts.catIssnRequestedBy}"/>
+   <param name="catIssnStatus" value="#{catCmptsList.catCmpts.catIssnStatus}"/>
+   <param name="catLtmJournalCode" value="#{catCmptsList.catCmpts.catLtmJournalCode}"/>
+   <param name="catLtmJournalId" value="#{catCmptsList.catCmpts.catLtmJournalId}"/>
+   <param name="catName" value="#{catCmptsList.catCmpts.catName}"/>
+   <param name="catNeededSourceChangeBy" value="#{catCmptsList.catCmpts.catNeededSourceChangeBy}"/>
+   <param name="catPrimarySigAuthor" value="#{catCmptsList.catCmpts.catPrimarySigAuthor}"/>
+   <param name="catPrintIssn" value="#{catCmptsList.catCmpts.catPrintIssn}"/>
+   <param name="catProductionStatus" value="#{catCmptsList.catCmpts.catProductionStatus}"/>
+   <param name="catPublctnUnitRange" value="#{catCmptsList.catCmpts.catPublctnUnitRange}"/>
+   <param name="catRightsObtainedBy" value="#{catCmptsList.catCmpts.catRightsObtainedBy}"/>
+   <param name="catSelectionRecommendation" value="#{catCmptsList.catCmpts.catSelectionRecommendation}"/>
+   <param name="catSelectionStatus" value="#{catCmptsList.catCmpts.catSelectionStatus}"/>
+   <param name="catSubtitle" value="#{catCmptsList.catCmpts.catSubtitle}"/>
+   <param name="catThOclcNumber" value="#{catCmptsList.catCmpts.catThOclcNumber}"/>
+   <param name="catTitleIssn" value="#{catCmptsList.catCmpts.catTitleIssn}"/>
+
+   <param name="catLifecycle" value="#{catCmptsList.catCmpts.catLifecycle}"/>
+
+<!-- componentsList -->
+<param name="catIssnNoteDateChange" value="#{catCmptsList.catCmpts.catIssnNoteDateChange}"/>
+
+
+<!-- componentsList -->
+<param name="catSigningDeadlineDate" value="#{catCmptsList.catCmpts.catSigningDeadlineDate}"/>
+
+
+<!-- componentsList -->
+<param name="catIniReleaseDeadline" value="#{catCmptsList.catCmpts.catIniReleaseDeadline}"/>
+
+
+<!-- componentsList -->
+<param name="catParticipationDate" value="#{catCmptsList.catCmpts.catParticipationDate}"/>
+
+
+<!-- componentsList -->
+<param name="catArtDarkNoteDateChange" value="#{catCmptsList.catCmpts.catArtDarkNoteDateChange}"/>
+
+
+<!-- componentsList -->
+<param name="catImgDarkNoteDateChange" value="#{catCmptsList.catCmpts.catImgDarkNoteDateChange}"/>
+
+
+<!-- componentsList -->
+<param name="catIssnDateRequested" value="#{catCmptsList.catCmpts.catIssnDateRequested}"/>
+
+
+<!-- componentsList -->
+<param name="catIssnDateReceived" value="#{catCmptsList.catCmpts.catIssnDateReceived}"/>
+
+
+<!-- componentsList -->
+<param name="catAcqDateStarted" value="#{catCmptsList.catCmpts.catAcqDateStarted}"/>
+
+
+<!-- componentsList -->
+<param name="catAcqDateCompleted" value="#{catCmptsList.catCmpts.catAcqDateCompleted}"/>
+
+
+<!-- componentsList -->
+<param name="catPrimarySigDateCompleted" value="#{catCmptsList.catCmpts.catPrimarySigDateCompleted}"/>
+
+
+<!-- componentsList -->
+<param name="catDateSentToVendor" value="#{catCmptsList.catCmpts.catDateSentToVendor}"/>
+
+
+<!-- componentsList -->
+<param name="catIniReleaseDateSchd" value="#{catCmptsList.catCmpts.catIniReleaseDateSchd}"/>
+
+
+<!-- componentsList -->
+<param name="catIniReleaseDatePrjd" value="#{catCmptsList.catCmpts.catIniReleaseDatePrjd}"/>
+
+
+<!-- componentsList -->
+<param name="catIniReleaseDateActl" value="#{catCmptsList.catCmpts.catIniReleaseDateActl}"/>
+
+
+<!-- componentsList -->
+<param name="catNeededSourceDateChange" value="#{catCmptsList.catCmpts.catNeededSourceDateChange}"/>
+
+
+<!-- componentsList -->
+<param name="catDateCreated" value="#{catCmptsList.catCmpts.catDateCreated}"/>
+
+
+<!-- componentsList -->
+<param name="catRightsObtainedDate" value="#{catCmptsList.catCmpts.catRightsObtainedDate}"/>
+
+
+<!--<param name="licensorValue" value="#{catCmptsList.licensorValue}"/>
+<param name="selectionRightsValue" value="#{catCmptsList.selectionRightsValue}"/>
+
+--></page>

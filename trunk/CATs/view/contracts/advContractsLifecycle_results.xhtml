@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{contractsLifecycleWizard.wizardTitle}"/></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1. Change</li>
+		<li class="disabled">2. Details</li>
+		<li class="disabled">3. Roles-Riders</li>
+		<li class="selected">4. Results</li>
+	</ul>
+
+	<div class="cluster smart">
+	
+	<s:div rendered="#{contractsLifecycleWizard.origInstance.getCatOutcome() eq 'Transferred' or 
+						contractsLifecycleWizard.origInstance.getCatOutcome() eq 'Signednewcontract'}">
+		<ui:include src="advContractsLifecycle_resultsTransferred.xhtml"/>
+	</s:div>
+	
+	<s:div rendered="#{not (contractsLifecycleWizard.origInstance.getCatOutcome() eq 'Transferred' or 
+						contractsLifecycleWizard.origInstance.getCatOutcome() eq 'Signednewcontract')}">	
+	
+		<div class="title results">
+				<h1><h:outputText value="Agreements (#{contractsLifecycleWizard.updatedContracts.size})"/></h1>
+				<p>You successfully advanced the lifecycle to <b><h:outputText value="#{contractsLifecycleWizard.newLifecycleValue.label}"></h:outputText></b>.</p>
+			</div>
+		  	 		 	
+				<ui:include src="advContractsLifecycle_resultsContractsTable.xhtml">
+					<ui:param name="value" value="#{contractsLifecycleWizard.updatedContracts}"/>
+				</ui:include>
+			<s:fragment rendered="#{not empty contractsLifecycleWizard.contractDtlsUpdated}">	
+						<div class="title eligible">
+							<h1><h:outputText value="Agreement Details (#{contractsLifecycleWizard.contractDtlsUpdated.size})"/></h1>		
+						<s:div rendered="#{contractsLifecycleWizard.newLifecycleValue.label eq 'Declined' or 
+											contractsLifecycleWizard.newLifecycleValue.label eq 'LOI Signed'}">
+							<p>You successfully advanced the lifecycles to <strong>#{contractsLifecycleWizard.newLifecycleValue.label}.</strong></p>	
+						</s:div>							
+						<s:div rendered="#{contractsLifecycleWizard.newLifecycleValue.label eq 'Active'}">
+							<p>You successfully advanced the lifecycles to <strong>#{contractsLifecycleWizard.newLifecycleValue.label}</strong>. The system also added the publisher(s) from the Agreement as the licensor(s) for the following content.</p>	
+						</s:div>		
+						<s:div rendered="#{contractsLifecycleWizard.newLifecycleValue.label eq 'Terminated'}">
+							<p>You successfully advanced the lifecycles to <strong>#{contractsLifecycleWizard.newLifecycleValue.label}</strong>. The system also marked the publisher(s) from the Agreement as historical licensor(s) for the following content.</p>
+						</s:div>					
+													
+						</div>		 	
+						<ui:include src="advContractsLifecycle_resultsContractDtlsTable.xhtml">
+							<ui:param name="value" value="#{contractsLifecycleWizard.contractDtlsUpdated}"/>
+						</ui:include>
+			</s:fragment>
+			<s:fragment rendered="#{contractsLifecycleWizard.origInstance.catOutcome.label eq 'Transferred'}">
+					<s:fragment rendered="#{not empty contractsLifecycleWizard.newContractDtlsList}">	
+						<div class="title eligible">
+							<h1><h:outputText value="New Agreement Details (#{contractsLifecycleWizard.newContractDtlsList.size})"/></h1>
+							<p>Created new agreement details listing the same content on the new agreement:</p>
+						</div>
+						<div class="push"></div>		 	
+						<ui:include src="advContractsLifecycle_resultsContractDtlsTable.xhtml">
+							<ui:param name="value" value="#{contractsLifecycleWizard.newContractDtlsList}"/>
+						</ui:include>
+					</s:fragment>
+			</s:fragment>
+			<s:fragment rendered="#{not empty contractsLifecycleWizard.contractDtlsInvalid}">	
+						<div class="title ineligible">
+							<h1><h:outputText value="Agreement Details (#{contractsLifecycleWizard.contractDtlsInvalid.size})"/></h1>						
+								<p>You were not able to advance the following Agreement Details because the component was on hold,
+									or the content covered by the Agreement Detail is already covered by another Agreement of the same type, or the agreement detail was already past LIFECYCLE.
+									The system did not change any information on the parent component, the agreement details, or associated publisher roles.</p>						
+						</div>		 	
+						<ui:include src="advContractsLifecycle_resultsContractDtlsTable.xhtml">
+							<ui:param name="value" value="#{contractsLifecycleWizard.contractDtlsInvalid}"/>
+						</ui:include>
+			</s:fragment>	
+		
+			<s:fragment rendered="#{not empty contractsLifecycleWizard.parentCmptListValid}">	
+						<div class="title eligible">
+							<h1><h:outputText value="Components (#{contractsLifecycleWizard.parentCmptListValid.size})"/></h1>			
+							<p>You successfully filled out some of the following information for the components listed below: CSP Digital Availability Date, Participation
+								Date, Rights Obtained and Rights Exclusions</p>			
+						</div>		 		 	
+						<ui:include src="/contractdetails/wizard_resultsCmptsTable.xhtml">
+							<ui:param name="value" value="#{contractsLifecycleWizard.parentCmptListValid}"/>
+						</ui:include> 
+			</s:fragment>
+			<s:fragment rendered="#{not empty contractsLifecycleWizard.pubRolesList}">	
+						<div class="title eligible">
+							<h1><h:outputText value="Publisher Roles (#{contractsLifecycleWizard.pubRolesList.size})"/></h1>						
+								<p>You successfully created the following publisher roles.</p>						
+						</div>		 		 		 	
+						<ui:include src="/contractdetails/wizard_resultsPubRolesTable.xhtml">
+							<ui:param name="value" value="#{contractsLifecycleWizard.pubRolesList}"/>
+						</ui:include> 
+			</s:fragment>
+			<s:fragment rendered="#{not empty contractsLifecycleWizard.pubRolesHistoricalList}">	
+						<div class="title eligible">
+							<h1><h:outputText value="Publisher Roles (#{contractsLifecycleWizard.pubRolesHistoricalList.size})"/></h1>						
+								<p>You successfully marked the following Publisher Roles as Historical.</p>						
+						</div>		 		 		 	
+						<ui:include src="/contractdetails/wizard_resultsPubRolesHistTable.xhtml">
+							<ui:param name="value" value="#{contractsLifecycleWizard.pubRolesHistoricalList}"/>
+						</ui:include> 
+			</s:fragment>
+	</s:div>
+	
+	</div>
+	
+	<div class="push"></div>
+	<a:commandLink styleClass="button right" value="Return" limitToList="true" action="#{contractsLifecycleWizard.wizardReset}" 
+		oncomplete="#{rich:component('contractsLifecycleUpdatePanel')}.hide(); javascript:location.reload(true)" rendered="#{empty pageURL}"
+		status="globalWaitStatus" ignoreDupResponses="true"/>
+	<a:commandLink styleClass="button right" value="Return" limitToList="true" action="#{contractsLifecycleWizard.wizardReset}" 
+		oncomplete="#{rich:component('contractsLifecycleUpdatePanel')}.hide(); javascript:location.href=formatURL(location.href);" rendered="#{not empty pageURL}"
+		status="globalWaitStatus" ignoreDupResponses="true"/>
+	</div>
+</ui:composition>

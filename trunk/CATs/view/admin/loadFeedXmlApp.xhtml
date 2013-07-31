@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="../layout/template.xhtml">
+	
+	<ui:define name="badge">
+		<h1> </h1>
+	</ui:define>
+	
+	<ui:define name="body">
+				
+		<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<rich:panel>		
+			<f:facet name="header">Load Feed XML into CAT_FEEDS table</f:facet>
+				
+			<h:form id="loadFeedXmlId" enctype="multipart/form-data">
+			
+			<b>Select Feed Type:</b><h:selectOneMenu name="feedTypeSelect" value="#{loadFeedXMLApp.feedType}">
+			   		<s:selectItems itemValue="#{i}" label="#{i.label}"
+			   			value="#{listsForEnums.catFeedType}" var="i"/>			   			                		
+				</h:selectOneMenu>
+				<br/>
+				<b>Feed XML Path: </b> 
+				<s:fileUpload data="#{loadFeedXMLApp.file}" required="true" size="60">
+				</s:fileUpload>
+					
+				 <h:commandButton  value="Import" action="#{loadFeedXMLApp.loadXML()}"/>
+				
+			</h:form>
+		
+		</rich:panel>
+		
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,94 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:cats="http://www.ithaka.org/cats"
+    xmlns:rich="http://richfaces.org/rich">
+
+<a:form id="contractDtlsRecordBadgeForm">    
+	<h1>#{catContractDtlsHome.instance.id}</h1>
+    
+     <s:decorate id="contractDtlsRecType" template="../layout/edit.xhtml">
+    	<ui:define name="label">Record Type:</ui:define>
+    	<h:outputText value="Agreement Details"/>
+    </s:decorate>
+    
+    <s:decorate id="contractDtlsChildId" template="../layout/edit.xhtml">
+    	<ui:define name="label">Child of:</ui:define>
+          <li>
+    	<h:outputText value="Agreement ("/>
+	      		<s:link view="/contracts/ContractsRecord.xhtml" id="contractInformation" propagation="none" value="#{catContractDtlsHome.instance.catContracts.id}">
+	      			<f:param name="catContractsId" value="#{catContractDtlsHome.instance.catContracts.id}"/>
+                </s:link>
+    	<h:outputText value=")"/>
+	      </li>
+          <li>
+	      		<s:link view="/components/ComponentsEdit.xhtml" id="componentId" propagation="none" value="#{catContractDtlsHome.instance.catCmpts.catName}">
+	      			<f:param name="catCmptsId" value="#{catContractDtlsHome.instance.catCmpts.id}"/>
+                </s:link>
+	      </li>
+    </s:decorate>
+    
+     <s:decorate id="catAgreementType" template="../layout/edit.xhtml">
+    	<ui:define name="label">Agreement Type:</ui:define>
+    	<h:outputText value="#{catContractDtlsHome.instance.catContracts.catType.label}"/>
+    </s:decorate> 
+    <s:decorate id="catPublisherName" template="../layout/edit.xhtml">
+    	<ui:define name="label">Publisher Name:</ui:define>
+    	<h:outputText value="#{catContractDtlsHome.instance.catContracts.publisherValue}"/>
+    </s:decorate>    
+    
+    <s:decorate id="catSets" template="../layout/edit.xhtml">
+    	<ui:define name="label">Sets:</ui:define>
+    	<h:outputText value="#{catContractDtlsHome.instance.catCmpts.setsValue}"/>
+    </s:decorate>    
+    
+    <s:decorate id="catLifecycle" template="../layout/edit.xhtml">
+    	<ui:define name="label">Lifecycle:</ui:define>
+    	<h:outputText value="#{catContractDtlsHome.instance.catLifecycle}"/>    	    	
+    		<a:commandLink id="catContDtlsLifecycleEditButton"				
+    			onclick="if ( ! checkForSave() ) { return false ; }"
+	    		action="#{contractDetailsLifecycleWizard.prepAdvLifecycleOperation(null)}"
+				value="Edit"
+				disabled="#{!s:hasPermission(catContractDtlsHome.instance, 'modify catLifecycle')}"
+				reRender="contDtlsLifecycleOperationsPanels" 
+				oncomplete="#{rich:component('contLifecycleUpdatePanel')}.show();"
+				styleClass="button wizard #{!s:hasPermission(catContractDtlsHome.instance, 'modify catLifecycle') ? 'disabled' : ''}"
+				status="globalWaitStatus" 
+				ignoreDupResponses="true"
+				 limitToList="true"/>		
+    </s:decorate>
+    
+    <s:decorate id="catOutCome" template="../layout/edit.xhtml">
+    	<ui:define name="label">Outcome:</ui:define>
+    	<h:outputText value="#{catContractDtlsHome.instance.catOutcome.label}"/>
+    </s:decorate>
+    
+    <s:decorate id="catEffectiveDate" template="../layout/edit.xhtml">
+    	<ui:define name="label">Effective Date:</ui:define>
+    	<h:outputText value="#{catContractDtlsHome.instance.catEffectiveDate}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+    </s:decorate>
+        <s:decorate id="catAgreementDatePubSigned" template="../layout/edit.xhtml" rendered="#{catContractDtlsHome.instance.catContracts.catType eq 'Books'}">
+    	<ui:define name="label">Date Agreement Signed by Publisher:</ui:define>
+    	<h:outputText value="#{catContractDtlsHome.instance.catAgreementDatePubSigned}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+    </s:decorate>
+    
+    <s:decorate id="catRiders" template="../layout/edit.xhtml" rendered="#{catContractDtlsHome.instance.catContracts.catType eq 'Backfile'}">
+    	<ui:define name="label">Riders:</ui:define>
+    	<h:outputText value="#{catContractDtlsHome.instance.riderNames}"/>
+    	<a:commandLink id="catContDtlsRidersEditButton"				
+    			onclick="if ( ! checkForSave() ) { return false ; }"
+	    		action="#{contractDetailsWizard.openChgAttrbWizard('RIDERS')}"
+				value="Edit"
+				disabled="#{!s:hasPermission(catContractDtlsHome.instance, 'modify catRiders') or !s:hasPermission(catContractDtlsHome.instance, 'add_reln catRiders')}"
+				reRender="contDtlsChangeAttrPanels" 
+				oncomplete="#{rich:component('contDtlsAttrUpdatePanel')}.show();"
+				styleClass="button wizard #{(!s:hasPermission(catContractDtlsHome.instance, 'modify catRiders') or !s:hasPermission(catContractDtlsHome.instance, 'add_reln catRiders')) ? 'disabled' : ''}"
+				status="globalWaitStatus" 
+				ignoreDupResponses="true"
+				 limitToList="true"/>	
+    </s:decorate>    
+   </a:form>
+</s:div>

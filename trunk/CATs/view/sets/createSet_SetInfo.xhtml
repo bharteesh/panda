@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createSetWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Name</li>
+			<li class="selected">2. Info</li>
+			<li class="disabled">3. Results</li>
+		</ul>
+		<div class="cluster">
+		<a:outputPanel layout="none" id="noLayoutFatalMsgs">
+				<s:div styleClass="alert">
+					<s:div rendered="#{not empty catCmptsHome.fatalMsgs}" id="fatalMsgsDiv">
+						<a:repeat value="#{catCmptsHome.fatalMsgs}" var="_fatalMsg">
+							<p>#{_fatalMsg}</p>
+						</a:repeat>
+					</s:div>
+				</s:div>
+		</a:outputPanel>
+		<a:outputPanel layout="none" id="noLayoutWarningMsgs">
+				<s:div styleClass="alert">
+					<s:div rendered="#{not empty catCmptsHome.warningMsgs}" id="warningMsgsDiv">
+						<a:repeat value="#{catCmptsHome.warningMsgs}" var="_warningMsg">
+							<p>#{_warningMsg}</p>
+						</a:repeat>
+					</s:div>
+				</s:div>
+		</a:outputPanel>
+			<div class="title additional">
+				<h1>Additional Set Info</h1>
+				<p>You may enter additional information about the set now:</p>
+			</div>
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Name</ui:define>
+				<h:outputText				
+					value="#{createSetWizard.catCmptsHome.instance.catIniArt} #{createSetWizard.catCmptsHome.instance.catName} 
+							#{createSetWizard.catCmptsHome.instance.catSubtitle}" />
+			</s:decorate>
+			<s:decorate template="../layout/edit.xhtml">
+	              <ui:define name="label">Publisher</ui:define>
+	              <h:inputTextarea cols="20" 
+	              	id="catThCrntPublisher1" rows="2" value="#{createSetWizard.catSetsHome.instance.catThCrntPublisher}"/>
+	              <span class="comments">Current publisher to the best of your knowledge.</span>
+	        </s:decorate>
+	        
+	        <s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Negotiator</ui:define>
+				<h:selectOneMenu id="catNegotiator"
+					value="#{createSetWizard.catSetsHome.instance.catThNegotiator}">
+					<s:selectItems value="#{roler.getUsersInRole('CD Negotiations')}"
+						var="i" itemValue="#{i}" label="#{i}"
+						noSelectionLabel="Select One" />
+				</h:selectOneMenu>
+				<span class="comments">Staff member responsible for researching the set. Leave blank if unknown.</span>
+			</s:decorate>
+			
+			<s:decorate template="../layout/edit.xhtml">
+	              <ui:define name="label">Title History Request Note</ui:define>
+	              <h:inputTextarea cols="20" 
+	              	id="catThReqNote1" rows="2" value="#{createSetWizard.catSetsHome.instance.catThRequestNote}"/>
+	              <span class="comments"></span>
+	        </s:decorate>
+	        
+	        <div class="title child">
+				<h1> Component Info</h1>
+                <p>You may enter additional information about the current title component now:</p>
+			</div>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Selection Status</ui:define>
+				<h:selectOneMenu name="catSelectionStatus"
+					value="#{createSetWizard.catCmptsHome.instance.catSelectionStatus}"
+					required="true">
+					<s:selectItems
+						value="#{listsForEnums.catCmpts_SelectionStatus}"
+						var="i" itemValue="#{i}" label="#{i.label}" />
+				</h:selectOneMenu>
+				<span class="comments">Status of Content Development's decision to pursue rights to the component. Use "New" if unknown.</span>
+			</s:decorate>
+			<s:decorate template="../layout/editDate.xhtml">
+				<ui:define name="label">Start Year</ui:define>
+				<h:inputText value="#{createSetWizard.catCmptsHome.instance.catStartYear}" id="catStartYear6"  ><s:convertDateTime type="date" pattern="yyyy"/></h:inputText>
+								<span class="comments">4 digit year. <em>Example: 1901</em></span>
+			</s:decorate>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Print ISSN</ui:define>
+				<h:inputText
+					id="catPrintIssn1" maxlength="50" size="25"
+					value="#{createSetWizard.catCmptsHome.instance.catPrintIssn}">					
+					<a:support event="onblur" action="#{catCmptsHome.printIssnChanged()}" eventsQueue="journalQueue"/>
+					<a:support event="onfocus" action="#{catCmptsHome.onFocusPrintIssn}" eventsQueue="journalQueue"/>
+				</h:inputText>
+				<span class="comments">Include dashes and capitalize X. Leave blank if unknown. <em>Example: 1345-274X</em></span>
+			</s:decorate>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">E-ISSN</ui:define>
+				<h:inputText id="catEIssn7" maxlength="14" size="25"
+					value="#{createSetWizard.catCmptsHome.instance.catEIssn}">										
+					<a:support event="onblur" action="#{catCmptsHome.eIssnChanged()}" eventsQueue="journalQueue"/>
+					<a:support event="onfocus" action="#{catCmptsHome.onFocusEIssn}" eventsQueue="journalQueue"/>
+				</h:inputText>
+				<span class="comments">Include dashes and capitalize X. Leave blank if unknown. <em>Example: 1345-274X</em></span>
+			</s:decorate> 
+			
+			
+		</div>
+		
+		
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('createSetQuit')}.show(); return false;"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"
+			reRender="createSetQuit"/>
+		 
+		
+		<a:commandLink styleClass="button right" value="Save"
+			action="#{createSetWizard.saveSet}"
+			reRender="createSetForm" 
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+	</div>
+</ui:composition>

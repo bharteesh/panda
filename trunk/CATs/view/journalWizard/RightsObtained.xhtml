@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.wizardTitle}" /></h2>
+	
+	<div id="step1">
+		<ul class="steps many">
+			<li class="disabled">...</li>
+			<li class="">4 Agreements</li>
+			<li class="selected">5. Rights</li>
+			<li class="disabled">6. Publisher Roles</li>
+			<li class="disabled">...</li>
+			<li class="disabled">8. Results</li>
+		</ul>
+		<div class="cluster smart">
+		
+			<s:fragment rendered="#{createJournalWizard.hasPermissionChangeRights}">
+				<p>You may now indicate that all needed rights have been obtained and production can begin on the journal.
+				Hit Edit Rights to indicate that all needed rights have been added to the database, or hit Save and Continue to continue creating the journal. </p>
+				<br/><br/>
+				<a:commandLink styleClass="button wizardleft" value="Edit Rights"
+					action="#{createJournalWizard.initRightsObtained}"
+					reRender="changeRightsForm" 
+					eventsQueue="journalQueue"
+					status="globalWaitStatus"
+					oncomplete="Richfaces.showModalPanel('changeRightsWizardModal');"/>
+			</s:fragment>
+				
+			<s:fragment rendered="#{!createJournalWizard.hasPermissionChangeRights}">
+				<p>You do not have permission to indicate that all rights have been obtained for this journal.
+				Hit Continue to continue creating the journal.</p>
+			</s:fragment>
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('createJournalQuit')}.show(); return false;"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+		 
+		<s:fragment rendered="#{createJournalWizard.hasPermissionChangeRights}">
+			<a:commandLink styleClass="button right" value="Save and Continue"
+				action="#{createJournalWizard.showPublisherRolesView}"
+				reRender="createJournalForm" 
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"/>
+		
+			
+		</s:fragment>
+		<s:fragment rendered="#{!createJournalWizard.hasPermissionChangeRights}">
+			<a:commandLink styleClass="button right" value="Continue"
+				action="#{createJournalWizard.showPublisherRolesView}"
+				reRender="createJournalForm" 
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"/>
+		</s:fragment>
+	</div>
+</ui:composition>

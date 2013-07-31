@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{bookVersionLifecycleWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Change</li>
+			<li class="disabled">2. Results</li>
+		</ul>
+		
+			<a:outputPanel layout="none" id="noLayoutErrorMsgs">
+				<s:div styleClass="alert">
+					<s:div rendered="#{not empty bookVersionLifecycleWizard.errorMsgs}" id="errorMsgsDiv">
+						<a:repeat value="#{bookVersionLifecycleWizard.errorMsgs}" var="_errMsg">
+							<p>#{_errMsg}</p>
+						</a:repeat>
+					</s:div>
+				</s:div>
+			</a:outputPanel>
+		
+		<div class="cluster">
+		
+		<a:outputPanel id = "alertPanel">
+			<s:div styleClass="alert" rendered="#{bookVersionLifecycleWizard.newVerInstance.catLifecycle.label eq 'Excluded'}">
+				<p class="highlight">When you Exclude this PDF, all active Book Vendor Submissions associated with this PDF will be automatically Excluded with "PDF Excluded" as Reason Excluded. </p>
+			</s:div>
+			<s:div styleClass="alert" rendered="#{bookVersionLifecycleWizard.origVerInstance.catLifecycle.label eq 'Excluded'}">
+				<p class="highlight">Warning: Moving this Book PDF from "Excluded" to another lifecycle state will only update the Book PDF record. The system will not automatically update Vendor Submissions associated with the PDF. </p>
+			</s:div>
+		</a:outputPanel>
+		<s:div rendered="#{empty bookVersionLifecycleWizard.errorMsgs}">
+			<s:decorate id="catLifecycle_div" template="../layout/edit.xhtml" >
+						<ui:define name="label">New Lifecycle:</ui:define>
+						<h:selectOneMenu name="catLifecycle" value="#{bookVersionLifecycleWizard.newVerInstance.catLifecycle}" requiredMessage="Required"   required="true" >
+								<s:selectItems value="#{bookVersionLifecycleWizard.targetLifecycleValues}" var="i" itemValue="#{i}"
+								              label="#{i.label}" noSelectionLabel="Choose..." />
+								<a:support event="onchange" reRender="reasonPanel, alertPanel" ajaxSingle="true" status="globalWaitStatus" limitToList="true"/>						              		
+						</h:selectOneMenu>	
+						<span class="comments">Use "Excluded" when JSTOR will no longer be working with this PDF due to problems with the file or content; use "Excluded" when expecting a replacement from the publisher and when not expecting a replacement. Use "Vendor Prep" when work needs to be done in house before the PDF can go to the vendor. Use "Ready for Vendor" when this PDF can be sent to the vendor at any time. Use "Active" when this PDF is at the vendor or back from the vendor and remains the current PDF in-use. Use "Fossil" for a PDF that was at one time delivered to JSTOR users via the Delivery Platform but has been replaced with a newer version. </span>					
+			</s:decorate>			
+		</s:div>	
+		
+			<a:outputPanel id="reasonPanel" layout="block">
+				<s:fragment rendered="true">		
+						<s:decorate id="catbkVerExclReason" template="../layout/edit.xhtml" 
+							rendered="#{bookVersionLifecycleWizard.newVerInstance.catLifecycle.label eq 'Excluded'}">
+							<ui:define name="label">Excluded Reason</ui:define>
+							<h:selectOneMenu name="catbkVerExclReasonInput" value="#{bookVersionLifecycleWizard.newVerInstance.catReasonExcluded}" requiredMessage="Required"   required="true" >
+								<s:selectItems value="#{listsForEnums.catBookVersions_ReasonExcluded}" var="i" itemValue="#{i}" label="#{i.label}"
+														 noSelectionLabel="Choose..." />						              		
+							</h:selectOneMenu>	
+							<span class="comments">Use "Duplicate" when this version represents an exact duplicate PDF. Use "Corrupt" when the PDF file is corrupt and unuseable. Use "Received unrequested new version" when the publisher sent a new, different PDF even though JSTOR did not request it. Use "Publisher agreed to replace problem PDF" when we have asked for a new PDF due to a known problem and the publisher has agreed to provide it. Use "Replacement Unusable" when the publisher supplies a replacement PDF that has the same problem as the earlier version or has a new problem. Use "Other" for all other cases. </span>						
+						</s:decorate>
+				</s:fragment>
+			</a:outputPanel>
+		
+		<s:div styleClass="smart">	
+			<div class="title change">
+				<h1>Book Submissions (#{bookVersionLifecycleWizard.bookSubmissionsList.size})</h1>	
+			</div>										
+				<ui:include src="/tags/dumbTableBookSubmissions.xhtml">
+					<ui:param name="value" value="#{bookVersionLifecycleWizard.bookSubmissionsList}"/>
+				</ui:include>
+		</s:div>
+		
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			reRender="bkVerLfclWizard"
+			oncomplete="#{rich:component('bookVersionLifecycleUpdateQuit')}.show(); return false;"
+			eventsQueue="changeVerLifecycleQueue" status="globalWaitStatus">
+		</a:commandLink> 
+		
+		<a:commandLink
+			styleClass="button right" value="Save"
+			eventsQueue="changeVerLifecycleQueue"
+			rendered="#{empty bookVersionLifecycleWizard.errorMsgs}"
+            status="globalWaitStatus"
+			action="#{bookVersionLifecycleWizard.performUpdateOperation()}" 
+			reRender="bkVerLfclWizard" 
+			limitToList="true"/>
+	
+	</div>
+</ui:composition>
+

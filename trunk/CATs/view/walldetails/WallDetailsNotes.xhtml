@@ -1,0 +1,83 @@
+<s:div id="notes" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:cats="http://www.ithaka.org/cats"
+    xmlns:rich="http://richfaces.org/rich">
+	
+<s:div id="notesComponents">
+
+   <h2>Notes</h2>
+   <a:form>
+    <a:commandLink 
+			ignoreDupResponses="true"
+	   		value="Add Note"
+	   		action="#{createWallNoteWizard.prepareCreate}"
+			reRender="createWallNoteWizardModal" 
+			oncomplete="#{rich:component('createWallNoteWizardModal')}.show();"
+			styleClass="button wizard #{!s:hasPermission(catWallDtlsHome.instance, 'add_reln catWallNoteses') ? 'disabled' : ''}"
+			disabled="#{!s:hasPermission(catWallDtlsHome.instance, 'add_reln catWallNoteses') }"
+			status="globalWaitStatus"
+			eventsQueue="wallDtlsEditQueue"
+			ajaxSingle="true"
+			onclick="if ( ! checkForSave() ) { return false ; }"/>
+			</a:form>
+    <div class="push"></div>
+    <a:form>
+	   	<s:div id="tadDivId">
+	    <ul class="tab">
+	      <li>
+	      	<a:commandLink  styleClass="#{catWallDtlsHome.notesSortOrder=='desc' ? 'selected' : ''}" reRender="tadDivId,notesId" ignoreDupResponses="true" status="globalWaitStatus"  ajaxSingle="true"  >
+	      		<f:param name="notesSortOrder" value="desc"/>
+	      		<h:outputText value="Newest First" /> 
+	    	</a:commandLink>
+	      </li>
+	      <li>
+	      	<a:commandLink  styleClass="#{catWallDtlsHome.notesSortOrder=='asc' ? 'selected' : ''}" reRender="tadDivId,notesId" ignoreDupResponses="true" status="globalWaitStatus"  ajaxSingle="true"  >
+	      		<f:param name="notesSortOrder" value="asc"/>
+	      		<h:outputText value="Oldest First" />
+	    	</a:commandLink>
+	      </li>
+		</ul>
+	    </s:div>	   	
+
+	    <div id="newnote"></div>
+	    
+	    <a:outputPanel id="notesId" styleClass="allnotes">
+		    <rich:dataList var="_note" value="#{catWallDtlsHome.allNotes}" rows="10" id="notesList1">
+		    	<div class="note">
+		        <p class="title museo">#{_note.catTitlePart1}<i>#{_note.catTitlePart2}</i>#{_note.catTitlePart3}</p>
+		        <pre>#{_note.catNote}</pre>
+		        <p class="sig"><h:outputText value="by #{_note.catCreator} at "/><h:outputText value="#{_note.catDateCreated}"><s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"/></h:outputText>
+		        <span class="editbutton"><a:commandLink ignoreDupResponses="true"
+			   		value=""
+			   		action="#{createWallNoteWizard.prepareEdit(_note)}"
+					reRender="createWallNoteWizardModal" 
+					oncomplete="#{rich:component('createWallNoteWizardModal')}.show();"
+					styleClass="button wizard2 #{(_note.parentType ne 'WALL DETAIL' or !roler.haveOverlappingRoles(identity.credentials.username, _note.catCreator)) ? 'disabled' : ''}"
+					disabled="#{_note.parentType ne 'WALL DETAIL' or !roler.haveOverlappingRoles(identity.credentials.username, _note.catCreator)}"
+					status="globalWaitStatus"
+					eventsQueue="wallDtlsEditQueue"
+					ajaxSingle="true"
+					onclick="if ( ! checkForSave() ) { return false ; }"
+		        /></span>
+		        </p>
+		
+		      </div>
+		    </rich:dataList>
+		    <rich:datascroller for="notesList1" maxPages="4" renderIfSinglePage="false">
+		          <f:facet name="first">
+		                    <h:outputText value="First"/>
+		          </f:facet>
+		          <f:facet name="last">
+		                    <h:outputText value="Last"/>
+		          </f:facet>
+			</rich:datascroller>
+		</a:outputPanel>
+		
+    </a:form>
+   </s:div>
+   
+</s:div>

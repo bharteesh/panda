@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.copyCDWizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Info</li>
+			<li class="disabled">2. Additional</li>
+		</ul>
+		<div class="cluster smart">
+			
+			<p>Revise information about the agreement details as needed, then continue to save your changes.</p>
+				
+				<s:decorate id="catContractDtlsLicensor" template="../layout/edit.xhtml"
+					rendered="#{createJournalWizard.selectedContractDtls.catContracts.catPublishers.catName eq 'ITHAKA'}">
+					<ui:define name="label">Reason ITHAKA is Licensor:</ui:define>
+					<h:selectOneMenu name="catLicensor" value="#{createJournalWizard.clonedContractDtls.catIthakaAsLicensorReason}">
+						<s:selectItems itemValue="#{i}" label="#{i.label}"
+							noSelectionLabel="Choose..."
+							value="#{listsForEnums.catContractDtls_AllOrPartOfCmpt}" var="i" />
+					</h:selectOneMenu>		
+				</s:decorate>
+			
+				<s:decorate id="catContractDtlsEffectDate" template="../layout/edit.xhtml">
+					<ui:define name="label">Effective Date</ui:define>
+					<rich:calendar enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="false" 
+						id="catContractDtlsEffectDateCal" inputClass="datestyle" 
+						value="#{createJournalWizard.clonedContractDtls.catEffectiveDate}"/>
+				</s:decorate> 
+			    
+			    <s:decorate id="catContractDtlsAllOrPart"	template="../layout/edit.xhtml">
+					<ui:define name="label">Covers All/Part of Component</ui:define>
+					<h:selectOneMenu
+						name="catAllOrPart"
+						value="#{createJournalWizard.clonedContractDtls.catAllOrPartOfCmpt}" required="true">
+						<s:selectItems itemValue="#{i}" label="#{i.label}"
+							noSelectionLabel="Choose..."
+							value="#{listsForEnums.catContractDtls_AllOrPartOfCmpt}" var="i" />
+					</h:selectOneMenu>
+				</s:decorate>      
+			    
+			    <s:decorate id="catContractDtlsPSSExcl"	template="../layout/edit.xhtml">
+					<ui:define name="label">PSS Exclusions</ui:define>
+					<h:selectOneMenu
+						name="catPssExcl"
+						value="#{createJournalWizard.clonedContractDtls.catPssExclusions}" required="true">
+						<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+								noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+					</h:selectOneMenu>
+				</s:decorate>     
+				
+				<s:decorate id="catPubUseOfFiles"	template="../layout/edit.xhtml">
+					<ui:define name="label">Publisher Use of JSTOR Files</ui:define>
+					<h:inputTextarea cols="20" id="catContractDtlsPubUseText" rows="2" 
+						value="#{createJournalWizard.clonedContractDtls.catPublisherUseOfFiles}"/>
+				</s:decorate>
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('copyCDQuit')}.show(); return false;"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+		 
+		
+		<a:commandLink styleClass="button right" value="Continue"
+			action="#{createJournalWizard.showCopyCDAddtlnView}"
+			reRender="copyCDForm" 
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+	</div>
+</ui:composition>

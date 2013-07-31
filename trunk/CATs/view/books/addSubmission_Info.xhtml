@@ -1,0 +1,202 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{addSubmissionWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Info</li>
+			<li class="disabled">2. Results</li>
+		</ul>
+		<s:div styleClass="cluster smart" rendered="#{addSubmissionWizard.hasValidAcceptedSubmission}"> 
+			<div class="title change">
+				<h1>Info</h1>
+				<p>Enter information about the new submission.</p>
+			</div>
+			<div>
+				<p>This wizard will add a new submission record and set the old submission to be excluded from future use.</p>
+			</div>
+			<a:outputPanel layout="none" id="reasonExcluded">
+				<s:decorate template="../layout/edit.xhtml">
+					<ui:define name="label">Reason Excluded</ui:define>
+					<h:selectOneMenu name="catWithdrawStatus"
+						value="#{addSubmissionWizard.oldSubmission.catReasonExcluded}"
+						required="true">
+						<s:selectItems
+							value="#{listsForEnums.catBookSubmissions_ReasonExcluded}"
+							var="i" itemValue="#{i}" label="#{i.label}"
+							noSelectionLabel="Choose..." />
+					</h:selectOneMenu>
+					<span class="comments">Why are you marking the old submission as 'Excluded' and making a new one?</span>
+				</s:decorate>
+			</a:outputPanel>
+			<a:outputPanel layout="none" id="currentSubmissionPanel">
+				<s:div styleClass="title">
+				 	<h1>Current Submission</h1>
+				</s:div>
+				<s:fragment>
+					<div class="scroller">
+			   			 <rich:dataTable id="catBestSubmissionList"
+			   			 	var="_catSub"
+			   			 	value="#{addSubmissionWizard.bestSubmissionList}"
+			              	rowClasses="odd,even">
+			           
+			        	<rich:column id="col1">
+			        	<f:facet name="header">
+			        		<h:outputText value="Book Title" id="bookTitle" />
+			        	</f:facet>
+						<h:outputText value="#{_catSub.catVersion.catBook.bestTitle}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col2">
+			        	<f:facet name="header">
+			        		<h:outputText value="Publisher" id="publisher" />
+			        	</f:facet>
+						<h:outputText value="#{_catSub.catVersion.catBook.booksPublishers}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col3">
+			        	<f:facet name="header">
+			        		<h:outputText value="Version ID" id="versionId" />
+			        	</f:facet>
+						<h:outputText value="#{_catSub.catVersion.id}" />        		
+			        	</rich:column>
+			        	 
+			        	<rich:column id="col5">
+			        	<f:facet name="header">
+			        		<h:outputText value="Submission ID" id="submissionId" />
+			        	</f:facet>
+						<h:outputText value="#{_catSub.id}" />        		
+			        	</rich:column>			        
+			        	<rich:column id="col6">
+			        	<f:facet name="header">
+			        		<h:outputText value="Vendor" id="vendor" />
+			        	</f:facet> 
+						<h:outputText value="#{_catSub.catVendor.catName}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col7">
+			        	<f:facet name="header">
+			        		<h:outputText value="Lifecycle" id="lifecycle" />
+			        	</f:facet> 
+						<h:outputText value="#{_catSub.catLifecycle.label}" />        		
+			        	</rich:column>
+			        	<rich:column id="col8">
+			        	<f:facet name="header">
+			        		<h:outputText value="QC Outcome" id="qcOutcome" />
+			        	</f:facet> 
+						<h:outputText value="#{_catSub.catQcOutcome.label}" />        		
+			        	</rich:column>
+			        	<rich:column id="col9">
+			        	<f:facet name="header">
+			        		<h:outputText value="Batch Name" id="batchName" />
+			        	</f:facet> 
+						<h:outputText value="#{_catSub.catConprepBatch}" />        		
+			        	</rich:column>	
+			        	</rich:dataTable>
+			        	</div>
+			        	</s:fragment>
+			</a:outputPanel>
+			<a:outputPanel layout="none" id="allSubmissionPanel">
+				<s:div styleClass="title">
+				 	<h1>All Submissions</h1>
+				</s:div>
+				<s:fragment>
+					<div class="scroller">
+			   			 <h:dataTable id="catAllSubmissionList"
+			   			 	var="_catSub"
+			   			 	value="#{addSubmissionWizard.allSubmissions}"
+			              	rowClasses="odd,even">
+			           
+			        	<rich:column id="col1">
+			        	<f:facet name="header">
+			        		<h:outputText value="Book Title" id="bookTitle" />
+			        	</f:facet>
+						<h:outputText value="#{_catSub.catVersion.catBook.bestTitle}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col2">
+			        	<f:facet name="header">
+			        		<h:outputText value="Publisher" id="publisher" />
+			        	</f:facet>
+						<h:outputText value="#{_catSub.catVersion.catBook.booksPublishers}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col3">
+			        	<f:facet name="header">
+			        		<h:outputText value="Version ID" id="versionId" />
+			        	</f:facet>
+						<h:outputText value="#{_catSub.catVersion.id}" />        		
+			        	</rich:column>
+			        	 
+			        	<rich:column id="col5">
+			        	<f:facet name="header">
+			        		<h:outputText value="Submission ID" id="submissionId" />
+			        	</f:facet>
+						<h:outputText value="#{_catSub.id}" />        		
+			        	</rich:column>			        
+			        	<rich:column id="col6">
+			        	<f:facet name="header">
+			        		<h:outputText value="Vendor" id="vendor" />
+			        	</f:facet> 
+						<h:outputText value="#{_catSub.catVendor.catName}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col7">
+			        	<f:facet name="header">
+			        		<h:outputText value="Lifecycle" id="lifecycle" />
+			        	</f:facet> 
+						<h:outputText value="#{_catSub.catLifecycle.label}" />        		
+			        	</rich:column>
+			        	<rich:column id="col8">
+			        	<f:facet name="header">
+			        		<h:outputText value="QC Outcome" id="qcOutcome" />
+			        	</f:facet> 
+						<h:outputText value="#{_catSub.catQcOutcome.label}" />        		
+			        	</rich:column>
+			        	<rich:column id="col9">
+			        	<f:facet name="header">
+			        		<h:outputText value="Batch Name" id="batchName" />
+			        	</f:facet> 
+						<h:outputText value="#{_catSub.catConprepBatch}" />        		
+			        	</rich:column>				
+			        	</h:dataTable>
+			        	</div>
+			        	</s:fragment>
+			</a:outputPanel>
+		</s:div>
+		<s:div styleClass="cluster smart" rendered="#{!addSubmissionWizard.hasValidAcceptedSubmission}">
+			<h1>Warning!</h1>
+			<p>This book does not have a valid active submission. Thus you cannot add another submission at this time. Please quit below.</p>
+		</s:div>
+		
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('addSubmissionQuit')}.show(); return false;"
+			ajaxSingle="true"
+			eventsQueue="submissionQueue"
+			status="globalWaitStatus"/>
+		 
+		
+		<a:commandLink styleClass="button right" value="Save"
+			rendered="#{addSubmissionWizard.hasValidAcceptedSubmission}"
+			action="#{addSubmissionWizard.attemptSave()}"
+			reRender="addSubmissionForm"
+			eventsQueue="submissionQueue"
+			status="globalWaitStatus"/>
+
+		
+	</div>
+</ui:composition>

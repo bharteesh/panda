@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+THIS TEXT WILL BE REMOVED
+
+html column, here so that we can NOT escape the angle brackes and ampersand in html clobs
+
+<ui:composition>
+	<c:set var="safeClassPropertyName"
+		value="#{fn:replace(propertyName, '\\.', '_')}" />
+
+	<rich:column styleClass="#{styleClass} #{safeClassPropertyName} #{rollup == 'true' ? 'rollupColumn' : ''}"
+		headerClass=" #{styleClass} #{safeClassPropertyName} #{rollup == 'true' ? 'rollupColumn' : ''}" rendered="#{rendered}">
+		<f:facet name="header">
+			<h:panelGrid columns="1" rendered="#{sortable eq 'true'}">
+
+					<s:link styleClass="propertyNuller"
+						value="#{propertyLabel} #{entityList.nullTestColumn == propertyPath ? (entityList.nullTestCondition == 'is null' ? '[empty]' : '[not empty]') : ''}"
+						propagation="end" rendered="#{lob}" >
+						<f:param name="nulltestpath" value="#{propertyPath}" />
+						<f:param name="nulltestcond"
+							value="#{entityList.nullTestColumn == propertyPath and entityList.nullTestCondition == 'is not null' ? 'is null' : 'is not null'}" />
+						<f:param name="firstResult" value="0" />
+					</s:link>
+					
+					
+					<s:div styleClass="propertyFilter"
+						rendered="#{empty enumList}">
+						<h:inputText styleClass="column-filter-input"
+							name="#{propertyName}" value="#{propertyValue}"
+							onchange="this.form.submit();" ><ui:insert/></h:inputText>
+						<f:param name="sort" value="#{sort}" />
+						<f:param name="dir" value="#{dir}" />
+						<f:param name="firstResult" value="0" />
+					</s:div>
+					
+			</h:panelGrid>
+		</f:facet>
+
+		<div class="htmlClob"><h:outputText escape="#{false}" value="#{value}" styleClass="#{safeClassPropertyName}">
+			<ui:insert />
+		</h:outputText></div>
+
+	</rich:column>
+</ui:composition>
+
+THIS TEXT WILL BE REMOVED AS WELL
+</html>

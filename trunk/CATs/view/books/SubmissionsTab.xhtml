@@ -1,0 +1,23 @@
+<s:div id="SubmissionsTab" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+				
+		<a:outputPanel layout="none" id="submissionsLayout">
+			<s:div id="submissionsTables"
+				rendered="true">
+
+				<ui:include src="SubmissionsTable.xhtml">
+					<ui:param name="divId" value="submissionsTableDiv" />
+					<ui:param name="tableId" value="submissionsTable" />
+					<ui:param name="bookSubmissionsList"
+						value="#{catBooksHome.bookSubmissionsList}" />
+				</ui:include>
+			</s:div>
+		</a:outputPanel>
+	
+</s:div> 

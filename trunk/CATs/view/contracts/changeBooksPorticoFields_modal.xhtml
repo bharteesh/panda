@@ -1,0 +1,36 @@
+<s:div id="changeBooksPorticoFieldsPanels"
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+<!-- note that these are: outside the a:form for the main table, and have their own a:form each. -->
+
+			<rich:modalPanel id="changeBooksPorticoFieldsPanel" width="900" height="550" styleClass="modal">
+			  <s:div id="changeBooksPorticoFieldsModalDiv">
+				<a:form ajaxSubmit="true" ajaxSingle="true" id="changeBooksPorticoFieldsForm">
+					<a:include viewId="#{changeBooksPorticoFieldsWizard.currentView}">
+						<f:param name="pageURL" value="#{pageURL}"/>					
+					</a:include>
+				</a:form>
+				</s:div>
+			</rich:modalPanel>
+
+			<rich:modalPanel id="changeBooksPorticoFieldsQuitPanel" width="900" height="550" styleClass="modal">
+			  <s:div id="changeBooksPorticoFieldsQuitDiv">
+				<a:form ajaxSubmit="true" ajaxSingle="true" id="changeBooksPorticoFieldsWizardQuit">
+					<a:include viewId="#{changeBooksPorticoFieldsWizard.quitView}">
+						<f:param name="pageURL" value="#{pageURL}"/>
+					</a:include>
+				</a:form>
+				</s:div>
+			</rich:modalPanel>
+			
+</s:div>

@@ -1,0 +1,213 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+
+	<ui:param name="entityType" value="publishers" />
+	<ui:define name="badge">
+		<ui:include src="PublishersBadge.xhtml" />
+	</ui:define>
+
+	<ui:define name="body">
+
+
+		<h:form id="catPublishersHomeEdit">
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/loading.gif" alt="" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<rich:tabPanel id="maintab" switchType="ajax" styleClass="tab"
+				contentClass="tab_content"
+				selectedTab="#{catPublishersHome.selectedTab}">
+
+				<rich:tab label="Publisher Information" id="tab1" name="tab1"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catPublishersHome.updateUserTabPreferences('tab1')}"
+					reRender="booksLayout" limitToList="true">
+					<ui:include src="PublishersInfoTab.xhtml" />
+				</rich:tab>
+
+				<rich:tab label="CSP Onboarding" id="tab2" name="tab2"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catPublishersHome.updateUserTabPreferences('tab2')}"
+					reRender="booksLayout" limitToList="true">
+					<ui:include src="CSPOnboardingTab.xhtml" />
+				</rich:tab>
+
+				<rich:tab label="Books" id="tab3" name="tab3"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catPublishersHome.updateUserTabPreferences('tab3')}"
+					reRender="booksLayout" limitToList="true">
+					<ui:include src="BooksTab.xhtml" />
+				</rich:tab>
+
+				<rich:tab label="Agreements and Invitations" id="tab4" name="tab4"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catPublishersHome.updateUserTabPreferences('tab4')}"
+					reRender="booksLayout" limitToList="true">
+					<ui:include src="PublishersContractsAndInvitTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Sets and Components" id="tab5" name="tab5"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catPublishersHome.updateUserTabPreferences('tab5')}"
+					reRender="booksLayout" limitToList="true">
+					<ui:include src="PublishersSetsAndCmptsTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Roles" id="tab6" name="tab6"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catPublishersHome.updateUserTabPreferences('tab6')}"
+					reRender="booksLayout" limitToList="true">
+					<ui:include src="PublishersRolesTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="SIG History" id="tab7" name="tab7"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catPublishersHome.updateUserTabPreferences('tab7')}"
+					reRender="booksLayout" limitToList="true">
+					<ui:include src="SigHistoryTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Audit" id="tab8" name="tab8"
+					status="globalWaitStatus"
+					oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catPublishersHome.updateUserTabPreferences('tab8')}"
+					reRender="booksLayout" limitToList="true">
+					<ui:include src="PublishersAuditTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Events" id="eventsTab" name="eventsTab"
+					status="globalWaitStatus"
+					action="#{catPublishersHome.updateUserTabPreferences('eventsTab')}"
+					reRender="booksLayout" limitToList="true">
+					<ui:include src="PublishersEventsTab.xhtml">
+					</ui:include>
+				</rich:tab>
+
+			</rich:tabPanel>
+
+
+			<div id="functions">
+				<a:commandLink action="#{catPublishersHome.update}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" styleClass="button saveOrCancel disabled"
+					value="Save" reRender="catPublishersHomeEdit"
+					eventsQueue="pubsEditQueue" status="globalWaitStatus" />
+				<a:commandLink action="#{catPublishersHome.cancel}"
+					onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } "
+					ignoreDupResponses="true" ajaxSingle="true"
+					styleClass="button saveOrCancel disabled" value="Cancel"
+					eventsQueue="pubsEditQueue" status="globalWaitStatus" />
+			</div>
+		</h:form>
+
+	<a:form>
+		<a:outputPanel layout="none" id="booksLayout">
+			<s:div id="variantTables" rendered="#{catPublishersHome.selectedTab eq 'tab1'}">
+							
+				<ui:include src="PublisherVariantsTable.xhtml">
+					<ui:param name="divId" value="pubVariantsTableDiv" />
+					<ui:param name="tableId" value="pubVariantsTable" />
+					<ui:param name="pubVariantsList"
+						value="#{catPublishersHome.publisherVariantsList}" />
+				</ui:include>				
+				<ui:include src="PublisherImprintsTable.xhtml">
+					<ui:param name="divId" value="pubImprintsTableDiv" />
+					<ui:param name="tableId" value="pubImprintsTable" />
+					<ui:param name="pubImprintsList"
+						value="#{catPublishersHome.publisherImprintsList}" />
+				</ui:include>
+			</s:div>
+			<s:div id="booksTables"
+				rendered="#{catPublishersHome.selectedTab eq 'tab3'}">
+
+				<ui:include src="BookSeriesTable.xhtml">
+					<ui:param name="divId" value="bookSeriesTableDiv" />
+					<ui:param name="tableId" value="bookSeriesTable" />
+					<ui:param name="bookSeriesList"
+						value="#{catPublishersHome.bookSeriesList}" />
+				</ui:include>
+				<ui:include src="BookSetsTable.xhtml">
+					<ui:param name="divId" value="bookSetsTableDiv" />
+					<ui:param name="tableId" value="bookSetsTable" />
+					<ui:param name="bookSetsList"
+						value="#{catPublishersHome.bookSetsList}" />
+				</ui:include>
+				<ui:include src="BooksTable.xhtml">
+					<ui:param name="divId" value="booksTableDiv" />
+					<ui:param name="tableId" value="booksTable" />
+					<ui:param name="booksList"
+						value="#{catPublishersHome.booksList}" />
+				</ui:include>
+			</s:div>
+		</a:outputPanel>
+	</a:form>
+	
+	<ui:include src="createm_Publishers.xhtml">
+		<!-- 'reRenderMe' useful for bulk actions from List screen-->
+		<!--  'divParam' needed for 'eventQueue' name -->
+		<ui:param name="divParam" value="PublishersEdit" />
+		<ui:param name="pageURL" value="/publishers/PublishersEdit.xhtml" />
+	</ui:include>
+
+
+
+	<ui:include src="../contracts/createm_Contracts.xhtml">
+		<ui:param name="reRenderMe" value="catContractsList" />
+		<ui:param name="divParam" value="contractsList" />
+		<ui:param name="pageURL" value="/publishers/PublishersEdit.xhtml" />
+	</ui:include>
+
+
+	<ui:include src="../invitations/createm_Invitations.xhtml">
+		<ui:param name="reRenderMe" value="catInvitationsList" />
+		<ui:param name="divParam" value="invitationsList" />
+		<ui:param name="pageURL" value="/publishers/PublishersEdit.xhtml" />
+	</ui:include>
+
+	<ui:include src="createm_Sig.xhtml">
+		<ui:param name="reRenderMe" value="catSigsList" />
+		<ui:param name="divParam" value="sigsList" />
+		<ui:param name="pageURL" value="/publishers/PublishersEdit.xhtml" />
+	</ui:include>
+
+	<ui:include src="../bookseries/createm_BookSeries.xhtml">
+
+		<ui:param name="divParam" value="bookSeriesList" />
+		<ui:param name="pageURL" value="/publishers/PublishersEdit.xhtml" />
+	</ui:include>
+
+	<ui:include src="../booksets/createm_BookSets.xhtml">
+
+		<ui:param name="divParam" value="bookSetsList" />
+		<ui:param name="pageURL" value="/publishers/PublishersEdit.xhtml" />
+	</ui:include>
+	<ui:include src="addEditPublisherVariant_modal.xhtml">
+		<ui:param name="reRenderMe" value="catPubVariantsList" />
+		<ui:param name="divParam" value="pubVariantsList" />
+		<ui:param name="pageURL" value="/publishers/PublishersEdit.xhtml" />
+	</ui:include>
+	
+	<ui:include src="../imprints/createImprint_modal.xhtml"></ui:include>
+	
+	<ui:include src="../imprints/deleteImprint_modal.xhtml"></ui:include>
+	
+	</ui:define>
+	<ui:define name="notes">
+		<ui:include src="PublisherNotes.xhtml" />
+		<ui:include src="createm_PublisherNote.xhtml">
+			<ui:param name="pageURL" value="/publishers/PublishersEdit.xhtml" />
+		</ui:include>
+	</ui:define>
+
+</ui:composition>

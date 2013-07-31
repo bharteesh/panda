@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createSetWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Name</li>
+			<li class="disabled">2. Info</li>
+			<li class="disabled">3. Results</li>
+		</ul>
+		<div class="cluster smart">
+			<div class="title change">
+				<h1>Info</h1>
+				<p>You must enter a <strong>name</strong> for the set and its current title component:</p>
+			</div>
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Initial Article</ui:define>
+				<h:inputText
+					id="catIniArtWiz" maxlength="20" size="25"
+					value="#{createSetWizard.catCmptsHome.instance.catIniArt}" />
+				<span class="comments">Examples: the, a, la,el </span>
+			</s:decorate>
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Name</ui:define>
+				<h:inputTextarea id="journalName" rows="2" cols="20"  
+               		value="#{createSetWizard.catCmptsHome.instance.catName}" required="true"/>
+               	<span class="comments">
+               		<a:commandLink styleClass="button find" value="Check for Duplicates"
+						action="#{createSetWizard.checkForDuplicates}"
+						reRender="createSetForm" 
+						eventsQueue="journalQueue"
+						status="globalWaitStatus"/>
+               	</span>
+            </s:decorate>
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Subtitle</ui:define>
+				<h:inputTextarea cols="20"
+					id="catSubtitleWiz" rows="2"
+					value="#{createSetWizard.catCmptsHome.instance.catSubtitle}" />
+			</s:decorate> 	
+			
+			<a:outputPanel layout="none" id="noLayoutNoDups">
+				<s:div rendered="#{createSetWizard.checkForDup and !createSetWizard.hasDups}" styleClass="alert eligible">
+					<p>No other sets or components share this name.</p>
+				</s:div>
+			</a:outputPanel>
+			
+			<a:outputPanel layout="none" id="noLayoutHasDups">
+				<s:div rendered="#{createSetWizard.checkForDup and createSetWizard.hasDups}" styleClass="alert">
+					<p><strong>#{createSetWizard.duplicateCmpts.size}</strong> components share this name. Click <strong>Continue</strong> if you want to make the duplicate.</p>
+				</s:div>
+				<s:fragment rendered="#{not empty createSetWizard.duplicateCmpts}">
+				
+					<div class="scroller">
+			   			 <rich:dataTable id="catCmptsList"
+			                var="_catCmpts"
+			              	value="#{createSetWizard.duplicateCmpts}"
+			              	rowClasses="odd,even">
+			           
+			        	<rich:column id="col1">
+			        	<f:facet name="header">
+			        		<h:outputText value="Lifecycle" id="lifeCycle" />
+			        	</f:facet>
+						<h:outputText value="#{_catCmpts.catLifecycle}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col11">
+			        	<f:facet name="header">
+			        		<h:outputText value="BF Prod Status" id="prodStatus" />
+			        	</f:facet>
+						<h:outputText value="#{_catCmpts.catProductionStatus.label}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col2">
+			        	<f:facet name="header">
+			        		<h:outputText value="Set Name" id="setname" />
+			        	</f:facet>
+						<h:outputText value="#{_catCmpts.setsValue}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col3">
+			        	<f:facet name="header">
+			        		<h:outputText value="Component Name" id="cmptname" />
+			        	</f:facet>
+						<h:outputText value="#{_catCmpts.catName}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col7">
+			        	<f:facet name="header">
+			        		<h:outputText value="Extent (Pub Units)" id="cmptpurange" />
+			        	</f:facet>
+						<h:outputText value="#{_catCmpts.catPublctnUnitRange}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col8">
+			        	<f:facet name="header">
+			        		<h:outputText value="Extent (Dates)" id="cmptdateRange" />
+			        	</f:facet>
+						<h:outputText value="#{_catCmpts.catDateRange}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col6">
+			        	<f:facet name="header">
+			        		<h:outputText value="Print ISSN" id="cmptissn" />
+			        	</f:facet>
+						<h:outputText value="#{_catCmpts.catPrintIssn}" />        		
+			        	</rich:column>
+			        	
+			        	<rich:column id="col12">
+			        	<f:facet name="header">
+			        		<h:outputText value="Publisher Roles" id="PublisherValue" />
+			        	</f:facet>
+						<h:outputText value="#{_catCmpts.publisherValue}" />        		
+			        	</rich:column>
+			        	
+			       	
+			        	</rich:dataTable>
+		        	</div>
+	        	
+				</s:fragment>
+			</a:outputPanel>
+			
+		</div>
+		
+		
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('createSetQuit')}.show(); return false;"
+			ajaxSingle="true"
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"
+			reRender="createSetQuit"/>
+		 
+		
+		<a:commandLink styleClass="button right" value="Continue"
+			action="#{createSetWizard.showInfoView}"
+			reRender="createSetForm" 
+			eventsQueue="journalQueue"
+			status="globalWaitStatus"/>
+	</div>
+</ui:composition>

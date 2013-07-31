@@ -1,0 +1,167 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createJournalWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps many">
+			<li class="selected">1. Info</li>
+			<li class="disabled">2. Selection Status</li>
+			<li class="disabled">3. Title Relationships</li>
+			<li class="disabled">...</li>
+			<li class="disabled">8. Results</li>
+		</ul>
+		<div class="cluster smart">
+			<p>Do you want to make a new Set or add a new Component to an existing Set?</p>
+			 <s:decorate id="SetSelection" template="../layout/edit.xhtml">
+              	<ui:define name="label"></ui:define>
+              	<h:selectOneRadio id="SetSelection1" value="#{createJournalWizard.newOrExistingSet}" styleClass="resetsmart">
+					<f:selectItem itemLabel="New Set" itemValue="new"/>
+					<f:selectItem itemLabel="Existing Set" itemValue="existing"/>
+					<a:support event="onclick" reRender="noLayout, noLayoutExisting, noLayout1, noLayoutExisting1" status="globalWaitStatus"/>
+				</h:selectOneRadio>
+            </s:decorate>
+			<a:outputPanel layout="none" id="noLayoutExisting">
+			<s:div id="chooseSetsFragment" rendered="#{createJournalWizard.newOrExistingSet eq 'existing'}">
+				<s:div rendered="#{not empty createJournalWizard.selectedSet}">
+					<p> Use <b><i>#{createJournalWizard.selectedSet.catCurrentTitle.catName}</i></b> as parent or </p>
+				</s:div>
+				<p>Choose a Set to use as the parent of the new Component:</p>
+		 		<h:outputText value="Search by name:"/>
+		 		<h:inputText id="default_search_catSetsList" 
+		 			value="#{catSetsList.catSets.catCurrentTitle.catName}" 
+		 			onchange="return false;" size="60">
+		 			
+		 		</h:inputText>
+
+			  	<a:commandLink 
+			  		 styleClass="button filter"
+					 value="Go"
+					 action="#{catAcqOrdersBulkOperations.narrowSetsList(rich:findComponent('default_search_catSetsList').value)}"
+					 reRender="chooseSetsFragment"
+					 status="globalWaitStatus" />
+	
+				<div class="scroller">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Sets (#{catSetsList.resultCount})" />
+					</f:facet>
+				</rich:panel>
+				  <rich:dataTable id="sets"
+					value="#{catSetsList.resultList}" var="_setsRollup">
+					<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+						<h:selectBooleanCheckbox styleClass="entity_checkbox"
+							value="#{createJournalWizard.selectionsForSets[_setsRollup]}"
+							onclick="emulateRadios(this, 'entity_checkbox');" />
+					</rich:column>
+	
+					<cats:wizardColumn
+						entityList="#{catSetsList}"
+						propertyLabel="ID"
+						propertyName="id"
+						propertyPath="catSets.id"
+						propertyValue="#{catSetsList.catSets.id}"
+						reRender="sets"
+						value="#{_setsRollup.id}"/>
+					<cats:wizardColumn
+						entityList="#{catSetsList}"
+						propertyLabel="Name"
+						propertyName="catName"
+						propertyPath="catSets.catCurrentTitle.catName"
+						propertyValue="#{catSetsList.catSets.catCurrentTitle.catName}"
+						reRender="sets"
+						value="#{_setsRollup.catCurrentTitle.catName}"/>
+					<cats:wizardColumn
+						entityList="#{catSetsList}"
+						propertyLabel="Lifecycle"
+						propertyName="catLifecycle"
+						propertyPath="catSets.catLifecycle"
+						propertyValue="#{catSetsList.catLifecycle}"
+						reRender="sets"
+						value="#{_setsRollup.catLifecycle}"/>
+						
+					<cats:wizardColumn
+						entityList="#{catSetsList}"
+						propertyLabel="Extent (Dates)"
+						propertyName="catThDateRange"
+						propertyPath="catSets.catThDateRange"
+						propertyValue="#{catSetsList.catSets.catThDateRange}"
+						reRender="sets"
+						value="#{_setsRollup.catThDateRange}"/>
+						
+					<cats:wizardColumn
+						entityList="#{catSetsList}"
+						propertyLabel="On Hold"
+						propertyName="catOnHold"
+						propertyPath="catSets.catOnHold"
+						propertyValue="#{catSetsList.catSets.catOnHold}"
+						reRender="sets"
+						value="#{_setsRollup.catOnHold}"/>
+				</rich:dataTable>
+			</div>
+		</s:div>	
+				
+		</a:outputPanel>
+		
+		<a:outputPanel layout="none" id="noLayout">
+			<s:div id="newSetDiv" rendered="#{createJournalWizard.newOrExistingSet eq 'new'}">
+				<p>Continue to save the new SET/COMPONENT. 
+				Quitting the wizard after saving will only cancel changes made since your last save.
+				</p>
+			</s:div>
+		</a:outputPanel>
+		
+		</div>
+		<div class="push"></div>
+		
+		<a:outputPanel layout="none" id="noLayoutExisting1">
+		<s:div id="continueBtn" rendered="#{createJournalWizard.newOrExistingSet eq 'existing'}">
+			<a:commandLink styleClass="button" value="Quit"
+				oncomplete="#{rich:component('createJournalQuit')}.show(); return false;"
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"/>
+		
+			<a:commandLink  styleClass="button right" value="Continue"
+				action="#{createJournalWizard.showCurrentTitleView}"
+				reRender="createJournalForm" 
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"
+				rendered="#{not empty createJournalWizard.selectedSet}"/>
+				
+			<a:commandLink  styleClass="button right" value="Continue"
+				action="#{createJournalWizard.showCurrentTitleView}"
+				reRender="createJournalForm" 
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"
+				rendered="#{empty createJournalWizard.selectedSet}"
+				onclick="if(checkRadios('entity_checkbox', 'Please select a Set') == false) {return false};"/>
+		</s:div>
+		</a:outputPanel>
+		
+		<a:outputPanel layout="none" id="noLayout1">
+		
+		<s:div id="saveBtn" rendered="#{createJournalWizard.newOrExistingSet eq 'new'}">
+			<a:commandLink styleClass="button" value="Quit"
+				oncomplete="#{rich:component('createJournalQuit')}.show(); return false;"
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"/>
+				
+			<a:commandLink  styleClass="button right" value="Save and Continue"
+				action="#{createJournalWizard.createJournal}"
+				reRender="createJournalForm" 
+				eventsQueue="journalQueue"
+				status="globalWaitStatus"/>	
+		</s:div>
+		</a:outputPanel>
+	</div>
+</ui:composition>

@@ -1,0 +1,110 @@
+<s:div id="#{divId}OrderField" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats"
+    styleClass="#{createIssueShipmentsWizard.wizardInvokedFrom ne createIssueShipmentsWizard.INVOKED_FROM_ORDERS_RECORD and empty createIssueShipmentsWizard.parentCmpt ? 'off':''}">
+    
+    <div class="field">
+       <label>Choose Order</label>
+	     <span></span>
+	</div>
+    
+    
+	<s:div id="#{divId}orderTable" styleClass="scroller">
+		<rich:dataTable id="#{divId}catOrdersTable"
+	    	var="_order"
+	        value="#{createIssueShipmentsWizard.ordersList}">
+	        
+	        <rich:column styleClass="orderCheckBoxes" headerClass="checkBoxes">
+				<h:selectBooleanCheckbox styleClass="orderentity_checkbox"
+					value="#{createIssueShipmentsWizard.selectionsForOrders[_order]}"
+					onclick="emulateRadios(this, 'orderentity_checkbox');" >
+					<a:support event="onchange" 
+						action="#{createIssueShipmentsWizard.selectParentOrder}"
+						reRender="noLayoutOrdersList, noLayoutOrdersListPre, noLayoutErrorMsgs"
+						eventsQueue="createShipmentQueue"
+						status="globalWaitStatus"
+						ajaxSingle="true" rendered="#{createIssueShipmentsWizard.wizardInvokedFrom eq createIssueShipmentsWizard.INVOKED_FROM_SHIPMENT_LIST}"/>
+				</h:selectBooleanCheckbox>
+			</rich:column>
+	
+	   	
+          	<rich:column>
+	        	<f:facet name="header">
+	        		<h:outputText value="Set Name"/>
+	        	</f:facet>
+				<h:outputText value="#{_order.catSets.catCurrentTitle.catName}" />        		
+        	</rich:column>
+        	
+        	<rich:column>
+	        	<f:facet name="header">
+	        		<h:outputText value="Component Name"/>
+	        	</f:facet>
+				<h:outputText value="#{_order.catCmpts.catName}" />        		
+        	</rich:column>
+        	
+        	<rich:column>
+	        	<f:facet name="header">
+	        		<h:outputText value="Extent (Pub Units)"/>
+	        	</f:facet>
+				<h:outputText value="#{_order.catPublctnUnitRange}" />        		
+        	</rich:column>
+        	
+        	<rich:column>
+	        	<f:facet name="header">
+	        		<h:outputText value="Extent (Dates)"/>
+	        	</f:facet>
+				<h:outputText value="#{_order.catCoverDateRange}" />        		
+        	</rich:column>
+        	
+        	<rich:column>
+	        	<f:facet name="header">
+	        		<h:outputText value="Supplier"/>
+	        	</f:facet>
+				<h:outputText value="#{_order.catSupplier}" />        		
+        	</rich:column>
+        	
+        	<rich:column>
+	        	<f:facet name="header">
+	        		<h:outputText value="Obligation"/>
+	        	</f:facet>
+				<h:outputText value="#{_order.catReturnObligation.label}" />        		
+        	</rich:column>
+        	
+        	<rich:column>
+	        	<f:facet name="header">
+	        		<h:outputText value="Type"/>
+	        	</f:facet>
+				<h:outputText value="#{_order.catType.label}" />        		
+        	</rich:column>
+        	
+        	<rich:column>
+	        	<f:facet name="header">
+	        		<h:outputText value="Hold"/>
+	        	</f:facet>
+				<h:outputText value="#{_order.catOnHold?'Yes':'No'}" />        		
+        	</rich:column>
+        	
+        	<rich:column>
+	        	<f:facet name="header">
+	        		<h:outputText value="Creator"/>
+	        	</f:facet>
+				<h:outputText value="#{_order.catCreator}" />        		
+        	</rich:column>
+        	
+        </rich:dataTable>
+	</s:div>
+	
+	<s:div styleClass="blanktable" rendered="#{empty createIssueShipmentsWizard.parentCmpt and createIssueShipmentsWizard.wizardInvokedFrom ne createIssueShipmentsWizard.INVOKED_FROM_ORDERS_RECORD}">
+		<span>First, choose the component your shipment belongs to, then choose the order.</span>
+	</s:div>
+    
+    <s:div styleClass="blanktable" rendered="#{not empty createIssueShipmentsWizard.parentCmpt and empty createIssueShipmentsWizard.ordersList}">
+		<span>There are no <b>"Ordered"</b> orders in the selected Component or in its Sets.</span>
+	</s:div>
+    
+ </s:div>

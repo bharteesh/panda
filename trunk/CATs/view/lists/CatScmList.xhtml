@@ -1,0 +1,379 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+
+	<ui:param name="entityType" value="scm" />
+	<ui:param name="moremenu" value="moremenu" />
+
+	<ui:define name="body">
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatScmList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catScmList}"></ui:param>
+			<ui:param name="divId" value="1" />
+		</ui:include>
+
+		<a:form>
+			<s:div id="header" styleclass="header">
+				<div class="left">
+					<span class="museo"><h:outputText
+							value="SCM
+			(#{empty catScmList.resultList ? 0 : (catScmList.paginated ? catScmList.resultCount : catScmList.resultList.size)})"></h:outputText>
+					</span>
+					<h:selectOneMenu name="flavour" value="#{catScmList.flavour}">
+						<s:selectItems value="#{catScmList.flavours}" var="i"
+							itemValue="#{i}" label="#{catScmList.flavourLabel(i)}" />
+						<a:support event="onchange"
+							action="#{catScmList.updateUserSkinPreferences}"
+							oncomplete="javascript: location.href='CatScmList.seam'" ignoreDupResponses="true"
+							eventsQueue="bkSetsListQueue" ajaxSingle="true" />
+					</h:selectOneMenu>
+
+					<s:link id="clearSearch" status="globalWaitStatus"
+						ignoreDupResponses="true" styleClass="button wizard"
+						action="#{catScmList.reset}" value="X" propagation="none"
+						oncomplete="javascript: location.href='CatScmList.seam'">
+						<f:param name="flavour" value="#{catScmList.flavour}" />
+					</s:link>
+
+				</div>
+
+				<div class="right">
+					<ui:include src="adhocReportSelect.xhtml">
+						<ui:param name="entityQuery" value="#{catScmList}" />
+					</ui:include>
+
+				</div>
+			</s:div>
+			<div id="globalStatusDiv" style="display: none;">
+				<img src="../img/loading.gif" />
+			</div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+				<h:dataTable id="catScmList" var="_catScm"
+					value="#{catScmList.resultList}" rowClasses="odd,even"
+					styleClass="mainListClass">
+					<cats:column value="#{_catScm.id}" id="scmId"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="id" propertyValue="#{catScmList.catScm.id}"
+						propertyLabel="ID" propertyPath="catScm.id"
+						rendered="#{catScmList.listFlavour['id']}" sortable="true" />
+
+
+					<cats:column value="#{_catScm.catType.label}" id="scmType"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catType" propertyValue="#{catScmList.catScm.catType}"
+						propertyLabel="Type" propertyPath="catScm.catType"
+						rendered="#{catScmList.listFlavour['catType']}" sortable="true"
+						enumList="#{listsForEnums.catScm_Type}" />
+
+					<cats:column value="#{_catScm.catRecordRefId}" id="scmRecordRefId"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catRecordRefId"
+						propertyValue="#{catScmList.catScm.catRecordRefId}"
+						propertyLabel="Record Reference ID"
+						propertyPath="catScm.catRecordRefId"
+						rendered="#{catScmList.listFlavour['catRecordRefId']}"
+						sortable="true" />
+
+					<cats:column value="#{_catScm.catNotificationType.label}"
+						id="scmNotificationType" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catNotificationType"
+						propertyValue="#{catScmList.catScm.catNotificationType}"
+						propertyLabel="Notification Type"
+						propertyPath="catScm.catNotificationType"
+						rendered="#{catScmList.listFlavour['catNotificationType']}"
+						sortable="true"
+						enumList="#{listsForEnums.catScm_NotificationType}" />
+						
+					<cats:column value="#{_catScm.catEIsbn13}" id="scmEIsbn13"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catEIsbn13"
+						propertyValue="#{catScmList.catScm.catEIsbn13}"
+						propertyLabel="EISBN-13" propertyPath="catScm.catEIsbn13"
+						rendered="#{catScmList.listFlavour['catEIsbn13']}" sortable="true" />
+
+					<cats:column value="#{_catScm.catDistinctiveTitle}"
+						id="scmDistinctiveTitle" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catDistinctiveTitle"
+						propertyValue="#{catScmList.catScm.catDistinctiveTitle}"
+						propertyLabel="Title" propertyPath="catScm.catDistinctiveTitle"
+						rendered="#{catScmList.listFlavour['catDistinctiveTitle']}"
+						sortable="true" />
+					
+					<cats:column value="#{_catScm.catSubtitle}"
+						id="scmSubTitle" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catSubtitle"
+						propertyValue="#{catScmList.catScm.catSubtitle}"
+						propertyLabel="Sub Title" propertyPath="catScm.catSubtitle"
+						rendered="#{catScmList.listFlavour['catSubtitle']}"
+						sortable="true" />
+					
+					<cats:column value="#{_catScm.catSetTitle}" id="scmSetTitle"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catSetTitle"
+						propertyValue="#{catScmList.catScm.catSetTitle}"
+						propertyLabel="Set Title" propertyPath="catScm.catSetTitle"
+						rendered="#{catScmList.listFlavour['catSetTitle']}" sortable="true" />
+						
+					<cats:column value="#{_catScm.catSetVolume}" id="scmSetVolume"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catSetVolume"
+						propertyValue="#{catScmList.catScm.catSetVolume}"
+						propertyLabel="Set Volume" propertyPath="catScm.catSetVolume"
+						rendered="#{catScmList.listFlavour['catSetVolume']}" sortable="true" />
+						
+					<cats:column value="#{_catScm.catSeriesTitle}" id="scmSeriesTitle"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catSeriesTitle"
+						propertyValue="#{catScmList.catScm.catSeriesTitle}"
+						propertyLabel="Series Title" propertyPath="catScm.catSeriesTitle"
+						rendered="#{catScmList.listFlavour['catSeriesTitle']}"
+						sortable="true" />
+						
+					<cats:column value="#{_catScm.catSeriesVolume}"
+						id="scmSeriesVolume" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catSeriesVolume"
+						propertyValue="#{catScmList.catScm.catSeriesVolume}"
+						propertyLabel="Series Volume"
+						propertyPath="catScm.catSeriesVolume"
+						rendered="#{catScmList.listFlavour['catSeriesVolume']}"
+						sortable="true" />
+						
+					<cats:column value="#{_catScm.catEditionType.label}" id="scmEditionType"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catEditionType"
+						propertyValue="#{catScmList.catScm.catEditionType}"
+						propertyLabel="Edition Type" propertyPath="catScm.catEditionType"
+						rendered="#{catScmList.listFlavour['catEditionType']}"
+						sortable="true" enumList="#{listsForEnums.catScm_EditionType}" />
+						
+					<cats:column value="#{_catScm.catEditionNumber}"
+						id="scmEditionNumber" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catEditionNumber"
+						propertyValue="#{catScmList.catScm.catEditionNumber}"
+						propertyLabel="Edition Number"
+						propertyPath="catScm.catEditionNumber"
+						rendered="#{catScmList.listFlavour['catEditionNumber']}"
+						sortable="true" />
+					
+					<cats:column value="#{_catScm.catEditionVersion}"
+						id="scmcatEditionVersion" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catEditionVersion"
+						propertyValue="#{catScmList.catScm.catEditionVersion}"
+						propertyLabel="Edition Version"
+						propertyPath="catScm.catEditionVersion"
+						rendered="#{catScmList.listFlavour['catEditionVersion']}"
+						sortable="true" />
+						
+					<cats:column linkToId="#{_catScm.id}" sortable="true"
+						rendered="#{catScmList.listFlavour['catPublctnDate']}"
+						entityList="#{catBookSetsList}" propertyLabel="Publication Date"
+						propertyPath="catScm.catPublctnDate"
+						propertyValue="#{catScmList.catScm.catPublctnDate}"
+						propertyName="catPublctnDate" value="#{_catScm.catPublctnDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column linkToId="#{_catScm.id}" sortable="true"
+						rendered="#{catScmList.listFlavour['catEmbargoDate']}"
+						entityList="#{catBookSetsList}" propertyLabel="Embargo Date"
+						propertyPath="catScm.catEmbargoDate"
+						propertyValue="#{catScmList.catScm.catEmbargoDate}"
+						propertyName="catEmbargoDate" value="#{_catScm.catEmbargoDate}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column value="#{_catScm.catPublisher}" id="scmPublisher"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catPublisher"
+						propertyValue="#{catScmList.catScm.catPublisher}"
+						propertyLabel="Publisher" propertyPath="catScm.catPublisher"
+						rendered="#{catScmList.listFlavour['catPublisher']}" sortable="true" />
+						
+					<cats:column value="#{_catScm.catPublishingStatus.label}"
+						id="scmPublishingStatus" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catPublishingStatus"
+						propertyValue="#{catScmList.catScm.catPublishingStatus}"
+						propertyLabel="Publishing Status"
+						propertyPath="catScm.catPublishingStatus"
+						rendered="#{catScmList.listFlavour['catPublishingStatus']}"
+						sortable="true"
+						enumList="#{listsForEnums.catScm_PublishingStatus}" />
+						
+					<cats:column value="#{_catScm.catBisacCode}" id="scmBisacCode"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catBisacCode"
+						propertyValue="#{catScmList.catScm.catBisacCode}"
+						propertyLabel="BISAC Code" propertyPath="catScm.catBisacCode"
+						rendered="#{catScmList.listFlavour['catBisacCode']}" sortable="true" />
+						
+					<cats:column value="#{_catScm.catPublisherDescription}"
+						id="scmPublisherDescription" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catPublisherDescription"
+						propertyValue="#{catScmList.catScm.catPublisherDescription}"
+						propertyLabel="Publisher Description"
+						propertyPath="catScm.catPublisherDescription"
+						rendered="#{catScmList.listFlavour['catPublisherDescription']}"
+						sortable="true"
+						lob="true" />
+						
+					<cats:column value="#{_catScm.catLtdPrice}" id="scmLtdPrice"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catLtdPrice"
+						propertyValue="#{catScmList.catScm.catLtdPrice}"
+						propertyLabel="Limited Price" propertyPath="catScm.catLtdPrice"
+						rendered="#{catScmList.listFlavour['catLtdPrice']}" sortable="true">
+						<f:convertNumber type="currency" maxFractionDigits="2" pattern="######.00"/>
+					</cats:column>
+						
+					<cats:column value="#{_catScm.catLtdCurrencyCode.label}"
+						id="scmLtdCurrencyCode" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catLtdCurrencyCode"
+						propertyValue="#{catScmList.catScm.catLtdCurrencyCode}"
+						propertyLabel="Limited Currency Code"
+						propertyPath="catScm.catLtdCurrencyCode"
+						rendered="#{catScmList.listFlavour['catLtdCurrencyCode']}"
+						sortable="true" enumList="#{listsForEnums.catScm_LtdCurrencyCode}" />
+
+					<cats:column value="#{_catScm.catUnltdPrice}" id="scmUnltdPrice"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catUnltdPrice"
+						propertyValue="#{catScmList.catScm.catUnltdPrice}"
+						propertyLabel="Unlimited Price"
+						propertyPath="catScm.catUnltdPrice"
+						rendered="#{catScmList.listFlavour['catUnltdPrice']}" sortable="true">
+						<f:convertNumber type="currency" maxFractionDigits="2" pattern="######.00"/>
+					</cats:column>
+
+					<cats:column value="#{_catScm.catUnltdCurrencyCode.label}"
+						id="scmUnltdCurrencyCode" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catUntldCurrencyCode"
+						propertyValue="#{catScmList.catScm.catUnltdCurrencyCode}"
+						propertyLabel="Unlimited Currency Code"
+						propertyPath="catScm.catUnltdCurrencyCode"
+						rendered="#{catScmList.listFlavour['catUntldCurrencyCode']}"
+						sortable="true"
+						enumList="#{listsForEnums.catScm_UnltdCurrencyCode}" />
+
+					<cats:column value="#{_catScm.catLanguage.label}" id="scmLanguage"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catLanguage"
+						propertyValue="#{catScmList.catScm.catLanguage}"
+						propertyLabel="Language" propertyPath="catScm.catLanguage"
+						rendered="#{catScmList.listFlavour['catLanguage']}" sortable="true"
+						enumList="#{listsForEnums.catScm_Language}" />
+						
+					<cats:column value="#{_catScm.catOriginalLanguage.label}"
+						id="scmOriginalLanguage" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catOriginalLangauge"
+						propertyValue="#{catScmList.catScm.catOriginalLanguage}"
+						propertyLabel="Original Language"
+						propertyPath="catScm.catOriginalLanguage"
+						rendered="#{catScmList.listFlavour['catOriginalLangauge']}"
+						sortable="true"
+						enumList="#{listsForEnums.catScm_OriginalLanguage}" />
+						
+					<cats:column value="#{_catScm.catImprint}" id="scmImprint"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catImprint"
+						propertyValue="#{catScmList.catScm.catImprint}"
+						propertyLabel="Imprint" propertyPath="catScm.catImprint"
+						rendered="#{catScmList.listFlavour['catImprint']}" sortable="true" />
+					
+					<cats:column value="#{_catScm.catBooks.id}"
+						id="scmBookId" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catBooks.id"
+						propertyValue="#{catScmList.catScm.catBooks.id}"
+						propertyLabel="Book Id"
+						propertyPath="catScm.catBooks.id"
+						rendered="#{catScmList.listFlavour['catBooks.id']}"
+						sortable="true" />
+						
+					<cats:column linkToId="#{_catScm.id}" sortable="true"
+						rendered="#{catScmList.listFlavour['catCopyright']}"
+						entityList="#{catBookSetsList}" propertyLabel="Copyright"
+						propertyPath="catScm.catCopyright"
+						propertyValue="#{catScmList.catScm.catCopyright}"
+						propertyName="catCopyright" value="#{_catScm.catCopyright}">
+						<s:convertDateTime type="both" pattern="yyyy"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column value="#{_catScm.catNumberOfPages}"
+						id="scmNumberOfPages" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catNumberOfPages"
+						propertyValue="#{catScmList.catScm.catNumberOfPages}"
+						propertyLabel="Number of Pages"
+						propertyPath="catScm.catNumberOfPages"
+						rendered="#{catScmList.listFlavour['catNumberOfPages']}"
+						sortable="true" />
+
+					<cats:column value="#{_catScm.catCreator}" id="scmCreator"
+						linkToId="#{_catScm.id}" entityList="#{catScmList}"
+						propertyName="catCreator"
+						propertyValue="#{catScmList.catScm.catCreator}"
+						propertyLabel="Created by" propertyPath="catScm.catCreator"
+						rendered="#{catScmList.listFlavour['catCreator']}" sortable="true" />
+
+					<cats:column linkToId="#{_catScm.id}" sortable="true"
+						rendered="#{catScmList.listFlavour['catDateModified']}"
+						entityList="#{catScmList}" propertyLabel="Date Modified"
+						propertyPath="catScm.catDateModified"
+						propertyValue="#{catScmList.catScm.catDateModified}"
+						propertyName="catDateModified" value="#{_catScm.catDateModified}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+
+					<cats:column linkToId="#{_catScm.id}" sortable="true"
+						rendered="#{catScmList.listFlavour['catDateCreated']}"
+						entityList="#{catScmList}" propertyLabel="Date Created"
+						propertyPath="catScm.catDateCreated"
+						propertyValue="#{catScmList.catScm.catDateCreated}"
+						propertyName="catDateCreated" value="#{_catScm.catDateCreated}">
+						<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+					</cats:column>
+					
+					<cats:column value="#{_catScm.catPblshrProvidedDoiSuffix}"
+						id="scmPblshrProvidedDoiSuffix" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}"
+						propertyName="catPblshrProvidedDoiSuffix"
+						propertyValue="#{catScmList.catScm.catPblshrProvidedDoiSuffix}"
+						propertyLabel="Publisher Provided DOI Suffix"
+						propertyPath="catScm.catPblshrProvidedDoiSuffix"
+						rendered="#{catScmList.listFlavour['catPblshrProvidedDoiSuffix']}"
+						sortable="true" />
+						
+					<cats:column value="#{_catScm.catOmittedContent}"
+						id="scmOmittedContent" linkToId="#{_catScm.id}"
+						entityList="#{catScmList}" propertyName="catOmittedContent"
+						propertyValue="#{catScmList.catScm.catOmittedContent}"
+						propertyLabel="Omitted Content"
+						propertyPath="catScm.catOmittedContent"
+						rendered="#{catScmList.listFlavour['catOmittedContent']}"
+						sortable="true" />
+					
+					
+				</h:dataTable>
+			</div>
+		</a:form>
+		<ui:include src="../layout/tablenav.xhtml">
+			<ui:param name="viewPath" value="/lists/CatScmList.xhtml"></ui:param>
+			<ui:param name="entityList" value="#{catScmList}"></ui:param>
+			<ui:param name="divId" value="2" />
+		</ui:include>
+		
+		<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catScmList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+	</ui:define>
+</ui:composition>

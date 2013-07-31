@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{catWallDtlsBulkOperations.bulkTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1. Permissions</li>
+		<li class="selected">2. Change</li>
+		<li class="disabled">3. Additional</li>
+		<li class="disabled">4. Results</li>
+	</ul>
+	<div class="cluster">
+
+	<p>Enter the new value to apply to all the eligible records you
+	selected.</p>
+
+	<s:fragment
+		rendered="#{catWallDtlsBulkOperations.bulkRequiredProperties.contains('catLifecycle')}">
+		<s:decorate id="catLifecycle_div" template="../layout/edit.xhtml">
+			<ui:define name="label">Lifecycle</ui:define>
+			<h:selectOneMenu required="true" name="catLifecycle"
+				value="#{catWallDtlsBulkOperations.bulkInstance.catLifecycle}">
+				<s:selectItems
+					value="#{catWallDtlsBulkOperations.availableLifecycles}" var="i"
+					itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." />
+			</h:selectOneMenu>
+		</s:decorate>
+	</s:fragment> 
+	<s:fragment
+		rendered="#{catWallDtlsBulkOperations.bulkRequiredProperties.contains('catWallType')}">
+		<s:decorate id="catWallType_div" template="../layout/edit.xhtml">
+			<ui:define name="label">Wall Type</ui:define>
+			<h:selectOneMenu required="true" name="catWallType"
+				value="#{catWallDtlsBulkOperations.bulkInstance.catWallType}">
+				<s:selectItems value="#{listsForEnums.catWallDtls_CatWallType}"
+					var="i" itemValue="#{i}" label="#{i.label}"
+					noSelectionLabel="Choose..." />
+			</h:selectOneMenu>
+		</s:decorate>
+	</s:fragment>
+	</div>
+
+	<div class="push"></div>
+
+	<a:commandLink  styleClass="button" value="Quit" reRender="catWallDtlsListWizard" oncomplete="#{rich:component('catWallDtlsBulkQuit')}.show(); return false;" eventsQueue="bulkWallDetails" status="globalWaitStatus" ignoreDupResponses="true"    >
+	</a:commandLink> 
+	<a:commandLink  styleClass="button right" value="Continue" action="#{catWallDtlsBulkOperations.bulkNext}" reRender="catWallDtlsListWizard" eventsQueue="bulkWallDetails" status="globalWaitStatus" ignoreDupResponses="true"   />
+		</div>
+
+</ui:composition>

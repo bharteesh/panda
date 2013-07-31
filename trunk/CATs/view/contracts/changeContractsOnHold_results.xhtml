@@ -1,0 +1,55 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{contractsWizard.onHoldWizardTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+				<li class="disabled">1. Change</li>
+				<li class="selected">2. Results</li>
+		</ul>
+			
+		
+		<div class="cluster smart">
+
+		  <p><h:outputText value="You updated the following record:"/></p>
+
+			<cats:dumbTableContracts value="#{contractsWizard.selectedRecord}" />
+
+			</div>
+
+			<div class="push"></div>		
+
+
+
+		
+		<a:commandLink styleClass="button right" value="Return"
+            eventsQueue="#{divParam}eventsQueue" 
+            status="globalWaitStatus" ignoreDupResponses="true"
+			action="#{contractsWizard.wizardReset}" 
+			oncomplete="#{rich:component('changeContractsOnHoldPanel')}.hide(); javascript:location.reload(true);" 			
+			rendered="#{empty pageURL}" limitToList="true"/>
+		
+		<a:commandLink styleClass="button right" value="Return" 
+            eventsQueue="#{divParam}eventsQueue" 
+            status="globalWaitStatus" ignoreDupResponses="true"
+			action="#{contractsWizard.wizardReset}" 
+			oncomplete="#{rich:component('changeContractsOnHoldPanel')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');"			
+			rendered="#{not empty pageURL}" limitToList="true"/>
+		
+		</div>
+	
+</ui:composition>
+

@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats">
+
+	<h2>
+		<h:outputText value="Delete Variant" />
+	</h2>
+	<div id="step1">
+		<div class="cluster">
+			<div class="alert">
+				<p>Are you sure you want to delete the following Publisher
+					Variant?</p>
+			</div>
+			<div class="smart">
+				<rich:dataTable id="#{divId}pubVariantsList" var="_catPubVariant"
+					value="#{publisherVariantsWizard.pubVariantsList}" rendered="#{not empty publisherVariantsWizard.pubVariantsList}">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Name" />
+						</f:facet>
+						<h:outputText value="#{_catPubVariant.catName}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Type" />
+						</f:facet>
+						<h:outputText value="#{_catPubVariant.catType.label}" />
+					</rich:column>
+
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="ID" />
+						</f:facet>
+						<h:outputText value="#{_catPubVariant.id}" />
+					</rich:column>
+					</rich:dataTable>
+			</div>
+		</div>
+	</div>
+	<div class="push"></div>
+	<a:commandLink styleClass="button" value="No, Return"
+		action="#{publisherVariantsWizard.reset}" status="globalWaitStatus"
+		ignoreDupResponses="true"
+		oncomplete="#{rich:component('publisherVariantsWizardModal')}.hide(); #{rich:component('publisherVariantsQuit')}.hide();" limitToList="true" />
+
+	<a:commandLink styleClass="button right" value="Yes, Delete"
+		status="globalWaitStatus" ignoreDupResponses="true"
+		action="#{publisherVariantsWizard.performDelete()}"
+		oncomplete="javascript:location.reload(true);" limitToList="true" />
+
+</ui:composition>

@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{createContractDetailsWizard.bulkTitle}"/></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1.Define</li>
+		<li class="disabled">2.Info</li>
+		<li class="disabled">3.Roles-Riders</li>
+		<li class="selected">4.Results</li>
+	</ul>
+
+	<div class="cluster smart">
+	<s:fragment rendered="#{not empty createContractDetailsWizard.contractDtlsValidList}">	
+					<div class="title eligible">
+						<h1><h:outputText value="Agreement Details (#{createContractDetailsWizard.contractDtlsValidList.size})"/></h1>						
+							<p>You successfully created the following agreement details and set their lifecycles to <strong>#{createContractDetailsWizard.bulkInstance.catLifecycle.label}:</strong></p>						
+					</div>		 	
+					<ui:include src="wizard_contractDtlsTable.xhtml">
+						<ui:param name="value" value="#{createContractDetailsWizard.contractDtlsValidList}"/>
+						<ui:param name="catTypeValue" value="#{createContractDetailsWizard.parentContract.catType}"/>
+					</ui:include>
+	</s:fragment>
+	<s:fragment rendered="#{not empty createContractDetailsWizard.contractDtlsInvalidList}">	
+					<div class="title ineligible">
+						<h1><h:outputText value="Agreement Details (#{createContractDetailsWizard.contractDtlsInvalidList.size})"/></h1>						
+							<p>You were not able to create the following Agreement Details because the component already has an Active Agreement
+								Detail of the same type, Backfile or CSP. The system did not change any information on the parent component or create publisher roles.</p>						
+					</div>		 	
+					<ui:include src="wizard_contractDtlsTable.xhtml">
+						<ui:param name="value" value="#{createContractDetailsWizard.contractDtlsInvalidList}"/>
+						<ui:param name="catTypeValue" value="#{createContractDetailsWizard.parentContract.catType}"/>
+					</ui:include>
+	</s:fragment>	
+	
+	<s:fragment rendered="#{not empty createContractDetailsWizard.parentCmptListValid}">	
+					<div class="title eligible">
+						<h1><h:outputText value="Components (#{createContractDetailsWizard.parentCmptListValid.size})"/></h1>			
+						<p>You successfully filled out some of the following information for the components listed below: CSP Digital Availability Date, Participation
+							Date, Rights Obtained and Rights Exclusions.</p>			
+					</div>		 		 	
+					<ui:include src="wizard_resultsCmptsTable.xhtml">
+						<ui:param name="value" value="#{createContractDetailsWizard.parentCmptListValid}"/>
+					</ui:include> 
+	</s:fragment>
+	<s:fragment rendered="#{not empty createContractDetailsWizard.pubRolesList}">	
+					<div class="title eligible">
+						<h1><h:outputText value="Publisher Roles (#{createContractDetailsWizard.pubRolesList.size})"/></h1>						
+							<p>You successfully created the following publisher roles.</p>						
+					</div>		 		 		 	
+					<ui:include src="wizard_resultsPubRolesTable.xhtml">
+						<ui:param name="value" value="#{createContractDetailsWizard.pubRolesList}"/>
+					</ui:include> 
+	</s:fragment>
+	</div>
+	<div class="push"></div>
+	<a:commandLink styleClass="button right" value="Return" limitToList="true" action="#{createContractDetailsWizard.createReset}" 
+		oncomplete="#{rich:component('addContractDtlsPanel')}.hide(); javascript:location.reload(true)" rendered="#{empty pageURL}"
+		status="globalWaitStatus" ignoreDupResponses="true" reRender="setsWizardForm,#{setsBulkOperations.bulkOpsSelectFieldId}"/>
+	<a:commandLink styleClass="button right" value="Return" limitToList="true" action="#{createContractDetailsWizard.createReset}" 
+		oncomplete="#{rich:component('addContractDtlsPanel')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');" rendered="#{not empty pageURL}"
+		status="globalWaitStatus" ignoreDupResponses="true"/>
+	</div>
+</ui:composition>

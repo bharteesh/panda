@@ -1,0 +1,105 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{catAcqOrdersBulkOperations.bulkTitle}" /></h2>
+	
+		<div id="step1">
+		<s:div rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGTYPE') or (catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.isCatLifecycleOfValueOrdered(catAcqOrdersBulkOperations.bulkInstance.catLifecycle))}">
+  		<ul class="steps">
+				<li class="">1. Permissions</li>
+				<li class="">2. Change</li>
+				<li class="">3. Children</li>
+				<li class="selected">4. Results</li>
+		</ul>
+		</s:div>
+		<s:div rendered="#{not (catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT') or catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGTYPE') or (catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.isCatLifecycleOfValueOrdered(catAcqOrdersBulkOperations.bulkInstance.catLifecycle)))}">
+  		<ul class="steps">
+				<li class="">1. Permissions</li>
+				<li class="">2. Change</li>
+				<li class="">3. Additional</li>
+				<li class="selected">4. Results</li>
+		</ul>
+		</s:div>
+		<s:div rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT')}">
+  		<ul class="steps">
+				<li class="">1. Permissions</li>
+				<li class="">2. Change</li>
+				<li class="">3. Select</li>
+				<li class="selected">4. Results</li>
+		</ul>
+		</s:div>
+		
+		<div class="cluster smart">
+
+		  <p><h:outputText value="You changed the following #{catAcqOrdersBulkOperations.bulkSelection.size()} record(s):"/></p>
+
+
+
+    		<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Orders" />
+				</f:facet>
+			</rich:panel>
+			<cats:dumbTableAcqOrders value="#{catAcqOrdersBulkOperations.bulkSelection}" />
+		<s:div rendered="#{not empty catAcqOrdersBulkOperations.catIssueShipmentsList}">
+    		<rich:panel>
+				<f:facet name="header">
+					<h:outputText value="Shipments" />
+				</f:facet>
+			</rich:panel>
+			<cats:dumbTableIssueShipments value="#{catAcqOrdersBulkOperations.catIssueShipmentsList}" />
+		</s:div>
+<!--  This will be rendered only if 1 record were selected, because multiple records could have different catType's so cannot be generalized  -->
+		<s:div rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.isCatLifecycleOfValueOrdered(catAcqOrdersBulkOperations.bulkSelection.get(0).catLifecycle) and catAcqOrdersBulkOperations.isCatTypeOfValueSubscription(catAcqOrdersBulkOperations.bulkSelection.get(0).catType)}">
+    		<div class="alert">
+					<p>No shipments created because this is a subscription order. Create shipments with the add and copy shipment wizards.</p>
+			</div>
+		</s:div>
+		
+
+
+			</div>
+
+			<div class="push"></div>		
+
+		<a:commandLink id="#{divParam}finishAsNormalwizard" styleClass="button right" value="Return" 
+		    rendered="#{catAcqOrdersBulkOperations.isSubWizard == false and empty pageURL}"
+			eventsQueue="#{divParam}eventsQueue"
+       		status="globalWaitStatus"
+			action="#{catAcqOrdersBulkOperations.bulkReset}" 
+			oncomplete="#{rich:component('acqordersbulkUpdatePanel')}.hide(); javascript:location.reload(true);" 
+			reRender="acqorderswizard"/>
+		
+		<a:commandLink id="#{divParam}finishAsNormalwizard1" styleClass="button right" value="Return" 
+		    rendered="#{catAcqOrdersBulkOperations.isSubWizard == false and not empty pageURL}"
+			eventsQueue="#{divParam}eventsQueue"
+       		status="globalWaitStatus"
+			action="#{catAcqOrdersBulkOperations.bulkReset}" 
+			oncomplete="#{rich:component('acqordersbulkUpdatePanel')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');"/>
+			
+<!-- If part of sub-wizard DO NOT refresh/reload, the combined parent-child wizard action(s) may not be complete yet, but make sure the parent calling wizard is rerendered only
+     then the parent's Continue button would be enabled -->		
+		<a:commandLink id="#{divParam}finishAsSubwizard" styleClass="button right" value="Return" 
+		    rendered="#{catAcqOrdersBulkOperations.isSubWizard == true}"
+			eventsQueue="#{divParam}eventsQueue"
+       		status="globalWaitStatus"
+			action="#{catAcqOrdersBulkOperations.bulkReset}" 
+			oncomplete="#{rich:component('acqordersbulkUpdatePanel')}.hide();" 
+			reRender="acqorderswizard,createAcqOrderswizard"/>
+		
+		</div>
+	
+</ui:composition>
+

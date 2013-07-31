@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+<ui:composition>
+	<c:set var="safeClassPropertyName"
+		value="#{fn:replace(propertyName, '\\.', '_')}" />
+	<c:set var="filterId"
+		value="#{'filter_'.concat( fn:replace(propertyPath, '\\.', '_') )}" />
+		
+		
+	<rich:column styleClass="#{styleClass} #{safeClassPropertyName}">
+			<f:facet name="header">
+					<a:commandLink 
+						styleClass="propertySorter" 
+						action="#{entityList.orderColumnAndToggleSort(propertyPath)}" 
+						limitToList="true"
+						reRender="#{reRender}"
+						value="#{propertyLabel} #{entityList.orderColumn == propertyPath ? (entityList.orderDirection == 'desc' ? messages.down : messages.up) : ''}"
+						status="globalWaitStatus"/>
+			</f:facet>
+			
+			<h:outputText value="#{value}" styleClass="#{safeClassPropertyName}"><ui:insert/></h:outputText>
+	</rich:column>
+</ui:composition>
+
+</html>

@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a="http://richfaces.org/a4j" xmlns:cats="http://www.ithaka.org/cats" template="../layout/list_template.xhtml">
+  <ui:define name="body">
+    <h:outputText value="CatCmptTags Search Results (#{empty catCmptTagsList.resultList ? 0 : (catCmptTagsList.paginated ? catCmptTagsList.resultCount : catCmptTagsList.resultList.size)})"></h:outputText>
+    <a:form>
+      
+
+			<div class="header">
+			<div class="left"><span class="museo">ENTITY NAME</span> 
+			  
+			  <h:selectOneMenu
+				name="flavour" value="#{catCmptTagsList.flavour}" onchange="this.form.submit();">
+				<s:selectItems value="#{catCmptTagsList.flavours}" var="i"
+					itemValue="#{i}" label="#{catCmptTagsList.flavourLabel(i)}" />
+
+			</h:selectOneMenu></div>
+
+			<div class="right"><h:selectOneMenu id="catCmptTagsListBulkOperationsSelect"
+				rendered="#{not empty catCmptTagsBulkOperations.bulkOperationsNames}"
+    				value="#{catCmptTagsBulkOperations.bulkOperationsType}"
+    >
+				<a:support event="onchange"
+					action="#{catCmptTagsBulkOperations.prepBulkOperations( 'catCmptTagsList', 'catCmptTagsListBulkOperationsSelect' )}"
+					reRender="catCmptTagsListBulkOperationsPanels,catCmptTagsList"
+					oncomplete="if ( #{rich:element('catCmptTagsListBulkOperationsSelect')}.options.selectedIndex != 0 ) { #{rich:component('catCmptTagsListBulkUpdatePanel')}.show(); } ; return false; " 
+					/>
+				<s:selectItems value="#{catCmptTagsBulkOperations.bulkOperationsNames}" var="b"
+					label="#{catCmptTagsBulkOperations.bulkOperations[b]}" itemValue="#{b}"
+					noSelectionLabel="Bulk Operations" />
+			</h:selectOneMenu>
+			
+							<ui:include src="adhocReportSelect.xhtml"><ui:param name="entityQuery" value="#{catCmptTagsList}"/></ui:include>
+			
+			
+			</div>
+			
+			<div class="right">
+				<s:link styleClass="button" rendered="#{s:hasPermission(catCmptTagsList.catCmptTags, 'create CatCmptTags')}" view="/home.xhtml" propagation="none" value="Create ENTITY NAME"/>
+			</div>
+			
+			</div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/Animated-Hourglass.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+
+
+<h:dataTable id="catCmptTagsList" var="_catCmptTags" value="#{catCmptTagsList.resultList}" rendered="#{not empty catCmptTagsList.resultList}" rowClasses="odd,even" styleClass="mainListClass">
+
+<rich:column styleClass="checkBoxes" headerClass="checkBoxes" rendered="#{not empty catCmptTagsBulkOperations.bulkOperationsNames}"><f:facet name="header"><h:panelGrid columns="1"><h:outputText value=" " /><input type="checkbox" id="select_all_checkbox" name="select_all_checkbox" onclick="toggleCheckboxes(this.checked, 'bulk_checkbox');" /></h:panelGrid></f:facet><div onclick="cancelEventBubbling(event);"><h:selectBooleanCheckbox styleClass="bulk_checkbox checkBoxes" value="#{catCmptTagsBulkOperations.selections[_catCmptTags]}" /></div></rich:column>
+        
+        <cats:column styleClass="id" rendered="#{listFlavour['id']}"
+          
+            
+              entityList="#{catCmptTagsList}" 
+              propertyLabel="Id" 
+              propertyPath="catCmptTags.id" 
+              propertyValue="#{catCmptTagsList.catCmptTags.id}" 
+              propertyName="id" 
+              sortable="true"  
+            
+          
+          value="#{_catCmptTags.id}" 
+        ></cats:column>
+        <cats:column styleClass="catName" rendered="#{listFlavour['catName']}"
+          
+            
+              entityList="#{catCmptTagsList}" 
+              propertyLabel="Cat name" 
+              propertyPath="catCmptTags.catName" 
+              propertyValue="#{catCmptTagsList.catCmptTags.catName}" 
+              propertyName="catName" 
+              sortable="true"  
+            
+          
+          value="#{_catCmptTags.catName}" 
+        ></cats:column>
+        
+      </h:dataTable></div>
+    </a:form>
+    <ui:include src="../layout/tablenav.xhtml">
+      <ui:param name="viewPath" value="/lists/CatCmptTagsList.xhtml"></ui:param>
+      <ui:param name="entityList" value="#{catCmptTagsList}"></ui:param>
+    </ui:include>
+    
+    
+  <ui:include src="bulkm_CatCmptTags.xhtml"></ui:include>
+<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+ 	<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,29 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    >
+
+    <m:from name="CATS" address="#{mailOps.fromEmail}"/>
+    <m:to name="#{catActionableEvents.displayName}">#{catActionableEvents.email}</m:to>
+    <ui:repeat var="_email" value="#{catActionableEvents.ccList}">
+    	<m:cc><h:outputText value="#{_email}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="Books Vendor Submission Batch: #{catActionableEvents.props['status']}"/> </m:subject>
+    <m:body>
+        <p><h:outputText value="Dear #{catActionableEvents.displayName}" />,</p>
+        
+      
+        <p>
+        	<h:outputText value="Book Submission (#{catActionableEvents.props['bookId']}_#{catActionableEvents.props['versionSeq']}_#{catActionableEvents.props['subSeq']}) for #{catActionableEvents.props['bestTitle']} (#{catActionableEvents.props['bestEisbn13']}) has been #{catActionableEvents.props['status']}."/>
+        </p>
+		
+				
+		<ui:include src="/booksubmissions/BookSubmissionsTableForMail.xhtml">
+			<ui:param name="submissionList" value="#{catActionableEvents.submissionList}"/>
+		</ui:include>
+			
+		<p>Sincerely,<br/>CATS</p>
+		
+    </m:body>
+</m:message>

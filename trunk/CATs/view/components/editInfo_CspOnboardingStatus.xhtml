@@ -1,0 +1,150 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{editCmptCspOnboardingStatusWizard.wizardTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Edit</li>
+			<li class="disabled">2. Results</li>
+		</ul>
+		<div class="cluster smart">
+			<div class="title change">
+				<h1>Edit</h1>
+				<p>Fill out required information to change the CSP Onboarding Status for your component(s).</p>
+			</div>
+			<s:div rendered="#{not empty editCmptCspOnboardingStatusWizard.errorMsg}" styleClass="alert">
+					<p><h:outputText value="#{editCmptCspOnboardingStatusWizard.errorMsg}" /></p>
+			</s:div>
+			            
+            
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">New CSP Onboarding Status</ui:define>
+				<h:selectOneMenu name="catCspOnboardingStatus"
+					value="#{editCmptCspOnboardingStatusWizard.cmptInstance.catCspOnboardingStatus}"
+					required="true">
+					<s:selectItems
+						value="#{listsForEnums.catCmpts_CspOnboardingStatus}"
+						var="i" itemValue="#{i}" label="#{i.label}"
+						noSelectionLabel="Choose..." />
+				</h:selectOneMenu>
+				<span class="comments">
+					Choose the new CSP Onboarding Status for your component(s). 
+					You can only move the CSP Onboarding Status forward; 
+					if you need to move it backwards please cancel this wizard and file a JIRA ticket with CM Support. 
+				</span>
+			</s:decorate>
+			
+			<a:outputPanel layout="none" id="noLayoutCmptsList">
+				<s:div styleClass="title">
+				 	<h1>Components (#{editCmptCspOnboardingStatusWizard.selectedCmptsList.size})</h1>
+                  	<p>You are attempting to change the <b>CSP Onboarding Status</b> for the following components:</p>
+				</s:div>
+				<s:fragment rendered="#{not empty editCmptCspOnboardingStatusWizard.selectedCmptsList}">
+					<div class="scroller">
+			   			<rich:dataTable id="catCmptsListPStatus"
+			                var="_catCmpts"
+			              	value="#{editCmptCspOnboardingStatusWizard.selectedCmptsList}"
+			              	rowClasses="odd,even">
+			           
+				        	<rich:column>
+					        	<f:facet name="header">
+					        		<h:outputText value="Set Name"/>
+					        	</f:facet>
+								<h:outputText value="#{_catCmpts.setsValue}" />        		
+				        	</rich:column>
+				        	
+				        	<rich:column>
+					        	<f:facet name="header">
+					        		<h:outputText value="Component Name"/>
+					        	</f:facet>
+								<h:outputText value="#{_catCmpts.catName}" />        		
+				        	</rich:column>
+				        	
+				        	<rich:column>
+					        	<f:facet name="header">
+					        		<h:outputText value="LTM JCODE"/>
+					        	</f:facet>
+								<h:outputText value="#{_catCmpts.catLtmJournalCode}" />        		
+				        	</rich:column>
+				        	
+				        	<rich:column>
+					        	<f:facet name="header">
+					        		<h:outputText value="CSP Licensor"/>
+					        	</f:facet>
+								<h:outputText value="#{_catCmpts.cspLicensorValue}" />        		
+				        	</rich:column>
+				        	
+				        	<rich:column>
+					        	<f:facet name="header">
+					        		<h:outputText value="CSP Onboarding"/>
+					        	</f:facet>
+								<h:outputText value="#{_catCmpts.catCspOnboardingStatus.label}" />        		
+				        	</rich:column>
+				        	
+				        	<rich:column>
+					        	<f:facet name="header">
+					        		<h:outputText value="Launch"/>
+					        	</f:facet>
+								<h:outputText value="#{_catCmpts.cspLaunchDate}">
+									<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+								</h:outputText>        		
+				        	</rich:column>
+				        	
+				        	<rich:column>
+					        	<f:facet name="header">
+					        		<h:outputText value="Digital Availability"/>
+					        	</f:facet>
+								<h:outputText value="#{_catCmpts.catCspDigiAvailDate}" />        		
+				        	</rich:column>
+				        	
+				        	<rich:column>
+					        	<f:facet name="header">
+					        		<h:outputText value="On Hold"/>
+					        	</f:facet>
+								<h:outputText value="#{_catCmpts.catOnHold ? 'Yes':'No'}" />        		
+				        	</rich:column>
+			        	</rich:dataTable>
+		        	</div>
+	        	</s:fragment>
+			</a:outputPanel>
+			
+		</div>
+		
+		
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			rendered="#{not empty editCmptCspOnboardingStatusWizard.selectedCmptsList}"
+			oncomplete="#{rich:component('editCspOnboardingStatusQuit')}.show(); return false;"
+			ajaxSingle="true"
+			eventsQueue="cspOnboardStatusQueue"
+			status="globalWaitStatus" reRender="editCspOnboardingStatusQuit"/>
+		
+		<a:commandLink styleClass="button right" value="Save"
+			rendered="#{not empty editCmptCspOnboardingStatusWizard.selectedCmptsList}"
+			action="#{editCmptCspOnboardingStatusWizard.updateCspOnboardingStatus}"
+			reRender="editCspOnboardingStatusForm"
+			eventsQueue="cspOnboardStatusQueue"
+			status="globalWaitStatus"/>
+		
+		<a:commandLink styleClass="button right" value="Return"
+			rendered="#{empty editCmptCspOnboardingStatusWizard.selectedCmptsList}"
+			action="#{editCmptCspOnboardingStatusWizard.reset}"
+			oncomplete="#{rich:component('editCspOnboardingStatusWizardModal')}.hide(); #{rich:component('editCspOnboardingStatusQuit')}.hide(); javascript:location.reload(true);"
+			eventsQueue="cspOnboardStatusQueue"
+			status="globalWaitStatus"/>
+		
+	</div>
+</ui:composition>

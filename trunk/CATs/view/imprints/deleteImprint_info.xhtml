@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats">
+
+	<h2>
+		<h:outputText value="Delete Imprint" />
+	</h2>
+	<div id="step1">
+		<div class="cluster">
+		<a:outputPanel layout="none" id="noLayoutErrorMsgs">
+			<s:div styleClass="alert">
+					<s:div rendered="#{not empty deleteImprintWizard.errorMsgs}" id="errorMsgsDiv">
+						<a:repeat value="#{deleteImprintWizard.errorMsgs}" var="_errMsg">
+							<p>#{_errMsg}</p>
+						</a:repeat>
+					</s:div>
+			</s:div>
+		</a:outputPanel>		
+				
+				<s:div rendered="#{not empty deleteImprintWizard.imprintsList}">
+					<p>Warning: Deleting this imprint will also delete its variants. Are you sure you want to continue?</p>
+					
+						<div class="smart">
+							<rich:dataTable id="#{divId}pubImprintsList" var="_catPubImprint"
+							value="#{deleteImprintWizard.imprintsList}" rendered="#{not empty deleteImprintWizard.imprintsList}">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Main Name" />
+								</f:facet>
+								<h:outputText value="#{_catPubImprint.mainName}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="LTM Prefix" />
+								</f:facet>
+								<h:outputText value="#{_catPubImprint.catLtmIdPrefix}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="LTM Code" />
+								</f:facet>
+								<h:outputText value="#{_catPubImprint.catLtmCode}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="LTM Code" />
+								</f:facet>
+								<h:outputText value="#{_catPubImprint.catLtmCode}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Display on Platform" />
+								</f:facet>
+								<h:outputText value="#{_catPubImprint.catDisplayOnPlatform}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="ID" />
+								</f:facet>
+								<h:outputText value="#{_catPubImprint.id}" />
+							</rich:column>
+							</rich:dataTable>
+						</div>
+					</s:div>		
+			
+		</div>
+	</div>
+	<div class="push"></div>
+	<a:commandLink styleClass="button" value="No, Return"
+		action="#{deleteImprintWizard.reset}" status="globalWaitStatus"
+		ignoreDupResponses="true"
+		oncomplete="#{rich:component('deleteImprintWizardModal')}.hide(); #{rich:component('deleteImprintQuit')}.hide();" limitToList="true" />
+
+	<a:commandLink styleClass="button right" value="Yes, Delete"
+		status="globalWaitStatus" ignoreDupResponses="true"
+		action="#{deleteImprintWizard.performDeleteOperation()}"
+		rendered="#{not empty deleteImprintWizard.imprintsList}"
+		oncomplete="javascript:location.reload(true);" limitToList="true" />
+
+</ui:composition>

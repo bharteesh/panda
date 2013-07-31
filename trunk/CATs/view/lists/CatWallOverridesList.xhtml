@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a="http://richfaces.org/a4j" xmlns:cats="http://www.ithaka.org/cats" template="../layout/list_template.xhtml">
+  <ui:param name="entityType" value="walloverrides"/>
+  <ui:param name="moremenu" value="moremenu"/>
+  <ui:define name="body">
+    <a:outputPanel>
+    <ui:include src="../layout/tablenav.xhtml">
+      <ui:param name="viewPath" value="/lists/CmptsWallOverridesList.xhtml"/>
+      <ui:param name="entityList" value="#{catWallOverridesList}"/>
+      <ui:param name="divId" value="1"/>
+    </ui:include>
+    
+    <a:form>
+    	<a:jsFunction name="tryToRefreshTable" action="#{catWallOverridesList.refresh}" oncomplete="orderColumns();" status="globalWaitStatus" reRender="catWallOverridesList,tableNav1,tableNav2,tableHeader,catWallOverridesList" />
+    	
+      <s:div id="tableHeader" styleClass="header">
+        <div class="left">
+          <span class="museo">
+            <h:outputText value="Wall Overrides (#{empty catWallOverridesList.resultList ? 0 : (catWallOverridesList.paginated ? catWallOverridesList.resultCount : catWallOverridesList.resultList.size)})"/>
+          </span>
+          <h:selectOneMenu name="flavour" value="#{catWallOverridesList.flavour}">
+            <s:selectItems value="#{catWallOverridesList.flavours}" var="i" itemValue="#{i}" label="#{catWallOverridesList.flavourLabel(i)}"/>
+				<a:support event="onchange" action="#{catWallOverridesList.updateUserSkinPreferences}"
+								oncomplete="javascript: location.href='CatWallOverridesList.seam'"
+								ignoreDupResponses="true"
+								eventsQueue="overrdsListQueue"
+								ajaxSingle="true"/>
+          </h:selectOneMenu>
+          <s:link id="clearSearch" status="globalWaitStatus" 
+          	ignoreDupResponses="true"  propagation="none"
+          	oncomplete="javascript: location.href='CatWallOverridesList.seam'" styleClass="button wizard" 
+          	action="#{catWallOverridesList.reset}" value="X" ajaxSingle="true">
+          	<f:param name="flavour" value="#{catWallOverridesList.flavour}"/>
+          </s:link>
+        </div>
+        <div class="right">
+          <ui:include src="adhocReportSelect.xhtml">
+            <ui:param name="entityQuery" value="#{catWallOverridesList}"/>
+          </ui:include>
+          <h:selectOneMenu id="catWallOverridesListBulkOperationsSelect" rendered="#{not empty catWallOverridesBulkOperations.bulkOperationsNames}" value="#{catWallOverridesBulkOperations.bulkOperationsType}">
+            <a:support event="onchange" action="#{catWallOverridesBulkOperations.prepBulkOperations( 'catWallOverridesList', 'catWallOverridesListBulkOperationsSelect' )}" reRender="catWallOverridesListBulkOperationsPanels" oncomplete="if ( #{rich:element('catWallOverridesListBulkOperationsSelect')}.options.selectedIndex != 0 ) { #{rich:component('catWallOverridesListBulkUpdatePanel')}.show(); } ; return false; " ignoreDupResponses="true" status="globalWaitStatus"/>
+            <s:selectItems value="#{catWallOverridesBulkOperations.bulkOperationsNames}" var="b" label="#{catWallOverridesBulkOperations.bulkOperations[b]}" itemValue="#{b}" noSelectionLabel="Bulk Operations"/>
+          </h:selectOneMenu>
+          <a:commandLink limitToList="true" ajaxSingle="true" id="createWallOverridesButton" ignoreDupResponses="true" action="#{createWallOverridesWizard.prepCreateOperation()}" 
+          	value="Add Wall Overrides" reRender="createWallOverridesOperationsPanels" oncomplete="Richfaces.showModalPanel('createWallOverridesPanel'); " styleClass="button wizard" status="globalWaitStatus"/>
+        </div>
+      </s:div>
+      <!-- Shows hour glass when the table is loading -->
+      <div id="globalStatusDiv" style="display: none;">
+        <img src="../img/Animated-Hourglass.gif"/>
+      </div>
+      <a:status id="globalWaitStatus" forceId="true" layout="none" onstart="jQuery('#globalStatusDiv').fadeIn('fast')" onstop="jQuery('#globalStatusDiv').fadeOut('slow')"/>
+      <div class="push"/>
+      <div id="mainlistscroller">
+        <h:dataTable id="catWallOverridesList" var="_catWallOverrides" value="#{catWallOverridesList.resultList}" rowClasses="odd,even" styleClass="mainListClass">
+          <rich:column styleClass="checkBoxes" headerClass="checkBoxes" rendered="#{not empty catWallOverridesBulkOperations.bulkOperationsNames}">
+            <f:facet name="header">
+              <h:panelGrid columns="1">
+                <h:outputText value=" "/>
+                <input type="checkbox" id="select_all_checkbox" name="select_all_checkbox" onclick="toggleCheckboxes(this.checked, 'bulk_checkbox');"/>
+              </h:panelGrid>
+            </f:facet>
+            <div onclick="cancelEventBubbling(event);">
+              <h:selectBooleanCheckbox styleClass="bulk_checkbox checkBoxes" value="#{catWallOverridesBulkOperations.selections[_catWallOverrides]}"/>
+            </div>
+          </rich:column>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="id" rendered="#{listFlavour['id']}" entityList="#{catWallOverridesList}" propertyLabel="ID" propertyPath="catWallOverrides.id" propertyValue="#{catWallOverridesList.catWallOverrides.id}" propertyName="id" sortable="true" value="#{_catWallOverrides.id}"/>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="catCreator" rendered="#{listFlavour['catCreator']}" entityList="#{catWallOverridesList}" propertyLabel="Creator" propertyPath="catWallOverrides.catCreator" propertyValue="#{catWallOverridesList.catWallOverrides.catCreator}" propertyName="catCreator" sortable="true" value="#{_catWallOverrides.catCreator}"/>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="catDateCompleted" rendered="#{listFlavour['catDateCompleted']}" entityList="#{catWallOverridesList}" propertyLabel="Date Completed" propertyPath="catWallOverrides.catDateCompleted" propertyValue="#{catWallOverridesList.catWallOverrides.catDateCompleted}" propertyName="catDateCompleted" sortable="true" value="#{_catWallOverrides.catDateCompleted}">
+            <s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+          </cats:column>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="catDateCreated" rendered="#{listFlavour['catDateCreated']}" entityList="#{catWallOverridesList}" propertyLabel="Date Created" propertyPath="catWallOverrides.catDateCreated" propertyValue="#{catWallOverridesList.catWallOverrides.catDateCreated}" propertyName="catDateCreated" sortable="true" value="#{_catWallOverrides.catDateCreated}">
+            <s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+          </cats:column>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="catDisplayThroughDate" rendered="#{listFlavour['catDisplayThroughDate']}" entityList="#{catWallOverridesList}" propertyLabel="Display Through" propertyPath="catWallOverrides.catDisplayThroughDate" propertyValue="#{catWallOverridesList.catWallOverrides.catDisplayThroughDate}" propertyName="catDisplayThroughDate" sortable="true" value="#{_catWallOverrides.catDisplayThroughDate}">
+            <s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+          </cats:column>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="catLifecycle" rendered="#{listFlavour['catLifecycle']}" entityList="#{catWallOverridesList}" propertyLabel="Lifecycle" propertyPath="catWallOverrides.catLifecycle" propertyValue="#{catWallOverridesList.catWallOverrides.catLifecycle}" propertyName="catLifecycle" sortable="true" enumList="#{listsForEnums.catWallOverrides_Lifecycle}" value="#{_catWallOverrides.catLifecycle.label}"/>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="catNote" rendered="#{listFlavour['catNote']}" entityList="#{catWallOverridesList}" propertyLabel="Note" propertyPath="catWallOverrides.catNote" propertyValue="#{catWallOverridesList.catWallOverrides.catNote}" propertyName="catNote" sortable="true" value="#{_catWallOverrides.catNote}"/>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="catOutcome" rendered="#{listFlavour['catOutcome']}" entityList="#{catWallOverridesList}" propertyLabel="Outcome" propertyPath="catWallOverrides.catOutcome" propertyValue="#{catWallOverridesList.catWallOverrides.catOutcome}" propertyName="catOutcome" sortable="true" enumList="#{listsForEnums.catWallOverrides_Outcome}" value="#{_catWallOverrides.catOutcome.label}"/>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="catSets.id" rendered="#{listFlavour['catSets.id']}" entityList="#{catWallOverridesList}" propertyLabel="Set ID" propertyPath="catWallOverrides.catSets.id" propertyValue="#{catWallOverridesList.catWallOverrides.catSets.id}" propertyName="catSets.id" sortable="true" value="#{_catWallOverrides.catSets.id}"/>
+          <cats:column linkToId="#{_catWallOverrides.id}" styleClass="catSets.setsName" rendered="#{listFlavour['catSets.setsName']}" entityList="#{catWallOverridesList}" propertyLabel="Set Name" propertyPath="catWallOverrides.catSets.catCurrentTitle.catName" propertyValue="#{catWallOverridesList.catWallOverrides.catSets.catCurrentTitle.catName}" propertyName="catSets.setsName" sortable="true" value="#{_catWallOverrides.catSets.catCurrentTitle.catName}"/>
+          <cats:column linkToId="#{_catWallOverrides.id}" sortable="true" rendered="#{catWallOverridesList.listFlavour['catDateModified']}" entityList="#{catWallOverridesList}" propertyLabel="Date Modified" propertyPath="catWallOverrides.catDateModified" propertyValue="#{catWallOverridesList.catWallOverrides.catDateModified}" propertyName="catDateModified" value="#{_catWallOverrides.catDateModified}">
+            <s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"/>
+          </cats:column>
+        </h:dataTable>
+      </div>
+    </a:form>
+    <ui:include src="../layout/tablenav.xhtml">
+      <ui:param name="viewPath" value="/lists/CmptsWallOverridesList.xhtml"/>
+      <ui:param name="entityList" value="#{catWallOverridesList}"/>
+      <ui:param name="divId" value="2"/>
+    </ui:include>
+    </a:outputPanel>
+    <ui:include src="/walloverrides/createm_WallOverrides.xhtml"/>
+    <ui:include src="/walloverrides/bulkm_WallOverrides.xhtml">
+      <ui:param name="reRender" value="catWallOverridesList,tableNav1,tableNav2,tableHeader"/>
+    </ui:include>
+    <!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+    <rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catWallOverridesList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+  </ui:define>
+</ui:composition>

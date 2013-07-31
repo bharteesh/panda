@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.com/products/seam/taglib" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:a="http://richfaces.org/a4j" xmlns:cats="http://www.ithaka.org/cats" template="../layout/list_template.xhtml">
+  <ui:define name="body">
+    <h:outputText value="CatTitleRltnshpTypes Search Results (#{empty catTitleRltnshpTypesList.resultList ? 0 : (catTitleRltnshpTypesList.paginated ? catTitleRltnshpTypesList.resultCount : catTitleRltnshpTypesList.resultList.size)})"></h:outputText>
+    <a:form>
+      
+
+			<div class="header">
+			<div class="left"><span class="museo">ENTITY NAME</span> 
+			  
+			  <h:selectOneMenu
+				name="flavour" value="#{catTitleRltnshpTypesList.flavour}" onchange="this.form.submit();">
+				<s:selectItems value="#{catTitleRltnshpTypesList.flavours}" var="i"
+					itemValue="#{i}" label="#{catTitleRltnshpTypesList.flavourLabel(i)}" />
+
+			</h:selectOneMenu></div>
+
+			<div class="right"><h:selectOneMenu id="catTitleRltnshpTypesListBulkOperationsSelect"
+				rendered="#{not empty catTitleRltnshpTypesBulkOperations.bulkOperationsNames}"
+    				value="#{catTitleRltnshpTypesBulkOperations.bulkOperationsType}"
+    >
+				<a:support event="onchange"
+					action="#{catTitleRltnshpTypesBulkOperations.prepBulkOperations( 'catTitleRltnshpTypesList', 'catTitleRltnshpTypesListBulkOperationsSelect' )}"
+					reRender="catTitleRltnshpTypesListBulkOperationsPanels,catTitleRltnshpTypesList"
+					oncomplete="if ( #{rich:element('catTitleRltnshpTypesListBulkOperationsSelect')}.options.selectedIndex != 0 ) { #{rich:component('catTitleRltnshpTypesListBulkUpdatePanel')}.show(); } ; return false; " 
+					/>
+				<s:selectItems value="#{catTitleRltnshpTypesBulkOperations.bulkOperationsNames}" var="b"
+					label="#{catTitleRltnshpTypesBulkOperations.bulkOperations[b]}" itemValue="#{b}"
+					noSelectionLabel="Bulk Operations" />
+			</h:selectOneMenu></div>
+			
+			<div class="right">
+				<s:link styleClass="button" rendered="#{s:hasPermission(catTitleRltnshpTypesList.catTitleRltnshpTypes, 'create CatTitleRltnshpTypes')}" view="/home.xhtml" propagation="none" value="Create ENTITY NAME"/>
+			</div>
+			
+			</div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/Animated-Hourglass.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+
+
+<h:dataTable id="catTitleRltnshpTypesList" var="_catTitleRltnshpTypes" value="#{catTitleRltnshpTypesList.resultList}" rendered="#{not empty catTitleRltnshpTypesList.resultList}" rowClasses="odd,even" styleClass="mainListClass">
+
+<rich:column styleClass="checkBoxes" headerClass="checkBoxes" rendered="#{not empty catTitleRltnshpTypesBulkOperations.bulkOperationsNames}"><f:facet name="header"><h:panelGrid columns="1"><h:outputText value=" " /><input type="checkbox" id="select_all_checkbox" name="select_all_checkbox" onclick="toggleCheckboxes(this.checked, 'bulk_checkbox');" /></h:panelGrid></f:facet><div onclick="cancelEventBubbling(event);"><h:selectBooleanCheckbox styleClass="bulk_checkbox checkBoxes" value="#{catTitleRltnshpTypesBulkOperations.selections[_catTitleRltnshpTypes]}" /></div></rich:column>
+        
+        <cats:column styleClass="id" rendered="#{listFlavour['id']}"
+          
+            
+              entityList="#{catTitleRltnshpTypesList}" 
+              propertyLabel="Id" 
+              propertyPath="catTitleRltnshpTypes.id" 
+              propertyValue="#{catTitleRltnshpTypesList.catTitleRltnshpTypes.id}" 
+              propertyName="id" 
+              sortable="true"  
+            
+          
+          value="#{_catTitleRltnshpTypes.id}" 
+        ></cats:column>
+        <cats:column styleClass="catLtmMapping" rendered="#{listFlavour['catLtmMapping']}"
+          
+            
+              entityList="#{catTitleRltnshpTypesList}" 
+              propertyLabel="Cat ltm mapping" 
+              propertyPath="catTitleRltnshpTypes.catLtmMapping" 
+              propertyValue="#{catTitleRltnshpTypesList.catTitleRltnshpTypes.catLtmMapping}" 
+              propertyName="catLtmMapping" 
+              sortable="true"  
+              enumList="#{listsForEnums.catTitleRltnshpTypes_LtmMapping}" 
+            
+          
+          value="#{_catTitleRltnshpTypes.catLtmMapping.label}" 
+        ></cats:column>
+        <cats:column styleClass="catName" rendered="#{listFlavour['catName']}"
+          
+            
+              entityList="#{catTitleRltnshpTypesList}" 
+              propertyLabel="Cat name" 
+              propertyPath="catTitleRltnshpTypes.catName" 
+              propertyValue="#{catTitleRltnshpTypesList.catTitleRltnshpTypes.catName}" 
+              propertyName="catName" 
+              sortable="true"  
+              enumList="#{listsForEnums.catTitleRltnshpTypes_Name}" 
+            
+          
+          value="#{_catTitleRltnshpTypes.catName.label}" 
+        ></cats:column>
+        
+      </h:dataTable></div>
+    </a:form>
+    <ui:include src="../layout/tablenav.xhtml">
+      <ui:param name="viewPath" value="/lists/CatTitleRltnshpTypesList.xhtml"></ui:param>
+      <ui:param name="entityList" value="#{catTitleRltnshpTypesList}"></ui:param>
+    </ui:include>
+    
+    
+  <ui:include src="bulkm_CatTitleRltnshpTypes.xhtml"></ui:include>
+<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+ <rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+</ui:define>
+</ui:composition>

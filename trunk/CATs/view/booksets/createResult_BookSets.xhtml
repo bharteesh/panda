@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	
+	<h2><h:outputText value="#{createBookSetsWizard.createTitle}" /></h2>
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Info</li>
+			<li class="selected">2. Results</li>
+		</ul>
+		
+		<div class="cluster smart">
+			<div class="title eligible">
+	            <h1>Book Set (1)</h1>
+	            <p>You successfully created one Book Set.</p>
+	        </div>
+	        <div>
+	        	<rich:dataTable value="#{createBookSetsWizard.createdBookSets}"
+					var="_catBookSets">
+					<rich:column>
+						<f:facet name="header">Main Title</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+							<f:param name="id" value="#{_catBookSets.id}"/>
+							<h:outputText value="#{_catBookSets.mainTitle}" />
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Book Set Publishers</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+							<f:param name="id" value="#{_catBookSets.id}"/>
+							<h:outputText value="#{_catBookSets.setPublishers}" />
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">ID</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+							<f:param name="id" value="#{_catBookSets.id}"/>
+							<h:outputText value="#{_catBookSets.id}" />
+						</s:link>
+					</rich:column>
+					
+				</rich:dataTable>
+	        </div>
+	        
+	    </div>
+		
+		<div class="push"></div>		
+		
+		<a:commandLink 
+		    rendered="#{empty pageURL}"
+		    styleClass="button right" 
+		    value="Return"
+   			eventsQueue="createBookSetsQueue"
+            status="globalWaitStatus"
+			onclick="#{rich:component('createBookSetsPanel')}.hide();" 
+			action="#{createBookSetsWizard.createReset}" 
+			oncomplete="javascript:location.reload(true);"
+			limitToList="true"/>
+		
+		<a:commandLink 
+		    rendered="#{not empty pageURL}"
+		    styleClass="button right" 
+		    value="Return"   	
+		    eventsQueue="createBookSetsQueue"
+		    status="globalWaitStatus"
+			action="#{createBookSetsWizard.createReset}" 
+			oncomplete="#{rich:component('createBookSetsPanel')}.hide();javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+			limitToList="true"/>
+		
+	</div>
+	
+</ui:composition>

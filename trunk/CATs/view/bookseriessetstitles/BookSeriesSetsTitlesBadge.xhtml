@@ -1,0 +1,47 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:rich="http://richfaces.org/rich">
+<a:form id="catBookSeriesSetsTitlesBadgeForm">
+	<h1>#{catBookSeriesSetsTitlesHome.instance.catTitle}</h1>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Record Type:</ui:define>
+		<h:outputText value="Book Series Sets Titles" />
+	</s:decorate>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Book Series</ui:define>
+		<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		     <f:param name="id" value="#{catBookSeriesSetsTitlesHome.instance.catBookSeries.id}"/>
+			<h:outputText value="#{catBookSeriesSetsTitlesHome.instance.catBookSeries.mainTitle}"/>
+		 </s:link>
+	</s:decorate>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Book Sets</ui:define>
+		<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		     <f:param name="id" value="#{catBookSeriesSetsTitlesHome.instance.catBookSets.id}"/>
+			<h:outputText value="#{catBookSeriesSetsTitlesHome.instance.catBookSets.mainTitle}"/>
+		 </s:link>
+	</s:decorate>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">ID</ui:define>
+		<h:outputText value="#{catBookSeriesSetsTitlesHome.instance.id}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Creator</ui:define>
+		<h:outputText value="#{catBookSeriesSetsTitlesHome.instance.catCreator}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Created Date</ui:define>
+		<h:outputText value="#{catBookSeriesSetsTitlesHome.instance.catDateCreated}">
+			<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+		</h:outputText>
+	</s:decorate>
+	</a:form>
+</s:div>
+ 

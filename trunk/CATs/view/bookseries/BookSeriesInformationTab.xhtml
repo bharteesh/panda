@@ -1,0 +1,61 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="bookSeriesInformationDiv1">
+
+	<div class="col col1">
+
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">DOI</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="catDoi"
+				value="#{catBookSeriesHome.instance.catDoi}" 
+				maxlength="255"
+				readonly="#{!s:hasPermission(catBookSeriesHome.instance, 'modify catDoi')}"/>
+		</s:decorate> 
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Publication Status</ui:define>
+			<h:selectOneMenu name="catPublicationStatus"
+				onchange="enableSaveCancel();" 
+				value="#{catBookSeriesHome.instance.catPublctnStatus}"
+				disabled="#{!s:hasPermission(catBookSeriesHome.instance, 'modify catPublctnStatus')}">
+				<s:selectItems var="i" itemValue="#{i}" label="#{i.label}" 
+					noSelectionLabel="None..." 
+					value="#{listsForEnums.catBookSeries_PublctnStatus}"/>
+			</h:selectOneMenu>
+		</s:decorate>
+	</div>
+	<div class="col col2">
+			<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Series EISSN</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="catEIssn"
+				value="#{catBookSeriesHome.instance.catEIssn}" 
+				maxlength="14"
+				readonly="#{!s:hasPermission(catBookSeriesHome.instance, 'modify catEIssn')}"/>
+		</s:decorate>
+			<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Series PISSN</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="catPIssn"
+				value="#{catBookSeriesHome.instance.catPIssn}" 
+				maxlength="14"
+				readonly="#{!s:hasPermission(catBookSeriesHome.instance, 'modify catPIssn')}"/>
+		</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">LCCN</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+				id="catLCCN"
+				value="#{catBookSeriesHome.instance.catLCCN}" 
+				maxlength="14"
+				readonly="#{!s:hasPermission(catBookSeriesHome.instance, 'modify catLCCN')}"/>
+		</s:decorate>
+	</div>
+
+	<div class="push" />
+
+</s:div>

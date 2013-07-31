@@ -1,0 +1,58 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      template="../layout/template.xhtml">
+>
+<ui:define name="body">
+
+<h:form>
+<a:commandLink oncomplete="#{rich:component('panel')}.show();"
+	 value="Open"
+	 reRender="panel"/>
+</h:form>
+ 
+<h:panelGrid id="result">
+   <h:outputText value="#{sampleBean.color}" />
+   <h:outputText value="#{sampleBean.number}" style="color: #{sampleBean.color}"/>
+</h:panelGrid>
+ 
+<rich:modalPanel styleClass="modal" id="panel">
+   <h2>FIRST Wizard</h2>
+   <a:form id="form" ajaxSubmit="true" limitToList="true">
+	<a:outputPanel >
+		<a:include viewId="#{sampleBean.view}" />
+	</a:outputPanel>
+
+<a:commandLink action="#{sampleBean.whatever}" 
+oncomplete="#{rich:component('stacker')}.show({top:'10', left:'10', height:'400'});"
+	 value="Stacker"
+	 reRender="stacker"/>
+	
+
+   </a:form>
+
+	<a href="#" onclick="#{rich:component('panel')}.hide();">Close</a>
+
+</rich:modalPanel>
+
+<rich:modalPanel styleClass="modal"  id="stacker">
+   
+   <h2>Stacking Wizard</h2>
+
+   <p>This wizard is stacked on that'n.</p>
+
+<a href="#" onclick="#{rich:component('stacker')}.hide();">Close</a>
+
+</rich:modalPanel>
+
+</ui:define>
+</ui:composition>

@@ -1,0 +1,84 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	
+	
+	
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo">
+					<h:outputText value="Titles (#{bookSeriesTitlesList.size})" />
+				</span>
+				<a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('seriesTitles'.concat(divId))}" 
+					ignoreDupResponses="true" status="globalWaitStatus"  reRender="#{tableId}" 
+					styleClass="button wizard"
+					eventsQueue="bookSetsEditQueue"
+					limitToList="true"/>
+			</div>
+			<div class="right">
+				<a:commandLink  limitToList="true" status="globalWaitStatus"
+					action="#{createBookSeriesTitleWizard.prepCreateOperation(catBookSeriesHome.instance)}" 
+					ajaxSingle="true" ignoreDupResponses="true" 
+					value="Add Title" 
+					reRender="createBookSeriesTitleForm" 
+					oncomplete="#{rich:component('createBookSeriesTitleWizardModal')}.show(); return false;" 
+					disabled="#{!s:hasPermission(catBookSeriesHome.instance, 'create CatBookSeriesSetsTitles')}"
+                    styleClass="button wizard #{!s:hasPermission(catBookSeriesHome.instance, 'create CatBookSeriesSetsTitles') ? 'disabled' : ''}"
+					onclick="if ( ! checkForSave() ) { return false ; }"/>	
+			</div>
+		</div>
+		<rich:dataTable id="#{tableId}" var="_bookSeriesTitles"
+			value="#{bookSeriesTitlesList}"
+			rendered="#{not empty bookSeriesTitlesList}" limitToList="true">			
+						
+			<rich:column id="title" sortBy="#{_bookSeriesTitles.catTitle}"
+				filterBy="#{_bookSeriesTitles.catTitle}" sortable="true" 
+				sortOrder="#{sortFiltBean['seriesTitles'.concat(divId)]['title_sortOrder']}"
+				filterValue="#{sortFiltBean['seriesTitles'.concat(divId)]['title_filterValue']}" >
+				<f:facet name="header">
+					<h:outputText value="Title"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_bookSeriesTitles.id}"/>
+					<h:outputText value="#{_bookSeriesTitles.catTitle}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="type" sortBy="#{_bookSeriesTitles.catType.label}"
+				filterBy="#{_bookSeriesTitles.catType.label}" sortable="true" 
+				sortOrder="#{sortFiltBean['seriesTitles'.concat(divId)]['type_sortOrder']}"
+				filterValue="#{sortFiltBean['seriesTitles'.concat(divId)]['type_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Type"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_bookSeriesTitles.id}"/>
+					<h:outputText value="#{_bookSeriesTitles.catType.label}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="id" sortBy="#{_bookSeriesTitles.id}"
+				filterBy="#{_bookSeriesTitles.id}" sortable="true" 
+				sortOrder="#{sortFiltBean['seriesTitles'.concat(divId)]['id_sortOrder']}"
+				filterValue="#{sortFiltBean['seriesTitles'.concat(divId)]['id_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_bookSeriesTitles.id}"/>
+					<h:outputText value="#{_bookSeriesTitles.id}" />
+				</s:link>
+			</rich:column>
+			
+		</rich:dataTable>
+
+	</div>
+
+
+
+</s:div>

@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{updateOnHoldReasonWizard.bulkTitle}" /></h2>
+	
+	<div id="step1">
+		<s:div>
+			<ul class="steps">
+				<li class="selected">1. Change</li>
+				<li class="disabled">2. Results</li>
+			</ul>
+		</s:div>
+		
+		<div class="cluster">
+		<p>Explain why this record is being put on hold:</p>
+					<s:decorate id="catOnHoldReason_div" template="../layout/edit.xhtml">
+						<ui:define name="label">On Hold Reason</ui:define>
+						<h:inputTextarea id="catOnHoldReason" cols="50" rows="20" styleClass="note"
+			               required="true" 	value="#{updateOnHoldReasonWizard.catOnHoldReason}"></h:inputTextarea>					
+					</s:decorate>
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button" value="Quit"
+			oncomplete="#{rich:component('updateOnHoldReasonQuit')}.show(); return false;"
+			status="globalWaitStatus" ajaxSingle="true"/>
+			 
+		<a:commandLink styleClass="button right" value="Save"
+			action="#{updateOnHoldReasonWizard.performUpdateOperation}" reRender="updateOnHoldReasonWizard"
+			status="globalWaitStatus"/>
+		
+	</div>
+</ui:composition>

@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+    <ui:param name="showGlobalMessages" value="false"/>
+    <ui:define name="badge">
+	<h1></h1>
+	</ui:define>
+    <ui:define name="body">
+
+        <h1>System Error</h1>
+        
+        <p><h:outputText value="Current system time is #{appInfo.now}.  The current system is #{appInfo.description}."><s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime></h:outputText></p>
+        
+		<p>There has been some kind of error in the system.  The following messages may indicate what the problem is:</p>
+
+        <rich:messages id="errorMessage" styleClass="message"/>
+
+		<p>Please copy-n-paste the whole text here in an email to <tt><h:outputText value="#{appInfo.supportEmail}"/></tt>, just in case our problem is so great that the error email itself does not make it out of the system.</p>
+    </ui:define>
+    <ui:define name="notes">
+	<h1></h1>
+	</ui:define>
+</ui:composition>

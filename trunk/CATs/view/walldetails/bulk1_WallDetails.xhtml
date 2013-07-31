@@ -1,0 +1,74 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+
+	<h2><h:outputText value="#{catWallDtlsBulkOperations.bulkTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+				<li class="selected">1. Permissions</li>
+				<li class="disabled">2. Change</li>
+				<li class="disabled">3. Additional</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		<div class="cluster smart">
+
+		<p><h:outputText
+			value="You have selected  #{catWallDtlsBulkOperations.bulkInvalid.size() + catWallDtlsBulkOperations.bulkSelection.size()}   records to change." /></p>
+
+		<s:fragment rendered="#{not empty catWallDtlsBulkOperations.bulkInvalid}">
+			<p><h:outputText
+				value="You "/><em><h:outputText
+				value="do not"/></em><h:outputText
+				value=" have permission to change "/>
+			<h:outputText
+				value="#{catWallDtlsBulkOperations.bulkInvalid.size()}" /><h:outputText
+				value=" of "/> 
+				<h:outputText
+				value="#{catWallDtlsBulkOperations.bulkInvalid.size() + catWallDtlsBulkOperations.bulkSelection.size()}" /><h:outputText
+				value=" records."/></p>
+
+		<cats:dumbWallDetailsList value="#{catWallDtlsBulkOperations.bulkInvalid}"/>
+		</s:fragment> <s:fragment rendered="#{not empty catWallDtlsBulkOperations.bulkSelection}">
+			<p><h:outputText
+				value="You have permission to change "/> 
+			<h:outputText
+				value="#{catWallDtlsBulkOperations.bulkSelection.size()}" /><h:outputText
+				value=" of "/>
+				<h:outputText
+				value="#{catWallDtlsBulkOperations.bulkInvalid.size() + catWallDtlsBulkOperations.bulkSelection.size()}" /><h:outputText
+				value=" records. "/></p>
+
+		<cats:dumbWallDetailsList value="#{catWallDtlsBulkOperations.bulkSelection}"/>
+		</s:fragment>
+
+		<p>Permissions determined by the following checks:</p>
+			<ol><li>User role must be CD Negotiations, CD Programs and Services, CM Management, or Data Release Team.</li></ol>
+		 
+		<rich:dataOrderedList value="#{_catCmpts.bulkPermissionsChecks}"
+			var="_check">
+			<h:outputText value="#{_check}" />
+		</rich:dataOrderedList></div>
+
+
+		<div class="push"></div>
+		
+		<a:commandLink  styleClass="button" value="Quit" action="#{catWallDtlsBulkOperations.bulkReset}" oncomplete="#{rich:component('catWallDtlsBulkPanel')}.hide();" reRender="#{catWallDtlsBulkOperations.bulkOpsSelectFieldId}" rendered="#{not catWallDtlsBulkOperations.isPubStatusSubWizard and not catWallDtlsBulkOperations.isPubStatusSubWizardNew}" eventsQueue="bulkWallDetails" status="globalWaitStatus" ignoreDupResponses="true"   />
+		
+		<a:commandLink  styleClass="button" value="Quit" reRender="catWallDtlsListWizard" oncomplete="#{rich:component('catWallDtlsBulkQuit')}.show(); return false;" rendered="#{catWallDtlsBulkOperations.isPubStatusSubWizard or catWallDtlsBulkOperations.isPubStatusSubWizardNew}" eventsQueue="bulkWallDetails" status="globalWaitStatus" ignoreDupResponses="true"   />
+		
+		<a:commandLink  styleClass="button right" value="Continue" disabled="#{empty catWallDtlsBulkOperations.bulkSelection}" action="#{catWallDtlsBulkOperations.bulkNext}" reRender="catWallDtlsListWizard" eventsQueue="bulkWallDetails" status="globalWaitStatus" ignoreDupResponses="true"   />
+		
+		</div>
+	
+</ui:composition>

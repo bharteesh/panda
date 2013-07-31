@@ -1,0 +1,28 @@
+<ui:composition id="createMovingWallFlipsNotePanel"
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<rich:modalPanel id="createMovingWallFlipsNoteWizardModal" 
+		width="900" height="550" styleClass="modal">
+		<s:div id="movingWallFlipsNoteModalDiv">
+			<a:form ajaxSubmit="true" ajaxSingle="true" id="createMovingWallFlipsNoteForm">
+				<a:include viewId="#{createMovingWallFlipsNoteWizard.currentCreateView}"></a:include>
+			</a:form>
+		</s:div>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="createMovingWallFlipsNoteQuit" width="900"
+		height="550" styleClass="modal">
+		<s:div id="movingWallFlipsNoteModalQuitDiv">
+			<a:form ajaxSubmit="true" ajaxSingle="true" id="movingWallFlipsNoteWizardQuit">
+				<a:include viewId="#{createMovingWallFlipsNoteWizard.quitView}"></a:include>
+			</a:form>
+		</s:div>
+	</rich:modalPanel>
+
+</ui:composition>

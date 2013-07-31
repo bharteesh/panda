@@ -1,0 +1,380 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+	
+	<ui:param name="entityType" value="contracts"/>
+	
+	<ui:define name="body">
+	<ui:include src="../layout/tablenav.xhtml">
+		<ui:param name="viewPath" value="/lists/CatContractsList.xhtml"></ui:param>
+		<ui:param name="entityList" value="#{catContractsList}"></ui:param>
+		<ui:param name="divId" value="1"/>
+	</ui:include>
+	
+	<a:form>
+		<s:div id="header"  styleclass="header">
+			<div class="left"><span class="museo"><h:outputText
+			value="Agreements
+			(#{empty catContractsList.resultList ? 0 : (catContractsList.paginated ? catContractsList.resultCount : catContractsList.resultList.size)})"></h:outputText>
+			</span> 
+			    <h:selectOneMenu name="flavour" value="#{catContractsList.flavour}">
+				<s:selectItems value="#{catContractsList.flavours}" var="i"
+					itemValue="#{i}" label="#{catContractsList.flavourLabel(i)}" />
+					<a:support event="onchange" action="#{catContractsList.updateUserSkinPreferences}"
+								oncomplete="javascript: location.href='CatContractsList.seam'"
+								ignoreDupResponses="true"
+								eventsQueue="contsListQueue"
+								ajaxSingle="true"/>		
+			</h:selectOneMenu>  
+			
+			<s:link id="clearSearch" status="globalWaitStatus" 
+				ignoreDupResponses="true" styleClass="button wizard" 
+				action="#{catContractsList.reset}"  value="X" propagation="none"
+				oncomplete="javascript: location.href='CatContractsList.seam'">
+				<f:param name="flavour" value="#{catContractsList.flavour}"/> 
+			</s:link>
+			
+			</div>
+			
+			 <div class="right">
+			 <a:commandLink id="createContractsEditButton"
+					ignoreDupResponses="true"
+				    action="#{createContractsWizard.prepCreateOperation('CREATECONTRACTS')}"
+					value="Add Agreement"
+					reRender="createContractsModalPanels" 
+					oncomplete="Richfaces.showModalPanel('createContractsPanel');"
+					styleClass="button wizard #{!s:hasPermission(catContractsHome.instance, 'create CatContracts') ? 'disabled' : ''}"
+					disabled="#{!s:hasPermission(catContractsHome.instance, 'create CatContracts')}"
+					status="globalWaitStatus"
+					limitToList="true">
+					</a:commandLink>
+					
+			 		<ui:include src="adhocReportSelect.xhtml"><ui:param name="entityQuery" value="#{catContractsList}"/></ui:include>				    
+			 </div>
+			 
+		</s:div>
+		<!-- Shows loading image when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />			
+
+			<div id="mainlistscroller"><h:dataTable
+				id="catContractsList" var="_catContracts"
+				value="#{catContractsList.resultList}"
+				rowClasses="odd,even"
+				styleClass="mainListClass"
+				>
+				
+				
+
+				<cats:column value="#{_catContracts.id}" id="contractsId" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="id"
+					propertyValue="#{catContractsList.catContracts.id}"
+					propertyLabel="ID" propertyPath="catContracts.id"
+					rendered="#{catContractsList.listFlavour['id']}" sortable="true" />
+
+				<cats:column value="#{_catContracts.catType.label}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catType"
+					propertyValue="#{catContractsList.catContracts.catType}"
+					propertyLabel="Type" propertyPath="catContracts.catType"
+					enumList="#{listsForEnums.catContracts_CatType}"
+					rendered="#{catContractsList.listFlavour['catType']}"
+					sortable="true" />
+					
+				<cats:column value="#{_catContracts.catLifecycle.label}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catLifecycle"
+					propertyValue="#{catContractsList.catContracts.catLifecycle}"
+					propertyLabel="Lifecycle" propertyPath="catContracts.catLifecycle"
+					enumList="#{listsForEnums.catContracts_Lifecycle}"
+					rendered="#{catContractsList.listFlavour['catLifecycle']}"
+					sortable="true" />
+
+				<cats:column value="#{_catContracts.catOutcome.label}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catOutcome"
+					propertyValue="#{catContractsList.catContracts.catOutcome}"
+					propertyLabel="Outcome" propertyPath="catContracts.catOutcome"
+					enumList="#{listsForEnums.catContracts_Outcome}"
+					rendered="#{catContractsList.listFlavour['catOutcome']}"
+					sortable="true" />
+
+
+				<cats:column value="#{_catContracts.publisherValue}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}"
+					propertyName="publisherValue"
+					propertyValue="#{catContractsList.catContracts.publisherValue}"
+					propertyLabel="Publisher Name"
+					propertyPath="catContracts.publisherValue"
+					rendered="#{catContractsList.listFlavour['publisherValue']}"
+					sortable="true" />
+
+ 
+				<cats:column value="#{_catContracts.catLoiDateSent}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catLoiDateSent"
+					propertyValue="#{catContractsList.catContracts.catLoiDateSent}"
+					propertyLabel="LOI Date Sent"
+					propertyPath="catContracts.catLoiDateSent"
+					rendered="#{catContractsList.listFlavour['catLoiDateSent']}"
+					sortable="true" ><s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime></cats:column>
+					
+				<cats:column value="#{_catContracts.catLoiDateRecvd}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catLoiDateRecvd"
+					propertyValue="#{catContractsList.catContracts.catLoiDateRecvd}"
+					propertyLabel="LOI Date Countersigned"
+					propertyPath="catContracts.catLoiDateRecvd"
+					rendered="#{catContractsList.listFlavour['catLoiDateRecvd']}"
+					sortable="true" ><s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime></cats:column>
+				
+				<cats:column value="#{_catContracts.catAgreementDateSent}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catAgreementDateSent"
+					propertyValue="#{catContractsList.catContracts.catAgreementDateSent}"
+					propertyLabel="Agreement Date Sent"
+					propertyPath="catContracts.catAgreementDateSent"
+					rendered="#{catContractsList.listFlavour['catAgreementDateSent']}"
+					sortable="true" ><s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime></cats:column>
+ 							
+				<cats:column value="#{_catContracts.catAgreementVersion}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catAgreementVersion"
+					propertyValue="#{catContractsList.catContracts.catAgreementVersion}"
+					propertyLabel="Agreement Version"
+					propertyPath="catContracts.catAgreementVersion"
+					rendered="#{catContractsList.listFlavour['catAgreementVersion']}"
+					sortable="true" />
+
+				<cats:column value="#{_catContracts.catAgreementDate}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catAgreementDate"
+					propertyValue="#{catContractsList.catContracts.catAgreementDate}"
+					propertyLabel="Agreement Date Signed"
+					propertyPath="catContracts.catAgreementDate"
+					rendered="#{catContractsList.listFlavour['catAgreementDate']}"
+					sortable="true" ><s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime></cats:column>
+				
+				<cats:column value="#{_catContracts.catCspLaunchDate}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catCspLaunchDate"
+					propertyValue="#{catContractsList.catContracts.catCspLaunchDate}"
+					propertyLabel="Launch Date"
+					propertyPath="catContracts.catCspLaunchDate"
+					rendered="#{catContractsList.listFlavour['catCspLaunchDate']}"
+					sortable="true" ><s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime></cats:column>
+
+				<cats:column linkToId="#{_catContracts.id}"
+					value="#{_catContracts.catAgreementRevisions ? 'Yes' : 'No'}"
+					entityList="#{catContractsList}"
+					propertyName="catAgreementRevisions"
+					propertyValue="#{catContractsList.catAgreementRevisions}"
+					propertyLabel="Revisions"
+					propertyPath="catContracts.catAgreementRevisions"
+					enumList="#{listsForEnums.yesNo}"
+					rendered="#{catContractsList.listFlavour['catAgreementRevisions']}"
+					sortable="true" />
+				
+				 
+				<cats:column value="#{_catContracts.catOmittedContent.label}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catOmittedContent"
+					propertyValue="#{catContractsList.catContracts.catOmittedContent}"
+					propertyLabel="Omitted Content" propertyPath="catContracts.catOmittedContent"
+					enumList="#{listsForEnums.catContracts_OmittedContent}"
+					rendered="#{catContractsList.listFlavour['catOmittedContent']}"
+					sortable="true" />
+				 
+				 	
+				<cats:column value="#{_catContracts.relatedSetCount}"
+					id="relatedSetCount" entityList="#{catContractsList}"
+					propertyName="relatedSetCount"
+					propertyValue="#{catContractsList.catContracts.relatedSetCount}"
+					propertyLabel="Set Count"
+					propertyPath="catContracts.relatedSetCount"
+					rendered="#{catContractsList.listFlavour['relatedSetCount']}"
+					sortable="true" />
+
+				<cats:column value="#{_catContracts.catOnHold ? 'Yes' : 'No'}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catOnHold"
+					propertyValue="#{catContractsList.catContracts.catOnHold}"
+					propertyLabel="On Hold" propertyPath="catContracts.catOnHold"
+					enumList="#{listsForEnums.yesNo}"
+					rendered="#{catContractsList.listFlavour['catOnHold']}"
+					sortable="true" />
+				<cats:column value="#{_catContracts.catAgreementDatePubSigned}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catAgreementDatePubSigned"
+					propertyValue="#{catContractsList.catContracts.catAgreementDatePubSigned}"
+					propertyLabel="Date Agreement Signed by Publisher"
+					propertyPath="catContracts.catAgreementDatePubSigned"
+					rendered="#{catContractsList.listFlavour['catAgreementDatePubSigned']}"
+					sortable="true" />
+				<cats:column value="#{_catContracts.distributorValue}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="distributorValue"
+					propertyValue="#{catContractsList.catContracts.distributorValue}"
+					propertyLabel="Distributor"
+					propertyPath="catContracts.distributorValue"
+					rendered="#{catContractsList.listFlavour['distributorValue']}"
+					sortable="true" />
+					
+				<cats:column value="#{_catContracts.catBooksPortico ? 'Yes' : 'No'}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catBooksPortico"
+					propertyValue="#{catContractsList.catContracts.catBooksPortico}"
+					propertyLabel="Books at JSTOR in Portico" propertyPath="catContracts.catBooksPortico"
+					enumList="#{listsForEnums.yesNo}"
+					rendered="#{catContractsList.listFlavour['catBooksPortico']}"
+					sortable="true" />
+					
+				
+					
+				<cats:column value="#{_catContracts.catBooksPorticoAnnexDate}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catBooksPorticoAnnexDate"
+					propertyValue="#{catContractsList.catContracts.catBooksPorticoAnnexDate}"
+					propertyLabel="Books Portico Annex Countersigned "
+					propertyPath="catContracts.catBooksPorticoAnnexDate"
+					rendered="#{catContractsList.listFlavour['catBooksPorticoAnnexDate']}"
+					sortable="true" >
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>	
+
+				<cats:column value="#{_catContracts.catBksDDA ? 'Yes' : 'No'}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catBksDDA"
+					propertyValue="#{catContractsList.catContracts.catBksDDA}"
+					propertyLabel="DDA" propertyPath="catContracts.catBksDDA"
+					enumList="#{listsForEnums.yesNo}"					
+					rendered="#{catContractsList.listFlavour['catBksDDA']}"
+					sortable="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdPreambleSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdPreambleSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdPreambleSec}"
+					propertyLabel="Preamble" propertyPath="catContracts.catRvsdPreambleSec"
+					rendered="#{catContractsList.listFlavour['catRvsdPreambleSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdDefinitionsSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdDefinitionsSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdDefinitionsSec}"
+					propertyLabel="Definitions" propertyPath="catContracts.catRvsdDefinitionsSec"
+					rendered="#{catContractsList.listFlavour['catRvsdDefinitionsSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdGrantOfLicenseSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdGrantOfLicenseSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdGrantOfLicenseSec}"
+					propertyLabel="Grant of License" propertyPath="catContracts.catRvsdGrantOfLicenseSec"
+					rendered="#{catContractsList.listFlavour['catRvsdGrantOfLicenseSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdPresAndDistrSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdPresAndDistrSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdPresAndDistrSec}"
+					propertyLabel="Preservation and Distribution" propertyPath="catContracts.catRvsdPresAndDistrSec"
+					rendered="#{catContractsList.listFlavour['catRvsdPresAndDistrSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdIpOwnerhipSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdIpOwnerhipSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdIpOwnerhipSec}"
+					propertyLabel="Intellectual Property Ownership" propertyPath="catContracts.catRvsdIpOwnerhipSec"
+					rendered="#{catContractsList.listFlavour['catRvsdIpOwnerhipSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdLtdTmLicenseSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdLtdTmLicenseSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdLtdTmLicenseSec}"
+					propertyLabel="Limited Trademark" propertyPath="catContracts.catRvsdLtdTmLicenseSec"
+					rendered="#{catContractsList.listFlavour['catRvsdLtdTmLicenseSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdRepAndWrntySec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdRepAndWrntySec"
+					propertyValue="#{catContractsList.catContracts.catRvsdRepAndWrntySec}"
+					propertyLabel="Representations and Warranties" propertyPath="catContracts.catRvsdRepAndWrntySec"
+					rendered="#{catContractsList.listFlavour['catRvsdRepAndWrntySec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdTermSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdTermSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdTermSec}"
+					propertyLabel="Terms" propertyPath="catContracts.catRvsdTermSec"
+					rendered="#{catContractsList.listFlavour['catRvsdTermSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdRevenueSharingSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdRevenueSharingSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdRevenueSharingSec}"
+					propertyLabel="Revenue Sharing" propertyPath="catContracts.catRvsdRevenueSharingSec"
+					rendered="#{catContractsList.listFlavour['catRvsdRevenueSharingSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdConfidentialitySec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdConfidentialitySec"
+					propertyValue="#{catContractsList.catContracts.catRvsdConfidentialitySec}"
+					propertyLabel="Confidentiality" propertyPath="catContracts.catRvsdConfidentialitySec"
+					rendered="#{catContractsList.listFlavour['catRvsdConfidentialitySec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdDlvryOfPublctnSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdDlvryOfPublctnSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdDlvryOfPublctnSec}"
+					propertyLabel="Delivery of Publication" propertyPath="catContracts.catRvsdDlvryOfPublctnSec"
+					rendered="#{catContractsList.listFlavour['catRvsdDlvryOfPublctnSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdGoverningLawSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdGoverningLawSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdGoverningLawSec}"
+					propertyLabel="Governing Law" propertyPath="catContracts.catRvsdGoverningLawSec"
+					rendered="#{catContractsList.listFlavour['catRvsdGoverningLawSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdNoticesSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdNoticesSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdNoticesSec}"
+					propertyLabel="Notices" propertyPath="catContracts.catRvsdNoticesSec"
+					rendered="#{catContractsList.listFlavour['catRvsdNoticesSec']}"
+					sortable="true" lob="true" />
+
+				<cats:htmlColumn value="#{_catContracts.catRvsdContractMiscSec}" linkToId="#{_catContracts.id}"
+					entityList="#{catContractsList}" propertyName="catRvsdContractMiscSec"
+					propertyValue="#{catContractsList.catContracts.catRvsdContractMiscSec}"
+					propertyLabel="Miscellaneous" propertyPath="catContracts.catRvsdContractMiscSec"
+					rendered="#{catContractsList.listFlavour['catRvsdContractMiscSec']}"
+					sortable="true" lob="true" />			
+					
+				<cats:column linkToId="#{_catContracts.id}" sortable="true"
+					rendered="#{catContractsList.listFlavour['catDateModified']}"
+					entityList="#{catContractsList}"
+					propertyLabel="Date Modified"
+					propertyPath="catContracts.catDateModified"
+					propertyValue="#{catContractsList.catContracts.catDateModified}"
+					propertyName="catDateModified"
+					value="#{_catContracts.catDateModified}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+				
+			</h:dataTable></div>
+		</a:form>
+
+	<ui:include src="../layout/tablenav.xhtml">
+		<ui:param name="viewPath" value="/lists/CatContractsList.xhtml"></ui:param>
+		<ui:param name="entityList" value="#{catContractsList}"></ui:param>
+		<ui:param name="divId" value="2"/>
+	</ui:include>
+		
+		<ui:include src="../contracts/createm_Contracts.xhtml">
+		   <ui:param name="reRenderMe" value="catContractsList"/>
+		   <ui:param name="divParam" value="contractsList"/>
+		</ui:include>
+		<h:outputText id="contDtlsBulkOperationsSelect" />
+		<h:outputText id="contChangeRevisionPanel" />
+				<!-- note that these are: outside the a:form for the main table, and have their own a:form each. -->
+	
+	<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+		<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catContractsList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+	</ui:define>
+</ui:composition>

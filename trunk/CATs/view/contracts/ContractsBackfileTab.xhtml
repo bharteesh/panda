@@ -1,0 +1,123 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:a="http://richfaces.org/a4j" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:rich="http://richfaces.org/rich" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="contractBfInfoDiv">
+
+	<rich:simpleTogglePanel id="cConBfInf" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cConBfInf')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cConBfInf') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cConBfInf')}"
+		reRender="cConBfInf" ajaxSingle="true" limitToList="true"
+		eventsQueue="contEditQueue" label="Backfile Agreement Information">	
+		
+		<div class="col col1">
+		
+			<s:decorate id="catLicensorAsWrittenBF" template="../layout/edit.xhtml">
+		           <ui:define name="label">Licensor Name as Written</ui:define>
+		           <h:inputTextarea onchange="enableSaveCancel();" readonly="#{!s:hasPermission(catContractsHome.instance, 'modify catLicensorAsWritten')}" cols="20" rows="2" value="#{catContractsHome.instance.catLicensorAsWritten}"/>
+		    </s:decorate>  
+			<s:decorate id="catContractBfInfoVersion" template="../layout/edit.xhtml">
+				<ui:define name="label">Agreement Version</ui:define>
+				<h:inputText onchange="enableSaveCancel();"  readonly="#{!s:hasPermission(catContractsHome.instance, 'modify catAgreementVersion')}" value="#{catContractsHome.instance.catAgreementVersion}"/>
+			</s:decorate> 
+			
+			<s:decorate id="catContractBfInfoDate" template="../layout/edit.xhtml">
+				<ui:define name="label">Agreement Date Signed</ui:define>
+				<rich:calendar readonly="#{!s:hasPermission(catContractsHome.instance, 'modify catAgreementDate')}" onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="false" id="catContractInfoNoteChangedDateCal" inputClass="datestyle" value="#{catContractsHome.instance.catAgreementDate}"/>
+			</s:decorate>  
+			
+			<s:decorate id="catContractBfInfoRevisions" template="../layout/edit.xhtml" rendered="#{catContractsHome.instance.catType eq 'Backfile'}">
+			<ui:define name="label">Revisions</ui:define>
+			<h:outputText value="#{catContractsHome.instance.catAgreementRevisions ? 'Yes' : 'No'}"/>
+			</s:decorate> 
+		</div>
+		
+		<div class="col col2">			       
+		    <s:decorate id="catContractBfInfoDeclinedBy" template="../layout/edit.xhtml">
+		           <ui:define name="label">Declined By</ui:define>
+		           <h:outputText value="#{catContractsHome.instance.catDeclinedBy}"/>
+		    </s:decorate> 
+		     
+		    <s:decorate id="catContractBfInfoDeclinedNotes" template="../layout/edit.xhtml">
+		           <ui:define name="label">Reason Declined</ui:define>
+		           <h:inputTextarea readonly="true" cols="20" rows="2" value="#{catContractsHome.instance.catDeclinedNotes}"/>
+		    </s:decorate>       
+		        
+		    <s:decorate id="catContractBfInfoDeclinedDate" template="../layout/edit.xhtml">
+		           <ui:define name="label">Declined Date</ui:define>
+		           <h:outputText value="#{catContractsHome.instance.catDateDeclined}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+		    </s:decorate>   
+		           
+		    <s:decorate id="catContractBfInfoTerminationDate" template="../layout/edit.xhtml">
+		           <ui:define name="label">Termination Date</ui:define>
+		           <h:outputText value="#{catContractsHome.instance.catTerminationDate}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+		    </s:decorate> 		    
+		     
+		    <s:decorate id="catContractBfOutCome" template="../layout/edit.xhtml">
+    			<ui:define name="label">Outcome</ui:define>
+    			<h:outputText value="#{catContractsHome.instance.catOutcome.label}"/>
+    		</s:decorate>  
+		
+		</div>
+	</rich:simpleTogglePanel>	
+	
+	<rich:simpleTogglePanel id="cConBfNotes" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cConBfNotes')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cConBfNotes') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cConBfNotes')}"
+		reRender="cConBfNotes" ajaxSingle="true" limitToList="true"
+		eventsQueue="contEditQueue" label="Notes">	
+		<div class="col col1">
+			<s:decorate id="catContractInfoNote" template="../layout/edit.xhtml">
+					<ui:define name="label">Note</ui:define>
+					<h:inputTextarea onchange="enableSaveCancel();"  cols="20" readonly="#{!s:hasPermission(catContractsHome.instance, 'modify catNote')}" id="catContractInfoNote" rows="2" value="#{catContractsHome.instance.catNote}">
+						<a:support event="onfocus" action="#{catContractsHome.onFocusNote}" ajaxSingle="true" eventsQueue="contractsEditQ"/>
+						<a:support event="onblur" action="#{catContractsHome.noteChanged}" ajaxSingle="true" eventsQueue="contractsEditQ"/>
+					</h:inputTextarea>
+			</s:decorate> 
+		</div>
+		<div class="col col2">			
+			<s:decorate id="catContractInfoNoteChangedBy" template="../layout/edit.xhtml">
+				<ui:define name="label">Note Changed By</ui:define>
+				<h:outputText onchange="enableSaveCancel();"  value="#{catContractsHome.instance.catNoteChangeBy}"/>
+			</s:decorate> 
+			<s:decorate id="catContractInfoNoteChangedDate" template="../layout/edit.xhtml">
+				<ui:define name="label">Note Date Changed</ui:define>
+				<rich:calendar  onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="true" id="catContractInfoNoteChangedDateCal" inputClass="datestyle" value="#{catContractsHome.instance.catNoteChangeDate}"/>
+			</s:decorate>   
+		</div>
+	</rich:simpleTogglePanel>
+	
+	<rich:simpleTogglePanel id="cConBfPdf" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cConBfPdf')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cConBfPdf') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cConBfPdf')}"
+		reRender="cConBfPdf" ajaxSingle="true" limitToList="true"
+		eventsQueue="contEditQueue" label="PDFs">
+	
+		<ui:include src="contractDocsTable.xhtml">
+			  	<ui:param name="divId" value="pdfsBfTableDiv"/>	  		
+			  	<ui:param name="tableId" value="pdfsBfTable"/>	  		
+		</ui:include>
+	</rich:simpleTogglePanel>
+	
+	<rich:simpleTogglePanel id="cConBfAgDtls" switchType="ajax"
+		opened="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cConBfAgDtls')}"
+		headerClass="#{userPreferences.getIsFlapOpen(identity.credentials.username,'cConBfAgDtls') ? 'open':''}"
+		action="#{userPreferences.updateUserFlapPreferences(identity.credentials.username,'cConBfAgDtls')}"
+		reRender="cConBfAgDtls" ajaxSingle="true" limitToList="true"
+		eventsQueue="contEditQueue" label="Agreement Details">
+	
+		<ui:include src="ContractDetailsTable.xhtml">
+			  <ui:param name="divId" value="contractDetailsBfTableDiv"/>	  		
+			  <ui:param name="tableId" value="contractDetailsBfTable"/>	  
+			  <ui:param name="conType" value="#{catContractsHome.instance.catType}"/>		
+		</ui:include>	
+	</rich:simpleTogglePanel>
+		
+	<div class="push"/>	  
+	 
+</s:div>

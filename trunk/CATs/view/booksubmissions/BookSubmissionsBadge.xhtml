@@ -1,0 +1,64 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<h1>#{catBookSubmissionsHome.instance.id}</h1>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Record Type:</ui:define>
+		<h:outputText value="Book Submissions" />
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Versions:</ui:define>
+			<s:link view="/bookversions/BookVersionsEdit.xhtml" propagation="none">
+				<f:param name="id" value="#{catBookSubmissionsHome.instance.catVersion.id}"/>
+				<h:outputText value="#{catBookSubmissionsHome.instance.catVersion.id}"/>
+			</s:link>
+	</s:decorate>
+		<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Lifecycle:</ui:define>
+		<h:outputText value="#{catBookSubmissionsHome.instance.catLifecycle.label}"/>
+		<a:form>	
+	    		<a:commandLink 
+	    			onclick="if ( ! checkForSave() ) { return false ; }" 
+	    			id="catBkSubLifecycleEditButton"				
+		    		action="#{bookSubmissionsLifecycleWizard.changeLifecycle()}"
+					value="Edit"
+					reRender="bookSubmissionsLifecycleOperationsPanels" 
+					oncomplete="#{rich:component('bookSubmissionsLifecycleUpdatePanel')}.show();"
+					disabled="#{catBookSubmissionsHome.instance.catLifecycle.label eq 'Excluded' or 
+								catBookSubmissionsHome.instance.catLifecycle.label eq 'QC Completed'}"
+					styleClass="button wizard #{(catBookSubmissionsHome.instance.catLifecycle.label eq 'Excluded' or 
+								catBookSubmissionsHome.instance.catLifecycle.label eq 'QC Completed')? 'disabled' : ''}"
+					status="globalWaitStatus"
+					ignoreDupResponses="true"
+					ajaxSingle="true" limitToList="true"/>		
+			</a:form>
+	</s:decorate>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Vendor:</ui:define>
+		<h:outputText value="#{catBookSubmissionsHome.instance.catVendor.catName}"/>
+	</s:decorate>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">ID:</ui:define>
+		<h:outputText value="#{catBookSubmissionsHome.instance.id}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Creator:</ui:define>
+		<h:outputText value="#{catBookSubmissionsHome.instance.catCreator}"/>
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Created Date:</ui:define>
+		<h:outputText value="#{catBookSubmissionsHome.instance.catDateCreated}">
+			<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+		</h:outputText>
+	</s:decorate>
+
+</s:div>

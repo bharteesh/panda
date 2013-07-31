@@ -1,0 +1,180 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+
+	<div class="smart">
+		<!--  <h:form id="#{tableId}Form">   -->
+		<div class="header">
+			<div class="left">
+				<span class="museo"> <h:outputText
+						value="Roles for this Publisher: #{catPublishersHome.catPublishersToCmptses.size}" />
+				</span>
+
+
+				<a:commandLink value="X"
+					action="#{sortFiltBean.resetSortFilt('catPubRoles'.concat(divId))}"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					reRender="#{divId}catPubRolesList" styleClass="button wizard" />
+			</div>
+		</div>
+		<rich:dataTable id="#{divId}catPubRolesList" var="_publishersToCmpts"
+			value="#{catPublishersHome.catPublishersToCmptses}"
+			rendered="#{not empty catPublishersHome.catPublishersToCmptses}">
+			<!-- 
+           Pub name, pub name variant, sets, cmpts name, role, all or part, coverage, historical, start date, end date -->
+			<rich:column id="#{divId}publishersToCmptsPublishersName"
+				sortBy="#{_publishersToCmpts.catPublishers.catName}"
+				filterBy="#{_publishersToCmpts.catPublishers.catName}"
+				sortable="true" width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsPublisherName_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsPublisherName_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Publisher Name" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText value="#{_publishersToCmpts.catPublishers.catName}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}publishersToCmptsPublishersNameVariant"
+				sortBy="#{_publishersToCmpts.catPublisherNameVariant}"
+				filterBy="#{_publishersToCmpts.catPublisherNameVariant}"
+				sortable="true" width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsPublisherNameVairant_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsPublisherNameVariant_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Publisher Name Variant" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText value="#{_publishersToCmpts.catPublisherNameVariant}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}publishersToCmptsSets"
+				sortBy="#{_publishersToCmpts.catCmpts.setsValue}"
+				filterBy="#{_publishersToCmpts.catCmpts.setsValue}" sortable="true"
+				width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsSets_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsSets_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Sets" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText value="#{_publishersToCmpts.catCmpts.setsValue}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}publishersToCmptsCmptsName"
+				sortBy="#{_publishersToCmpts.catCmpts.catName}"
+				filterBy="#{_publishersToCmpts.catCmpts.catName}" sortable="true"
+				width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsCmptName_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsCmptName_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Component Name" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText value="#{_publishersToCmpts.catCmpts.catName}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="#{divId}publishersToCmptsRole"
+				sortBy="#{_publishersToCmpts.catRole}"
+				filterBy="#{_publishersToCmpts.catRole}" sortable="true"
+				width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsRole_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsRole_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Role" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText value="#{_publishersToCmpts.catRole.label}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}publishersToCmptsAllOrPartOfCmpts"
+				sortBy="#{_publishersToCmpts.catAllOrPartOfCmpts}"
+				filterBy="#{_publishersToCmpts.catAllOrPartOfCmpts}" sortable="true"
+				width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsAllOrPartOfCmpts_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsAllOrPartOfCmpts_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="All or Part of Cmpt" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText value="#{_publishersToCmpts.catAllOrPartOfCmpts}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}publishersToCmptsContentCovered"
+				sortBy="#{_publishersToCmpts.catContentCovered}"
+				filterBy="#{_publishersToCmpts.catContentCovered}" sortable="true"
+				width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsContentCovered_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsContentCovered_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Coverage" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText value="#{_publishersToCmpts.catContentCovered}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}publishersToCmptsHistorical"
+				sortBy="#{_publishersToCmpts.catHistorical}"
+				filterBy="#{_publishersToCmpts.catHistorical}" sortable="true"
+				width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsHistorical_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsHistorical_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Historical" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText
+						value="#{_publishersToCmpts.catHistorical ? 'Yes' : 'No'}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}publishersToCmptsStartDate"
+				sortBy="#{_publishersToCmpts.catRoleStartDate}"
+				filterBy="#{_publishersToCmpts.catRoleStartDate}" sortable="true"
+				width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsStartDate_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsStartDate_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Start Date" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText value="#{_publishersToCmpts.catRoleStartDate}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}publishersToCmptsEndDate"
+				sortBy="#{_publishersToCmpts.catRoleEndDate}"
+				filterBy="#{_publishersToCmpts.catRoleEndDate}" sortable="true"
+				width="50px"
+				sortOrder="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsEndDate_sortOrder']}"
+				filterValue="#{sortFiltBean['catPubRoles'.concat(divId)]['publishersToCmptsEndDate_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="End Date" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishersToCmpts.id}" />
+					<h:outputText value="#{_publishersToCmpts.catRoleEndDate}" />
+				</s:link>
+			</rich:column>
+		</rich:dataTable>
+		<!-- note that these are: outside the a:form for the main table, and have their own a:form each. -->
+
+		<!-- note that these are: outside the a:form for the main table, and have their own a:form each. -->
+		<!--  This is were 'bulkOperationsPanels' was moving to InvitationDetails.xhtml-->
+
+		<!-- /h:form -->
+	</div>
+</s:div>

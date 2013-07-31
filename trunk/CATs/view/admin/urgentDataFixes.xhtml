@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="../layout/template.xhtml">
+	
+	<ui:define name="badge">
+		<h1> </h1>
+	</ui:define>
+	
+	<ui:define name="body">
+				
+		<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+		<rich:panel>
+			<f:facet name="header">Urgent Data Fixes</f:facet>
+
+			<a:form id="urgentDataFixes">
+			
+			<a:outputPanel layout="none" id="errorMsgs">
+					<s:div styleClass="alert">
+						<s:div rendered="#{not empty urgentDataFixes.errorMsgsList}" id="errorMsgsDiv">
+							<a:repeat value="#{urgentDataFixes.errorMsgsList}" var="_errMsg">
+								<p>#{_errMsg}</p>
+							</a:repeat>
+						</s:div>
+					</s:div>
+			</a:outputPanel>
+
+				<div>
+					<a:commandButton id="fixCat556" value="CAT-556"
+						action="#{urgentDataFixes.fixCat556}" />
+					<a:commandButton id="fixCat557" value="CAT-557"
+						action="#{urgentDataFixes.fixCat557}" />
+					<a:commandButton id="getPubToCmpts" value="CMSUPPORT-283"
+						action="#{postMigrPubRoles.createPubRoles}"></a:commandButton>
+					<a:commandButton id="CMSUPPORT671a" value="CMSUPPORT-671a"
+						action="#{urgentDataFixes.fixCat671a()}">
+					</a:commandButton>
+					<a:commandButton id="CMSUPPORT671b" value="CMSUPPORT-671b"
+						action="#{urgentDataFixes.fixCat671b()}">
+					</a:commandButton>
+				</div>
+				<div>
+					<br />
+				</div>
+				<div class="push">
+					<a:commandButton id="CAT952" value="CAT952"
+						action="#{urgentDataFixes.cat952()}">
+					</a:commandButton>
+					<a:commandButton id="CAT1019" value="CAT1019-Pub Variants"
+						action="#{urgentDataFixes.cat1019()}">
+					</a:commandButton>
+
+				</div>
+			</a:form>
+
+
+		</rich:panel>
+		
+	</ui:define>
+
+</ui:composition>

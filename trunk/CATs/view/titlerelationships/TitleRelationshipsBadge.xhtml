@@ -1,0 +1,53 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:cats="http://www.ithaka.org/cats"
+    xmlns:rich="http://richfaces.org/rich">
+
+<a:form id="titleRelationshipsEditBadgeForm">
+	<h1>#{catTitleRltnshpsHome.instance.id}</h1>
+    <s:decorate id="titleRelationshipsTblName" template="../layout/edit.xhtml">
+    	<ui:define name="label">Record Type:</ui:define>
+    	<h:outputText value="Title Relationships"/>
+    </s:decorate>
+    <s:decorate id="titleRelationshipsFCmptName" template="../layout/edit.xhtml">
+    	<ui:define name="label">1st Component Name and 2nd Component Name:</ui:define>
+    	<ui:define name="label">Child of:</ui:define>
+           <li>
+	      		<s:link view="/components/ComponentsEdit.xhtml" id="componentId1" propagation="none" value="#{catTitleRltnshpsHome.instance.catCmptsByCatFirstCmptId.catName}">
+	      			<f:param name="catCmptsId" value="#{catTitleRltnshpsHome.instance.catCmptsByCatFirstCmptId.id}"/>
+                </s:link>
+	      </li>
+          <li>
+	      		<s:link view="/components/ComponentsEdit.xhtml" id="componentId2" propagation="none" value="#{catTitleRltnshpsHome.instance.catCmptsByCatSecondCmptId.catName}">
+	      			<f:param name="catCmptsId" value="#{catTitleRltnshpsHome.instance.catCmptsByCatSecondCmptId.id}"/>
+                </s:link>
+	      </li>
+    </s:decorate>
+    <s:decorate id="titleRelationshipsFCmptId" template="../layout/edit.xhtml">
+    	<ui:define name="label">1st Component ID:</ui:define>
+    	<h:outputText value="#{catTitleRltnshpsHome.instance.catCmptsByCatFirstCmptId.id}"/>
+    </s:decorate>    
+    <s:decorate id="titleRelationshipsFCmptIssn" template="../layout/edit.xhtml">
+    	<ui:define name="label">1st Component ISSN:</ui:define>
+    	<h:outputText value="#{catTitleRltnshpsHome.instance.catCmptsByCatFirstCmptId.catPrintIssn}"/>
+    </s:decorate>  
+    <s:decorate id="titleRelationshipsSCmptId" template="../layout/edit.xhtml">
+    	<ui:define name="label">2nd Component ID:</ui:define>
+    	<h:outputText value="#{catTitleRltnshpsHome.instance.catCmptsByCatSecondCmptId.id}"/>
+    </s:decorate>    
+    <s:decorate id="titleRelationshipsSCmptIssn" template="../layout/edit.xhtml">
+    	<ui:define name="label">2nd Component ISSN:</ui:define>
+    	<h:outputText value="#{catTitleRltnshpsHome.instance.catCmptsByCatSecondCmptId.catPrintIssn}"/>
+    </s:decorate>
+    <s:decorate id="titleRelationshipsTypeId" template="../layout/edit.xhtml">
+    	<ui:define name="label">Relationship:</ui:define>
+    	<h:outputText value="#{catTitleRltnshpsHome.instance.catTitleRltnshpTypes.catName.label}"/>
+    </s:decorate>           
+        
+        
+    </a:form>
+</s:div>

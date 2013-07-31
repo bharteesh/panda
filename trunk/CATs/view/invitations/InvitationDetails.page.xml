@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/CatInvitationsList.xhtml"
+      login-required="false">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{catInvitationsHome.wire}"/>
+
+   <param name="catInvitationsFrom"/>
+   <param name="catInvitationsId" value="#{catInvitationsHome.catInvitationsId}"/>
+   <param name="id" value="#{catInvitationsHome.catInvitationsId}"/>
+   <param name="notesSortOrder" value="#{catInvitationsHome.notesSortOrder}"/>
+   <param name="selectedTab" value="#{catInvitationsHome.selectedTab}"/>
+
+   <navigation from-action="#{catInvitationsHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/invitations/InvitationDetails.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{catInvitationsHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/invitations/InvitationDetails.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{catInvitationsHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/lists/CatInvitationsList.xhtml"/>
+      </rule>
+   </navigation>
+   
+   <navigation>
+            <rule if-outcome="cancel" >
+                <end-conversation before-redirect="true"/>
+                <redirect view-id="/invitations/InvitationDetails.xhtml"/>
+            </rule>
+     </navigation>
+
+</page>

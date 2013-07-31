@@ -1,0 +1,73 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{contractsWizard.onHoldWizardTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+				<li class="selected">1. Change</li>
+				<li class="disabled">2. Results</li>
+		</ul>
+			
+		
+		<div class="cluster smart">
+
+		<p>Enter the new value to apply to all the eligible records you	selected.</p>
+
+			
+		    <s:decorate id="catOnHold_div" template="../layout/edit.xhtml">
+		    <ui:define name="label">On Hold</ui:define>
+		    <h:selectOneMenu 
+		           id="modifyOnHold" value="#{contractsWizard.contractsInstance.catOnHold}"
+		                           requiredMessage="Please make a selection !!" 
+					               required="true">
+				   		<s:selectItems value="#{listsForEnums.yesNo}" var="i" itemValue="#{i.value}"
+				                 label="#{i.label}" noSelectionLabel="Choose..." />
+		                    <a:support event="onchange"
+		                    	eventsQueue="#{divParam}eventsQueue"
+		                    	status="globalWaitStatus"
+		                        reRender="noLayoutExistingFromCatOnHold" ajaxSingle="true" limitToList="true"/>
+				       </h:selectOneMenu>
+		    </s:decorate>
+		    <a:outputPanel layout="none" id="noLayoutExistingFromCatOnHold">
+		    <s:div id="catOnHoldReason_outer_div" rendered="#{contractsWizard.contractsInstance.catOnHold == true}">
+		       <s:decorate id="catOnHoldReason_div" template="../layout/edit.xhtml">
+			     	<ui:define name="label">On Hold Reason</ui:define>
+				        <h:inputTextarea cols="20" 
+		                           requiredMessage="Please enter a value !!" 
+					               required="true" 
+				                   id="catOnHoldReason"
+						           rows="2" value="#{contractsWizard.contractsInstance.catOnHoldReason}" />
+			   </s:decorate>
+		    </s:div>
+		    </a:outputPanel>
+			</div>
+
+		<div class="push"></div>
+
+	<a:commandLink styleClass="button" value="Quit"
+         	status="globalWaitStatus" ignoreDupResponses="true" ajaxSingle="true" limitToList="true"
+			oncomplete="#{rich:component('changeContractsOnHoldQuit')}.show(); return false;">
+			</a:commandLink> 
+
+			<a:commandLink
+			styleClass="button right" value="Save" limitToList="true"
+         	status="globalWaitStatus" ignoreDupResponses="true"
+			action="#{contractsWizard.saveOnHold}" 
+			reRender="changeContractsOnHoldWizard" />
+			</div>
+	
+</ui:composition>
+

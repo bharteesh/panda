@@ -1,0 +1,37 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+    <m:from name="CATS" address="#{bookSeriesMailOps.fromEmail}" />
+    <m:to name="#{bookSeriesMailOps.displayName}"><h:outputText value="#{bookSeriesMailOps.email}"/></m:to>
+    <ui:repeat var="_email" value="#{bookSeriesMailOps.ccList}">
+    	<m:cc><h:outputText value="#{_email}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="Book Series Excluded from Literatum Series Feed"/></m:subject>
+	<m:replyTo address="catssupport@ithaka.org"/>
+    <m:body>
+    	<p><h:outputText value="Hi #{bookSeriesMailOps.displayName}" />,</p>
+    	<s:fragment rendered="true">
+			<p>
+				<h:outputText value="The Series listed in the attachment were excluded in the Literatum Book Series Feed because they were missing one or more of the following pieces of infomation: "/>
+				<br/>
+				<h:outputText value="The DOI" />
+				<br />
+				<h:outputText value="The Main Title" />
+				<br />
+				<h:outputText value="The Publisher" />
+				<br />
+				<br />
+				<h:outputText value="Please update the Book Series and re-request the feed." />
+			</p>
+		</s:fragment>
+		<p>Sincerely,<br/>CATS</p>
+				<m:attachment 
+		   value="#{bookSeriesMailOps.attachment}" 
+		   fileName="#{bookSeriesMailOps.attachmentName}"/>
+    </m:body>
+</m:message>

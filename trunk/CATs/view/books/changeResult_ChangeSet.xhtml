@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	
+	<h2><h:outputText value="#{changeSetWizard.wizardTitle}" /></h2>
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Info</li>
+			<li class="selected">2. Results</li>
+		</ul>
+		
+		<div class="cluster smart">
+			<div class="title eligible">
+	            <h1>Book Set (1)</h1>
+	            <p>You successfully changed this book to the following Book Set: <b>"#{changeSetWizard.bookSet.mainTitle}"</b></p>
+	        </div>
+	        <div class="push"></div>
+	        <div>
+	        	<rich:dataTable value="#{changeSetWizard.listOfBookSetsChanged}"
+					var="_catBookSet">
+					<rich:column>
+						<f:facet name="header">Main Title</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+							<f:param name="id" value="#{_catBookSet.id}"/>
+							<h:outputText value="#{_catBookSet.mainTitle}" />
+						</s:link>
+					</rich:column>
+										<rich:column>
+						<f:facet name="header">Book Set Publishers</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+							<f:param name="id" value="#{_catBookSet.id}"/>
+							<h:outputText value="#{_catBookSet.setPublishers}" />
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">DOI</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+							<f:param name="setdoi" value="#{_catBookSet.id}"/>
+							<h:outputText value="#{_catBookSet.catDoi}" />
+						</s:link>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">ID</f:facet>
+						<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" propagation="none">
+							<f:param name="id" value="#{_catBookSet.id}"/>
+							<h:outputText value="#{_catBookSet.id}" />
+						</s:link>
+					</rich:column>
+					
+				</rich:dataTable>
+	        </div>
+	        
+	    </div>
+		
+		<div class="push"></div>		
+		 
+		<a:commandLink 
+		    rendered="#{empty pageURL}"
+		    styleClass="button right" 
+		    value="Return"
+   			eventsQueue="changeSetQueue"
+            status="globalWaitStatus"
+			onclick="#{rich:component('changeSetTitleWizardModal')}.hide();" 
+			action="#{changeSetWizard.reset}" 
+			oncomplete="javascript:location.reload(true);"
+			limitToList="true"/>
+		
+		<a:commandLink 
+		    rendered="#{not empty pageURL}" 
+		    styleClass="button right" 
+		    value="Return"   	
+		    eventsQueue="changeSetQueue"
+		    status="globalWaitStatus"
+			action="#{changeSetWizard.reset}" 
+			oncomplete="#{rich:component('changeSetTitleWizardModal')}.hide();javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+			limitToList="true"/>
+		
+	</div>
+	
+</ui:composition>

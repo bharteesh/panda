@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{invitaionsBulkOperations.bulkTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1. Permissions</li>
+		<li class="disabled">2. Change</li>
+		<li class="selected">3. Additional</li>
+		<li class="disabled">4. Results</li>
+	</ul>
+				
+	<div class="cluster">
+	
+	<p>Make additional selection and changes(if any).</p>
+	
+	<s:fragment
+		rendered="#{not empty invitaionsBulkOperations.bulkOptionalProperties}">
+
+
+		<s:fragment
+			rendered="#{invitaionsBulkOperations.bulkOptionalProperties.contains('catOnHoldReason') and (invitaionsBulkOperations.bulkInstance.catOnHold)}">
+			<p>Enter the new value to apply to all the eligible records you
+			selected.</p>
+
+			<s:decorate id="catOnHoldReason_div" template="../layout/edit.xhtml"  >
+				<ui:define name="label">On Hold Reason</ui:define>
+				<h:inputTextarea id="catOnHoldReason" cols="20" rows="2"
+                           requiredMessage="Required" 
+			               required="true" 
+					value="#{invitaionsBulkOperations.bulkInstance.catOnHoldReason}"></h:inputTextarea>
+			</s:decorate>
+		</s:fragment>
+
+		<s:fragment
+			rendered="#{invitaionsBulkOperations.isCatInvitationsLifecycleOfValueSent(invitaionsBulkOperations.bulkInstance.catLifecycle)}">
+			<p>Enter the new value to apply to all the eligible records you
+			selected.</p>
+			
+			<s:decorate id="catInvitationDateSent_div" template="../layout/edit.xhtml">
+				<ui:define name="label">Date Sent</ui:define>
+                  <rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd" id="catInvitationDateSentId" inputClass="datestyle" value="#{invitaionsBulkOperations.bulkInstance.catInvitationDateSent}"/>
+			</s:decorate>
+		</s:fragment>
+
+		<s:fragment
+			rendered="#{invitaionsBulkOperations.bulkOptionalProperties.contains('catOutcome') and (invitaionsBulkOperations.isCatInvitationsLifecycleOfValueCompleted(invitaionsBulkOperations.bulkInstance.catLifecycle))}">
+			<p>Enter the new value to apply to all the eligible records you
+			selected.</p>
+
+			<s:decorate id="catDateCompleted_div" template="../layout/edit.xhtml">
+				<ui:define name="label">Date Completed</ui:define>
+                <h:outputText value="The Date Completed would be set to this current date."/>
+			</s:decorate>
+
+			<s:decorate id="catOutcome_div" template="../layout/edit.xhtml">
+				<ui:define name="label">Outcome</ui:define>
+                <h:selectOneMenu name="catOutcome" value="#{invitaionsBulkOperations.bulkInstance.catOutcome}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{listsForEnums.catInvitations_Outcome}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..."/>
+                    <a:support event="onchange" reRender="noLayoutExisting" 
+                    eventsQueue="#{divParam}eventsQueue" 
+                    status="globalWaitStatus" ignoreDupResponses="true"
+                    ajaxSingle="true"/>
+		                 
+		       </h:selectOneMenu>
+			</s:decorate>
+
+			<a:outputPanel layout="none" id="noLayoutExisting">
+            <s:div id="catReasonDeclined_outer_div" rendered="#{invitaionsBulkOperations.isCatInvitationsOutcomeOfValueDeclined(invitaionsBulkOperations.bulkInstance.catOutcome)}">
+    			<s:decorate id="catReasonDeclined_div" template="../layout/edit.xhtml">
+	    			<ui:define name="label">Reason Declined</ui:define>
+                    <h:selectOneMenu name="catReasonDeclined" value="#{invitaionsBulkOperations.bulkInstance.catReasonDeclined}"
+			               >
+		   	    	    <s:selectItems value="#{listsForEnums.catInvitations_ReasonDeclined}" var="i" itemValue="#{i}"
+		                     label="#{i.label}" noSelectionLabel="Choose..." />
+		           </h:selectOneMenu>
+			    </s:decorate>
+			    <s:decorate id="catReasonDeclinedNote_div" template="../layout/edit.xhtml">
+    				<ui:define name="label">Reason Declined Note</ui:define>
+                    <h:inputTextarea id="catReasonDeclinedNote"
+                 			cols="20"
+                			rows="2"
+ 				            requiredMessage="Please enter a value !!" 
+			                required="true" 
+                         	value="#{invitaionsBulkOperations.bulkInstance.catReasonDeclinedNote}"></h:inputTextarea>
+			    </s:decorate>
+			</s:div>
+			</a:outputPanel>
+		</s:fragment>
+
+
+	</s:fragment> <s:fragment rendered="#{empty invitaionsBulkOperations.bulkOptionalProperties}">
+		<p>There are no additional properties in order to continue.</p>
+	</s:fragment></div>
+
+	<div class="push"></div>
+
+
+<a:commandLink styleClass="button" value="Quit"
+                    eventsQueue="#{divParam}eventsQueue" 
+                    status="globalWaitStatus" ignoreDupResponses="true"
+			reRender="invwizard" oncomplete="#{rich:component('invbulkUpdateQuit')}.show(); return false;">
+			</a:commandLink> 
+		
+		
+		<a:commandLink
+		styleClass="button right" value="Continue"
+                    eventsQueue="#{divParam}eventsQueue" 
+                    status="globalWaitStatus" ignoreDupResponses="true"
+		action="#{invitaionsBulkOperations.performBulkOperation}" reRender="invwizard" /></div>
+
+</ui:composition>

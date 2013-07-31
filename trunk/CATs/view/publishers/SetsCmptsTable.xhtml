@@ -1,0 +1,287 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats">
+    
+    <div class="smart">
+      <div class="header">
+        <div class="left">
+                <span class="museo">
+        		<h:outputText value="Components for this Publisher: #{componentList.size}"/>
+						</span>
+        
+        
+          <a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('catCmpts'.concat(divId))}" 
+          	ignoreDupResponses="true" status="globalWaitStatus"  
+          	reRender="#{divId}catCmptsList" styleClass="button wizard"/>
+        </div>
+    </div>
+    	  <rich:dataTable id="#{divId}catCmptsList"
+                var="_catCmpts"
+              value="#{componentList}"
+            rendered="#{not empty componentList}">
+
+        	
+				
+			<rich:column id="#{divId}cpmtName" sortBy="#{_catCmpts.catName}" 
+				filterBy="#{_catCmpts.catName}" sortable="true" width="50px"
+				sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['cpmtName_sortOrder']}"
+				filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['cpmtName_filterValue']}">
+		       	<f:facet name="header">
+		       		<h:outputText value="Component Name"/>
+		       	</f:facet>
+		       	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		       		<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.catName}" />        		
+		       	</s:link>
+	        </rich:column>
+	        
+	        <rich:column id="catLtmJournalCode" 
+				 sortBy="#{_catCmpts.catLtmJournalCode}" filterBy="#{_catCmpts.catLtmJournalCode}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['catLtmJournalCode_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['catLtmJournalCode_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="LTM Code"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.catLtmJournalCode}" />
+				</s:link>        		
+        	</rich:column>
+	        
+	        <rich:column id="#{divId}bfOnboarding" sortBy="#{_catCmpts.bfOverallOnboardingStatus}" 
+				filterBy="#{_catCmpts.bfOverallOnboardingStatus}" sortable="true" width="50px"
+				sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['bfOnboarding_sortOrder']}"
+				filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['bfOnboarding_filterValue']}">
+		       	<f:facet name="header">
+		       		<h:outputText value="BF Onboarding"/>
+		       	</f:facet>
+		       	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		       		<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.bfOverallOnboardingStatus}" />        		
+		       	</s:link>
+	        </rich:column>
+	        
+	        <rich:column id="#{divId}cspOnboarding" sortBy="#{_catCmpts.cspOverallOnboardingStatus}" 
+				filterBy="#{_catCmpts.cspOverallOnboardingStatus}" sortable="true" width="50px"
+				sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['cspOnboarding_sortOrder']}"
+				filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['cspOnboarding_filterValue']}">
+		       	<f:facet name="header">
+		       		<h:outputText value="CSP Onboarding"/>
+		       	</f:facet>
+		       	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+		       		<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.cspOverallOnboardingStatus}" />        		
+		       	</s:link>
+	        </rich:column>	
+	        	
+			<rich:column id="disciplinesValue" 
+				 sortBy="#{_catCmpts.disciplinesValue}" filterBy="#{_catCmpts.disciplinesValue}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['disciplinesValue_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['disciplinesValue_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="Disciplines"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.disciplinesValue}" />
+				</s:link>        		
+        	</rich:column>
+	        
+	        <rich:column id="wallYearValue" 
+				 sortBy="#{_catCmpts.wallYearValue}" filterBy="#{_catCmpts.wallYearValue}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['wallYearValue_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['wallYearValue_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="Wall Value"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.wallYearValue}" />
+				</s:link>        		
+        	</rich:column>	
+        	
+        	<rich:column id="wallValue" 
+				 sortBy="#{_catCmpts.wallValue}" filterBy="#{_catCmpts.wallValue}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['wallValue_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['wallValue_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="Wall Type"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.wallValue}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="collectionsValue" 
+				 sortBy="#{_catCmpts.collectionsValue}" filterBy="#{_catCmpts.collectionsValue}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['collectionsValue_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['collectionsValue_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="Collections"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.collectionsValue}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="agreementDate" 
+				 sortBy="#{_catCmpts.agreementDate}" filterBy="#{_catCmpts.agreementDate}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['agreementDate_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['agreementDate_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="BF Agreement"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.agreementDate}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="catParticipationDate" 
+				 sortBy="#{_catCmpts.catParticipationDate}" filterBy="#{_catCmpts.catParticipationDate}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['catParticipationDate_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['catParticipationDate_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="BF Participation"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.catParticipationDate}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="catIniReleaseDateActl" 
+				 sortBy="#{_catCmpts.catIniReleaseDateActl}" filterBy="#{_catCmpts.catIniReleaseDateActl}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['catIniReleaseDateActl_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['catIniReleaseDateActl_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="BF Release"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.catIniReleaseDateActl}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="catDateRange" 
+				 sortBy="#{_catCmpts.catDateRange}" filterBy="#{_catCmpts.catDateRange}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['catDateRange_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['catDateRange_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="Extent (Dates)"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.catDateRange}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="catPrintIssn" 
+				 sortBy="#{_catCmpts.catPrintIssn}" filterBy="#{_catCmpts.catPrintIssn}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['catPrintIssn_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['catPrintIssn_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="Print ISSN"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.catPrintIssn}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="catEIssn" 
+				 sortBy="#{_catCmpts.catEIssn}" filterBy="#{_catCmpts.catEIssn}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['catEIssn_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['catEIssn_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="EISSN"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.catEIssn}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="publisherValue" 
+				 sortBy="#{_catCmpts.publisherValue}" filterBy="#{_catCmpts.publisherValue}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['publisherValue_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['publisherValue_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="Publisher Roles"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.publisherValue}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="catOnHold" 
+				 sortBy="#{_catCmpts.catOnHold}" filterBy="#{_catCmpts.catOnHold}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['catOnHold_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['catOnHold_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="Hold"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.catOnHold ? 'Yes' : 'No'}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="terminationDateValue" 
+				 sortBy="#{_catCmpts.terminationDateValue}" filterBy="#{_catCmpts.terminationDateValue}" 
+				 sortable="true" 
+				 sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['cmptTermDate_sortOrder']}"
+			 	 filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['cmptTermDate_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="BF Termination"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.terminationDateValue}" />
+				</s:link>        		
+        	</rich:column>
+        	
+        	<rich:column id="componentId" sortBy="#{_catCmpts.id}" 
+        		filterBy="#{_catCmpts.id}" sortable="true" width="50px"
+				sortOrder="#{sortFiltBean['catCmpts'.concat(divId)]['componentId_sortOrder']}"
+				filterValue="#{sortFiltBean['catCmpts'.concat(divId)]['componentId_filterValue']}">
+	        	<f:facet name="header">
+	        		<h:outputText value="ID"/>
+	        	</f:facet>
+	        	<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+	        		<f:param name="id" value="#{_catCmpts.id}"/>
+					<h:outputText value="#{_catCmpts.id}" />        		
+	        	</s:link>
+	        </rich:column>
+	        
+	        
+	        	
+	        	
+        	</rich:dataTable>
+        	
+    	</div>
+    	
+    	
+    
+</s:div>

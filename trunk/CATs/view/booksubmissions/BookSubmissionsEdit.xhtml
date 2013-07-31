@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+	
+  <ui:param name="entityType" value="bookSubmissions" />
+	<ui:param name="moremenu" value="moremenu" />
+	<ui:define name="badge">
+		<ui:include src="BookSubmissionsBadge.xhtml" />
+	</ui:define>
+	
+	<ui:define name="body">
+		<h:form id="bookSubmissionsEditForm">
+		<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+				
+			<rich:tabPanel 
+				id="maintab" 
+			   	switchType="ajax"
+				styleClass="tab"
+				contentClass="tab_content"
+				selectedTab="#{catBookSubmissionsHome.selectedTab}">
+
+				<rich:tab label="Submission Information" id="tab1" name="tab1" reRender="qcMessagesLayout" eventsQueue="bookSubmissionsEditQueue" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catBookSubmissionsHome.updateUserTabPreferences('tab1')}" limitToList="true">
+					<ui:include src="BookSubmissionsInformationTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Audit" id="tab2" name="tab2" eventsQueue="bookSubmissionsEditQueue" status="globalWaitStatus" 
+					action="#{catBookSubmissionsHome.updateUserTabPreferences('tab2')}" reRender="qcMessagesLayout" limitToList="true">
+					<ui:include src="BookSubmissionsAuditTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Events" id="eventsTab" name="eventsTab" eventsQueue="bookSubmissionsEditQueue" reRender="qcMessagesLayout" status="globalWaitStatus" oncomplete="addDisabledToDisabled(); addDisabledToReadonly();"
+					action="#{catBookSubmissionsHome.updateUserTabPreferences('eventsTab')}" limitToList="true">
+					<ui:include src="BookSubmissionsEventsTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+			<div id="functions">
+		    	<a:commandLink action="#{catBookSubmissionsHome.update}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" styleClass="button saveOrCancel disabled" 
+		    		value="Save"
+		    		reRender="bookSubmissionsEditForm"
+		    		eventsQueue="bookSubmissionsEditQueue" status="globalWaitStatus"/>
+		    	<a:commandLink action="#{catBookSubmissionsHome.cancel}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" ajaxSingle="true" styleClass="button saveOrCancel disabled" 
+		    		value="Cancel"
+		    		eventsQueue="bookSubmissionsEditQueue" status="globalWaitStatus"/>
+		    </div>
+		</h:form>
+		
+						<a:form>
+		<a:outputPanel layout="none" id="qcMessagesLayout"> 
+			<s:div id="qcMessagesTables"
+				rendered="#{catBookSubmissionsHome.selectedTab eq 'tab1'}">
+
+				<ui:include src="BookSubmissionsQcMessagesTable.xhtml">
+					<ui:param name="divId" value="qcMessagesTableDiv" />
+					<ui:param name="tableId" value="qcMessagesTable" />
+					<ui:param name="submissionQcMessagesList"
+						value="#{catBookSubmissionsHome.qcMessagesList}" />
+				</ui:include>
+			</s:div>
+		</a:outputPanel>
+	</a:form> 
+		<ui:include
+			src="/booksubmissions/bookSubmissionsLifecycle_modal.xhtml">
+		</ui:include>
+		</ui:define>
+		</ui:composition>

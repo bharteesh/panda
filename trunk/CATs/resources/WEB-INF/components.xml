@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://jboss.com/products/seam/components"
+	xmlns:async="http://jboss.com/products/seam/async" xmlns:core="http://jboss.com/products/seam/core"
+	xmlns:drools="http://jboss.com/products/seam/drools" xmlns:mail="http://jboss.com/products/seam/mail"
+	xmlns:persistence="http://jboss.com/products/seam/persistence"
+	xmlns:security="http://jboss.com/products/seam/security" xmlns:web="http://jboss.com/products/seam/web"
+	xmlns:excel="http://jboss.com/products/seam/excel"
+	xmlns:transaction="http://jboss.com/products/seam/transaction"
+	xmlns:document="http://jboss.com/products/seam/document" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd 
+ http://jboss.com/products/seam/document http://jboss.com/products/seam/document-2.2.xsd
+ http://jboss.com/products/seam/excel http://jboss.com/products/seam/excel-2.2.xsd  
+                  http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.2.xsd 
+                                   http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.2.xsd  
+                                                   http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.2.xsd     
+                                                                http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.2.xsd                  http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.2.xsd                  http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd                  http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd http://jboss.com/products/seam/async http://jboss.com/products/seam/async-2.2.xsd">
+	<core:init debug="@debug@" jndi-pattern="@jndiPattern@">
+		</core:init>
+	
+	<core:manager concurrent-request-timeout="1000"
+		conversation-id-parameter="cid" conversation-timeout="28800000"
+		parent-conversation-id-parameter="pid" />
+	<!--
+		Make sure this URL pattern is the same as that used by the Faces
+		Servlet
+	-->
+	<web:hot-deploy-filter url-pattern="*.seam" />
+
+	<web:ajax4jsf-filter force-parser="false"
+		enable-cache="true" />
+		
+	<web:cache-control-filter name="imageCacheControlFilter"
+		regex-url-pattern=".*(\.gif|\.png|\.jpg|\.jpeg)" value="max-age=86400" />
+	<web:cache-control-filter name="jsCacheControlFilter"
+		regex-url-pattern=".*(\.js|\.woff)" value="max-age=86400" />
+	<web:cache-control-filter name="cssCacheControlFilter"
+		regex-url-pattern=".*(\.css)" value="max-age=1400" />
+
+	<persistence:managed-persistence-context
+		auto-create="true" entity-manager-factory="@seamEmfRef@" name="entityManager"
+		persistence-unit-jndi-name="@puJndiName@" />
+	<drools:rule-base name="securityRules">
+		<drools:rule-files>
+			<!--  rules that are auto-generated, nkerr. -->
+			<value>/security.drl</value>
+			<!--  rules that are hand-written, or change a lot, nkerr. -->
+			<value>/security-custom.drl</value>
+		</drools:rule-files>
+	</drools:rule-base>
+	<security:rule-based-permission-resolver
+		security-rules="#{securityRules}" />
+
+	<security:identity jaas-config-name="activeDirectory"
+		remember-me="true" />
+	<event type="org.jboss.seam.security.postAuthenticate">
+		<action execute="#{roler.addRoles}" />
+	</event>
+	<event type="org.jboss.seam.security.notLoggedIn">
+		<action execute="#{redirect.captureCurrentView}" />
+	</event>
+	<event type="org.jboss.seam.security.loginSuccessful">
+		<action execute="#{redirect.returnToCapturedView}" />
+	</event>
+
+	<mail:mail-session host="smtp.ithaka.org" port="25"
+		username="CATS" />
+
+	<async:quartz-dispatcher />
+	<event type="org.jboss.seam.postInitialization">
+		<action execute="#{scheduleController.scheduleTimer}" />
+	</event>
+	
+	<!-- our crufty ldap-lookup-email -->
+	<component class="org.ithaka.cat.action.LdapOps" name="ldapOps">
+		<property name="server">ldapmi.ithaka.org:3268</property>
+		<property name="bindUser">cn=ldapuser,ou=service accounts,dc=office,dc=share,dc=org</property>
+		<property name="bindPass">LALApq5</property>
+		<property name="baseDc">dc=office,dc=share,dc=org</property>
+		<property name="emailOfLastResort">CATS@ithaka.org</property>
+	</component>
+
+	<!--  our mail-sending component -->
+	<component class="org.ithaka.cat.reports.MailOps" name="mailOps">
+		<property name="fromEmail">CATSreports@ithaka.org</property>
+	</component>
+
+	<!--  our sharepoint uploader, for reports -->
+	<component class="org.ithaka.cat.reports.SharePointDisseminator" name="sharePointDisseminator">
+		<property name="username">catsreports</property>
+		<property name="password">Password101</property>
+		<property name="domain">office</property>
+		<property name="host">arcade.ithaka.org</property>
+		<property name="protocol">http</property>
+		<property name="site">/sites/od/cmu</property>
+		<property name="list">CATs Reports</property>
+	</component>
+	
+	<!--  appinfo displayed various places -->
+	<component class="org.ithaka.cat.action.AppInfo" name="appInfo">
+		<property name="version">@appinfo_version@</property>
+		<property name="database">@appinfo_database@</property>
+		<property name="environment">@appinfo_environment@</property>
+		<property name="tstamp">@appinfo_tstamp@</property>
+	</component>
+
+</components>

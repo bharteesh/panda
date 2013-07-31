@@ -1,0 +1,50 @@
+<s:div id="badge" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<h1>#{catImprintsHome.instance.id}</h1>
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Record Type:</ui:define>
+		<h:outputText value="Imprints" />
+	</s:decorate>
+
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Imprint Publishers:</ui:define>
+
+		<ui:repeat value="#{catImprintsHome.getPublishersList()}" var="_publisher">
+			<s:link view="/publishers/PublishersEdit.xhtml">
+				<f:param name="id" value="#{_publisher.id}" />
+				<h:outputText value="#{_publisher.catName}" />
+			</s:link>
+			<br />
+		</ui:repeat>
+	</s:decorate>
+
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Main Name: </ui:define>
+		<h:outputText value="#{catImprintsHome.instance.mainName}" />
+	</s:decorate>
+	
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">ID: </ui:define>
+		<h:outputText value="#{catImprintsHome.instance.id}" />
+	</s:decorate>
+
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Creator:</ui:define>
+		<h:outputText value="#{catImprintsHome.instance.catCreator}" />
+	</s:decorate>
+
+	<s:decorate template="../layout/edit.xhtml">
+		<ui:define name="label">Created Date:</ui:define>
+		<h:outputText value="#{catImprintsHome.instance.catDateCreated}">
+			<s:convertDateTime type="both" pattern="yyyy/MM/dd"></s:convertDateTime>
+		</h:outputText>
+	</s:decorate>
+
+</s:div>

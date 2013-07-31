@@ -1,0 +1,18 @@
+<s:div xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:s="http://jboss.com/products/seam/taglib" xmlns:a="http://richfaces.org/a4j" xmlns:cats="http://www.ithaka.org/cats" xmlns:rich="http://richfaces.org/rich" id="badge">
+
+<a:form id="catRidersBadgeForm">
+  <h1>#{catRidersHome.instance.catName}</h1>
+
+  <s:decorate id="recordType" template="../layout/edit.xhtml">
+    <ui:define name="label">Record Type:</ui:define>
+    <h:outputText value="Riders"/>
+  </s:decorate>
+
+  <s:decorate id="catRidersId" template="../layout/edit.xhtml">
+    <ui:define name="label">ID:</ui:define>
+    <h:outputText value="#{catRidersHome.instance.id}"/>
+  </s:decorate>
+
+</a:form>
+</s:div>
+

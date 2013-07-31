@@ -1,0 +1,249 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{createIssueShipmentsWizard.createTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="selected">1. Info</li>
+			<li class="disabled">2. Results</li>
+		</ul>
+	
+		<div class="cluster smart">
+			<a:outputPanel layout="none" id="noLayoutErrorMsgs">
+				<s:div styleClass="alert">
+					<s:div rendered="#{not empty createIssueShipmentsWizard.errorMsgs}" id="errorMsgsDiv">
+						<a:repeat value="#{createIssueShipmentsWizard.errorMsgs}" var="_errMsg">
+							<p>#{_errMsg}</p>
+						</a:repeat>
+					</s:div>
+				</s:div>
+			</a:outputPanel>
+			
+			<a:outputPanel layout="none" id="noLayoutOrdersListPre">
+				<s:div rendered="#{createIssueShipmentsWizard.wizardInvokedFrom eq createIssueShipmentsWizard.INVOKED_FROM_ORDERS_RECORD}">
+					<ui:include src="/issueshipments/createOrderTable_IssueShipments.xhtml">\
+						<ui:param name="divId" value="pre" />
+					</ui:include>
+				</s:div>
+			</a:outputPanel>
+			<br/>
+			<s:div id="cmptSearchField" 
+				rendered="#{createIssueShipmentsWizard.wizardInvokedFrom eq createIssueShipmentsWizard.INVOKED_FROM_SHIPMENT_LIST}"
+				styleClass="field">
+				<label>Choose Component </label>
+				<h:inputText id="default_search_catCmptsListCreateShipment" 
+		 			value="#{createIssueShipmentsWizard.cmptSearchFieldName}" 
+		 			onchange="return false;" size="60">
+		 			<a:support event="onblur"
+                    	eventsQueue="createShipmentQueue"
+                    	ajaxSingle="true"/>
+		 		</h:inputText>
+		 		<a:commandLink 
+			  		 styleClass="button filter"
+					 value="Filter by name"
+					 action="#{createIssueShipmentsWizard.narrowCmptsList(rich:findComponent('default_search_catCmptsListCreateShipment').value)}"
+					 reRender="noLayoutCmptList,noLayoutOrdersList"
+					 status="globalWaitStatus" 
+					 ajaxSingle="true"
+					 eventsQueue="createShipmentQueue"/>
+			</s:div>
+			<s:div id="cmptSearchField1" 
+				rendered="#{createIssueShipmentsWizard.wizardInvokedFrom ne createIssueShipmentsWizard.INVOKED_FROM_SHIPMENT_LIST}"
+				styleClass="field">
+				<label>Choose Component </label>
+				<span></span>
+			</s:div>
+			
+			<a:outputPanel layout="none" id="noLayoutCmptList">
+				
+					<ui:include src="/issueshipments/createCmptTable_IssueShipments.xhtml"/>
+				
+			</a:outputPanel>
+		
+		<br/>
+			<a:outputPanel layout="none" id="noLayoutOrdersList">
+				<s:div rendered="#{createIssueShipmentsWizard.wizardInvokedFrom ne createIssueShipmentsWizard.INVOKED_FROM_ORDERS_RECORD}">
+					<ui:include src="/issueshipments/createOrderTable_IssueShipments.xhtml">
+						<ui:param name="divId" value="post" />
+					</ui:include>
+				</s:div>
+			</a:outputPanel>
+			
+			<div class="title change">
+				<h1>Info</h1>
+				<p>Fill out basic information about the shipment</p>
+			</div>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Ownership</ui:define>
+				<h:selectOneMenu name="catOwnership" required="true"  
+					value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catOwnership}"
+					requiredMessage="You must choose an ownership.">
+					<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." 
+						value="#{listsForEnums.catIssueShipments_Ownership}" var="i"/>
+					<a:support event="onchange" 
+						reRender="catReturnObligation_Create"
+						eventsQueue="createShipmentQueue"
+						status="globalWaitStatus"
+						ajaxSingle="true"
+						action="#{createIssueShipmentsWizard.populateShipmentReturnObligationList}"/>
+				</h:selectOneMenu>
+				<span class="comments">Who owns the source material?</span>
+			</s:decorate>
+			
+			<s:decorate id="catReturnObligation_Create" template="../layout/edit.xhtml">
+				<ui:define name="label">Obligation</ui:define>
+				<h:selectOneMenu name="catReturnObligation" required="true"  
+					value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catReturnObligation}"
+					requiredMessage="You must indicate the return obligation.">
+					<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." 
+						value="#{createIssueShipmentsWizard.issueShipments_ReturnObligationValues}" var="i"/>
+				</h:selectOneMenu>
+				<span class="comments">What is our obligation to return the source material?</span>
+			</s:decorate>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Extent (Pub Units)</ui:define>
+				 <h:inputTextarea cols="20" required="false" id="catPublctnUnitRange"
+                     rows="2" value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catPublctnUnitRange}"/>
+                <span class="comments">Range of content included in this shipment.</span>
+			</s:decorate>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Extent (Dates)</ui:define>
+				 <h:inputTextarea cols="20" required="false" id="catCoverDateRange"
+                     rows="2" value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catCoverDateRange}"/>
+                <span class="comments">Starting and ending publication dates for material in this shipment.</span>
+			</s:decorate>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Additional Date Info</ui:define>
+				 <h:inputText id="catCoverDateAsPrinted" maxlength="255" size="25" 
+				 	value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catCoverDateAsPrinted}"/>
+                <span class="comments">Additional, unusual date information. Example: Christmas Issue, Jubilee Volume.</span>
+			</s:decorate>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Notes</ui:define>
+				 <h:inputTextarea cols="20" required="false" id="catNote"
+                     rows="2" value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catNote}"/>
+                <span class="comments">Notes about missing or damaged content. Remember to file an Order Problem if needed.</span>
+			</s:decorate>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Quantity</ui:define>
+				<h:selectOneMenu name="catQuantity" required="true"  
+					value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catQuantity}"
+					requiredMessage="You must choose a Quantity">
+					<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." 
+						value="#{listsForEnums.catIssueShipments_Quantity}" var="i"/>
+				</h:selectOneMenu>
+				<span class="comments">Does this shipment include many pub units or just one?</span>
+			</s:decorate>
+			
+			<s:decorate template="../layout/edit.xhtml">
+				<ui:define name="label">Shipment Lifecycle</ui:define>
+				<h:selectOneMenu name="catLifecycle" required="true"  
+					value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catLifecycle}"
+					requiredMessage="You must choose a lifecycle state">
+					<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." 
+						value="#{listsForEnums.catIssueShipments_Lifecycle}" var="i"/>
+					<a:support event="onchange"
+                    	eventsQueue="createShipmentQueue"
+                    	status="globalWaitStatus"
+                        reRender="noLayoutLifecycleCompleted" ajaxSingle="true"/>
+				</h:selectOneMenu>
+				<span class="comments">
+					Where is this shipment in its lifecycle? 
+					If you choose Completed, the system will complete the shipment and will complete the order 
+					unless it's a subscription, on hold, has open problems, or has other open shipments.
+				</span>
+			</s:decorate>
+			
+			<a:outputPanel layout="none" id="noLayoutLifecycleCompleted">
+				<s:div rendered="#{createIssueShipmentsWizard.isLifeCycleCompleted}">
+					<s:decorate template="../layout/edit.xhtml">
+						<ui:define name="label">Format</ui:define>
+						<h:selectOneMenu name="catMaterialFormat" required="true"  
+							value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catMaterialFormat}"
+							requiredMessage="You must choose a Material format">
+							<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." 
+								value="#{listsForEnums.catIssueShipments_MaterialFormat}" var="i"/>
+						</h:selectOneMenu>
+						<span class="comments">Physical format.</span>
+					</s:decorate>
+					
+					<s:decorate template="../layout/edit.xhtml">
+						<ui:define name="label">Reprints</ui:define>
+						<h:selectOneMenu name="catReprints" required="true"  
+							value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catReprints}"
+							requiredMessage="You must indicate whether the shipment includes any reprints.">
+							<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." 
+								value="#{listsForEnums.catIssueShipments_Reprints}" var="i"/>
+						</h:selectOneMenu>
+						<span class="comments">Does this shipment include any reprints?</span>
+					</s:decorate>
+					
+					<s:decorate template="../layout/edit.xhtml">
+						<ui:define name="label">Condition</ui:define>
+						<h:selectOneMenu name="catSourceCondition" required="true"  
+							value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catSourceCondition}"
+							requiredMessage="You must choose condition of the source material">
+							<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." 
+								value="#{listsForEnums.catIssueShipments_SourceCondition}" var="i"/>
+						</h:selectOneMenu>
+						<span class="comments">To the best of your knowledge, is the source material usable for digitization?</span>
+					</s:decorate>
+					
+					<s:decorate template="../layout/edit.xhtml">
+						<ui:define name="label">Outcome</ui:define>
+						<h:selectOneMenu name="catOutcome" required="true"  
+							value="#{createIssueShipmentsWizard.catIssueShipmentsHome.instance.catOutcome}"
+							requiredMessage="You must choose outcome of the Shipment">
+							<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." 
+								value="#{listsForEnums.catIssueShipments_Outcome}" var="i"/>
+						</h:selectOneMenu>
+						<span class="comments">Did we receive all of the shipment?</span>
+					</s:decorate>
+					
+					<s:decorate template="../layout/edit.xhtml">
+						<ui:define name="label">Order Outcome</ui:define>
+						<h:selectOneMenu name="catOrderOutcome" required="true"  
+							value="#{createIssueShipmentsWizard.orderOutcome}"
+							requiredMessage="You must choose outcome of the Order">
+							<s:selectItems itemValue="#{i}" label="#{i.label}" noSelectionLabel="Choose..." 
+								value="#{listsForEnums.catAcqOrders_Outcome}" var="i"/>
+						</h:selectOneMenu>
+						<span class="comments">Did we receive all of the order? System will use this order outcome if it can complete the order</span>
+					</s:decorate>
+					
+				</s:div>
+			</a:outputPanel>
+		</div>
+		<div class="push"></div>
+		<a:commandLink styleClass="button" value="Quit"
+      		eventsQueue="createShipmentQueue"
+            status="globalWaitStatus"
+		    oncomplete="#{rich:component('createIssueShipmentsQuit')}.show(); return false;"
+		    ajaxSingle="true"/>
+			 
+ 
+		<a:commandLink
+			styleClass="button right" value="Save"
+			eventsQueue="createShipmentQueue"
+            status="globalWaitStatus"
+			action="#{createIssueShipmentsWizard.performCreateOperation}" 
+			reRender="createIssueShipmentswizard" />
+		
+	</div>
+</ui:composition>

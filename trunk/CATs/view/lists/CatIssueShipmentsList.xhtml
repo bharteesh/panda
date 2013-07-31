@@ -1,0 +1,530 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+	
+		<ui:param name="entityType" value="shipments"/>
+	
+	<ui:define name="body">
+<ui:include src="../layout/tablenav.xhtml">
+<ui:param name="viewPath" value="/lists/CatIssueShipmentsList.xhtml"></ui:param>
+<ui:param name="entityList" value="#{catIssueShipmentsList}"></ui:param>
+<ui:param name="divId" value="1"/>
+</ui:include>
+
+		<a:form>
+
+<s:div id="header"  styleclass="header">
+
+<div class="left"><span class="museo"><h:outputText
+value="Shipments 
+(#{empty catIssueShipmentsList.resultList ? 0 : (catIssueShipmentsList.paginated ? catIssueShipmentsList.resultCount : catIssueShipmentsList.resultList.size)})"></h:outputText>
+</span> 
+
+
+
+    <h:selectOneMenu name="flavour" value="#{catIssueShipmentsList.flavour}">
+				<s:selectItems value="#{catIssueShipmentsList.flavours}" var="i"
+					itemValue="#{i}" label="#{catIssueShipmentsList.flavourLabel(i)}" />
+						<a:support event="onchange" action="#{catIssueShipmentsList.updateUserSkinPreferences}"
+								oncomplete="javascript: location.href='CatIssueShipmentsList.seam'"
+								ignoreDupResponses="true"
+								eventsQueue="shipsListQueue"
+								ajaxSingle="true"/>			
+			</h:selectOneMenu>
+
+			<s:link id="clearSearch" status="globalWaitStatus" 
+				ignoreDupResponses="true" styleClass="button wizard" 
+				action="#{catIssueShipmentsList.reset}"  value="X" ajaxSingle="true" 
+				eventsQueue="catIssueShipmentsListEventsQueue"  propagation="none"
+				oncomplete="javascript: location.href='CatIssueShipmentsList.seam'">
+				<f:param name="flavour" value="#{catIssueShipmentsList.flavour}"/> 
+			</s:link>
+			
+			</div>
+
+			<div class="right">
+			<ui:include src="adhocReportSelect.xhtml"><ui:param name="entityQuery" value="#{catIssueShipmentsList}"/></ui:include>
+			<h:selectOneMenu
+				id="catIssueShpmntsBulkOpSelect"
+				rendered="#{not empty catIssueShipmentsBulkOperations.bulkOperationsNames}"
+				value="#{catIssueShipmentsBulkOperations.bulkOperationsType}">
+				<a:support  limitToList="true" event="onchange" 
+				action="#{catIssueShipmentsBulkOperations.prepBulkOperations( 'catIssueShipmentsList', 'catIssueShpmntsBulkOpSelect' )}" 
+				reRender="issueshipmentsbulkOperationsPanels" 
+				oncomplete="if ( #{rich:element('catIssueShpmntsBulkOpSelect')}.options.selectedIndex != 0 ) 
+								{ #{rich:component('issueshipmentsbulkUpdatePanel')}.show(); } ; return false; " 
+				ignoreDupResponses="true"  status="globalWaitStatus"  />
+				<s:selectItems
+					value="#{catIssueShipmentsBulkOperations.bulkOperationsNames}" var="b"
+					label="#{catIssueShipmentsBulkOperations.bulkOperations[b]}"
+					itemValue="#{b}" noSelectionLabel="Bulk Operations" />
+			</h:selectOneMenu> 
+			
+<!-- Note: Do not give ajaxSingle is true for duplicating issueshipments, the list selection will be lost -->
+
+			<a:commandLink id="duplicateIssueShipmentWithSameAcqOrdersEditButton"
+				ignoreDupResponses="true"
+    			eventsQueue="catIssueShipmentsListEventsQueue"
+         		status="globalWaitStatus"
+	    		action="#{duplicateIssueShipmentsWizard.duplicateUsingBulk('DUPLICATEISSUESHIPMENTS', duplicateIssueShipmentsWizard.initiatorFromListView)}"
+				value="Copy Shipment"
+				reRender="issueshipmentsduplicateOperationsPanels,catIssueShipmentsList" 
+				oncomplete="Richfaces.showModalPanel('issueshipmentsduplicateUpdatePanel');"
+                styleClass="button wizard #{!s:hasPermission(catIssueShipmentsList.catIssueShipments, 'create CatIssueShipments') ? 'disabled' : ''}"
+                disabled="#{!s:hasPermission(catIssueShipmentsList.catIssueShipments, 'create CatIssueShipments')}"/>
+
+			    <a:commandLink id="createIssueShipmentEditButton"
+    				ignoreDupResponses="true"
+        			eventsQueue="catIssueShipmentsListEventsQueue"
+             		status="globalWaitStatus"
+         	    	ajaxSingle="true"
+	        	    action="#{createIssueShipmentsWizard.prepCreateOperation}"
+				    value="Add Shipment"
+				    reRender="createIssueShipmentsOperationsPanels,createIssueShipmentswizard,catIssueShipmentsList" 
+				    oncomplete="Richfaces.showModalPanel('createIssueShipmentsPanel');"
+                    styleClass="button wizard #{!s:hasPermission(catIssueShipmentsList.catIssueShipments, 'create CatIssueShipments') ? 'disabled' : ''}"
+                    disabled="#{!s:hasPermission(catIssueShipmentsList.catIssueShipments, 'create CatIssueShipments')}"/>
+
+				
+
+</div>
+
+			</s:div>
+			<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />
+
+			<div id="mainlistscroller">
+			<h:dataTable
+				id="catIssueShipmentsList" var="_catIssueShipments"
+				value="#{catIssueShipmentsList.resultList}"
+				rowClasses="odd,even"
+				styleClass="mainListClass">
+				<rich:column styleClass="checkBoxes" headerClass="checkBoxes"
+					rendered="#{not empty catIssueShipmentsBulkOperations.bulkOperationsNames}">
+					<f:facet name="header">
+						<h:panelGrid columns="1">
+							<h:outputText value=" " />
+							<input type="checkbox" id="select_all_checkbox"
+								name="select_all_checkbox"
+				                onclick="if ( this.checked ) { jQuery('.bulk_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.bulk_checkbox').each(function(){ this.checked = false; }); }" />
+						</h:panelGrid>
+					</f:facet>
+					<span onclick="cancelEventBubbling(event);"><h:selectBooleanCheckbox
+						styleClass="bulk_checkbox checkBoxes"
+						value="#{catIssueShipmentsBulkOperations.selections[_catIssueShipments]}" /></span>
+				</rich:column>
+				
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['id']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="ID"
+					propertyPath="catIssueShipments.id"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.id}"
+					propertyName="id" sortable="true"
+					
+					value="#{_catIssueShipments.id}"></cats:column>
+					
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['catAcqOrders.id']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Order ID"
+					propertyPath="catIssueShipments.catAcqOrders.id"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catAcqOrders.id}"
+					propertyName="catAcqOrders.id" sortable="true"
+					
+					value="#{_catIssueShipments.catAcqOrders.id}"></cats:column>
+					
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['catCmpts.id']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Component ID"
+					propertyPath="catIssueShipments.catCmpts.id"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.id}"
+					propertyName="catCmpts.id" sortable="true"
+					
+					value="#{_catIssueShipments.catCmpts.id}"></cats:column>
+
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catCmptsName']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Component Name"
+					propertyPath="catIssueShipments.catCmpts.catName"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.catName}"
+					propertyName="catCmptsName" sortable="true"
+					
+					value="#{_catIssueShipments.catCmpts.catName}"></cats:column>
+					
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catLifecycle']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Lifecycle"
+					propertyPath="catIssueShipments.catLifecycle"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catLifecycle}"
+					propertyName="catLifecycle" sortable="true"
+					enumList="#{listsForEnums.catIssueShipments_Lifecycle}"
+					
+					value="#{_catIssueShipments.catLifecycle.label}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['catOutcome']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Outcome"
+					propertyPath="catIssueShipments.catOutcome"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catOutcome}"
+					propertyName="catOutcome" sortable="true"
+					enumList="#{listsForEnums.catIssueShipments_Outcome}"
+					
+					value="#{_catIssueShipments.catOutcome.label}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['catCoverDateRange']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Extent (Dates)"
+					propertyPath="catIssueShipments.catCoverDateRange"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCoverDateRange}"
+					propertyName="catCoverDateRange" sortable="true"
+					
+					value="#{_catIssueShipments.catCoverDateRange}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catPublctnUnitRange']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Extent (Pub Units)"
+					propertyPath="catIssueShipments.catPublctnUnitRange"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catPublctnUnitRange}"
+					propertyName="catPublctnUnitRange" sortable="true"
+					
+					value="#{_catIssueShipments.catPublctnUnitRange}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catOwnership']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Ownership"
+					propertyPath="catIssueShipments.catOwnership"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catOwnership}"
+					propertyName="catOwnership" sortable="true"
+					enumList="#{listsForEnums.catIssueShipments_Ownership}"
+					
+					value="#{_catIssueShipments.catOwnership.label}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catReturnObligation']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Return Obligation"
+					propertyPath="catIssueShipments.catReturnObligation"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catReturnObligation}"
+					propertyName="catReturnObligation" sortable="true"
+					enumList="#{listsForEnums.catIssueShipments_ReturnObligation}"
+					
+					value="#{_catIssueShipments.catReturnObligation.label}"></cats:column>
+				
+				
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catDisposition']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Disposition"
+					propertyPath="catIssueShipments.catDisposition"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catDisposition}"
+					propertyName="catDisposition" sortable="true"
+					enumList="#{listsForEnums.catIssueShipments_Disposition}"
+					
+					value="#{_catIssueShipments.catDisposition.label}"></cats:column>
+					
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catReprints']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Reprints"
+					propertyPath="catIssueShipments.catReprints"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catReprints}"
+					propertyName="catReprints" sortable="true"
+					enumList="#{listsForEnums.catIssueShipments_Reprints}"
+					value="#{_catIssueShipments.catReprints.label}"></cats:column>
+					
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['catOnHold']}"
+					entityList="#{catIssueShipmentsList}" 
+					propertyLabel="On Hold"
+					propertyPath="catIssueShipments.catOnHold"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catOnHold}"
+					propertyName="catOnHold"
+					sortable="true"
+                    enumList="#{listsForEnums.yesNo}"
+					value="#{_catIssueShipments.catOnHold ? 'Yes' : 'No'}"></cats:column>
+
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['setsValue']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Set Name(s)"
+					propertyPath="catIssueShipments.catCmpts.setsValue"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.setsValue}"
+					propertyName="setsValue" 
+                    sortable="true"
+					value="#{_catIssueShipments.catCmpts.setsValue}"></cats:column>
+
+
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catCompletedBy']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Completed By"
+					propertyPath="catIssueShipments.catCompletedBy"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCompletedBy}"
+					propertyName="catCompletedBy" sortable="true"
+					
+					value="#{_catIssueShipments.catCompletedBy}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catCoverDateAsPrinted']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Cat cover date as printed"
+					propertyPath="catIssueShipments.catCoverDateAsPrinted"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCoverDateAsPrinted}"
+					propertyName="catCoverDateAsPrinted" sortable="true"
+					
+					value="#{_catIssueShipments.catCoverDateAsPrinted}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catCreator']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Cat creator"
+					propertyPath="catIssueShipments.catCreator"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCreator}"
+					propertyName="catCreator" sortable="true"
+					
+					value="#{_catIssueShipments.catCreator}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catDateCompleted']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Date Completed"
+					propertyPath="catIssueShipments.catDateCompleted"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catDateCompleted}"
+					propertyName="catDateCompleted" sortable="true"
+					
+					value="#{_catIssueShipments.catDateCompleted}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catDateCreated']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Cat date created"
+					propertyPath="catIssueShipments.catDateCreated"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catDateCreated}"
+					propertyName="catDateCreated" sortable="true"
+					
+					value="#{_catIssueShipments.catDateCreated}">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catLegacyDispositionNote']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Cat legacy disposition note"
+					propertyPath="catIssueShipments.catLegacyDispositionNote"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catLegacyDispositionNote}"
+					propertyName="catLegacyDispositionNote" sortable="true"
+					
+					value="#{_catIssueShipments.catLegacyDispositionNote}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['catLoanReturnDate']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Return Date"
+					propertyPath="catIssueShipments.catLoanReturnDate"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catLoanReturnDate}"
+					propertyName="catLoanReturnDate" sortable="true"
+					
+					value="#{_catIssueShipments.catLoanReturnDate}">
+					<s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime>
+				</cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catLoanReturnTrackNumber']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Return Tracking"
+					propertyPath="catIssueShipments.catLoanReturnTrackNumber"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catLoanReturnTrackNumber}"
+					propertyName="catLoanReturnTrackNumber" sortable="true"
+					
+					value="#{_catIssueShipments.catLoanReturnTrackNumber}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catMaterialFormat']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Cat material format"
+					propertyPath="catIssueShipments.catMaterialFormat"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catMaterialFormat}"
+					propertyName="catMaterialFormat" sortable="true"
+					enumList="#{listsForEnums.catIssueShipments_MaterialFormat}"
+					
+					value="#{_catIssueShipments.catMaterialFormat.label}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" styleClass="catNote"
+					rendered="#{catIssueShipmentsList.listFlavour['catNote']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Cat note"
+					propertyPath="catIssueShipments.catNote"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catNote}"
+					propertyName="catNote" sortable="true"
+					
+					value="#{_catIssueShipments.catNote}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catOnHoldReason']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Cat on hold reason"
+					propertyPath="catIssueShipments.catOnHoldReason"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catOnHoldReason}"
+					propertyName="catOnHoldReason" sortable="true"
+					
+					value="#{_catIssueShipments.catOnHoldReason}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catQuantity']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Cat quantity"
+					propertyPath="catIssueShipments.catQuantity"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catQuantity}"
+					propertyName="catQuantity" sortable="true"
+					enumList="#{listsForEnums.catIssueShipments_Quantity_forList}"
+					
+					value="#{_catIssueShipments.catQuantity.label}"></cats:column>
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catSourceCondition']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Cat source condition"
+					propertyPath="catIssueShipments.catSourceCondition"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catSourceCondition}"
+					propertyName="catSourceCondition" sortable="true"
+					enumList="#{listsForEnums.catIssueShipments_SourceCondition_forList}"
+					
+					value="#{_catIssueShipments.catSourceCondition.label}"></cats:column>
+
+<cats:column linkToId="#{_catIssueShipments.id}" sortable="true"
+					rendered="#{catIssueShipmentsList.listFlavour['catDateModified']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Date Modified"
+					propertyPath="catIssueShipments.catDateModified"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catDateModified}"
+					propertyName="catDateModified"
+					value="#{_catIssueShipments.catDateModified}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['setCspValue']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="CSP"
+					propertyPath="catIssueShipments.catCmpts.setCspValue"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.setCspValue}"
+					propertyName="setCspValue" 
+                    sortable="true"
+					value="#{_catIssueShipments.catCmpts.setCspValue}"></cats:column>
+			<!--  	<cats:enumColumn 
+					enumValueMap="#{catIssueShipmentsList.cspOverallOnboardStatusEnumValueMap}"
+		          	linkToId="#{_catIssueShipments.id}" 
+		          	value="#{_catIssueShipments.catCmpts.cspOverallOnboardingStatus}"
+					entityList="#{catIssueShipmentsList}"
+					propertyName="cspOverallOnboardingStatus"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.cspOverallOnboardingStatus}"
+					propertyLabel="Overall CSP Status"
+					propertyPath="catIssueShipments.catCmpts.cspOverallOnboardingStatus"
+					rendered="#{catIssueShipmentsList.listFlavour['cspOverallOnboardingStatus']}" 
+					enumList="#{listsForEnums.cspOverallOnboardingStatusEnum}"
+					sortable="true"
+					styleClass="cspOverallOnboardingStatus"
+					reRender="catIssueShipmentsList,tableNav1,tableNav2,header"/> -->
+					
+				<cats:column 
+					linkToId="#{_catIssueShipments.id}" 
+		          	value="#{_catIssueShipments.catCmpts.catHasCspRelationship ? 'Yes' : 'No'}"
+					entityList="#{catIssueShipmentsList}"
+					propertyName="catHasCspRelationship"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.catHasCspRelationship}"
+					propertyLabel="CSP"
+					propertyPath="catIssueShipments.catCmpts.catHasCspRelationship"
+					rendered="#{catIssueShipmentsList.listFlavour['catHasCspRelationship']}" 
+					enumList="#{listsForEnums.yesNo}"
+					sortable="true"
+					/>
+				
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['setCilValue']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="CIL"
+					propertyPath="catIssueShipments.catCmpts.setCilValue"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.setCilValue}"
+					propertyName="setCilValue" 
+                    sortable="true"
+					value="#{_catIssueShipments.catCmpts.setCilValue}"></cats:column>
+
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['wallValue']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Wall"
+					propertyPath="catIssueShipments.catCmpts.wallValue"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.wallValue}"
+					propertyName="wallValue" 
+                    sortable="true"
+					value="#{_catIssueShipments.catCmpts.wallValue}"></cats:column>
+
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['wallYearValue']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Wall Year"
+					propertyPath="catIssueShipments.catCmpts.wallYearValue"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.wallYearValue}"
+					propertyName="wallYearValue" 
+                    sortable="true"
+					value="#{_catIssueShipments.catCmpts.wallYearValue}"></cats:column>
+
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['setPublisherNoRolesValue']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Publisher"
+					propertyPath="catIssueShipments.catCmpts.setPublisherNoRolesValue"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catCmpts.setPublisherNoRolesValue}"
+					propertyName="setPublisherNoRolesValue" 
+                    sortable="true"
+					value="#{_catIssueShipments.catCmpts.setPublisherNoRolesValue}"></cats:column>
+
+
+				<cats:column linkToId="#{_catIssueShipments.id}"
+					rendered="#{catIssueShipmentsList.listFlavour['catSupplier']}"
+					entityList="#{catIssueShipmentsList}"
+					propertyLabel="Supplier Name"
+					propertyPath="catIssueShipments.catAcqOrders.catSupplier"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catAcqOrders.catSupplier}"
+					propertyName="catSupplier" sortable="true"
+					
+					value="#{_catIssueShipments.catAcqOrders.catSupplier}"></cats:column>
+
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catSupplierCommitment']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Commitment"
+					propertyPath="catIssueShipments.catAcqOrders.catSupplierCommitment"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catAcqOrders.catSupplierCommitment}"
+					propertyName="catSupplierCommitment" sortable="true"
+					enumList="#{listsForEnums.catAcqOrders_SupplierCommitment_forList}"
+					
+					value="#{_catIssueShipments.catAcqOrders.catSupplierCommitment.label}"></cats:column>
+
+				<cats:column linkToId="#{_catIssueShipments.id}" 
+					rendered="#{catIssueShipmentsList.listFlavour['catType']}"
+					entityList="#{catIssueShipmentsList}" propertyLabel="Order Type"
+					propertyPath="catIssueShipments.catAcqOrders.catType"
+					propertyValue="#{catIssueShipmentsList.catIssueShipments.catAcqOrders.catType}"
+					propertyName="catType" sortable="true"
+					enumList="#{listsForEnums.catAcqOrders_Type}"
+					
+					value="#{_catIssueShipments.catAcqOrders.catType.label}"></cats:column>
+								
+			</h:dataTable></div>
+		</a:form>
+
+	<ui:include src="../issueshipments/createm_IssueShipments.xhtml">
+		   <ui:param name="reRenderMe" value="catIssueShipmentsList"/>
+		   <ui:param name="divParam" value="issueShipmentsList"/>
+	</ui:include>
+	<ui:include src="../issueshipments/duplicatem_IssueShipments.xhtml">
+		   <ui:param name="reRenderMe" value="catIssueShipmentsList"/>
+		   <ui:param name="divParam" value="CatIssueShipmentsListduplicatem_IssueShipments"/>
+	</ui:include>
+
+
+<ui:include src="../layout/tablenav.xhtml">
+<ui:param name="viewPath" value="/lists/CatIssueShipmentsList.xhtml"></ui:param>
+<ui:param name="entityList" value="#{catIssueShipmentsList}"></ui:param>
+<ui:param name="divId" value="2"/>
+</ui:include>
+	<ui:include src="/issueshipments/bulkm_IssueShipments.xhtml">
+		   <ui:param name="divParam" value="IssueShipmentsEditbulkm_IssueShipments"/>
+		   <ui:param name="pageURL" value="Yes"/>
+	</ui:include>
+
+		<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+		<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catIssueShipmentsList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,237 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats">
+
+    
+    <div class="smart">
+    	<div class="header">
+				<div class="left">
+        <span class="museo">
+<h:outputText
+						value="Other Shipments from the same Set (#{catIssueShipmentsHome.otherCatIssueShipmentsListWithSameComponentsOrSets.size})" /></span>
+
+          <a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('otherShipmentsWithSameComponentsOrSets'.concat(divId))}" ignoreDupResponses="true" status="globalWaitStatus" eventsQueue="catIssueshipmentsEditQueue" reRender="#{tableId}" styleClass="button wizard"/>
+				
+				</div>
+
+				<div class="right">
+				</div>
+				
+			<div class="right">
+			
+			    <a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }" id="#{divId}createIssueShipmentEditButton"
+    				ignoreDupResponses="true"
+             		ajaxSingle="true"
+              		eventsQueue="#{divId}eventsQueue"
+              		status="globalWaitStatus"
+	        	    action="#{createIssueShipmentsWizard.prepCreateOperation}"
+				    value="Add Shipment"
+				    reRender="createIssueShipmentsOperationsPanels,createIssueShipmentswizard,#{tableId}" 
+				    oncomplete="Richfaces.showModalPanel('createIssueShipmentsPanel');"
+                    styleClass="button wizard #{!s:hasPermission(catIssueShipmentsHome.instance, 'create CatIssueShipments') ? 'disabled' : ''}"
+                    disabled="#{!s:hasPermission(catIssueShipmentsHome.instance, 'create CatIssueShipments')}"/>
+
+<!-- Note: Do not give ajaxSingle is true for duplicating issueshipments, the list selection will be lost -->
+
+			<a:commandLink  onclick="if ( ! checkForSave() ) { return false ; }" id="duplicateIssueShipmentWithSameComponentsOrSetsEditButton"
+    			ignoreDupResponses="true"
+              	eventsQueue="#{divId}eventsQueue"
+              	status="globalWaitStatus"
+	    		action="#{catIssueShipmentsHome.duplicateUsingBulk('DUPLICATEISSUESHIPMENTS', catIssueShipmentsHome.initiatorAsSameComponentsOrSets)}"
+				value="Copy Shipment"
+				reRender="issueshipmentsduplicateOperationsPanels" 
+				oncomplete="Richfaces.showModalPanel('issueshipmentsduplicateUpdatePanel');"
+                styleClass="button wizard #{!s:hasPermission(catIssueShipmentsHome.instance, 'create CatIssueShipments') ? 'disabled' : ''}"
+                disabled="#{!s:hasPermission(catIssueShipmentsHome.instance, 'create CatIssueShipments')}"/>
+			</div>
+				
+				
+		</div>
+    	  <rich:dataTable id="#{tableId}"
+                var="_otherIssueShipments"
+              value="#{catIssueShipmentsHome.otherCatIssueShipmentsListWithSameComponentsOrSets}"
+           rendered="#{not empty catIssueShipmentsHome.otherCatIssueShipmentsListWithSameComponentsOrSets}">
+           
+            <rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+					<f:facet name="header">
+						<h:panelGrid columns="1">
+							<h:outputText value=" " />
+							<input type="checkbox" id="select_all_checkbox"
+								name="select_all_checkbox"
+				                onclick="if ( this.checked ) { jQuery('.bulk_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.bulk_checkbox').each(function(){ this.checked = false; }); }" />
+						</h:panelGrid>
+					</f:facet>
+					<span onclick="cancelEventBubbling(event);"><h:selectBooleanCheckbox
+						styleClass="bulk_checkbox"
+						value="#{catIssueShipmentsHome.selectionsWithSameComponentsOrSets[_otherIssueShipments]}" /></span>
+			</rich:column>
+        	           
+        	<rich:column id="otherShipmentsSameComponentsOrSetsId" sortBy="#{_otherIssueShipments.id}" filterBy="#{_otherIssueShipments.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['id_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['id_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.id}" />        		
+				</s:link>				
+	        	</rich:column>
+				
+				<rich:column id="otherShipmentsSameComponentsOrSetsAcqOrdersId" sortBy="#{_otherIssueShipments.catAcqOrders.id}" filterBy="#{_otherIssueShipments.catAcqOrders.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['acqOrdersId_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['acqOrdersId_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Order ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catAcqOrders.id}" />        		
+				</s:link>				
+	        	</rich:column>
+	        	
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsSetName" sortBy="#{_otherIssueShipments.catCmpts.setsValue}" filterBy="#{_otherIssueShipments.catCmpts.setsValue}" sortable="false" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['setName_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['setName_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Sets"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catCmpts.setsValue}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsComponentId" sortBy="#{_otherIssueShipments.catCmpts.id}" filterBy="#{_otherIssueShipments.catCmpts.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['componentId_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['componentId_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Component ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catCmpts.id}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsComponentName" sortBy="#{_otherIssueShipments.catCmpts.catName}" filterBy="#{_otherIssueShipments.catCmpts.catName}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['componentName_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['componentName_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Component Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catCmpts.catName}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsLifecycle" sortBy="#{_otherIssueShipments.catLifecycle}" filterBy="#{_otherIssueShipments.catLifecycle}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['lifecycle_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['lifecycle_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Lifecycle"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catLifecycle.label}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsOutcome" sortBy="#{_otherIssueShipments.catOutcome}" filterBy="#{_otherIssueShipments.catOutcome}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['outcome_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['outcome_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Outcome"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catOutcome.label}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsPublctnUnitRange" sortBy="#{_otherIssueShipments.catPublctnUnitRange}" filterBy="#{_otherIssueShipments.catPublctnUnitRange}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['publctnUnitRange_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['publctnUnitRange_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Pub. Units)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catPublctnUnitRange}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsCoverDateRange" sortBy="#{_otherIssueShipments.catCoverDateRange}" filterBy="#{_otherIssueShipments.catCoverDateRange}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['coverDateRange_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['coverDateRange_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Date)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catCoverDateRange}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				
+
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsOwnership" sortBy="#{_otherIssueShipments.catOwnership}" filterBy="#{_otherIssueShipments.catOwnership}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['ownership_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['ownership_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Ownership"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catOwnership.label}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsReturnObligation" sortBy="#{_otherIssueShipments.catReturnObligation}" filterBy="#{_otherIssueShipments.catReturnObligation}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['returnObligation_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['returnObligation_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Return Obligation"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catReturnObligation.label}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsDisposition" sortBy="#{_otherIssueShipments.catDisposition}" filterBy="#{_otherIssueShipments.catDisposition}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['disposition_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['disposition_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Disposition"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catDisposition}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherShipmentsSameComponentsOrSetsOnHold" sortBy="#{_otherIssueShipments.catOnHold}" filterBy="#{_otherIssueShipments.catOnHold}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['onHold_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherShipmentsWithSameComponentsOrSets'.concat(divId)]['onHold_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="On Hold?"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_otherIssueShipments.id}"/>
+					<h:outputText value="#{_otherIssueShipments.catOnHold}" />        		
+				</s:link>				
+	        	</rich:column>
+
+        	</rich:dataTable>
+        	
+    	</div>
+</s:div>

@@ -1,0 +1,155 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+	
+	<ui:param name="entityType" value="booksets"/>
+	<ui:param name="moremenu" value="moremenu" />
+	
+	<ui:define name="body">
+	<ui:include src="../layout/tablenav.xhtml">
+		<ui:param name="viewPath" value="/lists/CatBookSetsList.xhtml"></ui:param>
+		<ui:param name="entityList" value="#{catBookSetsList}"></ui:param>
+		<ui:param name="divId" value="1"/>
+	</ui:include>
+	
+	<a:form>
+		<s:div id="header"  styleclass="header">
+			<div class="left"><span class="museo"><h:outputText
+			value="Book Sets
+			(#{empty catBookSetsList.resultList ? 0 : (catBookSetsList.paginated ? catBookSetsList.resultCount : catBookSetsList.resultList.size)})"></h:outputText>
+			</span> 
+			    <h:selectOneMenu name="flavour" value="#{catBookSetsList.flavour}">
+				<s:selectItems value="#{catBookSetsList.flavours}" var="i"
+					itemValue="#{i}" label="#{catBookSetsList.flavourLabel(i)}" />
+					<a:support event="onchange" action="#{catBookSetsList.updateUserSkinPreferences}"
+								oncomplete="javascript: location.href='CatBookSetsList.seam'"
+								ignoreDupResponses="true"
+								eventsQueue="bkSetsListQueue"
+								ajaxSingle="true"/>		
+			</h:selectOneMenu>  
+			
+			<s:link id="clearSearch" status="globalWaitStatus" 
+				ignoreDupResponses="true" styleClass="button wizard" 
+				action="#{catBookSetsList.reset}"  value="X" propagation="none"
+				oncomplete="javascript: location.href='CatBookSetsList.seam'">
+				<f:param name="flavour" value="#{catBookSetsList.flavour}"/> 
+			</s:link>
+			
+			</div>
+			
+			 <div class="right">
+			 		<ui:include src="adhocReportSelect.xhtml"><ui:param name="entityQuery" value="#{catBookSetsList}"/></ui:include>
+			 			
+			 		<a:commandLink id="createBookSetsEditButton"
+    				ignoreDupResponses="true"
+        			eventsQueue="bkSetsListQueue"
+             		status="globalWaitStatus"
+         	    	ajaxSingle="true"
+	        	    action="#{createBookSetsWizard.prepCreateOperation}"
+				    value="Add Book Set"
+				    reRender="createBookSetswizardForm" 
+				    oncomplete="Richfaces.showModalPanel('createBookSetsPanel');"
+                       styleClass="button wizard #{!s:hasPermission(catBookSeriesList.catBookSeries, 'create CatBookSeries') ? 'disabled' : '' }"
+					disabled="#{!s:hasPermission(catBookSeriesList.catBookSeries, 'create CatBookSeries')}"/>			    
+			 </div>
+			 
+		</s:div>
+		<!-- Shows loading image when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+
+			<div class="push" />			
+
+			<div id="mainlistscroller"><h:dataTable
+				id="catBookSetsList" var="_catBookSets"
+				value="#{catBookSetsList.resultList}"
+				rowClasses="odd,even"
+				styleClass="mainListClass">
+				
+				<cats:column value="#{_catBookSets.mainTitle}" id="maintitle" linkToId="#{_catBookSets.id}"
+					entityList="#{catBookSetsList}" propertyName="mainTitle"
+					propertyValue="#{catBookSetsList.catBookSets.mainTitle}"
+					propertyLabel="Main Title" propertyPath="catBookSets.mainTitle"
+					rendered="#{catBookSetsList.listFlavour['mainTitle']}" sortable="true" />
+				
+				<cats:column value="#{_catBookSets.setPublishers}" id="setpublishers" linkToId="#{_catBookSets.id}"
+					entityList="#{catBookSetsList}" propertyName="setPublishers"
+					propertyValue="#{catBookSetsList.catBookSets.setPublishers}"
+					propertyLabel="Book Set Publishers" propertyPath="catBookSets.setPublishers"
+					rendered="#{catBookSetsList.listFlavour['setPublishers']}" sortable="true" />
+				
+				<cats:column value="#{_catBookSets.catDoi}" id="catdoi" linkToId="#{_catBookSets.id}"
+					entityList="#{catBookSetsList}" propertyName="catDoi"
+					propertyValue="#{catBookSetsList.catBookSets.catDoi}"
+					propertyLabel="DOI" propertyPath="catBookSets.catDoi"
+					rendered="#{catBookSetsList.listFlavour['catDoi']}" sortable="true" />
+					
+				<cats:column value="#{_catBookSets.catEIssn}" id="EISSN" linkToId="#{_catBookSets.id}"
+					entityList="#{catBookSetsList}" propertyName="catEIssn"
+					propertyValue="#{catBookSetsList.catBookSets.catEIssn}"
+					propertyLabel="Set EISSN" propertyPath="catBookSets.catEIssn"
+					rendered="#{catBookSetsList.listFlavour['catEIssn']}" sortable="true" />
+				
+				<cats:column value="#{_catBookSets.catTotalInSet}" id="totalInSet" linkToId="#{_catBookSets.id}"
+					entityList="#{catBookSetsList}" propertyName="catTotalInSet"
+					propertyValue="#{catBookSetsList.catBookSets.catTotalInSet}"
+					propertyLabel="Total Books Published In Set" propertyPath="catBookSets.catTotalInSet"
+					rendered="#{catBookSetsList.listFlavour['catTotalInSet']}" sortable="true" />
+				
+				<cats:column value="#{_catBookSets.catCreator}" id="creator" linkToId="#{_catBookSets.id}"
+					entityList="#{catBookSetsList}" propertyName="catCreator"
+					propertyValue="#{catBookSetsList.catBookSets.catCreator}"
+					propertyLabel="Created by" propertyPath="catBookSets.catCreator"
+					rendered="#{catBookSetsList.listFlavour['catCreator']}" sortable="true" />
+				
+				<cats:column linkToId="#{_catBookSets.id}" sortable="true"
+					rendered="#{catBookSetsList.listFlavour['catDateModified']}"
+					entityList="#{catBookSetsList}"
+					propertyLabel="Date Modified"
+					propertyPath="catBookSets.catDateModified"
+					propertyValue="#{catBookSetsList.catBookSets.catDateModified}"
+					propertyName="catDateModified"
+					value="#{_catBookSets.catDateModified}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+					
+				<cats:column linkToId="#{_catBookSets.id}" sortable="true"
+					rendered="#{catBookSetsList.listFlavour['catDateCreated']}"
+					entityList="#{catBookSetsList}"
+					propertyLabel="Date Created"
+					propertyPath="catBookSets.catDateCreated"
+					propertyValue="#{catBookSetsList.catBookSets.catDateCreated}"
+					propertyName="catDateCreated"
+					value="#{_catBookSets.catDateCreated}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+				
+				<cats:column value="#{_catBookSets.id}" id="bookSetId" linkToId="#{_catBookSets.id}"
+					entityList="#{catBookSetsList}" propertyName="id"
+					propertyValue="#{catBookSetsList.catBookSets.id}"
+					propertyLabel="ID" propertyPath="catBookSets.id"
+					rendered="#{catBookSetsList.listFlavour['id']}" sortable="true" />
+				
+			</h:dataTable></div>
+		</a:form>
+		
+		<ui:include src="../booksets/createm_BookSets.xhtml">
+		   <ui:param name="divParam" value="bkSetList"/>
+		</ui:include>
+	
+	<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+	<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catBookSetsList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+		
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,149 @@
+<s:div id="#{divId}chooseCmptsTblSdiv" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">	
+	<s:div id="#{divId}chooseCmptFragment" styleClass="#{empty createContractDetailsWizard.parentContract ? 'off':'field'}">				
+			<s:div styleClass="field" >
+				<label>Choose Component</label>			
+			
+				<h:inputText id="default_search_catCmptsList1#{divId}"
+					value="#{catCmptsList.catCmpts.catName}"
+					disabled="#{createContractDetailsWizard.disableFilter()}"
+					onchange="return false;" size="60">
+					<a:support event="onblur"
+                    	eventsQueue="createContDtlsQueue"
+                    	ajaxSingle="true"/>
+				</h:inputText>			
+				<a:commandLink 
+			  		 styleClass="button filter"
+					 disabled="#{createContractDetailsWizard.disableFilter()}"
+					 value="Filter"
+                     ajaxSingle="true"
+                   	 eventsQueue="createContDtlsQueue"                     
+					 action="#{createContractDetailsWizard.narrowCmptsList(rich:findComponent('default_search_catCmptsList1'.concat(divId)).value)}"
+					 reRender="noLayoutContractsList#{divId},noLayoutCmptList#{divId},noLayoutErrorMsgs,editContractDtlsPanel,activateContractDtlsPanel"
+					 status="globalWaitStatus"  ignoreDupResponses="true" limitToList="true"/>
+					 
+					 <h:selectOneMenu id="cmptFilterByName#{divId}" value="#{createContractDetailsWizard.filterBy}" styleClass="filtertype"
+					 disabled="#{createContractDetailsWizard.disableFilter()}">
+					 	<f:selectItem itemLabel="by Set Name" itemValue="Set"/>
+					 	<f:selectItem itemLabel="by Component Name" itemValue="Cmpt"/>
+						<a:support event="onblur"
+                    		eventsQueue="createContDtlsQueue"
+                    		ajaxSingle="true"/>
+					 </h:selectOneMenu>
+				
+			</s:div>					 
+	</s:div>	
+	<div class="smart">
+			<rich:dataTable id="#{divId}catCmptsListId" rendered="#{not empty createContractDetailsWizard.cmptsList}"
+					var="_catCmpts" value="#{createContractDetailsWizard.cmptsList}">
+		
+					<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+						<h:selectBooleanCheckbox 
+									value="#{createContractDetailsWizard.selectionsForCmpts[_catCmpts]}">
+						<a:support event="onchange" 
+							action="#{createContractDetailsWizard.selectCmpts}"
+							reRender="noLayoutContractsList#{divId},noLayoutCmptList#{divId},noLayoutErrorMsgs,editContractDtlsPanel,activateContractDtlsPanel"
+							eventsQueue="createContDtlsQueue"
+							status="globalWaitStatus"  ignoreDupResponses="true"
+							ajaxSingle="true"
+							limitToList="true"/>			
+						</h:selectBooleanCheckbox>
+					</rich:column>		
+			
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="Set Name"
+						propertyName="setsValue"
+						propertyPath="catCmpts.setsValue"
+						propertyValue="#{catCmptsList.catCmpts.setsValue}"
+						reRender="cmpts"
+						value="#{_catCmpts.setsValue}"/>	
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="Component Name"
+						propertyName="catName"
+						propertyPath="catCmpts.catName"
+						propertyValue="#{catCmptsList.catCmpts.catName}"
+						reRender="cmpts"
+						value="#{_catCmpts.catName}"/>	
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="Backfile Summary"
+						propertyName="bfOverallOnboardingStatus"
+						propertyPath="catCmpts.bfOverallOnboardingStatus"
+						propertyValue="#{catCmptsList.catCmpts.bfOverallOnboardingStatus}"
+						reRender="cmpts"
+						value="#{_catCmpts.bfOverallOnboardingStatus}"/>
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="CSP Onboarding"
+						propertyName="catCspOnboardingStatus"
+						propertyPath="catCmpts.catCspOnboardingStatus"
+						propertyValue="#{catCmptsList.catCmpts.catCspOnboardingStatus}"
+						reRender="cmpts"
+						value="#{_catCmpts.catCspOnboardingStatus.label}"/>	
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="ISSN"
+						propertyName="catPrintIssn"
+						propertyPath="catCmpts.catPrintIssn"
+						propertyValue="#{catCmptsList.catCmpts.catPrintIssn}"
+						reRender="cmpts"
+						value="#{_catCmpts.catPrintIssn}"/>			
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="Extent (Dates)"
+						propertyName="catDateRange"
+						propertyPath="catCmpts.catDateRange"
+						propertyValue="#{catCmptsList.catCmpts.catDateRange}"
+						reRender="cmpts"
+						value="#{_catCmpts.catDateRange}"/>		
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="Rights Exclusions"
+						propertyName="catRightsExclusions"
+						propertyPath="catCmpts.catRightsExclusions"
+						propertyValue="#{catCmptsList.catCmpts.catRightsExclusions}"
+						reRender="cmpts"
+						value="#{_catCmpts.catRightsExclusions ? 'Yes' : 'No'}"/>
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="Participation"
+						propertyName="catParticipationDate"
+						propertyPath="catCmpts.catParticipationDate"
+						propertyValue="#{catCmptsList.catCmpts.catParticipationDate}"
+						reRender="cmpts"
+						value="#{_catCmpts.catParticipationDate}">
+						<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+					</cats:wizardColumn>	
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="On Hold"
+						propertyName="catOnHold"
+						propertyPath="catCmpts.catOnHold"
+						propertyValue="#{catCmptsList.catCmpts.catOnHold}"
+						reRender="cmpts"
+						value="#{_catCmpts.catOnHold ? 'Yes' : 'No'}"/>
+					<cats:wizardColumn
+						entityList="#{catCmptsList}"
+						propertyLabel="ID"
+						propertyName="id"
+						propertyPath="catCmpts.id"
+						propertyValue="#{catCmptsList.catCmpts.id}"
+						reRender="cmpts"
+						value="#{_catCmpts.id}"/>		
+				</rich:dataTable>	
+			</div>	
+			<s:div styleClass="blanktable" rendered="#{empty createContractDetailsWizard.selectedCmptsList}">
+				<span>Use the filter to narrow down your options.</span>
+			</s:div>
+	</s:div>

@@ -1,0 +1,225 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	template="../layout/list_template.xhtml">
+	<ui:param name="entityType" value="contractdetails"/>
+  <ui:param name="moremenu" value="moremenu"/>
+
+	<ui:define name="body">
+	
+	<ui:include src="../layout/tablenav.xhtml">
+      <ui:param name="viewPath" value="/lists/CatContractDtlsList.xhtml"></ui:param>
+      <ui:param name="entityList" value="#{catContractDtlsList}"></ui:param>
+      <ui:param name="divId" value="1"></ui:param>
+    </ui:include>
+    
+	<a:form>
+			<s:div id="header">			
+			<div class="left"> <span
+				class="museo"><h:outputText
+			value="Agreement Details (#{empty catContractDtlsList.resultList ? 0 : (catContractDtlsList.paginated ? catContractDtlsList.resultCount : catContractDtlsList.resultList.size)})"></h:outputText>
+				</span>
+				<h:selectOneMenu name="flavour" value="#{catContractDtlsList.flavour}">
+				<s:selectItems value="#{catContractDtlsList.flavours}" var="i"
+					itemValue="#{i}" label="#{catContractDtlsList.flavourLabel(i)}" />
+				<a:support event="onchange" action="#{catContractDtlsList.updateUserSkinPreferences}"
+								oncomplete="javascript: location.href='CatContractDtlsList.seam'"
+								ignoreDupResponses="true"
+								eventsQueue="condtlsListQueue"
+								ajaxSingle="true"/>
+			</h:selectOneMenu>  
+			<s:link id="clearSearch" status="globalWaitStatus" 
+				ignoreDupResponses="true" styleClass="button wizard" 
+				action="#{catContractDtlsList.reset}"  value="X" propagation="none"
+				oncomplete="javascript: location.href='CatContractDtlsList.seam'"></s:link>
+			<f:param name="flavour" value="#{catContractDtlsList.flavour}"/>	
+			</div>
+			
+			<div class="right">
+			<ui:include src="adhocReportSelect.xhtml"><ui:param name="entityQuery" value="#{catContractDtlsList}"/></ui:include>
+			<h:selectOneMenu id="contDtlsBulkOperationsSelect" value="#{contractDetailsWizard.wizardType}">
+				<a:support 
+					event="onchange" 
+					action="#{contractDetailsWizard.prepBulkOperation()}"
+					status="globalWaitStatus"
+					reRender="contDtlsLifecycleOperationsPanels,contDtlsChangeAttrPanels, catContractDtlsList"					 
+					oncomplete="if ( #{rich:element('contDtlsBulkOperationsSelect')}.options[this.options.selectedIndex].value == 'RIDERS' )	{									
+									 #{rich:component('contDtlsAttrUpdatePanel')}.show();	
+								} ;
+								if ( #{rich:element('contDtlsBulkOperationsSelect')}.options[this.options.selectedIndex].value == 'CDLIFECYCLE' )	{									
+									 #{rich:component('contLifecycleUpdatePanel')}.show();	
+								} ; return false; "
+					limitToList="true"/>
+				<s:selectItems value="#{contractDetailsWizard.bulkOperationsNames}" var="b"
+					label="#{contractDetailsWizard.bulkOperations[b]}" itemValue="#{b}"
+					noSelectionLabel="Bulk Operations" />
+			</h:selectOneMenu>
+						
+						
+						<a:commandLink 
+							onclick="if ( ! checkForSave() ) { return false ; }" 
+							id="createContractDtlsEditButton"
+							ignoreDupResponses="true"
+						    action="#{createContractDetailsWizard.prepCreateOperation}"
+							value="Add Agreement Detail"
+							reRender="addContractDtlsModalPanels" 
+							disabled="#{!s:hasPermission(catContractsHome.instance, 'create ContractDetails')}"
+							oncomplete="Richfaces.showModalPanel('addContractDtlsPanel');"
+							styleClass="button wizard #{!s:hasPermission(catContractsHome.instance, 'create ContractDetails') ? 'disabled' : ''}"
+							status="globalWaitStatus" 
+							limitToList="true">
+				</a:commandLink>		
+						
+			</div>
+			</s:div>
+			
+		<!-- Shows loading image when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;"><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+				<div class="push" />
+			<div id="mainlistscroller"><h:dataTable
+				id="catContractDtlsList" var="_catContractDtls"
+				value="#{catContractDtlsList.resultList}"				
+				rowClasses="odd,even"
+				styleClass="mainListClass">
+				<rich:column styleClass="checkBoxes" headerClass="checkBoxes"
+				rendered="#{not empty contractDetailsWizard.bulkOperationsNames}">
+					<f:facet name="header">
+						<h:panelGrid columns="1">
+							<h:outputText value=" " />
+							<input type="checkbox" id="select_all_checkbox"
+								name="select_all_checkbox"
+								onclick="if ( this.checked ) { jQuery('.bulk_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.bulk_checkbox').each(function(){ this.checked = false; }); }" />
+						</h:panelGrid>
+					</f:facet>
+					<span onclick="cancelEventBubbling(event);">
+					<h:selectBooleanCheckbox styleClass="bulk_checkbox checkBoxes"
+						value="#{contractDetailsWizard.selections[_catContractDtls]}" />
+						</span>
+				</rich:column>
+
+				<cats:column value="#{_catContractDtls.id}" linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="id"
+					propertyValue="#{catContractDtlsList.catContractDtls.id}"
+					propertyLabel="ID" propertyPath="catContractDtls.id"
+					rendered="#{catContractDtlsList.listFlavour['id']}" sortable="true" />
+
+				<cats:column value="#{_catContractDtls.catContracts.id}" linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catContracts.id"
+					propertyValue="#{catContractDtlsList.catContractDtls.catContracts.id}"
+					propertyLabel="Agreement ID" propertyPath="catContractDtls.catContracts.id"
+					rendered="#{catContractDtlsList.listFlavour['catContracts.id']}" sortable="true" />
+					
+				<cats:column value="#{_catContractDtls.catContracts.catType.label}" linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catContracts.catType"
+					propertyValue="#{catContractDtlsList.catContractDtls.catContracts.catType}"
+					propertyLabel="Agreement Type" propertyPath="catContractDtls.catContracts.catType"
+					enumList="#{listsForEnums.catContracts_CatType}"
+					rendered="#{catContractDtlsList.listFlavour['catContracts.catType']}"
+					sortable="true" />
+
+				<cats:column value="#{_catContractDtls.catContracts.publisherValue}" linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catContracts.publisherValue"
+					propertyValue="#{catContractDtlsList.catContractDtls.catContracts.publisherValue}"
+					propertyLabel="Publisher Name" propertyPath="catContractDtls.catContracts.publisherValue"
+					rendered="#{catContractDtlsList.listFlavour['catContracts.publisherValue']}" sortable="true" />
+
+				
+				
+				<cats:column value="#{_catContractDtls.catCmpts.setsValue}" linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catCmpts.setsValue"
+					propertyValue="#{catContractDtlsList.catContractDtls.catCmpts.setsValue}"
+					propertyLabel="Set Name" propertyPath="catContractDtls.catCmpts.setsValue"
+					rendered="#{catContractDtlsList.listFlavour['catCmpts.setsValue']}" sortable="true" />
+
+				<cats:column value="#{_catContractDtls.catCmpts.id}"  linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catCmpts.id"
+					propertyValue="#{catContractDtlsList.catContractDtls.catCmpts.id}"
+					propertyLabel="Component ID" propertyPath="catContractDtls.catCmpts.id"
+					rendered="#{catContractDtlsList.listFlavour['catCmpts.id']}" sortable="true" />
+
+				<cats:column value="#{_catContractDtls.catCmpts.catName}"  linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catCmpts.catName"
+					propertyValue="#{catContractDtlsList.catContractDtls.catCmpts.catName}"
+					propertyLabel="Component Name" propertyPath="catContractDtls.catCmpts.catName"
+					rendered="#{catContractDtlsList.listFlavour['catCmpts.catName']}" sortable="true" />
+
+				<cats:column value="#{_catContractDtls.catLifecycle.label}" linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catLifecycle"
+					propertyValue="#{catContractDtlsList.catContractDtls.catLifecycle}"
+					propertyLabel="Lifecycle" propertyPath="catContractDtls.catLifecycle"
+					enumList="#{listsForEnums.catContractDtls_Lifecycle}"
+					rendered="#{catContractDtlsList.listFlavour['catLifecycle']}"
+					sortable="true" />
+
+				<cats:column value="#{_catContractDtls.catOutcome.label}" linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catOutcome"
+					propertyValue="#{catContractDtlsList.catContractDtls.catOutcome}"
+					propertyLabel="Outcome" propertyPath="catContractDtls.catOutcome"
+					enumList="#{listsForEnums.catContractDtls_Outcome}"
+					rendered="#{catContractDtlsList.listFlavour['catOutcome']}"
+					sortable="true" />
+
+				<cats:column value="#{_catContractDtls.catEffectiveDate}"  linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catEffectiveDate"
+					propertyValue="#{catContractDtlsList.catContractDtls.catEffectiveDate}"
+					propertyLabel="Effective Date" propertyPath="catContractDtls.catEffectiveDate"
+					rendered="#{catContractDtlsList.listFlavour['catEffectiveDate']}" sortable="true" ><s:convertDateTime type="date" pattern="yyyy/MM/dd"></s:convertDateTime></cats:column>
+
+				<cats:column value="#{_catContractDtls.catAllOrPartOfCmpt.label}" linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catAllOrPartOfCmpt"
+					propertyValue="#{catContractDtlsList.catContractDtls.catAllOrPartOfCmpt}"
+					propertyLabel="Covers All/Part of Component" propertyPath="catContractDtls.catAllOrPartOfCmpt"
+					enumList="#{listsForEnums.catContractDtls_AllOrPartOfCmpt}"
+					rendered="#{catContractDtlsList.listFlavour['catAllOrPartOfCmpt']}"
+					sortable="true" />
+
+				<cats:column value="#{_catContractDtls.catContentCovered}"  linkToId="#{_catContractDtls.id}"
+					entityList="#{catContractDtlsList}" propertyName="catContentCovered"
+					propertyValue="#{catContractDtlsList.catContractDtls.catContentCovered}"
+					propertyLabel="Content Covered" propertyPath="catContractDtls.catContentCovered"
+					rendered="#{catContractDtlsList.listFlavour['catContentCovered']}" sortable="true" />
+					
+					
+					<cats:column linkToId="#{_catContractDtls.id}" sortable="true"
+					rendered="#{catContractDtlsList.listFlavour['catDateModified']}"
+					entityList="#{catContractDtlsList}"
+					propertyLabel="Date Modified"
+					propertyPath="catContractDtls.catDateModified"
+					propertyValue="#{catContractDtlsList.catContractDtls.catDateModified}"
+					propertyName="catDateModified"
+					value="#{_catContractDtls.catDateModified}">
+					<s:convertDateTime type="both" pattern="yyyy/MM/dd HH:mm:ss"></s:convertDateTime>
+				</cats:column>
+					
+					
+		</h:dataTable>
+	</div>
+</a:form>
+
+ <ui:include src="../layout/tablenav.xhtml">
+      <ui:param name="viewPath" value="/lists/CatContractDtlsList.xhtml"></ui:param>
+      <ui:param name="entityList" value="#{catContractDtlsList}"></ui:param>
+      <ui:param name="divId" value="2"></ui:param>
+    </ui:include>
+
+	<ui:include src="/contractdetails/advLifecycleContractDtls_modal.xhtml"/>
+	<ui:include src="/contractdetails/changeAttrbContractDtls_modal.xhtml"/>
+	<ui:include src="/contractdetails/addContractDetails_modal.xhtml"/>
+	<h:outputText id="contChangeRevisionPanel" />
+		<!-- note that these are: outside the a:form for the main table, and have their own a:form each. -->
+							
+		<!-- when used in conjunction with a BaseListFlavour, this will order the columns per the configuration order. -->
+	<rich:jQuery timing="onload" name="orderColumns"
+			selector="#mainlistscroller > .mainListClass > thead:first-child > tr:first-child, #mainlistscroller > .mainListClass > tbody > tr"
+			query="#{catContractDtlsList.listFlavour.getColumnOrderingJQuery()}" id="orderJQuery"/>
+</ui:define>
+</ui:composition>

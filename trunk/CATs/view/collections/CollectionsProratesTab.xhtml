@@ -1,0 +1,13 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:ui="http://java.sun.com/jsf/facelets" id="SOMEDiv2">
+
+	<!-- Smart table for Prorates and Prorates Changes -->
+	<ui:include src="CollectionsProratesTable.xhtml">
+	  		<ui:param name="divId" value="collProratesTableDiv"/>
+	  		<ui:param name="tableId" value="collProratesTable"/>
+	</ui:include>
+	
+	<ui:include src="CollectionsProratesChangesTable.xhtml">
+	  		<ui:param name="divId" value="collProratesChangesTableDiv"/>
+	  		<ui:param name="tableId" value="collProratesChangesTable"/>
+	</ui:include>
+</s:div>

@@ -1,0 +1,29 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+    <m:from name="CATS" address="#{vendorSubmissionBatchListMailOps.fromEmail}" />
+    <m:to name="#{vendorSubmissionBatchListMailOps.displayName}"><h:outputText value="#{vendorSubmissionBatchListMailOps.email}"/></m:to>
+    <ui:repeat var="_email" value="#{vendorSubmissionBatchListMailOps.ccList}">
+    	<m:cc><h:outputText value="#{_email}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="Vendor Submission Batch List for Conprep: #{vendorSubmissionBatchListMailOps.reportFilename}"/></m:subject>
+	<m:replyTo address="catssupport@ithaka.org"/>
+    <m:body>
+    	<p><h:outputText value="Hi #{vendorSubmissionBatchListMailOps.displayName}" />,</p>
+    	<s:fragment rendered="true">
+			<p>
+				<h:outputText value="You recently attempted to create a Vendor Submission Batch List for Conrep. Please see the attached file for the results." />
+				<br/>
+			</p>
+		</s:fragment>
+		<p>Sincerely,<br/>CATS</p>
+				<m:attachment 
+		   value="#{vendorSubmissionBatchListMailOps.attachment}" 
+		   fileName="#{vendorSubmissionBatchListMailOps.attachmentName}"/>
+    </m:body>
+</m:message>

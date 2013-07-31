@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VendorMetadataExtract creationDate="2012-12-06T11:45:01.422-05:00">
+    <BookId type="doi">ctsfh1sh</BookId>
+    <BookId type="versionid">1</BookId>
+    <BookId type="submissionid">2</BookId>
+    <LCSHCallNumber>HC106.83.P38 2008</LCSHCallNumber>
+    <LCSHSubjectDisplayString>United States -- Economic policy -- 2001–; Taxation -- United States; Education and state -- United States; Skilled labor -- Government policy -- United
+        States; Economic development -- United States</LCSHSubjectDisplayString>
+    <LCSHSubjectGroup sequence="1">
+        <LCSHSubject>United States</LCSHSubject>
+        <LCSHSubjectGroup>
+            <LCSHSubject>Economic policy</LCSHSubject>
+            <LCSHSubjectGroup>
+                <LCSHSubject>2001–</LCSHSubject>
+            </LCSHSubjectGroup>
+        </LCSHSubjectGroup>
+    </LCSHSubjectGroup>
+    <LCSHSubjectGroup sequence="2">
+        <LCSHSubject>Taxation</LCSHSubject>
+        <LCSHSubjectGroup>
+            <LCSHSubject>United States</LCSHSubject>
+        </LCSHSubjectGroup>
+    </LCSHSubjectGroup>
+    <LCSHSubjectGroup sequence="3">
+        <LCSHSubject>Education and state</LCSHSubject>
+        <LCSHSubjectGroup>
+            <LCSHSubject>United States</LCSHSubject>
+        </LCSHSubjectGroup>
+    </LCSHSubjectGroup>
+    <LCSHSubjectGroup sequence="4">
+        <LCSHSubject>Skilled labor</LCSHSubject>
+        <LCSHSubjectGroup>
+            <LCSHSubject>Government policy</LCSHSubject>
+            <LCSHSubjectGroup>
+                <LCSHSubject>United States</LCSHSubject>
+            </LCSHSubjectGroup>
+        </LCSHSubjectGroup>
+    </LCSHSubjectGroup>
+    <LCSHSubjectGroup sequence="5">
+        <LCSHSubject>Economic development</LCSHSubject>
+        <LCSHSubjectGroup>
+            <LCSHSubject>United States</LCSHSubject>
+        </LCSHSubjectGroup>
+    </LCSHSubjectGroup>
+</VendorMetadataExtract> 

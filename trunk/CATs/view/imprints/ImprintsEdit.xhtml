@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+
+	<ui:param name="entityType" value="imprints" />
+	<ui:param name="moremenu" value="moremenu"/>
+	
+	<ui:define name="badge">
+		<ui:include src="ImprintsBadge.xhtml" />
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="imprintsEditForm">
+		<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+				
+			<rich:tabPanel 
+				id="maintab" 
+			   switchType="ajax"
+				styleClass="tab"
+				contentClass="tab_content"
+				selectedTab="#{catImprintsHome.selectedTab}">
+
+				<rich:tab label="Imprints Information" id="tab1" name="tab1" eventsQueue="imprintsEditQueue" status="globalWaitStatus"
+					 reRender="variantsLayout" limitToList="true" action="#{catImprintsHome.updateUserTabPreferences('tab1')}">
+					<ui:include src="ImprintsInformationTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Books" id="bookstab" name="bookstab"
+					status="globalWaitStatus" reRender="variantsLayout"
+					action="#{catImprintsHome.updateUserTabPreferences('bookstab')}"
+					limitToList="true">
+					<ui:include src="ImprintsBooksTab.xhtml" />
+				</rich:tab>				
+				<rich:tab label="Audit" id="auditTab" name="auditTab" eventsQueue="imprintsEditQueue" status="globalWaitStatus" 
+					 limitToList="true" action="#{catImprintsHome.updateUserTabPreferences('auditTab')}" reRender="variantsLayout" >
+					<ui:include src="ImprintsAuditTab.xhtml" />
+				</rich:tab>		
+				<rich:tab label="Events" id="eventsTab" name="eventsTab" eventsQueue="imprintsEditQueue" status="globalWaitStatus" 
+					 limitToList="true" action="#{catImprintsHome.updateUserTabPreferences('eventsTab')}" reRender="variantsLayout">
+					<ui:include src="ImprintsEventsTab.xhtml" />
+				</rich:tab>
+			</rich:tabPanel>
+			<div id="functions">
+			<a:commandLink action="#{catImprintsHome.update}"  
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" styleClass="button saveOrCancel disabled" 
+		    		value="Save"
+		    		reRender="imprintsEditForm" limitToList="true"
+		    		eventsQueue="imprintsEditQueue" status="globalWaitStatus" />
+		    	<a:commandLink action="#{catImprintsHome.cancel}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" ajaxSingle="true" styleClass="button saveOrCancel disabled" 
+		    		value="Cancel" limitToList="true"
+		    		eventsQueue="imprintsEditQueue" status="globalWaitStatus"/>
+			</div>
+		</h:form>
+		
+		<a:form>
+			<a:outputPanel layout="none" id="variantsLayout">
+				<s:div id="variantsTable" rendered="#{empty catImprintsHome.selectedTab or catImprintsHome.selectedTab eq 'tab1'}">		
+				<ui:include src="ImprintVariantsTable.xhtml">
+					<ui:param name="divId" value="impVariantsTableDiv" />
+					<ui:param name="tableId" value="impVariantsTable" />
+					<ui:param name="impVariantsList"
+						value="#{catImprintsHome.imprintVariantsList}" />
+				</ui:include>
+				</s:div>
+			</a:outputPanel>
+			
+		</a:form>
+		
+		<ui:include src="addEditImprintVariant_modal.xhtml">
+			<ui:param name="reRenderMe" value="catImpVariantsList" />
+			<ui:param name="divParam" value="impVariantsList" />
+			<ui:param name="pageURL" value="/imprints/ImprintsEdit.xhtml" />
+		</ui:include>
+		
+		<ui:include src="booksToImprint_modal.xhtml">
+			<ui:param name="reRenderMe" value="booksToImprintList" />
+			<ui:param name="divParam" value="booksToImprintList" />
+			<ui:param name="pageURL" value="/imprints/ImprintsEdit.xhtml" />
+		</ui:include>
+
+	</ui:define>
+</ui:composition>

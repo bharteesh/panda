@@ -1,0 +1,123 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo"> <h:outputText value="Book Agreement Details (#{bookAgreementDtlsList.size})" />
+				</span>
+				<a:commandLink value="X"
+					action="#{sortFiltBean.resetSortFilt('catBookAgreementDtls'.concat(divId))}"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					reRender="#{divId}catBookAgreementDtlsList" styleClass="button wizard" />
+			</div>
+	<div class="right">
+
+	</div>
+	</div>
+		<rich:dataTable id="#{divId}catBookAgreementDtlsList" var="_catBookAgreementDtls"
+			value="#{bookAgreementDtlsList}" rendered="#{not empty bookAgreementDtlsList}">
+			
+			
+			<rich:column id="#{divId}id" sortBy="#{_catBookAgreementDtls.id}"
+				filterBy="#{_catBookAgreementDtls.id}" sortable="true"
+				sortOrder="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsId_sortOrder']}"
+				filterValue="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsId_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBookAgreementDtls.id}" />
+					<h:outputText value="#{_catBookAgreementDtls.id}" />
+				</s:link>
+			</rich:column>
+			
+						<rich:column id="#{divId}dateAdded" sortBy="#{_catBookAgreementDtls.catDateAddedToAgreement}"
+				filterBy="#{_catBookAgreementDtls.catDateAddedToAgreement}" sortable="true"
+				sortOrder="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsDateAddedToAgreement_sortOrder']}"
+				filterValue="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsDateAddedToAgreement_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Date Added To Agreement" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBookAgreementDtls.id}" />
+					<h:outputText value="#{_catBookAgreementDtls.catDateAddedToAgreement}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="#{divId}publisher" sortBy="#{_catBookAgreementDtls.catContracts.id}"
+				filterBy="#{_catBookAgreementDtls.catContracts.id}" sortable="true"
+				sortOrder="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsContracts_sortOrder']}"
+				filterValue="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsContracts_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Contract" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBookAgreementDtls.id}" /> 
+					<h:outputText value="#{_catBookAgreementDtls.catContracts.id}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="#{divId}lifecycle" sortBy="#{_catBookAgreementDtls.catLifecycle}"
+				filterBy="#{_catBookAgreementDtls.catLifecycle}" sortable="true"
+				sortOrder="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsLifecycle_sortOrder']}"
+				filterValue="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsLifecycle_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Lifecycle" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBookAgreementDtls.id}" /> 
+					<h:outputText value="#{_catBookAgreementDtls.catLifecycle.label}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="#{divId}outcome" sortBy="#{_catBookAgreementDtls.catOutcome}"
+				filterBy="#{_catBookAgreementDtls.catOutcome}" sortable="true"
+				sortOrder="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsOutcome_sortOrder']}"
+				filterValue="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsOutcome_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Outcome" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBookAgreementDtls.id}" /> 
+					<h:outputText value="#{_catBookAgreementDtls.catOutcome.label}" />
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}terminationDateActl" sortBy="#{_catBookAgreementDtls.catTerminationDateActl}"
+				filterBy="#{_catBookAgreementDtls.catTerminationDateActl}" sortable="true"
+				sortOrder="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsTerminationDateActl_sortOrder']}"
+				filterValue="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsTerminationDateActl_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Termination Date" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBookAgreementDtls.id}" /> 
+					<h:outputText value="#{_catBookAgreementDtls.catTerminationDateActl}">
+						<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+					</h:outputText>
+				</s:link>
+			</rich:column>
+			<rich:column id="#{divId}publisherValue" sortBy="#{_catBookAgreementDtls.catContracts.publisherValue}"
+				filterBy="#{_catBookAgreementDtls.catContracts.publisherValue}" sortable="true"
+				sortOrder="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsPublisherValue_sortOrder']}"
+				filterValue="#{sortFiltBean['catBookAgreementDtls'.concat(divId)]['catBookAgreementDtlsPublisherValue_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Publisher" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catBookAgreementDtls.id}" /> 
+					<h:outputText value="#{_catBookAgreementDtls.catContracts.publisherValue}" />
+				</s:link>
+			</rich:column>
+		</rich:dataTable>
+
+
+	</div>
+
+</s:div>
+ 

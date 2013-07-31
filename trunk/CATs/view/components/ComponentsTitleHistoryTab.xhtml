@@ -1,0 +1,200 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="titleHistoryDiv">
+
+	<div class="col col1">
+		<s:decorate id="catName_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">Name</ui:define>
+			<h:inputTextarea onchange="enableSaveCancel();" cols="20"
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catName')}"
+				id="catName7" rows="2"
+				value="#{catCmptsHome.instance.catName}" />
+		</s:decorate> 
+		<s:decorate id="catIniArt_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">Initial Article</ui:define>
+			<h:inputText onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catIniArt')}"
+				id="catIniArt7" maxlength="20" size="25"
+				value="#{catCmptsHome.instance.catIniArt}" />
+		</s:decorate> 
+		<s:decorate id="catSubtitle_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">Subtitle</ui:define>
+			<h:inputTextarea cols="20" onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catSubtitle')}"
+				id="catSubtitle7" rows="2"
+				value="#{catCmptsHome.instance.catSubtitle}" />
+		</s:decorate> 
+		<!-- "#{!s:hasPermission(catCmptsHome.instance, 'modify catPublisherSpecifiedName')}"-->
+		<s:decorate id="catPublisherSpecifiedName_div7"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Name Specified by Publisher</ui:define>
+			<h:selectOneMenu onchange="enableSaveCancel();" 
+				disabled= "#{!s:hasPermission(catCmptsHome.instance, 'modify catPublisherSpecifiedName')}"
+				name="catPublisherSpecifiedName"
+				value="#{catCmptsHome.instance.catPublisherSpecifiedName}" required="true">
+				<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+					noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+			</h:selectOneMenu>
+		</s:decorate> 
+		<s:decorate id="catPublisherAcronym_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">Publisher's Acronym</ui:define>
+			<h:inputText onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catPublisherAcronym')}"
+				id="catPublisherAcronym7" maxlength="255" size="25"
+				value="#{catCmptsHome.instance.catPublisherAcronym}" />
+		</s:decorate>
+		<s:decorate id="catPrintIssn_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">Print ISSN</ui:define>
+			<h:inputText onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catPrintIssn')}"
+				id="catPrintIssn7" maxlength="50" size="25"
+				value="#{catCmptsHome.instance.catPrintIssn}">
+				<a:support event="onblur" action="#{catCmptsHome.printIssnChanged()}" eventsQueue="cmptsEditQueue"/>
+				<a:support event="onfocus" action="#{catCmptsHome.onFocusPrintIssn}" eventsQueue="cmptsEditQueue"/>
+			</h:inputText>
+		</s:decorate> 
+		<s:decorate id="catEIssn_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">EISSN</ui:define>
+			<h:inputText onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catEIssn')}"
+				id="catEIssn7" maxlength="14" size="25"
+				value="#{catCmptsHome.instance.catEIssn}" >
+				<a:support event="onblur" action="#{catCmptsHome.eIssnChanged()}" eventsQueue="cmptsEditQueue"/>
+				<a:support event="onfocus" action="#{catCmptsHome.onFocusEIssn}" eventsQueue="cmptsEditQueue"/>
+			</h:inputText>				
+		</s:decorate> 
+		<s:decorate id="catTitleIssn_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">Title ISSN</ui:define>
+			<h:inputText onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catTitleIssn')}"
+				id="catTitleIssn7" maxlength="14" size="25"
+				value="#{catCmptsHome.instance.catTitleIssn}">
+				<a:support event="onblur" action="#{catCmptsHome.titleIssnChanged()}" eventsQueue="cmptsEditQueue"/>
+				<a:support event="onfocus" action="#{catCmptsHome.onFocusTitleIssn}" eventsQueue="cmptsEditQueue"/>
+			</h:inputText>				
+		</s:decorate> 
+		<s:decorate id="catIssnNote_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">ISSN Note</ui:define>
+			<h:inputTextarea cols="20" onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catIssnNote')}"
+				id="catIssnNote7" rows="2"
+				value="#{catCmptsHome.instance.catIssnNote}" />
+		</s:decorate> 
+		<s:decorate id="catIssnStatus_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">ISSN Status</ui:define>
+			<h:selectOneMenu onchange="enableSaveCancel();" 
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catIssnStatus')}"
+				name="catIssnStatus" value="#{catCmptsHome.instance.catIssnStatus}">
+				<s:selectItems itemValue="#{i}" label="#{i.label}"
+					noSelectionLabel="Choose..."
+					value="#{listsForEnums.catCmpts_CatIssnStatus(catCmptsHome.instance)}" var="i" />
+				<a:support event="onblur" action="#{catCmptsHome.issnStatusChanged}" eventsQueue="cmptsEditQueue"/>
+				<a:support event="onfocus" action="#{catCmptsHome.onFocusIssnStatus}" eventsQueue="cmptsEditQueue"/>
+			</h:selectOneMenu>
+		</s:decorate> 
+		<s:decorate id="catIssnRequestNote_div7"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">ISSN Request Note</ui:define>
+			<h:inputTextarea cols="20" onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catIssnRequestNote')}"
+				id="catIssnRequestNote7" rows="2"
+				value="#{catCmptsHome.instance.catIssnRequestNote}" />
+		</s:decorate>
+	</div>
+	<div class="col col2">
+		<s:decorate id="catThOclcNumber_div7"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">OCLC Number</ui:define>
+			<h:inputText onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catThOclcNumber')}"
+				id="catThOclcNumber7" maxlength="50" size="25"
+				value="#{catCmptsHome.instance.catThOclcNumber}" />
+		</s:decorate> 
+		<s:decorate id="catPublctnUnitRange_div7"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Extent (Pub Units)</ui:define>
+			<h:inputTextarea onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catPublctnUnitRange')}"
+				id="catPublctnUnitRange7" maxlength="200" size="25"
+				value="#{catCmptsHome.instance.catPublctnUnitRange}" />
+		</s:decorate> 
+		<s:decorate id="catStartYear_div7"	template="../layout/edit.xhtml">
+			<ui:define name="label">Start Year</ui:define>
+			<h:inputText value="#{catCmptsHome.instance.catStartYear}" onchange="enableSaveCancel();" ><s:convertDateTime type="date" pattern="yyyy"/></h:inputText>
+		</s:decorate>
+		<s:decorate id="catDateRange_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">Extent (Dates)</ui:define>
+			<h:inputTextarea onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catDateRange')}"
+				id="catDateRange7" maxlength="200"
+				value="#{catCmptsHome.instance.catDateRange}" />
+		</s:decorate> 
+		<s:decorate id="catStartDateIsAnEstimate_div7"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Estimated Start Date</ui:define>
+			<h:selectOneMenu onchange="enableSaveCancel();" 
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catStartDateIsAnEstimate')}"
+				name="catStartDateIsAnEstimate"
+				value="#{catCmptsHome.instance.catStartDateIsAnEstimate}">
+				<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+					noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+			</h:selectOneMenu>
+		</s:decorate> 
+		<s:decorate id="catEndDateIsAnEstimate_div7"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Estimated End Date</ui:define>
+			<h:selectOneMenu onchange="enableSaveCancel();" 
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catEndDateIsAnEstimate')}"
+				name="catEndDateIsAnEstimate"
+				value="#{catCmptsHome.instance.catEndDateIsAnEstimate}">
+				<s:selectItems itemValue="#{i.value}" label="#{i.label}"
+					noSelectionLabel="Choose..." value="#{listsForEnums.yesNo}" var="i" />
+			</h:selectOneMenu>
+		</s:decorate> 
+		<!-- the validation messages populated from catCmptsHome.persist() and catCmptsHome.update() can reach these two
+		fields because the id's of the input fields are the propertyNames.  this is crufty.   -->
+		<s:decorate id="catLtmJournalId_div7" template="../layout/edit.xhtml">
+			<ui:define name="label">LTM Journal ID</ui:define>
+			<h:outputText value="#{catCmptsHome.instance.catLtmJournalId}"/>			 
+			<a:commandLink id="setLtmJournalIdButton"		
+				oncomplete="#{rich:component('newJournalIdWizardModal')}.show(); return false;"
+				onclick="if ( ! checkForSave() ) { return false ; }" 	   
+				ignoreDupResponses="true"
+	    		action="#{newJournalIdWizard.initWizard(catCmptsHome.instance)}"
+				value="Set"
+				reRender="catLtmJournalId_div7"
+				styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'modify catLtmJournalId') or catCmptsHome.validCatLtmJournalId() ? 'disabled':''}"
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catLtmJournalId') or catCmptsHome.validCatLtmJournalId()}"
+				status="globalWaitStatus"
+				eventsQueue="cmptsEditQueue"
+				ajaxSingle="true"/>
+		</s:decorate> 
+		<s:decorate id="catLtmJournalCode_div7"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">LTM Journal Code</ui:define>
+			<h:inputText onchange="enableSaveCancel();" 
+				readonly="#{!s:hasPermission(catCmptsHome.instance, 'modify catLtmJournalCode')}"
+				id="catLtmJournalCode" maxlength="50" size="25"
+				value="#{catCmptsHome.instance.catLtmJournalCode}" />
+		</s:decorate> 
+		<s:decorate id="catSelectionRecommendation_div7"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Selection Recommendation</ui:define>
+			<h:selectOneMenu onchange="enableSaveCancel();" 
+				disabled="#{!s:hasPermission(catCmptsHome.instance, 'modify catSelectionRecommendation')}"
+				name="catSelectionRecommendation"
+				value="#{catCmptsHome.instance.catSelectionRecommendation}">
+				<s:selectItems itemValue="#{i}" label="#{i.label}"
+					noSelectionLabel="Choose..."
+					value="#{listsForEnums.catCmpts_SelectionRecommendation}" var="i" />
+			</h:selectOneMenu>
+		</s:decorate>
+	</div>
+
+	<div class="push" />
+	
+
+</s:div>

@@ -1,0 +1,208 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2><h:outputText value="#{createAcqOrdersWizard.createTitle}" /></h2>
+
+	<div id="step1">
+		<ul class="steps">
+			<li class="">1. Info</li>
+			<li class="selected">2. Results</li>
+		</ul>
+	
+	
+		<div class="cluster smart">
+			<div class="title eligible">
+	            <h1>Orders (1)</h1>
+	            <p>You <strong>added</strong> one order to <strong> #{createAcqOrdersWizard.parentType} #{createAcqOrdersWizard.parentName}</strong>:</p>
+	        </div>
+	        <div>
+	        	<rich:dataTable id="catCreatedOrdersTable"
+					var="_order"
+			        value="#{createAcqOrdersWizard.createdAcqOrdersList}">
+			           	
+		          	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Lifecycle"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catLifecycle.label}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Outcome"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catOutcome.label}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Set"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catSets.catCurrentTitle.catName}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Component"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catCmpts.catName}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Extent (Pub Units)"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catPublctnUnitRange}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Extent (Dates)"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catCoverDateRange}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Supplier"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catSupplier}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Commitment"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catSupplierCommitment.label}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Type"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catType.label}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Obligation"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.catReturnObligation.label}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Open Ships"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.openShipmentsCount}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Completed Ships"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.completedShipmentsCount}" />        		
+		        	</rich:column>
+		        	
+		        	<rich:column>
+			        	<f:facet name="header">
+			        		<h:outputText value="Open Probs"/>
+			        	</f:facet>
+						<h:outputText value="#{_order.openProblemsCount}" />        		
+		        	</rich:column>
+		        	
+		        </rich:dataTable>
+	        </div>
+	        
+	        <s:fragment rendered="#{not empty createAcqOrdersWizard.createdShipmentsList}">
+		        <div class="title child eligible">
+		            <h1>Shipments (1)</h1>
+		            <p>You also <strong>added</strong> one shipment to the new order and the <strong>(Component) #{createAcqOrdersWizard.issueCmptName}</strong>:</p>
+		        </div>
+				<div class="push"></div>	
+				<div>
+					<rich:dataTable value="#{createAcqOrdersWizard.createdShipmentsList}"
+						var="_catIssueShipments">
+						
+						<rich:column>
+							<f:facet name="header">Lifecycle</f:facet>
+							<h:outputText value="#{_catIssueShipments.catLifecycle.label}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Outcome</f:facet>
+							<h:outputText value="#{_catIssueShipments.catOutcome.label}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Component Name</f:facet>
+							<h:outputText value="#{_catIssueShipments.catCmpts.catName}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Extent (Pub. Units)</f:facet>
+							<h:outputText value="#{_catIssueShipments.catPublctnUnitRange}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Extent (Dates)</f:facet>
+							<h:outputText value="#{_catIssueShipments.catCoverDateRange}" />
+						</rich:column>
+						
+						<rich:column>
+							<f:facet name="header">Owner</f:facet>
+							<h:outputText value="#{_catIssueShipments.catOwnership.label}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Obligation</f:facet>
+							<h:outputText value="#{_catIssueShipments.catReturnObligation.label}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Completed</f:facet>
+							<h:outputText value="#{_catIssueShipments.catDateCompleted}" >
+								<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+							</h:outputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">On Hold</f:facet>
+							<h:outputText value="#{_catIssueShipments.catOnHold? 'Yes' : 'No'}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">ID</f:facet>
+							<h:outputText value="#{_catIssueShipments.id}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">Order ID</f:facet>
+							<h:outputText value="#{_catIssueShipments.catAcqOrders.id}" />
+						</rich:column>
+					</rich:dataTable>
+					
+				</div>
+			</s:fragment>
+		</div>
+		
+		<div class="push"></div>
+	
+		<a:commandLink styleClass="button right" value="Return"
+			action="#{createAcqOrdersWizard.createReset}"
+			oncomplete="#{rich:component('createAcqOrdersPanel')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+			eventsQueue="createOrder"
+			status="globalWaitStatus"
+			rendered="#{not empty pageURL}"/>
+			
+		<a:commandLink styleClass="button right" value="Return"
+			action="#{createAcqOrdersWizard.createReset}"
+			oncomplete="#{rich:component('createAcqOrdersPanel')}.hide(); #{rich:component('createAcqOrdersQuit')}.hide(); javascript:location.reload(true);" 
+			eventsQueue="createOrder"
+			status="globalWaitStatus"
+			rendered="#{empty pageURL}"/>
+			
+	    
+	</div>
+</ui:composition>

@@ -1,0 +1,129 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+versus column.xhtml: value and the filter need not have much to do with
+each other, just that filtering on one or more of the enum makes some
+sense with respect to the value. don't use this with booleans, jsut true
+enum's that have a label property. DIFFERENT (all about *filtering* per
+the enumList): entityList the List class, subclass of
+EnhancedEntityQuery and bearing a new map property for the enum and
+special search logic for the map property. enumList the enum to make a
+list and map enumValueMap map to bind individual enum items into
+reRender the same as what the skin-changer reRenders suffices. STAY THE
+SAME (all aout the *value*): linkToId lob propertyLabel display value
+for this property *value* propertyName property name for *value*
+propertyPath path for *value* sortable styleClass value
+
+
+<ui:composition>
+	<c:set var="safeClassPropertyName"
+		value="#{fn:replace(propertyName, '\\.', '_')}" />
+	<c:set var="toggleId" value="toggle_#{safeClassPropertyName}" />
+	<c:set var="toggleColumns"
+		value="#{fn:length(enumList) gt 5 ? (fn:length(enumList) gt 12 ? 3 : 2) : 1}" />
+	<c:set var="toggleWidth" value="#{(200 * toggleColumns) + 100}" />
+	<c:set var="toggleHeight" value="550" />
+
+	<rich:column
+		styleClass="#{styleClass} #{safeClassPropertyName} #{rollup == 'true' ? 'rollupColumn' : ''}"
+		headerClass=" #{styleClass} #{safeClassPropertyName} #{rollup == 'true' ? 'rollupColumn' : ''}"
+		rendered="#{rendered}">
+		<f:facet name="header">
+			<h:panelGrid columns="1" rendered="#{sortable eq 'true'}">
+				<s:link styleClass="propertySorter"
+					value="#{propertyLabel} #{entityList.orderColumn == propertyPath ? (entityList.orderDirection == 'desc' ? messages.down : messages.up) : ''}"
+					propagation="end" rendered="#{empty lob or not lob}">
+					<f:param name="sort" value="#{propertyPath}" />
+					<f:param name="dir"
+						value="#{entityList.orderColumn == propertyPath and entityList.orderDirection == 'asc' ? 'desc' : 'asc'}" />
+					<f:param name="firstResult" value="0" />
+				</s:link>
+
+				<s:div styleClass="propertyFilter">
+		
+					<span onclick="#{rich:component(toggleId)}.show();">Filter...</span>
+
+					<rich:modalPanel id="#{toggleId}" width="#{toggleWidth}"
+						height="#{toggleHeight}" styleClass=" nosteps">
+						<s:div style="overflow-y: scroll; height: 85%;">
+						<s:div styleClass="largelist" >
+							<h2>BF Onboarding Status</h2>
+							<br/>
+							<input type="checkbox" id="select_all_checkbox"
+									name="select_all_checkbox"
+									onclick="if ( this.checked ) { jQuery('.#{safeClassPropertyName}_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.#{safeClassPropertyName}_checkbox').each(function(){ this.checked = false; }); }" />
+								<h:outputText value="Select All" />
+							<input type="checkbox" id="select_all_signed"
+									name="select_all_signed"
+									onclick="if ( this.checked ) { jQuery('.signed').each(function(){ this.checked = true; }); } else { jQuery('.#{safeClassPropertyName}_checkbox').each(function(){ this.checked = false; }); }" />
+								<h:outputText value="Select All Signed" />
+							<rich:dataGrid value="#{enumList}" var="_enum"
+								columns="#{toggleColumns}" width="100%">
+								<h:selectBooleanCheckbox
+									styleClass="#{safeClassPropertyName}_checkbox #{listsForEnums.styleClassBfOnboadingStatusSigned(_enum)}"
+									value="#{enumValueMap[_enum]}" />
+								<h:outputText value="#{_enum.label}" />
+							</rich:dataGrid>
+							<br/>
+							<h2>Other Properties</h2>
+							<br />
+							<s:decorate>
+								
+								<strong>Withdrawn</strong>
+								<h:selectOneMenu value="#{withdrawnValue}">
+									<s:selectItems itemValue="#{i.label}" label="#{i.label}"
+										noSelectionLabel="None" value="#{listsForEnums.yesNo}" var="i" />
+								</h:selectOneMenu>
+								
+							</s:decorate>
+							<br />
+							
+							<s:decorate>
+								<strong>On Hold</strong>
+								<h:selectOneMenu value="#{onHoldValue}">
+									<s:selectItems itemValue="#{i.label}" label="#{i.label}"
+										noSelectionLabel="None" value="#{listsForEnums.yesNo}" var="i" />
+								</h:selectOneMenu>
+								
+							</s:decorate>
+						</s:div>
+						</s:div>
+						<br/>
+						<a:commandLink action="#{entityList.prepAdditionalRestrictions}"
+							reRender="#{reRender}" oncomplete="jQuery('.#{safeClassPropertyName}_checkbox').each(function(){ this.checked = false; }); orderColumns();"
+							status="globalWaitStatus"
+							onclick="#{rich:component(toggleId)}.hide();"
+							styleClass="button right">Done</a:commandLink>
+
+						
+					</rich:modalPanel>
+
+					<s:conversationId></s:conversationId>
+					<f:param name="sort" value="#{sort}" />
+					<f:param name="dir" value="#{dir}" />
+					<f:param name="firstResult" value="0" />
+				</s:div>
+
+			</h:panelGrid>
+		</f:facet>
+
+		<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml" styleClass="#{safeClassPropertyName}">
+			<f:param name="id" value="#{linkToId}" />
+			<h:outputText value="#{value}">
+				<ui:insert />
+			</h:outputText>
+		</s:link>
+
+	</rich:column>
+</ui:composition>
+
+</html>

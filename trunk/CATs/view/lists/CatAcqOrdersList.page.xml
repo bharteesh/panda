@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <begin-conversation join="true"/>
+ <param name="flavour" value="#{catAcqOrdersList.flavour}"/>
+ <param name="firstResult" value="#{catAcqOrdersList.firstResult}"/>
+ <param name="sort" value="#{catAcqOrdersList.orderColumn}"/>
+ <param name="dir" value="#{catAcqOrdersList.orderDirection}"/>
+ <param name="logic" value="#{catAcqOrdersList.restrictionLogicOperator}"/>
+ <param name="from"/>
+ <param name="id" value="#{catAcqOrdersList.catAcqOrders.id}"/>
+ <!-- <param name="catCmptId" value="#{catAcqOrdersList.catAcqOrders.catCmptId}"/>-->
+ <param name="catCmptId" value="#{catAcqOrdersList.catAcqOrders.catCmpts.id}"/>
+ <param name="catCmptName" value="#{catAcqOrdersList.catAcqOrders.catCmpts.catName}"/>
+ <param name="catCompletedBy" value="#{catAcqOrdersList.catAcqOrders.catCompletedBy}"/>
+ <param name="catCoverDateRange" value="#{catAcqOrdersList.catAcqOrders.catCoverDateRange}"/>
+ <param name="catCreator" value="#{catAcqOrdersList.catAcqOrders.catCreator}"/>
+ <param name="catLifecycle" value="#{catAcqOrdersList.catAcqOrders.catLifecycle}"/>
+ <param name="catOutcome" value="#{catAcqOrdersList.catAcqOrders.catOutcome}"/>
+ <param name="catPostMasterAddress" value="#{catAcqOrdersList.catAcqOrders.catPostMasterAddress}"/>
+ <param name="catPublctnUnitRange" value="#{catAcqOrdersList.catAcqOrders.catPublctnUnitRange}"/>
+ <param name="catQuantity" value="#{catAcqOrdersList.catAcqOrders.catQuantity}"/>
+ <param name="catReprints" value="#{catAcqOrdersList.catAcqOrders.catReprints}"/>
+ <param name="catReturnObligation" value="#{catAcqOrdersList.catAcqOrders.catReturnObligation}"/>
+ <!-- <param name="catSetId" value="#{catAcqOrdersList.catAcqOrders.catSetId}"/>-->
+ <param name="catSetId" value="#{catAcqOrdersList.catAcqOrders.catSets.id}"/>
+ <param name="catSupplier" value="#{catAcqOrdersList.catAcqOrders.catSupplier}"/>
+ <param name="catSupplierCommitment" value="#{catAcqOrdersList.catAcqOrders.catSupplierCommitment}"/>
+ <param name="catSupplierContact" value="#{catAcqOrdersList.catAcqOrders.catSupplierContact}"/>
+ <param name="catType" value="#{catAcqOrdersList.catAcqOrders.catType}"/>
+ <param name="catDateCreated" value="#{catAcqOrdersList.catAcqOrders.catDateCreated}"/>
+ <param name="catDateCompleted" value="#{catAcqOrdersList.catAcqOrders.catDateCompleted}"/>
+ <param name="catLegacySubscriptionNote" value="#{catAcqOrdersList.catAcqOrders.catLegacySubscriptionNote}"/>
+ <param name="catNotReceivedNote" value="#{catAcqOrdersList.catAcqOrders.catNotReceivedNote}"/>
+ <param name="catNotificationThreshold" value="#{catAcqOrdersList.catAcqOrders.catNotificationThreshold}"/>
+ <param name="catSetName" value="#{catAcqOrdersList.catAcqOrders.catSets.catCurrentTitle.catName}"/>
+ <param name="catOnHold" value="#{catAcqOrdersList.catAcqOrders.catOnHold}"/>
+ <!-- <param name="catAcqOrdersOpenProblemsCount" value="#{catAcqOrdersList.catAcqOrders.openProblemsCount}"/> 
+ <param name="catAcqOrdersOpenShipmentsCount" value="#{catAcqOrdersList.catAcqOrders.openShipmentsCount}"/> 
+ <param name="catAcqOrdersCompletedShipmentsCount" value="#{catAcqOrdersList.catAcqOrders.completedShipmentsCount}"/> -->
+ <param name="openProblemsCount" value="#{catAcqOrdersList.catAcqOrders.openProblemsCount}"/>
+ <param name="openShipmentsCount" value="#{catAcqOrdersList.catAcqOrders.openShipmentsCount}"/>
+ <param name="completedShipmentsCount" value="#{catAcqOrdersList.catAcqOrders.completedShipmentsCount}"/>
+ <param name="cspValue" value="#{catAcqOrdersList.catAcqOrders.cspValue}"/>
+ <param name="cilValue" value="#{catAcqOrdersList.catAcqOrders.cilValue}"/>
+ <param name="setValue" value="#{catAcqOrdersList.catAcqOrders.setValue}"/>
+ <param name="wallValue" value="#{catAcqOrdersList.catAcqOrders.wallValue}"/>
+ <param name="wallYearValue" value="#{catAcqOrdersList.catAcqOrders.wallYearValue}"/>
+ <param name="publisherValue" value="#{catAcqOrdersList.catAcqOrders.publisherValue}"/>
+ <param name="catDateModified" value="#{catAcqOrdersList.catAcqOrders.catDateModified}"/>
+</page>

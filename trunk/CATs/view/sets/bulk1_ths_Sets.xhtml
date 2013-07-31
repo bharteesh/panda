@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{setsBulkOperations.bulkTitle}" /></h2>
+	
+	<div id="step1">
+	<s:fragment rendered="#{setsBulkOperations.isActionAllowed}">
+		<s:div>
+			<ul class="steps">
+				<li class="selected">Permissions</li>
+				<li class="disabled">Change</li>
+				<li class="disabled">Results</li>
+			</ul>
+		</s:div>
+		
+		<div class="cluster smart">
+		<div>
+
+		  <s:div styleClass="title eligible" rendered="#{not empty setsBulkOperations.bulkSelection}">
+		  	<h1><h:outputText value="Sets (#{setsBulkOperations.bulkSelection.size()})"/></h1>
+		  	<p>You have permission to change the title history status for the following sets:</p>
+		  </s:div>
+		  <s:fragment rendered="#{not empty setsBulkOperations.bulkSelection}">
+				<cats:dumbTableSetsThs value="#{setsBulkOperations.bulkSelection}" />
+		  </s:fragment>
+
+		  <s:div styleClass="title ineligible" rendered="#{not empty setsBulkOperations.bulkInvalid}">
+		  	<h1><h:outputText value="Sets (#{setsBulkOperations.bulkInvalid.size()})"/></h1>
+		  	<p>You do not have permissions to change the following records. Permissions are determined by the following checks:<br/>
+1. User role must be CD Negotiations, CD Publisher Relations, or Librarian.<br/>
+2. Set lifecycle must be New, Review Started, Targeted, or Rights Obtained.<br/>
+3. Set cannot be on hold.<br/>
+4. Set must have a Negotiator</p>
+		  </s:div>
+			<s:fragment rendered="#{not empty setsBulkOperations.bulkInvalid}">
+				<cats:dumbTableSetsThs value="#{setsBulkOperations.bulkInvalid}" />
+				</s:fragment>
+				
+				
+			<s:fragment rendered="#{empty setsBulkOperations.bulkSelection}">
+				<div class="alert">
+				<p>You  do not have permission to edit any of the records you selected.</p>
+				</div>
+			</s:fragment>	
+		</div>
+		</div>
+	
+	
+		<div class="push"></div>
+		<s:fragment rendered="#{not empty setsBulkOperations.bulkSelection}">
+			<a:commandLink styleClass="button" value="Quit"
+				action="#{setsBulkOperations.bulkReset}"
+				oncomplete="#{rich:component('setsBulkUpdatePanel')}.hide();"
+				reRender="#{setsBulkOperations.bulkOpsSelectFieldId}"
+				eventsQueue="bulkOps" 
+				status="globalWaitStatus"/> 
+			<a:commandLink
+				styleClass="button right" value="Continue"
+				action="#{setsBulkOperations.bulkNext}" reRender="setsWizardForm"
+				eventsQueue="bulkOps" status="globalWaitStatus" />
+		</s:fragment>
+		
+		<s:fragment rendered="#{empty setsBulkOperations.bulkSelection}">
+			<a:commandLink styleClass="button right" value="Return"
+				action="#{setsBulkOperations.bulkReset}"
+				oncomplete="#{rich:component('setsBulkUpdatePanel')}.hide();"
+				reRender="#{setsBulkOperations.bulkOpsSelectFieldId}"
+				eventsQueue="bulkOps" 
+				status="globalWaitStatus"/> 
+		</s:fragment>
+		
+	</s:fragment>
+
+	</div>
+	
+</ui:composition>

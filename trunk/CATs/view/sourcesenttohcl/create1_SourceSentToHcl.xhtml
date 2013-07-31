@@ -1,0 +1,79 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{createSourceSentToHclWizard.createTitle}" /></h2>
+	
+		<div id="step1">
+		<ul class="steps">
+    		<li class="disabled">1. Permissions</li>
+	    	<li class="selected">2. Change</li>
+		    <li class="disabled">3. Additional</li>
+		    <li class="disabled">4. Results</li>
+		</ul>
+		
+		<div class="cluster smart">
+
+		<p>Please make selections.</p>
+
+
+<s:fragment>
+<div class="scroller">
+	<s:decorate id="catSourceSentToHclCatBoxNumber_div" template="../layout/edit.xhtml">
+		<ui:define name="label">Box No.</ui:define>
+            <h:inputText 
+               id="catBoxNumber" 
+               requiredMessage="Please enter a value !!" 
+               required="true"                			
+               maxlength="100" size="25" value="#{createSourceSentToHclWizard.createTransientInstance.catBoxNumber}"/>    
+	</s:decorate>
+    <s:decorate id="catSourceSentToHclCatContentRange_div" template="../layout/edit.xhtml">
+        <ui:define name="label">Content Range</ui:define>
+		    <h:inputTextarea cols="20" 
+               id="catContentRange"
+               requiredMessage="Please enter a value !!" 
+			   required="true"                			
+			   rows="2" value="#{createSourceSentToHclWizard.createTransientInstance.catContentRange}" />
+    </s:decorate>
+			
+    <s:decorate id="catSourceSentToHclCatNote_div" template="../layout/edit.xhtml">
+        <ui:define name="label">Note</ui:define>
+		     <h:inputTextarea cols="20"
+		        id="catNote" 
+		        required="false" 
+		        rows="2" value="#{createSourceSentToHclWizard.createTransientInstance.catNote}" />
+    </s:decorate>
+			
+</div>
+</s:fragment>
+
+			</div>
+
+		<div class="push"></div>
+
+            <a:commandLink styleClass="button" value="Quit" ignoreDupResponses="true"
+       			eventsQueue="#{divParam}eventsQueue"
+               	status="globalWaitStatus" ajaxSingle="true"
+			    reRender="createSourceSentToHclwizard" oncomplete="#{rich:component('createSourceSentToHclQuit')}.show(); return false;">
+			</a:commandLink> 
+ 
+			<a:commandLink
+			styleClass="button right" value="Save" ignoreDupResponses="true"
+			eventsQueue="#{divParam}eventsQueue"
+           	status="globalWaitStatus"
+			action="#{createSourceSentToHclWizard.performCreateOperation}" 
+			reRender="createSourceSentToHclwizard" />
+			</div>
+</ui:composition>
+

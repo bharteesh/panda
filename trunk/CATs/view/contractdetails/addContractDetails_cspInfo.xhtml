@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	
+	<rich:dataTable id="#{divId}catCmptsContractDtlsCspTbl" styleClass="scroller"
+				var="catCmpts" value="#{createContractDetailsWizard.parentCmptListValid}" 
+				rendered="#{not empty createContractDetailsWizard.parentCmptListValid}">					
+					<rich:column>
+						<f:facet name="header">Set Name</f:facet>
+						<h:outputText value="#{catCmpts.setsValue}"></h:outputText>
+					</rich:column>
+					<rich:column>
+					<f:facet name="header">Component <br/>Name</f:facet>
+						<h:outputText value="#{catCmpts.catName}"></h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">Publisher <br/>Launch</f:facet>					
+						<h:outputText value="#{createContractDetailsWizard.parentContract.catCspLaunchDate}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+					</rich:column>
+					<rich:column styleClass="datestyle">
+						<f:facet name="header">Component <br/>Launch</f:facet>
+						<rich:calendar  enableManualInput="true" datePattern="yyyy/MM/dd" disabled="false" id="catContractDtlsCspDateCal" value="#{createContractDetailsWizard.contractDtlsInstanceMap[catCmpts].catCspLaunchDate}">
+						</rich:calendar>
+					</rich:column>
+					<rich:column styleClass="datestyle required #{invalid?'error':''}" rendered="#{createContractDetailsWizard.bulkInstance.catLifecycle eq 'Active'}">
+						<f:facet name="header">Date Added to <br/>Agreement</f:facet>					
+						<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd" disabled="false" required="true" id="catContractDtlsEffectDateCal" value="#{createContractDetailsWizard.contractDtlsInstanceMap[catCmpts].catEffectiveDate}">
+						</rich:calendar>						
+					</rich:column>
+					<rich:column styleClass="required #{invalid?'error':''}">
+						<f:facet name="header">Coverage</f:facet>
+							<h:selectOneRadio styleClass="coverage" required="true" value="#{createContractDetailsWizard.contractDtlsInstanceMap[catCmpts].catAllOrPartOfCmpt}" layout="pageDirection">
+								<s:selectItems itemValue="#{i}" label="#{i.label}" value="#{listsForEnums.catContractDtls_AllOrPartOfCmpt}" var="i"/>
+								<a:support event="onclick" reRender="catContractDtlsRange" ajaxSingle="true" status="globalWaitStatus" limitToList="true"/>
+							</h:selectOneRadio>					
+						<h:inputText id="catContractDtlsRange" value="#{createContractDetailsWizard.contractDtlsInstanceMap[catCmpts].catContentCovered}" disabled="#{not createContractDetailsWizard.enableContractDtlsRangeInput(catCmpts)}"></h:inputText>
+					</rich:column>						
+					<rich:column styleClass="datestyle" rendered="#{createContractDetailsWizard.parentContract.catType eq 'Csp'}">
+						<f:facet name="header">Digital <br/>Availability</f:facet>
+						<rich:calendar  enableManualInput="true" datePattern="yyyy/MM/dd" id="catContractDtlsCspDigiCal"  value="#{catCmpts.catCspDigiAvailDate}">
+						</rich:calendar>
+					</rich:column>					
+					<rich:column>
+			    		<a:commandLink styleClass="button delete" action="#{createContractDetailsWizard.removeCmpt(catCmpts)}"
+							 reRender="#{divId}catCmptsContractDtlsCspTbl"
+							 status="globalWaitStatus"		
+							 ajaxSingle="true"
+							 rendered="#{createContractDetailsWizard.parentCmptListValid.size gt 1}"
+							 ignoreDupResponses="true"
+							 limitToList="true">					
+						</a:commandLink>		    	
+			    	</rich:column>	
+			</rich:dataTable>	
+	
+</ui:composition>

@@ -1,0 +1,101 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="bookCoversInformationDiv1">
+
+	<div class="col col1">
+	
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Book</ui:define>
+			<h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catExcludedReason" value="#{catBookCoversHome.instance.catBook.id}">
+            </h:inputText>
+		</s:decorate>
+				
+		  <s:decorate template="../layout/edit.xhtml">
+                <ui:define name="label">Lifecycle</ui:define>
+                <h:inputText onchange="enableSaveCancel();" 
+                	readonly="true"
+                	id="catLifecycle" value="#{catBookCoversHome.instance.catLifecycle}">
+                </h:inputText>
+          </s:decorate>
+          
+          <s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Excluded Reason</ui:define>
+			<h:inputText onchange="enableSaveCancel();"
+					readonly="true"
+                	id="catExcludedReason" value="#{catBookCoversHome.instance.catExcludedReason}">
+            </h:inputText>
+		</s:decorate>
+				 
+        <s:decorate  template="../layout/edit.xhtml">
+              <ui:define name="label">Created</ui:define>
+               <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+		       enableManualInput="true"  datePattern="yyyy/MM/dd HH:mm:ss" disabled="true"
+               	id="catDateCreated" inputClass="datestyle" value="#{catBookCoversHome.instance.catDateCreated}"/>
+        </s:decorate>
+        
+        <s:decorate  template="../layout/edit.xhtml">
+                <ui:define name="label">Received</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd HH:mm:ss" disabled="true"
+                	id="catDateCvrRcvd" inputClass="datestyle" value="#{catBookCoversHome.instance.catDateCvrRcvd}"/>
+            </s:decorate>  
+            
+             <s:decorate  template="../layout/edit.xhtml">
+                <ui:define name="label">Modified</ui:define>
+                <rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"
+			       enableManualInput="true"  datePattern="yyyy/MM/dd HH:mm:ss" disabled="true"
+                	id="catDateModified" inputClass="datestyle" value="#{catBookCoversHome.instance.catDateModified}"/>
+            </s:decorate>  
+                    
+	</div>
+	
+	<div class="col col2">
+
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Fetcher ID</ui:define>
+			<h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catCvrFetcherId" value="#{catBookCoversHome.instance.catCvrFetcherId}">
+            </h:inputText>
+		</s:decorate>
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Filepath</ui:define>
+			<h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catCvrFilepath" value="#{catBookCoversHome.instance.catCvrFilepath}">
+            </h:inputText>
+		</s:decorate>
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Filesize</ui:define>
+			<h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catCvrFilesize" value="#{catBookCoversHome.instance.catCvrFilesize}">
+            </h:inputText>
+		</s:decorate>
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Checksum</ui:define>
+			<h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catCvrChecksum" value="#{catBookCoversHome.instance.catCvrChecksum}">
+            </h:inputText>
+		</s:decorate>
+		
+		<s:decorate template="../layout/edit.xhtml">
+			<ui:define name="label">Creator</ui:define>
+			<h:inputText onchange="enableSaveCancel();"  readonly="true" 
+                	id="catCreator" value="#{catBookCoversHome.instance.catCreator}">
+            </h:inputText>
+		</s:decorate>
+		
+		
+       
+		</div>
+		
+ 
+	<div class="push" />
+
+</s:div>

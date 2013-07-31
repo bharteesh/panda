@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{createMultiPublisherRolesWizard.createTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps many">
+		<li class="selected">1. Permissions</li>
+		<li class="disabled">2. Choose Pub</li>
+		<li class="disabled">3. Add</li>
+		<li class="disabled">4. Optional</li>
+		<li class="disabled">5. Results</li>
+	</ul>
+	
+		<div class="cluster smart">
+		
+			<p><h:outputText
+				value="You have selected  #{createMultiPublisherRolesWizard.cmptsBulkInvalid.size() + createMultiPublisherRolesWizard.cmptsBulkSelection.size()}   records to change." /></p>
+		
+			<s:fragment rendered="#{not empty createMultiPublisherRolesWizard.cmptsBulkInvalid}">
+				<p>
+					<h:outputText value="You " />
+					<em><h:outputText value="do not" /></em><h:outputText value=" have permission to change " />
+					<h:outputText value="#{createMultiPublisherRolesWizard.cmptsBulkInvalid.size()}" /> <h:outputText value=" of " /> 
+					<h:outputText value="#{createMultiPublisherRolesWizard.cmptsBulkInvalid.size() + createMultiPublisherRolesWizard.cmptsBulkSelection.size()}" />
+					<h:outputText value=" records." />
+				</p>
+		
+				<cats:dumbTableComponents value="#{createMultiPublisherRolesWizard.cmptsBulkInvalid}" />
+			</s:fragment> 
+			<s:fragment rendered="#{not empty createMultiPublisherRolesWizard.cmptsBulkSelection}">
+				<p><h:outputText value="You have permission to change " /> <h:outputText
+					value="#{createMultiPublisherRolesWizard.cmptsBulkSelection.size()}" /><h:outputText
+					value=" of " /> <h:outputText
+					value="#{createMultiPublisherRolesWizard.cmptsBulkInvalid.size() + createMultiPublisherRolesWizard.cmptsBulkSelection.size()}" /><h:outputText
+					value=" records. " /></p>
+		
+				<cats:dumbTableComponents value="#{createMultiPublisherRolesWizard.cmptsBulkSelection}" />
+			</s:fragment>	
+			
+		</div>
+	
+	
+		<div class="push"></div>
+	<s:fragment rendered="#{not empty createMultiPublisherRolesWizard.cmptsBulkSelection}">
+		<a:commandLink styleClass="button" value="Quit"
+			eventsQueue="#{divParam}eventsQueue"
+			status="globalWaitStatus" ignoreDupResponses="true" 
+			reRender="createMultiPublisherRolesWizard"
+			oncomplete="#{rich:component('createPublisherRolesPanel')}.hide(); return false;">
+		</a:commandLink> 
+		<a:commandLink styleClass="button right" value="Continue"		    
+			eventsQueue="#{divParam}eventsQueue"
+			status="globalWaitStatus" ignoreDupResponses="true" 
+			action="#{createMultiPublisherRolesWizard.createNext}"
+			reRender="createMultiPublisherRolesWizard" />		
+	</s:fragment>
+	<s:fragment rendered="#{empty createMultiPublisherRolesWizard.cmptsBulkSelection}">
+		<a:commandLink styleClass="button right" value="Return"
+			eventsQueue="#{divParam}eventsQueue"
+			status="globalWaitStatus" ignoreDupResponses="true" 
+			reRender="createMultiPublisherRolesWizard"
+			oncomplete="#{rich:component('createPublisherRolesPanel')}.hide(); return false;">
+		</a:commandLink> 
+	</s:fragment>
+</div>
+</ui:composition>

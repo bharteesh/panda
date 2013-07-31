@@ -1,0 +1,56 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j" template="../layout/template.xhtml">
+	
+	<ui:define name="badge">
+		<h1> </h1>
+	</ui:define>
+	
+	<ui:define name="body">
+
+		<rich:panel id="roleSelectPanel" rendered="#{s:hasRole('ADMIN')}">
+			<f:facet name="header">Masquerade In Role</f:facet>
+
+			<p>This form allows you as a member of ADMIN to add a role to
+			your session, for the duration of your session.</p>
+
+			<h:form id="MasqueradeForm">
+				<p>Choose one:</p>
+				<h:selectOneListbox id="roleSelect"
+					value="#{Masquerade.selectedRole}">
+					<s:selectItems value="#{roler.availableRoles}" var="r"
+						label="#{r.catName}" itemValue="#{r.catName}" />
+				</h:selectOneListbox>
+
+
+				<a:commandButton id="masquerade" value="Add Role"
+					action="#{Masquerade.masquerade}" reRender="roleSelectPanel,currentRolesPanel"/>
+
+			</h:form>
+
+
+		</rich:panel>
+		
+
+		<rich:panel rendered="#{identity.loggedIn and !s:hasRole('ADMIN')}">
+			<f:facet name="header">Masquerade In Role</f:facet>
+			<p>You could use this form if you were a member of ADMIN!</p>
+		</rich:panel>
+
+		<rich:panel id="currentRolesPanel" rendered="#{identity.loggedIn}">
+			<f:facet name="header">Your Current Roles</f:facet>
+
+			<rich:dataList value="#{roler.currentRoles}" var="_role">
+				<h:outputText value="#{_role.name}" />
+			</rich:dataList>
+		</rich:panel>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,196 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+>
+
+	<h2><h:outputText value="#{catAcqOrdersBulkOperations.bulkTitle}" /></h2>
+	
+		<div id="step1">
+		<s:div rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGTYPE') or (catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.isCatLifecycleOfValueOrdered(catAcqOrdersBulkOperations.bulkInstance.catLifecycle))}">
+  		<ul class="steps">
+				<li class="">1. Permissions</li>
+				<li class="selected">2. Change</li>
+				<li class="disabled">3. Children</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		</s:div>
+		<s:div rendered="#{not (catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT') or catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGTYPE') or (catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.isCatLifecycleOfValueOrdered(catAcqOrdersBulkOperations.bulkInstance.catLifecycle)))}">
+  		<ul class="steps">
+				<li class="">1. Permissions</li>
+				<li class="selected">2. Change</li>
+				<li class="disabled">3. Additional</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		</s:div>
+		<s:div rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT')}">
+  		<ul class="steps">
+				<li class="">1. Permissions</li>
+				<li class="selected">2. Change</li>
+				<li class="disabled">3. Select</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		</s:div>
+		
+		<div class="cluster smart">
+
+
+<!-- fragments with things to edit per bulkOp -->
+
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGPARENT')}">
+<div class="scroller">
+	<p>An order can use either a set or a component as its parent. Do you want to pick the parent from a list of sets or a list of components?.</p>
+<s:decorate id="changeParent_div" template="../layout/edit.xhtml">
+<ui:define name="label">Sets or Components</ui:define>
+<h:selectOneMenu id="changeParentOrderType" value="#{catAcqOrdersBulkOperations.changeParentOrderType}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		<s:selectItems value="#{catAcqOrdersBulkOperations.getPossibleParentOrderTypeValues()}" var="i" itemValue="#{i}"
+		                 label="#{i}" noSelectionLabel="Choose..." />
+		       </h:selectOneMenu>
+</s:decorate>
+	
+</div>
+</s:fragment>
+
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE')}">
+<div class="scroller">
+	<p>Choose new lifecycle.</p>
+	
+<s:decorate id="catLifecycle_div" template="../layout/edit.xhtml">
+<ui:define name="label">Lifecycle</ui:define>
+<h:selectOneMenu 
+   id="advanceLifecycle" value="#{catAcqOrdersBulkOperations.bulkInstance.catLifecycle}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		<s:selectItems value="#{catAcqOrdersBulkOperations.possibleLifecycleAdvancementValues}" var="i" itemValue="#{i}"
+		                 label="#{i}" noSelectionLabel="Choose..." />
+                    <a:support event="onchange"
+                    	eventsQueue="#{divParam}eventsQueue"
+                    	status="globalWaitStatus"
+                        reRender="warningMessagePanel,noLayoutExistingFromLifecycle" ajaxSingle="true"/>
+		       </h:selectOneMenu>
+</s:decorate>
+	
+</div>
+</s:fragment>
+
+<a:outputPanel layout="none" id="warningMessagePanel">
+	<s:div id="warningMsg_div" rendered="#{catAcqOrdersBulkOperations.bulkInstance.catLifecycle.label eq 'Ordered'}">
+	<div class="alert">
+		<p>The system will automatically create one shipment for this order. If the order is linked up to a component, the shipment will be linked to the same component. If the order is linked up to a set, the shipment will be linked up to the set's current title.</p>
+		<p>Note: The system will not create a shipment for a subscription order.</p>
+	</div>
+	</s:div>
+</a:outputPanel>
+
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('CHNGTYPE') and catAcqOrdersBulkOperations.bulkRequiredProperties.contains('catType')}">
+<div class="scroller">
+	<p>Choose the order type and return obligation. You will only be asked to fill out return obligation for certain types of order.</p>
+	
+    <s:decorate id="catType_div" template="../layout/edit.xhtml">
+    <ui:define name="label">Type</ui:define>
+    <h:selectOneMenu 
+           id="modifyCatType" value="#{catAcqOrdersBulkOperations.bulkInstance.catType}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		<s:selectItems value="#{listsForEnums.catAcqOrders_Type}" var="i" itemValue="#{i}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+                    <a:support event="onchange"
+                    	eventsQueue="#{divParam}eventsQueue"
+                    	status="globalWaitStatus"
+                        reRender="noLayoutExistingFromCatType" ajaxSingle="true"/>
+		       </h:selectOneMenu>
+    </s:decorate>
+    <a:outputPanel layout="none" id="noLayoutExistingFromCatType">
+    <s:div id="catReturnObligation_outer_div" rendered="#{catAcqOrdersBulkOperations.bulkOptionalProperties.contains('catReturnObligation') and catAcqOrdersBulkOperations.isUserInputNeededForReturnObligation(catAcqOrdersBulkOperations.bulkInstance.catType)}">
+       <s:decorate id="catReturnObligation_div" template="../layout/edit.xhtml">
+	     	<ui:define name="label">Return Obligation</ui:define>
+                <h:selectOneMenu id="catReturnObligation" value="#{catAcqOrdersBulkOperations.bulkInstance.catReturnObligation}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		    		    <s:selectItems value="#{listsForEnums.catAcqOrders_ReturnObligation}" var="i" itemValue="#{i}"
+		                    label="#{i.label}" noSelectionLabel="Choose..." />
+		        </h:selectOneMenu>
+	   </s:decorate>
+    </s:div>
+    </a:outputPanel>
+	
+	
+</div>
+</s:fragment>
+
+<s:fragment rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('ONHOLD') and catAcqOrdersBulkOperations.bulkRequiredProperties.contains('catOnHold')}">
+<div class="scroller">
+	<p>Please make a selection.</p>
+	
+    <s:decorate id="catOnHold_div" template="../layout/edit.xhtml">
+    <ui:define name="label">On Hold</ui:define>
+    <h:selectOneMenu 
+           id="modifyOnHold" value="#{catAcqOrdersBulkOperations.bulkInstance.catOnHold}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		<s:selectItems value="#{listsForEnums.yesNo}" var="i" itemValue="#{i.value}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+                    <a:support event="onchange"
+                    	eventsQueue="#{divParam}eventsQueue"
+                    	status="globalWaitStatus"
+                        reRender="noLayoutExistingFromCatOnHold" ajaxSingle="true"/>
+		       </h:selectOneMenu>
+    </s:decorate>
+    <a:outputPanel layout="none" id="noLayoutExistingFromCatOnHold">
+    <s:div id="catOnHoldReason_outer_div" rendered="#{catAcqOrdersBulkOperations.bulkOptionalProperties.contains('catOnHoldReason') and catAcqOrdersBulkOperations.bulkInstance.catOnHold == true}">
+       <s:decorate id="catOnHoldReason_div" template="../layout/edit.xhtml">
+	     	<ui:define name="label">On Hold Reason</ui:define>
+		        <h:inputTextarea cols="20" 
+                           requiredMessage="Please enter a value !!" 
+			               required="true" 
+		                   id="catOnHoldReason"
+				           rows="2" value="#{catAcqOrdersBulkOperations.bulkInstance.catOnHoldReason}" />
+	   </s:decorate>
+    </s:div>
+    </a:outputPanel>
+	
+</div>
+</s:fragment>
+
+			</div>
+
+		<div class="push"></div>
+
+
+<a:commandLink styleClass="button" value="Quit"
+			eventsQueue="#{divParam}eventsQueue"
+			status="globalWaitStatus"
+			reRender="acqorderswizard" oncomplete="#{rich:component('acqordersbulkUpdateQuit')}.show(); return false;">
+			</a:commandLink> 
+			
+			
+    <a:outputPanel layout="none" id="noLayoutExistingFromLifecycle">
+			<a:commandLink
+		    rendered="#{ not (catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.isCatLifecycleOfValueOrdered(catAcqOrdersBulkOperations.bulkInstance.catLifecycle))}"
+			styleClass="button right" value="Continue"
+			eventsQueue="#{divParam}eventsQueue"
+			status="globalWaitStatus"
+			action="#{catAcqOrdersBulkOperations.bulkNext}" 
+			reRender="acqorderswizard" />
+
+		<a:commandLink
+		rendered="#{catAcqOrdersBulkOperations.bulkOperationsType.equals('ADVANCE') and catAcqOrdersBulkOperations.isCatLifecycleOfValueOrdered(catAcqOrdersBulkOperations.bulkInstance.catLifecycle)}"
+		styleClass="button right" value="Save"
+		eventsQueue="#{divParam}eventsQueue"
+		status="globalWaitStatus"
+		action="#{catAcqOrdersBulkOperations.performBulkOperation}" reRender="acqorderswizard" />
+    </a:outputPanel>
+
+			</div>
+	
+</ui:composition>

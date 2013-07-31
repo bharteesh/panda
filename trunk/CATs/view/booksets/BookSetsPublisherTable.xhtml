@@ -1,0 +1,90 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	
+	
+	
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo">
+					<h:outputText value="Publishers for this Book Set (#{publisherList.size})" />
+				</span>
+				<a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('catPublisher'.concat(divId))}" 
+					ignoreDupResponses="true" status="globalWaitStatus"  reRender="#{tableId}" 
+					styleClass="button wizard"
+					eventsQueue="bookSetsEditQueue"
+					limitToList="true"/>
+			</div>
+			<div class="right">
+				
+			</div>
+		</div>
+		<rich:dataTable id="#{tableId}" var="_publishers"
+			value="#{publisherList}"
+			rendered="#{not empty publisherList}">			
+						
+			<rich:column id="pubName" sortBy="#{_publishers.catName}"
+				filterBy="#{_publishers.catName}" sortable="true" 
+				sortOrder="#{sortFiltBean['catPublisher'.concat(divId)]['pubname_sortOrder']}"
+				filterValue="#{sortFiltBean['catPublisher'.concat(divId)]['pubname_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Publisher Name"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishers.id}"/>
+					<h:outputText value="#{_publishers.catName}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="pubOrg" sortBy="#{_publishers.catOrganizationType.label}"
+				filterBy="#{_publishers.catOrganizationType.label}" sortable="true" 
+				sortOrder="#{sortFiltBean['catPublisher'.concat(divId)]['orgtype_sortOrder']}"
+				filterValue="#{sortFiltBean['catPublisher'.concat(divId)]['orgtype_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Organization Type"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishers.id}"/>
+					<h:outputText value="#{_publishers.catOrganizationType.label}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="pubCountry" sortBy="#{_publishers.catCountry}"
+				filterBy="#{_publishers.catCountry}" sortable="true" 
+				sortOrder="#{sortFiltBean['catPublisher'.concat(divId)]['country_sortOrder']}"
+				filterValue="#{sortFiltBean['catPublisher'.concat(divId)]['country_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Country"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishers.id}"/>
+					<h:outputText value="#{_publishers.catCountry}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="pubId" sortBy="#{_publishers.id}"
+				filterBy="#{_publishers.id}" sortable="true" 
+				sortOrder="#{sortFiltBean['catPublisher'.concat(divId)]['id_sortOrder']}"
+				filterValue="#{sortFiltBean['catPublisher'.concat(divId)]['id_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_publishers.id}"/>
+					<h:outputText value="#{_publishers.id}" />
+				</s:link>
+			</rich:column>
+			
+		</rich:dataTable>
+
+	</div>
+
+
+
+</s:div>

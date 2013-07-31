@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page login-required="true" xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <begin-conversation join="true"/>
+ <param name="flavour" value="#{catPublishersList.flavour}"/>
+ <param name="firstResult" value="#{catPublishersList.firstResult}"/>
+ <param name="sort" value="#{catPublishersList.orderColumn}"/>
+ <param name="dir" value="#{catPublishersList.orderDirection}"/>
+ <param name="logic" value="#{catPublishersList.restrictionLogicOperator}"/>
+ <param name="from"/>
+ <param name="id" value="#{catPublishersList.catPublishers.id}"/>
+ <param name="catContactInformation" value="#{catPublishersList.catPublishers.catContactInformation}"/>
+ <param name="catCountry" value="#{catPublishersList.catPublishers.catCountry}"/>
+ <param name="catCreator" value="#{catPublishersList.catPublishers.catCreator}"/>
+ <param name="catDisplayName" value="#{catPublishersList.catPublishers.catDisplayName}"/>
+ <param name="catLastOutrchBy" value="#{catPublishersList.catPublishers.catLastOutrchBy}"/>
+ <param name="catName" value="#{catPublishersList.catPublishers.catName}"/>
+ <param name="catOrganizationType" value="#{catPublishersList.catPublishers.catOrganizationType}"/>
+ <param name="catOutrchNoteChangeBy" value="#{catPublishersList.catPublishers.catOutrchNoteChangeBy}"/>
+ <param name="catTalismaId" value="#{catPublishersList.catPublishers.catTalismaId}"/>
+ <param name="catTaxFormStatus" value="#{catPublishersList.catPublishers.catTaxFormStatus}"/>
+ <param name="catLogo" value="#{catPublishersList.catPublishers.catLogo}"/>
+ <param name="catTaxWithholdingPercent" value="#{catPublishersList.catPublishers.catTaxWithholdingPercent}"/>
+ <!-- catPublishersList -->
+ <param name="catLastOutrchDate" value="#{catPublishersList.catPublishers.catLastOutrchDate}"/>
+ <!-- catPublishersList -->
+ <param name="catOutrchNoteChangeDate" value="#{catPublishersList.catPublishers.catOutrchNoteChangeDate}"/>
+ <!-- catPublishersList -->
+ <param name="catDateCreated" value="#{catPublishersList.catPublishers.catDateCreated}"/>
+ <param name="rolesValue" value="#{catPublishersList.catPublishers.rolesValue}"/>
+</page>

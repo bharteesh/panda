@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:dui="http://openorganize.com/platform/dui">
+
+	<h2>
+		<h:outputText value="#{deleteBookSetsWizard.wizardTitle}" />
+	</h2>
+	<div>
+		<div class="cluster smart">
+		<a:outputPanel layout="none" id="warningMessagePanel">
+			<s:div rendered="#{deleteBookSetsWizard.hasBooks()}">
+			<div class="alert">
+				<p>You cannot delete this Book Sets because it has books
+					associated with it. Please remove the books from the set and try
+					again.</p>
+					</div>
+			</s:div>
+			</a:outputPanel>
+			<a:outputPanel>
+			<s:div rendered="#{!deleteBookSetsWizard.hasBooks()}">
+				<div class="alert">
+				<p>Warning: You are about to delete this Book Sets, deleting
+					this Book Sets will also deletes its Titles. Are you sure you want
+					to continue?</p>
+				 </div>
+			</s:div>
+			</a:outputPanel>
+		</div>
+	</div>
+	<div></div>
+	<div class="push"></div>
+
+	<a:commandLink styleClass="button" value="No, Return"
+		status="globalWaitStatus" ignoreDupResponses="true"
+		action="#{deleteBookSetsWizard.createReset}"
+		oncomplete="#{rich:component('deleteBookSetsModal')}.hide();"
+		ajaxSingle="true" rendered="#{!deleteBookSetsWizard.hasBooks()}"
+		limitToList="true" />
+
+	<a:commandLink styleClass="button right" value="Yes, Delete"
+		rendered="#{!deleteBookSetsWizard.hasBooks()}"
+		status="globalWaitStatus" ignoreDupResponses="true"
+		action="#{deleteBookSetsWizard.remove}"
+		oncomplete="javascript:location.href='../lists/CatBookSetsList.seam'"
+		limitToList="true" />
+
+	<a:commandLink styleClass="button right" value="Return"
+		status="globalWaitStatus" ignoreDupResponses="true"
+		action="#{deleteBookSetsWizard.createReset}"
+		oncomplete="#{rich:component('deleteBookSetsModal')}.hide();"
+		ajaxSingle="true" rendered="#{deleteBookSetsWizard.hasBooks()}"
+		limitToList="true" />
+
+</ui:composition>

@@ -1,0 +1,153 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	
+	
+	
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo">
+					<h:outputText value="HCL Shipments for this Component (#{hclShipmentsList.size})" />
+				</span>
+				<a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('hclShip'.concat(divId))}" 
+					ignoreDupResponses="true" status="globalWaitStatus"  reRender="#{tableId}" 
+					styleClass="button wizard"
+					eventsQueue="cmptsEditQueue"/>
+			</div>
+            <div class="right">
+	            <a:commandLink id="#{divId}createSourceSentToHclEditButton"
+	                ignoreDupResponses="true"
+	            	styleClass="button wizard #{!s:hasPermission(catCmptsHome.instance, 'add_reln catSourceSentToHcls') ? 'disabled' : ''}"
+	            	disabled="#{!s:hasPermission(catCmptsHome.instance, 'add_reln catSourceSentToHcls')}"
+	              	action="#{createSourceSentToHclWizard.prepCreateOperation('CREATESOURCESENTTOHCL')}"
+	              	eventsQueue="#{divId}eventsQueue"
+	              	status="globalWaitStatus"
+	                value="Add Source Sent to HCL"
+	                reRender="createSourceSentToHclOperationsPanels" 
+	                oncomplete="Richfaces.showModalPanel('createSourceSentToHclPanel');"
+	                ajaxSingle="true"
+	                onclick="if ( ! checkForSave() ) { return false ; }"/>
+            </div>
+			
+		</div>
+		<rich:dataTable id="#{tableId}" var="_catHclShipments"
+			value="#{hclShipmentsList}"
+			rendered="#{not empty hclShipmentsList}">
+
+			<rich:column id="hclShipmentId" sortBy="#{_catHclShipments.id}"
+				filterBy="#{_catHclShipments.id}" sortable="true" 
+				sortOrder="#{sortFiltBean['hclShip'.concat(divId)]['hclShip1_sortOrder']}"
+				filterValue="#{sortFiltBean['hclShip'.concat(divId)]['hclShip1_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catHclShipments.id}"/>
+					<h:outputText value="#{_catHclShipments.id}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="hclShipmentCmptId" sortBy="#{_catHclShipments.catCmpts.id}"
+				filterBy="#{_catHclShipments.catCmpts.id}" sortable="true" 
+				sortOrder="#{sortFiltBean['hclShip'.concat(divId)]['hclShip2_sortOrder']}"
+				filterValue="#{sortFiltBean['hclShip'.concat(divId)]['hclShip2_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Component ID"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catHclShipments.id}"/>
+					<h:outputText value="#{_catHclShipments.catCmpts.id}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="hclShipmentCmptName" sortBy="#{_catHclShipments.catCmpts.catName}"
+				filterBy="#{_catHclShipments.catCmpts.catName}" sortable="true" 
+				sortOrder="#{sortFiltBean['hclShip'.concat(divId)]['hclShip3_sortOrder']}"
+				filterValue="#{sortFiltBean['hclShip'.concat(divId)]['hclShip3_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Component Name"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catHclShipments.id}"/>
+					<h:outputText value="#{_catHclShipments.catCmpts.catName}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="hclShipmentBoxNo" sortBy="#{_catHclShipments.catBoxNumber}"
+				filterBy="#{_catHclShipments.catBoxNumber}" sortable="true" 
+				sortOrder="#{sortFiltBean['hclShip'.concat(divId)]['hclShip4_sortOrder']}"
+				filterValue="#{sortFiltBean['hclShip'.concat(divId)]['hclShip4_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Box No."/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catHclShipments.id}"/>
+					<h:outputText value="#{_catHclShipments.catBoxNumber}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="hclShipmentContentRange" sortBy="#{_catHclShipments.catContentRange}"
+				filterBy="#{_catHclShipments.catContentRange}" sortable="true" 
+				sortOrder="#{sortFiltBean['hclShip'.concat(divId)]['hclShip5_sortOrder']}"
+				filterValue="#{sortFiltBean['hclShip'.concat(divId)]['hclShip5_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Content Range"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catHclShipments.id}"/>
+					<h:outputText value="#{_catHclShipments.catContentRange}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="hclShipmentNote"
+				filterBy="#{_catHclShipments.catNote}" sortable="true" >
+				<f:facet name="header">
+					<h:outputText value="Note"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catHclShipments.id}"/>
+					<h:outputText value="#{_catHclShipments.catNote}" />
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="hclShipmentDate" sortBy="#{_catHclShipments.catDateShipped}"
+				filterBy="#{_catHclShipments.catDateShipped}" sortable="true" 
+				sortOrder="#{sortFiltBean['hclShip'.concat(divId)]['hclShip6_sortOrder']}"
+				filterValue="#{sortFiltBean['hclShip'.concat(divId)]['hclShip6_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Date Shipped"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catHclShipments.id}"/>
+					<h:outputText value="#{_catHclShipments.catDateShipped}">
+						<s:convertDateTime type="date" pattern="yyyy/MM/dd"/>
+					</h:outputText>
+				</s:link>
+			</rich:column>
+			
+			<rich:column id="hclShipmentBy" sortBy="#{_catHclShipments.catShippedBy}"
+				filterBy="#{_catHclShipments.catShippedBy}" sortable="true" 
+				sortOrder="#{sortFiltBean['hclShip'.concat(divId)]['hclShip7_sortOrder']}"
+				filterValue="#{sortFiltBean['hclShip'.concat(divId)]['hclShip7_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Shipped By"/>
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catHclShipments.id}"/>
+					<h:outputText value="#{_catHclShipments.catShippedBy}" />
+				</s:link>
+			</rich:column>
+			
+		</rich:dataTable>
+
+	</div>
+
+
+
+</s:div>

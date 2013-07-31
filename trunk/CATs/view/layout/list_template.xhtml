@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib" contentType="text/html">
+	<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>ITHAKA | CATS</title>
+	<link rel="shortcut icon" href="#{request.contextPath}/favicon.ico" />
+	<link rel="stylesheet" href="#{request.contextPath}/layout/cats.css"/>
+	<ui:insert name="head" />
+	</head>
+	<body>
+	  <ui:include src="linkto.xhtml"/>
+	
+	
+	<div id="container" class="#{entityType} ${moremenu}">
+	<!-- Header --> 
+      <ui:include src="menu.xhtml">
+         <ui:param name="projectName" value="cat"/>
+      </ui:include>
+    <!-- End Header -->
+    
+    <div class="push"></div>
+    
+    <div class="smart">
+    <rich:messages id="messages" globalOnly="true" styleClass="message"
+				errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+				rendered="#{showGlobalMessages != 'false'}" />
+    	<ui:insert id="body-insert" name="body" />
+    </div>
+    
+    <s:div id="footer" styleClass="footerStyle"><ui:insert name="extraFooter" /> <span id="appinfo"><h:outputText value="#{appInfo.description}"/></span><s:fragment
+		rendered="#{init.debug}">
+		<a:log hotkey="D" />
+		<p style="margin-top: -0.5em;">Conversation: id =
+		#{conversation.id}, #{conversation.longRunning ? 'long running' :
+		'temporary'}#{conversation.nested ? ', nested, parent id =
+		'.concat(conversation.parentId) : ''} #{' - '} Ajax4jsf Log
+		(Ctrl+Shift+D) #{' - '} <s:link id="debugConsole" view="/debug.xhtml"
+			value="Debug console" target="debugConsole" /> #{' - '} <s:link
+			id="resetSession" view="/home.xhtml"
+			action="#{org.jboss.seam.web.session.invalidate}" propagation="none"
+			value="Terminate session" /></p>
+	</s:fragment></s:div>
+    
+	</div>
+
+	</body>
+	</html>
+</f:view>

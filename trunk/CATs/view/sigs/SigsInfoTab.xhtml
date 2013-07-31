@@ -1,0 +1,21 @@
+<s:div 
+ xmlns:s="http://jboss.com/products/seam/taglib"
+ xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:a="http://richfaces.org/a4j" 
+ xmlns:f="http://java.sun.com/jsf/core" 
+ xmlns:h="http://java.sun.com/jsf/html" 
+ xmlns:rich="http://richfaces.org/rich" 
+ xmlns:ui="http://java.sun.com/jsf/facelets" id="sigsInfoDiv1">
+    
+    <div class="col col1">
+    <s:decorate id="catSigsInfoVersion" template="../layout/edit.xhtml">
+    		<ui:define name="label">Version</ui:define>
+    		<h:outputText value="#{catSigsHome.instance.catVersion}"/>
+    	</s:decorate>
+    	
+    	 <s:decorate id="catSigsInfoVersionCompletedDate" template="../layout/edit.xhtml">
+    		<ui:define name="label">Version Completed Date</ui:define>
+    		<h:outputText value="#{catSigsHome.instance.catVersionCompletedDate}"/>
+    	</s:decorate>
+    </div>
+    </s:div>

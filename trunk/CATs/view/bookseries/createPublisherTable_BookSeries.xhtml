@@ -1,0 +1,70 @@
+<s:div id="otherCmptFilterTable" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats"
+    styleClass="scroller">
+    
+    
+	<rich:dataTable id="pubTable"
+		value="#{createBookSeriesWizard.publisherList}" var="_publisher">
+		<rich:column>
+			<a:commandLink value="Add" 
+				 action="#{createBookSeriesWizard.addPublisher(_publisher)}"
+				 reRender="choosePublishersPanel, addedPublishersPanel, noLayoutErrorMsgs, noLayoutPubList"
+				 status="globalWaitStatus"
+				 disabled="#{createBookSeriesWizard.disableAddButton(_publisher)}"	
+				 styleClass="button add #{createBookSeriesWizard.disableAddButton(_publisher) ? 'disabled' : ''}"					 
+				 ajaxSingle="true" 
+				 eventsQueue="createBookSeriesQueue"
+				 ignoreDupResponses="true"
+				 limitToList="true">
+			</a:commandLink>
+		</rich:column>
+		
+		<cats:wizardColumn
+			entityList="#{catPublishersList}"
+			propertyLabel="Publisher Name"
+			propertyName="catName"
+			propertyPath="catPublishersList.catName"
+			propertyValue="#{catPublishersList.catPublishers.catName}"
+			reRender="pubTable"
+			value="#{_publisher.catName}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catPublishersList}"
+			propertyLabel="Organization Type"
+			propertyName="catOrganizationType"
+			propertyPath="catPublishersList.catOrganizationType"
+			propertyValue="#{catPublishersList.catPublishers.catOrganizationType}"
+			reRender="pubTable"
+			value="#{_publisher.catOrganizationType.label}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catPublishersList}"
+			propertyLabel="Country"
+			propertyName="catCountry"
+			propertyPath="catPublishersList.catCountry"
+			propertyValue="#{catPublishersList.catPublishers.catCountry}"
+			reRender="pubTable"
+			value="#{_publisher.catCountry}"/>
+		
+		<cats:wizardColumn
+			entityList="#{catPublishersList}"
+			propertyLabel="ID"
+			propertyName="id"
+			propertyPath="catPublishersList.id"
+			propertyValue="#{catPublishersList.catPublishers.id}"
+			reRender="pubTable"
+			value="#{_publisher.id}"/>
+		
+	</rich:dataTable>
+	<s:div styleClass="blanktable" rendered="#{empty createBookSeriesWizard.publisherList}">
+		<span>Choose a Publisher.</span>
+	</s:div>
+    
+	
+ </s:div>

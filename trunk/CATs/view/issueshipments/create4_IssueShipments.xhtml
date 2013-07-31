@@ -1,0 +1,121 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{createIssueShipmentsWizard.createTitle}" /></h2>
+	
+		<div id="step1">
+		<s:div rendered="#{createIssueShipmentsWizard.checkIfCreateIssueShipmentLifecycleCompletable() == true}">
+		<ul class="steps">
+				<li class="">1. Choose</li>
+				<li class="">2. Main</li>
+				<li class="">3. Parent</li>
+				<li class="selected">4. Additional</li>
+				<li class="disabled">5. Results</li>
+		</ul>
+		</s:div>
+		<!-- This will not be rendered for this page, based on conditions -->
+		<s:div rendered="#{createIssueShipmentsWizard.checkIfCreateIssueShipmentLifecycleCompletable() == false}">
+		<ul class="steps">
+				<li class="">1. Choose</li>
+				<li class="">2. Main</li>
+				<li class="selected">3. Parent</li>
+				<li class="disabled">4. Results</li>
+		</ul>
+		</s:div>
+		
+		<div class="cluster smart">
+
+		<p>Please make additional selections(if any).</p>
+
+<s:fragment rendered="#{createIssueShipmentsWizard.checkIfCreateIssueShipmentLifecycleCompletable()}">
+<div class="scroller">
+			<s:decorate id="completeIssueShipment_div" template="../layout/edit.xhtml">
+				<ui:define name="label">Complete shipment</ui:define>
+                <h:selectOneMenu id="completeIssueShipment" value="#{createIssueShipmentsWizard.doCompleteCreateIssueShipment}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   		    <s:selectItems value="#{listsForEnums.yesNo}" var="i" itemValue="#{i.value}"
+		                 label="#{i.label}" noSelectionLabel="Choose..." />
+                    <a:support event="onchange" reRender="noLayoutExistingForOutcome"
+                    	eventsQueue="#{divParam}eventsQueue"
+                        status="globalWaitStatus"
+                        ajaxSingle="true"/>
+		       </h:selectOneMenu>
+			</s:decorate>
+			<a:outputPanel layout="none" id="noLayoutExistingForOutcome">
+            <s:div id="catOutcome_outer_div" rendered="#{createIssueShipmentsWizard.doCompleteCreateIssueShipment}">
+    			<s:decorate id="catOutcome_div" template="../layout/edit.xhtml">
+	    			<ui:define name="label">Outcome</ui:define>
+                    <h:selectOneMenu name="catOutcome" value="#{createIssueShipmentsWizard.createTransientInstance.catOutcome}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   	    	    <s:selectItems value="#{listsForEnums.catIssueShipments_Outcome}" var="i" itemValue="#{i}"
+		                     label="#{i.label}" noSelectionLabel="Choose..." />
+                    <a:support event="onchange" reRender="noLayoutExistingForOutcomeReceivedAll" 
+                    	eventsQueue="#{divParam}eventsQueue"
+                        status="globalWaitStatus"
+                        ajaxSingle="true"/>
+		           </h:selectOneMenu>
+			    </s:decorate>
+    			<a:outputPanel layout="none" id="noLayoutExistingForOutcomeReceivedAll">
+                <s:div id="catOutcomeForOutcomeReceivedAll_outer_div" rendered="#{createIssueShipmentsWizard.doCompleteCreateIssueShipment and createIssueShipmentsWizard.isOutcomeBeingReceivedAll(createIssueShipmentsWizard.createTransientInstance.catOutcome)}">
+    			<s:decorate id="catMaterialFormat_div" template="../layout/edit.xhtml">
+	    			<ui:define name="label">Material Format</ui:define>
+                    <h:selectOneMenu name="catMaterialFormat" value="#{createIssueShipmentsWizard.createTransientInstance.catMaterialFormat}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   	    	    <s:selectItems value="#{listsForEnums.catIssueShipments_MaterialFormat}" var="i" itemValue="#{i}"
+		                     label="#{i.label}" noSelectionLabel="Choose..." />
+		           </h:selectOneMenu>
+			    </s:decorate>
+    			<s:decorate id="catSourceCondition_div" template="../layout/edit.xhtml">
+	    			<ui:define name="label">Source Condition</ui:define>
+                    <h:selectOneMenu name="catSourceCondition" value="#{createIssueShipmentsWizard.createTransientInstance.catSourceCondition}"
+                           requiredMessage="Please make a selection !!" 
+			               required="true">
+		   	    	    <s:selectItems value="#{listsForEnums.catIssueShipments_SourceCondition}" var="i" itemValue="#{i}"
+		                     label="#{i.label}" noSelectionLabel="Choose..." />
+		           </h:selectOneMenu>
+			    </s:decorate>
+		    	</s:div>
+			    </a:outputPanel>
+			</s:div>
+			</a:outputPanel>
+</div>
+</s:fragment>
+<s:fragment rendered="#{createIssueShipmentsWizard.checkIfCreateIssueShipmentLifecycleCompletable() == false}">
+		<p>No additional selections are needed.</p>
+</s:fragment>
+
+
+			</div>
+
+		<div class="push"></div>
+
+            <a:commandLink styleClass="button" value="Quit"
+       			eventsQueue="#{divParam}eventsQueue"
+                status="globalWaitStatus"
+			    reRender="createIssueShipmentswizard" oncomplete="#{rich:component('createIssueShipmentsQuit')}.show(); return false;">
+			</a:commandLink> 
+ 
+			<a:commandLink
+			styleClass="button right" value="Save"
+			eventsQueue="#{divParam}eventsQueue"
+            status="globalWaitStatus"
+			action="#{createIssueShipmentsWizard.performCreateOperation}" 
+			reRender="createIssueShipmentswizard" />
+			</div>
+</ui:composition>
+

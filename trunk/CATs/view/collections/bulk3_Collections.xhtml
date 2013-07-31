@@ -1,0 +1,221 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText
+		value="#{catCollectionsBulkOperations.bulkTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1. Permissions</li>
+		<li class="disabled">2. Change</li>
+		<li class="selected">3. Additional</li>
+		<li class="disabled">4. Results</li>
+	</ul>
+
+	<div class="cluster ">	
+	<s:fragment
+		rendered="#{catCollectionsBulkOperations.bulkRequiredProperties.contains('catName') or 
+								catCollectionsBulkOperations.bulkRequiredProperties.contains('catMinPromSetCnt') or 
+								catCollectionsBulkOperations.bulkRequiredProperties.contains('catTargetSetCnt') or 
+								catCollectionsBulkOperations.bulkRequiredProperties.contains('catLaunchDateSchd')}">
+		<p>Additional information required:</p>
+		<s:decorate id="catCollChgHistReasonDiv"
+			template="../layout/edit.xhtml">
+			<ui:define name="label">Change History Reason</ui:define>
+			<h:inputTextarea cols="20" required="true" id="catCollChgHistReason"
+				rows="2" value="#{catCollectionsBulkOperations.changeHistoryReason}" />
+		</s:decorate>
+	</s:fragment>
+	
+	<s:fragment rendered="#{catCollectionsBulkOperations.bulkRequiredProperties.contains('catLifecycle')}">
+		<s:fragment	rendered="#{catCollectionsBulkOperations.noAddnlInfoRequired or (not catCollectionsBulkOperations.existingTypeCore)}">
+				<p>No Additional information required</p>
+		</s:fragment>	
+	
+		<s:fragment rendered="#{catCollectionsBulkOperations.existingTypeCore}">			
+			<s:fragment	rendered="#{catCollectionsBulkOperations.newLifecycleAnnounced}">
+			<p>Additional information required:</p>
+				<s:decorate id="catAnncmntDateActl_div1"	template="../layout/edit.xhtml">
+					<ui:define name="label">Actual Announcement</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catAnncmntDateActl1" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catAnncmntDateActl}" />
+				</s:decorate>
+			</s:fragment>
+			<s:fragment	rendered="#{catCollectionsBulkOperations.newLifecycleLaunched}">
+			<p>Additional information required:</p>
+				<s:decorate id="catLaunchDateActl_div1"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Actual Launch</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catLaunchDateAct1" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catLaunchDateActl}" />
+				</s:decorate>
+			</s:fragment>
+			<s:fragment	rendered="#{catCollectionsBulkOperations.newLifecycleCompleted}">
+			<p>Additional information required:</p>
+				<s:decorate id="catMinPromCmpltnDateActl_div1"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Actual Promise Completion Date</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catMinPromCmpltnDateActl1" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catMinPromCmpltnDateActl}" />
+				</s:decorate>
+			</s:fragment>
+		</s:fragment>			
+	</s:fragment> 
+	
+	<s:fragment
+		rendered="#{catCollectionsBulkOperations.bulkRequiredProperties.contains('catType')}">
+		<s:fragment rendered="#{catCollectionsBulkOperations.selectedTypeCore}">
+		<p>Additional information required:</p>
+			<s:fragment
+				rendered="#{catCollectionsBulkOperations.existingLifecycleProposed or 
+							catCollectionsBulkOperations.existingLifecycleAnnounced or 
+							catCollectionsBulkOperations.existingLifecycleLaunched or 
+							catCollectionsBulkOperations.existingLifecycleSigningCompleted or 
+							catCollectionsBulkOperations.existingLifecycleReleaseCompleted}">				
+				<s:decorate id="catTargetSetCnt_div2"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Target Set Count</ui:define>
+					<h:inputText required="true" id="catTargetSetCnt"
+						value="#{catCollectionsBulkOperations.bulkInstance.catTargetSetCnt}">
+					</h:inputText>
+				</s:decorate>
+				<s:decorate id="catPageBudget_div2" template="../layout/edit.xhtml">
+					<ui:define name="label">Page Budget</ui:define>
+					<h:inputText required="true" id="catPageBudget"
+						value="#{catCollectionsBulkOperations.bulkInstance.catPageBudget}">
+					</h:inputText>
+				</s:decorate>
+			</s:fragment>
+
+			<s:fragment
+				rendered="#{catCollectionsBulkOperations.existingLifecycleAnnounced or 
+							catCollectionsBulkOperations.existingLifecycleLaunched or 
+							catCollectionsBulkOperations.existingLifecycleSigningCompleted or 
+							catCollectionsBulkOperations.existingLifecycleReleaseCompleted}">
+				<s:decorate id="catMinPromSetCnt_div2"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Promised Sets</ui:define>
+					<h:inputText required="true" id="catMinPromSetCnt"
+						value="#{catCollectionsBulkOperations.bulkInstance.catMinPromSetCnt}">
+					</h:inputText>
+				</s:decorate>
+
+				<s:decorate id="catMinPromSigningDeadline_div2"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Minimum Promise Signing Deadline</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catMinPromSigningDeadline" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catMinPromSigningDeadline}" />
+				</s:decorate>
+
+				<s:decorate id="catAnncmntDateSchd_div1"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Scheduled Announcement</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catAnncmntDateSchd" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catAnncmntDateSchd}" />
+				</s:decorate>
+
+				<s:decorate id="catAnncmntDatePrjd_div1"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Projected Announcement</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catAnncmntDatePrjd" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catAnncmntDatePrjd}" />
+				</s:decorate>
+
+				<s:decorate id="catAnncmntDateActl_div2"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Actual Announcement</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catAnncmntDateActl" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catAnncmntDateActl}" />
+				</s:decorate>
+			</s:fragment>
+
+			<s:fragment
+				rendered="#{catCollectionsBulkOperations.existingLifecycleLaunched or 
+							catCollectionsBulkOperations.existingLifecycleSigningCompleted or 
+							catCollectionsBulkOperations.existingLifecycleReleaseCompleted}">
+				<s:decorate id="catLaunchDateSchd_div1"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Scheduled Launch</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catLaunchDateSchd" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catLaunchDateSchd}" />
+				</s:decorate>
+
+				<s:decorate id="catLaunchDatePrjd_div1"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Projected Launch</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catLaunchDatePrjd" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catLaunchDatePrjd}" />
+				</s:decorate>
+
+				<s:decorate id="catLaunchDateActl_div2"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Actual Launch</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catLaunchDateAct2" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catLaunchDateActl}" />
+				</s:decorate>
+			</s:fragment>
+			
+			<s:fragment
+				rendered="#{catCollectionsBulkOperations.existingLifecycleSigningCompleted or 
+							catCollectionsBulkOperations.existingLifecycleReleaseCompleted}">
+				<s:decorate id="catMinPromCmpltnDateSchd_div1"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Scheduled Promise Completion</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catMinPromCmpltnDateSchd}" />
+				</s:decorate>
+
+				<s:decorate id="catMinPromCmpltnDatePrjd_div1"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Projected Promise Completion Date</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catMinPromCmpltnDatePrjd" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catMinPromCmpltnDatePrjd}" />
+				</s:decorate>
+			</s:fragment>
+			
+			<s:fragment
+				rendered="#{catCollectionsBulkOperations.existingLifecycleReleaseCompleted}">
+				<s:decorate id="catMinPromCmpltnDateActl_div2"
+					template="../layout/edit.xhtml">
+					<ui:define name="label">Actual Promise Completion Date</ui:define>
+					<rich:calendar enableManualInput="true" datePattern="yyyy/MM/dd"
+						id="catMinPromCmpltnDateActl2" inputClass="datestyle" required="true"
+						value="#{catCollectionsBulkOperations.bulkInstance.catMinPromCmpltnDateActl}" />
+				</s:decorate>
+			</s:fragment>
+		</s:fragment>
+		<s:fragment rendered="#{not catCollectionsBulkOperations.selectedTypeCore}">
+			<p>No Additional information required</p>
+		</s:fragment>
+	</s:fragment></div>
+
+	<div class="push"></div>
+
+	<a:commandLink styleClass="button" value="Quit" status="globalWaitStatus" ignoreDupResponses="true" eventsQueue="bulkCollectionsQueue"	
+				   oncomplete="#{rich:component('collectionsBulkUpdateQuit')}.show();" />
+
+	<a:commandLink styleClass="button right" value="Continue" action="#{catCollectionsBulkOperations.bulkNext}" reRender="collectionsBulkWizard" 
+					eventsQueue="bulkCollectionsQueue"	status="globalWaitStatus" ignoreDupResponses="true"/></div>
+
+</ui:composition>

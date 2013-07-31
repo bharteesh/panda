@@ -1,0 +1,163 @@
+<s:div id="SOMEDiv1" xmlns:s="http://jboss.com/products/seam/taglib" xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:rich="http://richfaces.org/rich" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="col col1">
+<s:decorate id="catName_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Name</ui:define>
+<h:outputText disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catName')}" id="catName" size="25" value="#{catCollectionsHome.instance.catName}"/>
+<a:commandLink id="collectionNameEditButton"
+				disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catName')}"
+				onclick="if ( ! checkForSave() ) { return false ; }"
+				ignoreDupResponses="true"
+	    		action="#{catCollectionsBulkOperations.changeWithLogWizard('NAME')}"
+				value="Edit"
+				reRender="collectionsModalDiv" 
+				oncomplete="#{rich:component('collectionsBulkUpdatePanel')}.show();"
+				status = "globalWaitStatus"
+				ajaxSingle="true"
+				styleClass="button wizard #{!s:hasPermission(catCollectionsHome.instance, 'modify catName') ? 'disabled' : ''}"/>
+</s:decorate>
+
+<s:decorate id="catLifecycle_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Lifecycle</ui:define>
+<h:outputText disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catLifecycle')}" id="catLifecycle" size="25" value="#{catCollectionsHome.instance.catLifecycle.label}"/>
+ <a:commandLink id="collectionLifecycleEditButton"
+				ignoreDupResponses="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"
+	    		action="#{catCollectionsBulkOperations.changeAttribWizard('LIFECYCLE')}"
+				value="Edit"
+				disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catLifecycle')}"
+				reRender="collectionsModalDiv" 
+				oncomplete="#{rich:component('collectionsBulkUpdatePanel')}.show();"
+				status = "globalWaitStatus"
+				ajaxSingle="true"
+				styleClass="button wizard #{!s:hasPermission(catCollectionsHome.instance, 'modify catLifecycle') ? 'disabled' : ''}"/>
+				
+</s:decorate>
+
+<s:decorate id="catMinPromSetCnt_div1" template="../layout/edit.xhtml">
+    <ui:define name="label">Promised Sets</ui:define>
+       <h:outputText disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catMinPromSetCnt')}" id="catMinPromSetCnt" value="#{catCollectionsHome.instance.catMinPromSetCnt}"/>
+       <a:commandLink id="collectionPromSetsEditButton"
+				ignoreDupResponses="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"
+	    		action="#{catCollectionsBulkOperations.changeWithLogWizard('PROMSETCNT')}"
+				value="Edit"
+				disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catMinPromSetCnt')}"
+				reRender="collectionsModalDiv" 
+				oncomplete="#{rich:component('collectionsBulkUpdatePanel')}.show();"
+				status = "globalWaitStatus"
+				ajaxSingle="true"
+				styleClass="button wizard #{!s:hasPermission(catCollectionsHome.instance, 'modify catMinPromSetCnt') ? 'disabled' : ''}"/>
+</s:decorate>
+
+<s:decorate id="catMinPromSigningDeadline_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Minimum Promise Signing Deadline</ui:define>
+<rich:calendar  onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catMinPromSigningDeadline')}" id="catMinPromSigningDeadline" inputClass="datestyle" value="#{catCollectionsHome.instance.catMinPromSigningDeadline}"/>
+</s:decorate>
+
+<s:decorate id="catType_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Type</ui:define>
+<h:outputText disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catType')}" name="catType" value="#{catCollectionsHome.instance.catType}"/>
+<a:commandLink id="collectionTypeEditButton"
+				ignoreDupResponses="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"
+	    		action="#{catCollectionsBulkOperations.changeAttribWizard('TYPE')}"
+				value="Edit"
+				disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catType')}"
+				reRender="collectionsModalDiv" 
+				oncomplete="#{rich:component('collectionsBulkUpdatePanel')}.show();"
+				status = "globalWaitStatus"
+				ajaxSingle="true"
+				styleClass="button wizard #{!s:hasPermission(catCollectionsHome.instance, 'modify catType') ? 'disabled' : ''}"/>		   		
+</s:decorate>
+
+<s:decorate id="catTargetSetCnt_div1" template="../layout/edit.xhtml">
+  <ui:define name="label">Target Set Count</ui:define>
+	<h:outputText disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catTargetSetCnt')}" id="catTargetSetCnt" value="#{catCollectionsHome.instance.catTargetSetCnt}"/>
+      <a:commandLink id="collectionTargetSetEditButton"
+				ignoreDupResponses="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"
+	    		action="#{catCollectionsBulkOperations.changeWithLogWizard('TARGETSETCNT')}"
+				value="Edit"
+				disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catTargetSetCnt')}"
+				reRender="collectionsModalDiv" 
+				oncomplete="#{rich:component('collectionsBulkUpdatePanel')}.show();"
+				status = "globalWaitStatus"
+				ajaxSingle="true"
+				styleClass="button wizard #{!s:hasPermission(catCollectionsHome.instance, 'modify catTargetSetCnt') ? 'disabled' : ''}"/>
+</s:decorate>
+
+<s:decorate id="catPageBudget_div1" template="../layout/edit.xhtml">
+                <ui:define name="label">Page Budget</ui:define>
+                <h:inputText onchange="enableSaveCancel();" readonly="#{!s:hasPermission(catCollectionsHome.instance, 'modify catPageBudget')}" id="catPageBudget" value="#{catCollectionsHome.instance.catPageBudget}">
+                </h:inputText>
+            </s:decorate>
+
+<s:decorate id="catOtherPromContentNote_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Other Promised Content</ui:define>
+<h:inputText onchange="enableSaveCancel();" readonly="#{!s:hasPermission(catCollectionsHome.instance, 'modify catOtherPromContentNote')}" id="catOtherPromContentNote" maxlength="255" size="25" value="#{catCollectionsHome.instance.catOtherPromContentNote}"/>
+</s:decorate>
+</div>
+<div class="col col2">
+<s:decorate id="catAnncmntDateSchd_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Scheduled Announcement</ui:define>
+<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catAnncmntDateSchd')}" id="catAnncmntDateSchd" inputClass="datestyle" value="#{catCollectionsHome.instance.catAnncmntDateSchd}"/>
+</s:decorate>
+
+<s:decorate id="catAnncmntDatePrjd_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Projected Announcement</ui:define>
+<rich:calendar  onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catAnncmntDatePrjd')}" id="catAnncmntDatePrjd" inputClass="datestyle" value="#{catCollectionsHome.instance.catAnncmntDatePrjd}"/>
+</s:decorate>
+
+<s:decorate id="catAnncmntDateActl_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Actual Announcement</ui:define>
+<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();"  enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catAnncmntDateActl')}" id="catAnncmntDateActl" inputClass="datestyle" value="#{catCollectionsHome.instance.catAnncmntDateActl}"/>
+</s:decorate>
+
+<s:decorate id="catLaunchDateSchd_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Scheduled Launch</ui:define>
+<h:outputText disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catLaunchDateSchd')}" id="catLaunchDateSchd" value="#{catCollectionsHome.instance.catLaunchDateSchd}"><s:convertDateTime type="date" pattern="yyyy/MM/dd"/></h:outputText>
+ <a:commandLink id="collectionLaunchDateEditButton"
+				ignoreDupResponses="true"
+				onclick="if ( ! checkForSave() ) { return false ; }"
+	    		action="#{catCollectionsBulkOperations.changeWithLogWizard('LAUNCHDATE')}"
+				value="Edit"
+				disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catLaunchDateSchd')}"
+				reRender="collectionsModalDiv" 
+				oncomplete="#{rich:component('collectionsBulkUpdatePanel')}.show();"
+				status = "globalWaitStatus"
+				ajaxSingle="true"
+				styleClass="button wizard #{!s:hasPermission(catCollectionsHome.instance, 'modify catLaunchDateSchd') ? 'disabled' : ''}"/>
+</s:decorate>
+
+<s:decorate id="catLaunchDatePrjd_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Projected Launch</ui:define>
+<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catLaunchDatePrjd')}" id="catLaunchDatePrjd" inputClass="datestyle" value="#{catCollectionsHome.instance.catLaunchDatePrjd}"/>
+</s:decorate>
+
+<s:decorate id="catLaunchDateActl_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Actual Launch</ui:define>
+<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catLaunchDateActl')}" id="catLaunchDateActl" inputClass="datestyle" value="#{catCollectionsHome.instance.catLaunchDateActl}"/>
+</s:decorate>
+
+<s:decorate id="catMinPromCmpltnDateSchd_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Scheduled Promise Completion</ui:define>
+<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catMinPromCmpltnDateSchd')}" id="catMinPromCmpltnDateSchd" inputClass="datestyle" value="#{catCollectionsHome.instance.catMinPromCmpltnDateSchd}"/>
+</s:decorate>
+
+<s:decorate id="catMinPromCmpltnDatePrjd_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Projected Promise Completion Date</ui:define>
+<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catMinPromCmpltnDatePrjd')}" id="catMinPromCmpltnDatePrjd" inputClass="datestyle" value="#{catCollectionsHome.instance.catMinPromCmpltnDatePrjd}"/>
+</s:decorate>
+
+<s:decorate id="catMinPromCmpltnDateActl_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Actual Promise Completion Date</ui:define>
+<rich:calendar onchanged="enableSaveCancel();" oninputkeyup="enableSaveCancel();" enableManualInput="true"  datePattern="yyyy/MM/dd" disabled="#{!s:hasPermission(catCollectionsHome.instance, 'modify catMinPromCmpltnDateActl')}" id="catMinPromCmpltnDateActl" inputClass="datestyle" value="#{catCollectionsHome.instance.catMinPromCmpltnDateActl}"/>
+</s:decorate>
+
+
+</div>
+
+	<div class="push"/>
+	
+</s:div>

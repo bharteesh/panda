@@ -1,0 +1,93 @@
+<s:div xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:rich="http://richfaces.org/rich">
+	<html>
+	<head>
+	
+	<f:verbatim escape="true">
+		<style> 
+			body {
+				font-family:Arial, Helvetica, sans-serif;
+				font-size: 12px;
+			}
+			a {
+				color: #000;
+				text-decoration: none;
+			}
+			th, td {
+				padding: 5px;
+			}
+			td {
+				border-bottom: solid 1px #ccc;
+			}
+			th {
+				color: white;
+				font-weight: bold;
+				text-align: left;
+				text-shadow: rgba(0, 0, 0, 0.296875) 0px -2px 3px;
+				background: #faa41a;
+				background: -webkit-gradient(linear, left top, left bottom, from(#faa41a), to(#f47b20));
+				background: -moz-linear-gradient(top, #faa41a, #f47b20);
+			 filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa41a', endColorstr='#f47b20');
+			}
+			tr:hover {
+				background: #fbfaf5;
+				background: -webkit-gradient(linear, left top, left bottom, from(#fbfaf5), to(#d2d0be));
+				background: -moz-linear-gradient(top, #fbfaf5, #d2d0be);
+			 filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbfaf5', endColorstr='#d2d0be');
+			}
+			tr:hover a {
+				text-decoration: underline;
+			}
+			
+		</style>
+		 
+	</f:verbatim>
+	</head>
+	<body>
+		<div class="push"/>
+		<b><h:outputText value="CATS Book Submission Record" /></b>
+		<div class="push"/>
+		<h:dataTable value="#{submissionList}" var="_catSub" border="0" cellpadding="0" cellspacing="0">
+			<h:column>
+				<f:facet name="header">
+		        	<h:outputText value="ID" />
+		        </f:facet> 
+		        <a href="#{appInfo.basePath}/booksubmissions/BookSubmissionsEdit.seam?id=#{_catSub.id}">#{_catSub.id}</a>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+		        	<h:outputText value="Sequence" />
+		        </f:facet> 
+		        <a href="#{appInfo.basePath}/booksubmissions/BookSubmissionsEdit.seam?id=#{_catSub.id}">#{_catSub.catSequenceNo}</a>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+		        	<h:outputText value="Lifecycle" />
+		        </f:facet> 
+		        <a href="#{appInfo.basePath}/booksubmissions/BookSubmissionsEdit.seam?id=#{_catSub.id}">#{_catSub.catLifecycle.label}</a>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+		        	<h:outputText value="Vendor" />
+		        </f:facet> 
+		        <a href="#{appInfo.basePath}/booksubmissions/BookSubmissionsEdit.seam?id=#{_catSub.id}">#{_catSub.catVendor.catName}</a>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+		        	<h:outputText value="QC Completed" />
+		        </f:facet> 
+		        <a href="#{appInfo.basePath}/booksubmissions/BookSubmissionsEdit.seam?id=#{_catSub.id}">
+			       <h:outputText value="#{_catSub.catQcCompletedTimestamp}">
+			        </h:outputText>
+		        </a>
+			</h:column>
+		</h:dataTable>
+	
+	</body>
+	</html>
+</s:div>
+	

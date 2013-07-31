@@ -1,0 +1,98 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo"> <h:outputText value="Imprint Variants (#{impVariantsList.size})" />
+				</span>
+				<a:commandLink value="X"
+					action="#{sortFiltBean.resetSortFilt('catImprintVariant'.concat(divId))}"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					reRender="#{divId}impVariantsList" styleClass="button wizard" />
+			</div>
+	<div class="right">
+		<a:commandLink ignoreDupResponses="true" value="Add Variant"
+			action="#{imprintVariantsWizard.prepAddVariant()}"	
+			reRender="imprintVariantsWizardPanel"
+			oncomplete="#{rich:component('imprintVariantsWizardModal')}.show();"
+			status="globalWaitStatus" ajaxSingle="true" limitToList="true"			
+            styleClass="button wizard #{!s:hasPermission(catImprintsHome.instance, 'add_reln catImprintVariants') ? 'disabled' : ''}"
+			disabled="#{!s:hasPermission(catImprintsHome.instance, 'add_reln catImprintVariants')}"
+			/>			
+			
+	</div>
+	</div>
+		<rich:dataTable id="#{divId}impVariantsList" var="_catImprintVariant"
+			value="#{impVariantsList}" rendered="#{not empty impVariantsList}">
+			
+			<rich:column id="#{divId}Name" sortBy="#{_catImprintVariant.catName}"
+				filterBy="#{_catImprintVariant.catName}" sortable="true"
+				sortOrder="#{sortFiltBean['catImprintVariant'.concat(divId)]['catImprintVariantName_sortOrder']}"
+				filterValue="#{sortFiltBean['catImprintVariant'.concat(divId)]['catImprintVariantName_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Name" />
+				</f:facet>				
+					<h:outputText value="#{_catImprintVariant.catName}" />
+				
+			</rich:column>
+			
+			<rich:column id="#{divId}Type" sortBy="#{_catImprintVariant.catType}"
+				filterBy="#{_catImprintVariant.catType}" sortable="true"
+				sortOrder="#{sortFiltBean['catImprintVariant'.concat(divId)]['catImprintVariantType_sortOrder']}"
+				filterValue="#{sortFiltBean['catImprintVariant'.concat(divId)]['catImprintVariantType_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Type" />
+				</f:facet>				
+					<h:outputText value="#{_catImprintVariant.catType.label}" />				
+			</rich:column>
+			
+			<rich:column id="#{divId}id" sortBy="#{_catImprintVariant.id}"
+				filterBy="#{_catImprintVariant.id}" sortable="true"
+				sortOrder="#{sortFiltBean['catImprintVariant'.concat(divId)]['catImprintVariantId_sortOrder']}"
+				filterValue="#{sortFiltBean['catImprintVariant'.concat(divId)]['catImprintVariantId_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID" />
+				</f:facet>				
+					<h:outputText value="#{_catImprintVariant.id}" />				
+			</rich:column>
+			<rich:column>
+				<f:facet name="header"></f:facet>
+				<a:commandLink 			    			
+			    			id="editButton"				
+				    		action="#{imprintVariantsWizard.prepEditVariant(_catImprintVariant)}"	
+							reRender="imprintVariantsWizardPanel"
+							oncomplete="#{rich:component('imprintVariantsWizardModal')}.show();"
+							value="Edit"			
+							styleClass="button wizard #{!s:hasPermission(catImprintsHome.instance, 'modify catImprintVariants') ? 'disabled' : ''}"
+							disabled="#{!s:hasPermission(catImprintsHome.instance, 'modify catImprintVariants')}"			
+							status="globalWaitStatus"
+							ignoreDupResponses="true"
+							ajaxSingle="true"
+							limitToList="true">
+				</a:commandLink>				
+			</rich:column>
+			<rich:column>
+			<a:commandLink 			    			
+			    			id="deleteVariantButton"				
+				    		action="#{imprintVariantsWizard.prepDeleteVariant(_catImprintVariant)}"	
+				    		disabled="#{!imprintVariantsWizard.deletable(_catImprintVariant) or (!s:hasPermission(catImprintsHome.instance, 'remove_reln catImprintVariants'))}"
+				    		reRender="imprintVariantsWizardPanel"
+							oncomplete="#{rich:component('imprintVariantsWizardModal')}.show();"
+							value="Delete"							
+							styleClass="button delete #{!imprintVariantsWizard.deletable(_catImprintVariant) or !s:hasPermission(catImprintsHome.instance, 'remove_reln catImprintVariants') ? 'disabled' : ''}"
+							status="globalWaitStatus"
+							ignoreDupResponses="true"
+							ajaxSingle="true"
+							limitToList="true">					
+			</a:commandLink>
+			</rich:column>
+		</rich:dataTable>
+	</div>
+
+</s:div>

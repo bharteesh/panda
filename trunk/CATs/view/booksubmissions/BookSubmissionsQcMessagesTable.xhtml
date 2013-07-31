@@ -1,0 +1,77 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:cats="http://www.ithaka.org/cats">
+	<div class="smart">
+		<div class="header">
+			<div class="left">
+				<span class="museo"> <h:outputText value="QC Messages (#{submissionQcMessagesList.size})" />
+				</span>
+				<a:commandLink value="X"
+					action="#{sortFiltBean.resetSortFilt('catSubmissionQcMessage'.concat(divId))}"
+					ignoreDupResponses="true" status="globalWaitStatus"
+					reRender="#{divId}catSubmissionQcMessageList" styleClass="button wizard" />
+			</div>
+	</div>
+		<rich:dataTable id="#{divId}catSubmissionQcMessageList" var="_catSubmissionQcMessage"
+			value="#{submissionQcMessagesList}" rendered="#{not empty submissionQcMessagesList}">
+			
+			<rich:column id="#{divId}id" sortBy="#{_catSubmissionQcMessage.id}"
+				filterBy="#{_catSubmissionQcMessage.id}" sortable="true"
+				sortOrder="#{sortFiltBean['catSubmissionQcMessage'.concat(divId)]['catSubmissionQcMessageId_sortOrder']}"
+				filterValue="#{sortFiltBean['catSubmissionQcMessage'.concat(divId)]['catSubmissionQcMessageId_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="ID" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catSubmissionQcMessage.id}" />
+					<h:outputText value="#{_catSubmissionQcMessage.id}" />
+				</s:link>
+			</rich:column>
+
+			<rich:column id="#{divId}sortKey" sortBy="#{_catSubmissionQcMessage.catSortKey}"
+				filterBy="#{_catSubmissionQcMessage.catSortKey}" sortable="true"
+				sortOrder="#{sortFiltBean['catSubmissionQcMessage'.concat(divId)]['catSubmissionQcMessageSortKey_sortOrder']}"
+				filterValue="#{sortFiltBean['catSubmissionQcMessage'.concat(divId)]['catSubmissionQcMessageSortKey_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Sort Key" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catSubmissionQcMessage.id}" />
+					<h:outputText value="#{_catSubmissionQcMessage.catSortKey}" />
+				</s:link>
+			</rich:column>  
+			
+						<rich:column id="#{divId}message" sortBy="#{_catSubmissionQcMessage.catMessage}"
+				filterBy="#{_catSubmissionQcMessage.catMessage}" sortable="true"
+				sortOrder="#{sortFiltBean['catSubmissionQcMessage'.concat(divId)]['catSubmissionQcMessageCatMessage_sortOrder']}"
+				filterValue="#{sortFiltBean['catSubmissionQcMessage'.concat(divId)]['catSubmissionQcMessageCatMessage_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Message" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catSubmissionQcMessage.id}" />
+					<h:outputText value="#{_catSubmissionQcMessage.catMessage}" />
+				</s:link>
+			</rich:column> 
+			
+			<rich:column id="#{divId}dateCreated" sortBy="#{_catSubmissionQcMessage.catDateCreated}"
+				filterBy="#{_catSubmissionQcMessage.catDateCreated}" sortable="true"
+				sortOrder="#{sortFiltBean['catSubmissionQcMessage'.concat(divId)]['catSubmissionQcMessageCatDateCreated_sortOrder']}"
+				filterValue="#{sortFiltBean['catSubmissionQcMessage'.concat(divId)]['catSubmissionQcMessageCatDateCreated_filterValue']}">
+				<f:facet name="header">
+					<h:outputText value="Date Created" />
+				</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catSubmissionQcMessage.id}" />
+					<h:outputText value="#{_catSubmissionQcMessage.catDateCreated}" />
+				</s:link>
+			</rich:column> 
+		</rich:dataTable>
+	</div>
+
+</s:div>

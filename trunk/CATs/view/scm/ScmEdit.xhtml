@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="../layout/template.xhtml">
+
+	<ui:param name="entityType" value="scm" />
+	<ui:param name="moremenu" value="moremenu"/>
+	
+	 <ui:define name="badge">
+		<ui:include src="ScmBadge.xhtml" />
+	</ui:define> 
+	<ui:define name="body">
+		<h:form id="scmEditForm">
+		<!-- Shows hour glass when the table is loading -->
+			<div id="globalStatusDiv" style="display: none;" ><img
+				src="../img/loading.gif" /></div>
+			<a:status id="globalWaitStatus" forceId="true" layout="none"
+				onstart="jQuery('#globalStatusDiv').fadeIn('fast')"
+				onstop="jQuery('#globalStatusDiv').fadeOut('slow')" />
+				
+			<rich:tabPanel 
+				id="maintab" 
+			   switchType="ajax"
+				styleClass="tab"
+				contentClass="tab_content"
+				selectedTab="#{catScmHome.selectedTab}">
+				
+				<rich:tab label="SCM Information" id="tab1" name="tab1" eventsQueue="scmEditQueue" status="globalWaitStatus"
+					action="#{catScmHome.updateUserTabPreferences('tab1')}" reRender="contribLayout" limitToList="true">
+					<ui:include src="ScmInformationTab.xhtml" />
+				</rich:tab>
+				<rich:tab label="Audit" id="tab2" name="tab2" eventsQueue="scmEditQueue" status="globalWaitStatus" 
+					action="#{catScmHome.updateUserTabPreferences('tab2')}" reRender="contribLayout" limitToList="true">
+					<ui:include src="ScmAuditTab.xhtml" />
+				</rich:tab>
+				
+				<rich:tab label="Events" id="eventsTab" name="eventsTab" eventsQueue="scmEditQueue" status="globalWaitStatus"
+					action="#{catScmHome.updateUserTabPreferences('eventsTab')}" reRender="contribLayout" limitToList="true">
+					<ui:include src="ScmEventsTab.xhtml" />
+				</rich:tab> 
+				
+			</rich:tabPanel>
+				<div id="functions">
+					
+					
+		    	<a:commandLink action="#{catScmHome.update}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" styleClass="button saveOrCancel disabled" 
+		    		value="Save"
+		    		reRender="scmEditForm"
+		    		eventsQueue="scmEditQueue" status="globalWaitStatus" />
+		    	<a:commandLink action="#{catScmHome.cancel}" 
+		    		onclick=" if ( jQuery(this).hasClass('disabled') ) { return false; } " 
+		    		ignoreDupResponses="true" ajaxSingle="true" styleClass="button saveOrCancel disabled" 
+		    		value="Cancel"
+		    		eventsQueue="scmEditQueue" status="globalWaitStatus"/>
+			</div>
+		</h:form>
+		<a:form>
+		<a:outputPanel layout="none" id="contribLayout">
+				<s:div id="ContribTables" rendered="#{empty catScmHome.selectedTab or catScmHome.selectedTab eq 'tab1'}">
+				
+					
+					<ui:include src="ScmContributorsTable.xhtml">
+					  	<ui:param name="divId" value="contribTableDiv"/>
+					  	<ui:param name="tableId" value="contribTable"/>
+					  	
+					  	<ui:param name="contributorsList" value="#{catScmHome.catContributors}" />
+					</ui:include>
+				</s:div>
+			</a:outputPanel>
+		</a:form>
+	</ui:define>
+</ui:composition>
+			

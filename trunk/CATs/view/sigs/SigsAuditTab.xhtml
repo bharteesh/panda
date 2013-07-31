@@ -1,0 +1,21 @@
+<s:div 
+ xmlns:s="http://jboss.com/products/seam/taglib"
+ xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:a="http://richfaces.org/a4j" 
+ xmlns:f="http://java.sun.com/jsf/core" 
+ xmlns:h="http://java.sun.com/jsf/html" 
+ xmlns:rich="http://richfaces.org/rich" 
+ xmlns:ui="http://java.sun.com/jsf/facelets" id="sigsAuditDiv1">
+    
+    <div class="col col1">
+    <s:decorate id="catSigsAuditCreator" template="../layout/edit.xhtml">
+    		<ui:define name="label">Creator</ui:define>
+    		<h:outputText value="#{catSigsHome.instance.catCreator}"/>
+    	</s:decorate>
+    	
+    	<s:decorate id="catSigsAuditDateCreated" template="../layout/edit.xhtml">
+    		<ui:define name="label">Date Created</ui:define>
+    		<h:outputText value="#{catSigsHome.instance.catDateCreated}"/>
+    	</s:decorate>
+    </div>
+    </s:div> 

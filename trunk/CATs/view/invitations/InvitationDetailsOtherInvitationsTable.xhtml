@@ -1,0 +1,197 @@
+<s:div id="#{divId}" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:cats="http://www.ithaka.org/cats">
+    
+    <div class="smart">
+    	<!--  <h:form id="#{tableId}Form">   -->
+    	<div class="header">
+				<div class="left">
+        <span class="museo">
+<h:outputText
+						value="Other invitations associated with same Sets (#{catInvitationsHome.otherInvitationsList.size})" /></span>
+
+          <a:commandLink value="X" action="#{sortFiltBean.resetSortFilt('otherInvitations'.concat(divId))}" ignoreDupResponses="true" status="globalWaitStatus"  reRender="divIdTobeRenderedByWizard01" styleClass="button wizard"/>
+				
+				</div>
+
+
+
+
+				<div class="right">
+
+			<a:commandLink id="createInvitationsEditButton"
+				onclick="if ( ! checkForSave() ) { return false ; }" 
+				status="globalWaitStatus" ignoreDupResponses="true"
+			    action="#{createInvitationsWizard.prepCreateOperation('CREATEINVITATIONS')}"
+				value="Create Invitations"
+				reRender="createInvitationsOperationsPanels,divIdTobeRenderedByWizard01" 
+				oncomplete="Richfaces.showModalPanel('createInvitationsPanel');"
+                styleClass="button wizard #{!s:hasPermission(catInvitationsHome.instance, 'create CatInvitations') ? 'disabled' : ''}"
+                disabled="#{!s:hasPermission(catInvitationsHome.instance, 'create CatInvitations')}"/>
+				
+<!-- For later
+					<h:selectOneMenu id="#{tableId}invbulkOperationsSelect" rendered="#{not empty invitaionsBulkOperations.bulkOperationsNames}" value="#{invitaionsBulkOperations.bulkOperationsType}">
+						<a:support 
+						event="onchange" 
+						action="#{invitaionsBulkOperations.prepBulkOperations(tableId, ''.concat( tableId ).concat('invbulkOperationsSelect'))}" 
+						reRender="invbulkOperationsPanels" 
+						oncomplete="#{rich:component('invbulkUpdatePanel')}.show(); return false;"
+						/>
+						<s:selectItems value="#{invitaionsBulkOperations.bulkOperationsNames}" var="b"  label="#{invitaionsBulkOperations.bulkOperations[b]}" itemValue="#{b}"  noSelectionLabel="Bulk Operations" />
+					</h:selectOneMenu>
+-->					
+				</div>
+		</div>
+    	  <rich:dataTable id="divIdTobeRenderedByWizard01"
+                var="_catInvitations"
+              value="#{catInvitationsHome.otherInvitationsList}"
+           rendered="#{not empty catInvitationsHome.otherInvitationsList}">
+           
+        	<rich:column rendered="false" width="20px">
+					<f:facet name="header">
+						<input type="checkbox" id="select_all_checkbox1"
+								name="select_all_checkbox"
+								onclick="if ( this.checked ) { jQuery('.#{divId}bulk_checkbox').each(function(){ this.checked = true; }); } else { jQuery('.#{divId}bulk_checkbox').each(function(){ this.checked = false; }); }" />
+					</f:facet>
+					<h:selectBooleanCheckbox styleClass="#{divId}bulk_checkbox"
+						value="#{invitaionsBulkOperations.selections[_catInvitations]}" />
+				</rich:column>
+           	
+           
+        	<rich:column id="otherInvitationId" sortBy="#{_catInvitations.id}" filterBy="#{_catInvitations.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['id_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['id_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.id}" />        		
+				</s:link>				
+	        	</rich:column>
+				
+				<rich:column id="otherInvitationSetId" sortBy="#{_catInvitations.catSets.id}" filterBy="#{_catInvitations.catSets.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['setId_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['setId_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.catSets.id}" />        		
+				</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="otherInvitationSetName" sortBy="#{_catInvitations.catSets.catCurrentTitle.catName}" filterBy="#{_catInvitations.catSets.catCurrentTitle.catName}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['setName_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['setName_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.catSets.catCurrentTitle.catName}" />        		
+				</s:link>				
+	        	</rich:column>
+				
+				<rich:column id="otherInvitationPublisherId" sortBy="#{_catInvitations.catPublishers.id}" filterBy="#{_catInvitations.catPublishers.id}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['publisherId_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['publisherId_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Publisher ID"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.catPublishers.id}" />        		
+				</s:link>				
+	        	</rich:column>
+				
+				<rich:column id="otherInvitationPublisherName" sortBy="#{_catInvitations.catPublishers.catName}" filterBy="#{_catInvitations.catPublishers.catName}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['publisherName_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['publisherName_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Publisher Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.catPublishers.catName}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherInvitationLifecycle" sortBy="#{_catInvitations.catLifecycle}" filterBy="#{_catInvitations.catLifecycle}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['lifecycle_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['lifecycle_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Lifecycle"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.catLifecycle}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherInvitationOutcome" sortBy="#{_catInvitations.catOutcome}" filterBy="#{_catInvitations.catOutcome}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['outcome_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['outcome_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Outcome"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.catOutcome}" />        		
+				</s:link>				
+	        	</rich:column>
+				<rich:column id="otherInvitationNegotiator" sortBy="#{_catInvitations.catNegotiator}" filterBy="#{_catInvitations.catNegotiator}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['negotiator_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['negotiator_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Negotiator"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.catNegotiator}" />        		
+				</s:link>				
+	        	</rich:column>
+
+				<rich:column id="otherInvitationReasonDeclined" sortBy="#{_catInvitations.catReasonDeclined}" filterBy="#{_catInvitations.catReasonDeclined}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['reasonDeclined_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['reasonDeclined_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="Reason Declined"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.catReasonDeclined}" />        		
+				</s:link>				
+	        	</rich:column>
+
+
+				<rich:column id="otherInvitationOnHold" sortBy="#{_catInvitations.catOnHold}" filterBy="#{_catInvitations.catOnHold}" sortable="true" width="50px"
+        	sortOrder="#{sortFiltBean['otherInvitations'.concat(divId)]['onHold_sortOrder']}"
+        	filterValue="#{sortFiltBean['otherInvitations'.concat(divId)]['onHold_filterValue']}">
+		        	<f:facet name="header">
+		        		<h:outputText value="On Hold"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_catInvitations.id}"/>
+					<h:outputText value="#{_catInvitations.catOnHold ? 'Yes' : 'No'}"/>        		
+				</s:link>				
+	        	</rich:column>
+
+				<!-- @TODO Add Title Relationships -->
+        	</rich:dataTable>
+        	
+        	
+        	<!-- note that these are: outside the a:form for the main table, and have their own a:form each. -->
+        	
+        	<!-- note that these are: outside the a:form for the main table, and have their own a:form each. -->
+<!--  This is were 'bulkOperationsPanels' was moving to InvitationDetails.xhtml-->        	
+        	
+        	<!-- /h:form -->
+    	</div>
+</s:div>

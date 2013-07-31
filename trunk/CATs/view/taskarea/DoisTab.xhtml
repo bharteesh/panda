@@ -1,0 +1,179 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets" id="doisDiv1">
+	<!-- START Remove DOIs from Books and Book Parts -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Remove DOIs from Books and Book Parts</h1>
+			<section>
+				<h:form id="removeDoisId" enctype="multipart/form-data">
+					<dl>
+						<dt>
+							Books Spreadsheet Path:
+							<s:fileUpload data="#{createDoiAssignment.file}" required="true">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:commandButton value="Upload and Remove"
+								action="#{createDoiAssignment.removeBookDois()}" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Removes DOIs from Books and Book Parts that have the wrong
+					DOIs.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/RemoveDoiFromBooksAndPartsTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Remove DOIs from Books and Book Parts -->
+	<!-- START Propose Book DOIs -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Propose Book DOIs</h1>
+			<section>
+				<h:form id="doiPropId" enctype="multipart/form-data">
+					<dl>
+						<dt>
+							List of Books Spreadsheet :
+							<s:fileUpload data="#{createDoiAssignment.file}" required="true"
+								requiredMessage="Select a Spreadsheet">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{createDoiAssignment.proposeDois()}"
+								eventsQueue="doiAssignTasks" status="globalWaitStatus" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Generates a proposed list of DOIs for ITHAKA staff to share
+					with publishers.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/BooksListTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Propose Book DOIs -->
+	<!-- START Assign Book DOIs -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Assign Book DOIs</h1>
+			<section>
+				<h:form id="doiAssId" enctype="multipart/form-data">
+					<dl>
+						<dt>
+							List of Books Spreadsheet :
+							<s:fileUpload data="#{createDoiAssignment.file}" required="true"
+								requiredMessage="Select a Spreadsheet">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{createDoiAssignment.bookDoiAssigner()}"
+								eventsQueue="doiAssignTasks" status="globalWaitStatus" />
+						</dt>
+					</dl>
+				</h:form>
+
+			</section>
+			<section>
+				<p>Generates and assigns a unique DOI to a book.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/BooksDoiAssignerTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Assign Book DOIs -->
+	<!-- START Assign Book Series/Set DOIs -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Assign Book Series/Book Set DOIs</h1>
+			<section>
+				<h:form id="ssdoiAssignmentForm" enctype="multipart/form-data">
+					<dl>
+						<dt>
+							<h:outputText value="Choose an Book Series or Book Set: " />
+							<h:selectOneMenu name="entityType" required="true"
+								value="#{createDoiAssignment.entityType}">
+								<s:selectItems itemValue="#{i}" label="#{i}"
+									noSelectionLabel="None..."
+									value="#{createDoiAssignment.entityTypes}" var="i" />
+							</h:selectOneMenu>
+
+						</dt>
+						<dt>
+							List of Series/Sets Spreadsheet:
+							<s:fileUpload data="#{createDoiAssignment.file}" required="true"
+								requiredMessage="Select a Spreadsheet">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{createDoiAssignment.bookSeriesSetDoiAssigner()}"
+								eventsQueue="doiAssignTasks" status="globalWaitStatus" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Creates Book Series and Book Set DOIs based on Series and
+					Sets IDs and the publisher prefix.</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/BookSeriesSetDoiTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Assign Book Series/Set DOIs -->
+	<!-- START Assign Book Part DOIs -->
+	<rich:panel rendered="#{s:hasRole('ADMIN') or s:hasRole('CM Content Coordinator')}">
+		<section class="task">
+			<h1>Assign Book Parts DOIs</h1>
+			<section>
+				<h:form id="partdoiAssId" enctype="multipart/form-data">
+					<dl>
+						<dt>
+							List of Books Spreadsheet :
+							<s:fileUpload data="#{createDoiAssignment.file}" required="true"
+								requiredMessage="Select a Spreadsheet">
+							</s:fileUpload>
+						</dt>
+						<dt>
+							<h:commandButton value="Upload"
+								action="#{createDoiAssignment.bookPartDoiAssigner()}"
+								eventsQueue="doiAssignTasks" status="globalWaitStatus" />
+						</dt>
+					</dl>
+				</h:form>
+			</section>
+			<section>
+				<p>Generates and assigns a unique DOI to a Book Part</p>
+				<p>
+					<a target="_blank"
+						href="../templatespreadsheets/BooksListTemplate.xlsx">Download
+						Template Spreadsheet</a> to see an example.
+				</p>
+			</section>
+		</section>
+	</rich:panel>
+	<!-- END Assign Book Part DOIs -->
+</s:div>

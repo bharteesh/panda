@@ -1,0 +1,457 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+      xmlns:dui="http://openorganize.com/platform/dui"
+>
+
+	<h2><h:outputText value="#{catIssueShipmentsBulkOperations.bulkTitle}" /></h2>
+	
+		<div id="step1">
+		<s:fragment rendered="#{not catIssueShipmentsBulkOperations.bulkOperationsType.equals('ADVANCE')}">
+			<ul class="steps">
+					<li class="">1. Permissions</li>
+					<li class="">2. Change</li>
+					<li class="">3. Additional</li>
+					<li class="selected">4. Results</li>
+			</ul>
+		<div class="cluster smart">
+		
+		  <p><h:outputText value="You applied the following values to #{catIssueShipmentsBulkOperations.bulkSelection.size()} records:"/></p>
+			<cats:dumbTableIssueShipments value="#{catIssueShipmentsBulkOperations.bulkSelection}" />
+
+		</div>
+		</s:fragment>
+		
+		<s:fragment rendered="#{catIssueShipmentsBulkOperations.bulkOperationsType.equals('ADVANCE')}">
+			<ul class="steps">
+					<li class="disabled">1. Edit</li>
+					<li class="selected">2. Results</li>
+			</ul>
+			<div class="cluster smart">
+			<div class="title eligible">
+					<h1><h:outputText value="Shipments (1)"/></h1>
+					<p>You successfully <strong>Completed</strong> one shipment</p>
+			</div>
+			
+			<rich:dataTable id="issueShipmentsTblId"
+                var="_issueShipments"
+              value="#{catIssueShipmentsBulkOperations.issueShipmentsList}"
+           rendered="#{not empty catIssueShipmentsBulkOperations.issueShipmentsList}">       
+        	           	
+           
+ 	        	<rich:column id="issueShipmentsId1" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set Name"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catCmpts.setsValue}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId2" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Component Name"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catCmpts.catName}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId3" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="ISSN"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catCmpts.catPrintIssn}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId4" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="BF Prod Status"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catCmpts.catProductionStatus}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId5" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set CSP"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catCmpts.setCspValue}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId6" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set CIL"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catCmpts.setCilValue}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId7" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Wall Type"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catCmpts.wallValue}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId8" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Wall Year"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catCmpts.wallYearValue}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId9" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Supplier"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catAcqOrders.catSupplier}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId10" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Shipment Lifecycle"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catLifecycle.label}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId11" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Pub Units)"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catPublctnUnitRange}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId12" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Dates)"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catCoverDateRange}" />        		
+					</s:link>				
+	        	</rich:column>
+	        	
+	        	<rich:column id="issueShipmentsId13" width="50px">
+		        	<f:facet name="header">
+		        		<h:outputText value="Obligation"/>
+		        	</f:facet>
+					<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+						<f:param name="id" value="#{_issueShipments.id}"/>
+						<h:outputText value="#{_issueShipments.catReturnObligation.label}" />        		
+					</s:link>				
+	        	</rich:column>
+
+        	</rich:dataTable>
+        	
+        	<s:fragment rendered="#{not empty catIssueShipmentsBulkOperations.acqOrdersList}">
+        	<div class="title eligible">
+					<h1><h:outputText value="Orders (1)"/></h1>
+					<p>You successfully <strong>Completed</strong> one order and set the outcome to <strong><h:outputText value="#{catIssueShipmentsHome.instance.catAcqOrders.catOutcome}"/></strong></p>
+			</div>
+        	
+			
+			<rich:dataTable id="acqOrdersTblId"
+                var="_acqOrders"
+             	 value="#{catIssueShipmentsBulkOperations.acqOrdersList}"
+          		 rendered="#{not empty catIssueShipmentsBulkOperations.acqOrdersList}">
+        	
+				<rich:column id="catAcqOrdersSetName">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catCmpts.setsValue}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersCmptName">
+		        	<f:facet name="header">
+		        		<h:outputText value="Component Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catCmpts.catName}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersLifecycle">
+		        	<f:facet name="header">
+		        		<h:outputText value="Lifecycle"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catLifecycle.label}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersPubUnitRange">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Pub Units)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catPublctnUnitRange}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersExtDates">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Dates)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catCoverDateRange}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersSupplier">
+		        	<f:facet name="header">
+		        		<h:outputText value="Supplier"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catSupplier}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersObligation">
+		        	<f:facet name="header">
+		        		<h:outputText value="Obligation"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catReturnObligation.label}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersType">
+		        	<f:facet name="header">
+		        		<h:outputText value="Type"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catType}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersHold">
+		        	<f:facet name="header">
+		        		<h:outputText value="Hold"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catOnHold ? 'Yes' : 'No'}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersCreator">
+		        	<f:facet name="header">
+		        		<h:outputText value="Creator"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catCreator}" />        		
+				</s:link>				
+	        	</rich:column>
+	        	
+	        </rich:dataTable>
+	       </s:fragment> 	
+	       
+	       
+	       <s:fragment rendered="#{not empty catIssueShipmentsBulkOperations.failedOrdersList}">
+        	<div class="title ineligible">
+					<h1><h:outputText value="Orders (1)"/></h1>
+					<p>You were not able to complete the order because it was a subscription, was on hold, had open problems or had other open shipments.</p>
+			</div>
+        	
+			<div class="push"></div>	
+			<rich:dataTable id="acqOrdersTblId2"
+                var="_acqOrders"
+             	 value="#{catIssueShipmentsBulkOperations.failedOrdersList}"
+          		 rendered="#{not empty catIssueShipmentsBulkOperations.failedOrdersList}">
+        	
+				<rich:column id="catAcqOrdersSetName2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Set Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catCmpts.setsValue}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersCmptName2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Component Name"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catCmpts.catName}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersLifecycle2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Lifecycle"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catLifecycle.label}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersPubUnitRange2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Pub Units)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catPublctnUnitRange}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersExtDates2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Extent (Dates)"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catCoverDateRange}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersSupplier2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Supplier"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catSupplier}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersObligation2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Obligation"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catReturnObligation.label}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersType2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Type"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catType}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersOpenProblems2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Open Problems"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.openProblemsCount}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersOpenShips2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Open Ships"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.openShipmentsCount}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersHold2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Hold"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catOnHold ? 'Yes' : 'No'}" />        		
+				</s:link>				
+	        	</rich:column>
+        	
+				<rich:column id="catAcqOrdersCreator2">
+		        	<f:facet name="header">
+		        		<h:outputText value="Creator"/>
+		        	</f:facet>
+				<s:link action="#{LinkTo.linkTo}" view="/linkTo.xhtml">
+					<f:param name="id" value="#{_acqOrders.id}"/>
+					<h:outputText value="#{_acqOrders.catCreator}" />        		
+				</s:link>				
+	        	</rich:column>
+	        	
+	        </rich:dataTable>
+	       </s:fragment> 
+	       
+			</div>
+		</s:fragment>
+		
+			<div class="push"></div>		
+
+		<a:commandLink id="#{divParam}finishAsNormalwizard" styleClass="button right" value="Return" 
+			eventsQueue="#{divParam}eventsQueue"
+       		status="globalWaitStatus"
+			action="#{catIssueShipmentsBulkOperations.bulkReset}" 
+			oncomplete="#{rich:component('issueshipmentsbulkUpdatePanel')}.hide(); javascript:location.reload(true);" 
+			reRender="issueshipmentswizard"
+			rendered="#{empty pageURL}"/>
+		
+		<a:commandLink id="#{divParam}finishAsNormalwizard1" styleClass="button right" value="Return" 
+			eventsQueue="#{divParam}eventsQueue"
+       		status="globalWaitStatus"
+			action="#{catIssueShipmentsBulkOperations.bulkReset}" 
+			oncomplete="#{rich:component('issueshipmentsbulkUpdatePanel')}.hide(); javascript:location.href=formatURL(location.href,'#{selectedTab}');"
+			rendered="#{not empty pageURL}"/>
+		
+		</div>
+	
+</ui:composition>
+

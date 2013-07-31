@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+<ui:composition>
+
+	<rich:dataTable value="#{value}" var="catBookSub">
+		<rich:column>
+			<f:facet name="header">ID</f:facet>
+			<h:outputText value="#{catBookSub.id}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Lifecycle</f:facet>
+			<h:outputText value="#{catBookSub.catLifecycle.label}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Version</f:facet>
+			<h:outputText value="#{catBookSub.catVersion.id}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Sequence</f:facet>
+			<h:outputText value="#{catBookSub.catSequenceNo}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Sent</f:facet>
+			<h:outputText value="#{catBookSub.catSentTimestamp}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Received</f:facet>
+			<h:outputText value="#{catBookSub.catReceivedTimestamp}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Vendor</f:facet>
+			<h:outputText value="#{catBookSub.catVendor.catName}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">Current Vendor State</f:facet>
+			<h:outputText value="#{catBookSub.catCurrentVendorState.label}" />
+		</rich:column>
+		<rich:column>
+			<f:facet name="header">QC Outcome</f:facet>
+			<h:outputText value="#{catBookSub.catQcOutcome.label}" />
+		</rich:column>
+	</rich:dataTable>
+
+</ui:composition>
+</html>

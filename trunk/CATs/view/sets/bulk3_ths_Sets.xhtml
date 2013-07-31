@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{setsBulkOperations.bulkTitle}" /></h2>
+	
+	<div id="step1">
+		<s:div>
+			<ul class="steps">
+				<li class="disabled">Permissions</li>
+				<li class="disabled">Change</li>
+				<li class="selected">Results</li>
+			</ul>
+		</s:div>
+		
+		<div class="cluster smart">
+			<s:div styleClass="title eligible" rendered="#{not empty setsBulkOperations.bulkSelection}">
+		  	<h1><h:outputText value="Sets (#{setsBulkOperations.bulkSelection.size()})"/></h1>
+		  	<p><h:outputText value="You successfully changed the title history status to "/><strong><h:outputText value="#{setsBulkOperations.bulkInstance.catThStatus.label}"/></strong><h:outputText value=" for the following sets:"/></p>
+		  </s:div>
+		  <s:fragment rendered="#{not empty setsBulkOperations.bulkSelection}">
+				<cats:dumbTableSetsThs value="#{setsBulkOperations.bulkSelection}" />
+		  </s:fragment>
+
+		</div>
+		
+		
+		<div class="push"></div>		
+
+		<a:commandLink styleClass="button right" value="Return" 
+			action="#{setsBulkOperations.bulkReset}" 
+			oncomplete="#{rich:component('setsBulkUpdatePanel')}.hide(); javascript:location.reload(true);" 
+			eventsQueue="bulkOps" status="globalWaitStatus" rendered="#{empty pageURL}"/>
+		
+		<a:commandLink styleClass="button right" value="Return" 
+			action="#{setsBulkOperations.bulkReset}" 
+			oncomplete="#{rich:component('setsBulkUpdatePanel')}.hide(); javascript:location.href=formatURL(location.href);" 
+			eventsQueue="bulkOps" status="globalWaitStatus" rendered="#{not empty pageURL}"/>
+		
+	</div>
+</ui:composition>

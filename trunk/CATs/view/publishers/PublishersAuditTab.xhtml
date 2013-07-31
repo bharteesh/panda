@@ -1,0 +1,43 @@
+<s:div xmlns:s="http://jboss.com/products/seam/taglib" 
+xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:a="http://richfaces.org/a4j" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:rich="http://richfaces.org/rich" 
+xmlns:ui="http://java.sun.com/jsf/facelets" id="SOMEDiv9">
+
+<s:decorate id="catCreator_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Creator</ui:define>
+<h:inputText readonly="#{!s:hasPermission(catPublishersHome.instance, 'modify catCreator')}" id="catCreator" maxlength="1000" size="25" value="#{catPublishersHome.instance.catCreator}"/>
+</s:decorate>
+
+<s:decorate id="catDateCreated_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Date Created</ui:define>
+<h:inputText readonly="#{!s:hasPermission(catPublishersHome.instance, 'modify catDateCreated')}" id="catDateCreated" maxlength="1000" size="25" value="#{catPublishersHome.instance.catDateCreated}"/>
+</s:decorate>
+
+<s:decorate id="catLastOutrchDate_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Last Outreach Date</ui:define>
+<rich:calendar enableManualInput="true"  datePattern="yyyy/MM/dd" onchanged="enableSaveCancel();" disabled="#{!s:hasPermission(catPublishersHome.instance, 'modify catLastOutrchDate')}" 
+	id="catLastOutrchDate" inputClass="datestyle" value="#{catPublishersHome.instance.catLastOutrchDate}"/>
+</s:decorate>
+
+<s:decorate id="catLastOutrchBy_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Last Outreach By</ui:define>
+<h:inputText readonly="#{!s:hasPermission(catPublishersHome.instance, 'modify catLastOutrchBy')}" id="catLastOutrchBy" maxlength="1000" size="25" value="#{catPublishersHome.instance.catLastOutrchBy}"/>
+</s:decorate>
+
+<s:decorate id="catOutrchNoteChangeBy_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Outreach Note Last Changed By</ui:define>
+<h:outputText value="#{catPublishersHome.instance.catOutrchNoteChangeBy}"/>
+</s:decorate>
+
+<s:decorate id="catOutrchNoteChangeDate_div1" template="../layout/edit.xhtml">
+<ui:define name="label">Outreach Note Last Changed</ui:define>
+<h:outputText value="#{catPublishersHome.instance.catOutrchNoteChangeDate}"/>
+</s:decorate>
+
+
+	<div class="push"/>
+	
+</s:div>

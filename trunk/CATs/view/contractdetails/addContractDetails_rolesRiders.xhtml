@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:z="http://www.qualcomm.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:cats="http://www.ithaka.org/cats"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<h2><h:outputText value="#{createContractDetailsWizard.bulkTitle}" /></h2>
+
+	<div id="step1">
+	<ul class="steps">
+		<li class="disabled">1.Define</li>
+		<li class="disabled">2.Info</li>
+		<li class="selected">3.Roles-Riders</li>
+		<li class="disabled">4.Results</li>
+	</ul>
+	<div class="cluster"><s:div styleClass="title change"
+		rendered="#{not empty createContractDetailsWizard.pubsToCmptsRolesBeanList}">
+		<h1>Publisher Roles</h1>
+	</s:div>
+	<div class="smart roles">
+	<rich:dataTable id="#{divId}catPubRolesTbl" styleClass="scroller" var="_pubscmpts"
+		value="#{createContractDetailsWizard.pubsToCmptsRolesBeanList}">
+		<rich:column>
+			<f:facet name="header">
+				<h:outputText value="Component" />
+			</f:facet>
+			<h:outputText value="#{_pubscmpts.cmpts.catName}" />
+		</rich:column>
+		<rich:column>
+			<ui:repeat value="#{_pubscmpts.pubsList}" var="_pubs">
+				<ui:repeat value="#{createContractDetailsWizard.getPubsToCmptsList(_pubs, _pubscmpts.cmpts)}"
+							var="_pubToCmpts">
+					<rich:column styleClass="checkBoxes" headerClass="checkBoxes">
+						<f:facet name="header">
+							<h:outputText value="Publishers" />
+						</f:facet>
+						<div class="headline"><h:outputText value="#{_pubs.catName}" />
+						</div>
+						<h:selectManyCheckbox layout="pageDirection"
+							name="catLicensorRoles"
+							value="#{createContractDetailsWizard.selectionsForRoles[_pubToCmpts]}"
+							rendered="#{createContractDetailsWizard.parentContract.catType eq 'Backfile'}"
+							styleClass="checklist">
+							<f:selectItem itemLabel="Backfile Licensor" itemValue="Licensor"
+								itemDisabled="true" />
+							<s:selectItems itemValue="#{i}" label="#{i.label}"
+								value="#{createContractDetailsWizard.catPublishersToCmpts_Role}"
+								var="i" />
+						</h:selectManyCheckbox>
+						<h:selectManyCheckbox layout="pageDirection"
+							name="catLicensorRoles"
+							value="#{createContractDetailsWizard.selectionsForRoles[_pubToCmpts]}"
+							rendered="#{createContractDetailsWizard.parentContract.catType eq 'Csp'}"
+							styleClass="checklist">
+							<f:selectItem itemLabel="CSP Licensor" itemValue="Csplicensor"
+								itemDisabled="true" />
+							<s:selectItems itemValue="#{i}" label="#{i.label}"
+								value="#{createContractDetailsWizard.catPublishersToCmpts_Role}"
+								var="i" />
+						</h:selectManyCheckbox>
+					</rich:column>
+				</ui:repeat>
+			</ui:repeat>
+		</rich:column>
+	</rich:dataTable></div>
+
+	<s:fragment rendered="#{createContractDetailsWizard.bulkInstance.catLifecycle eq 'Active'  
+								and	createContractDetailsWizard.parentContract.catType eq 'Backfile'}">
+		<rich:listShuttle id="ridersPickList"
+			sourceValue="#{createContractDetailsWizard.availableRiders}"
+			targetValue="#{createContractDetailsWizard.currentRiders}"
+			sourceCaptionLabel="Available Riders"
+			targetCaptionLabel="Current Riders" var="_rider"
+			converter="#{org.jboss.seam.ui.EntityConverter}"
+			copyControlLabel="Add" copyAllControlLabel="Add all"
+			sourceListWidth="315" targetListWidth="315" listsHeight="350">
+			<rich:column>
+				<h:outputText value="#{_rider.catName}"></h:outputText>
+			</rich:column>
+		</rich:listShuttle>
+	</s:fragment></div>
+	
+	<div class="push"></div>
+	
+	<a:commandLink styleClass="button" value="Quit" limitToList="true"
+		action="#{createContractDetailsWizard.createReset}"
+		rendered="#{createContractDetailsWizard.showWizard()}"
+		oncomplete="#{rich:component('addContractDtlsQuit')}.show();"
+		status="globalWaitStatus" ignoreDupResponses="true" /> 
+		
+	<a:commandLink styleClass="button" value="Quit" limitToList="true"
+		action="#{createContractDetailsWizard.createReset}"
+		rendered="#{not createContractDetailsWizard.showWizard()}"
+		oncomplete="#{rich:component('addContractDtlsQuit')}.hide(); javascript:location.reload(true)"
+		status="globalWaitStatus" ignoreDupResponses="true" /> 
+		
+	<a:commandLink styleClass="button right" value="Continue" status="globalWaitStatus"
+		ignoreDupResponses="true"
+		rendered="#{createContractDetailsWizard.showWizard()}"
+		action="#{createContractDetailsWizard.bulkNext}"
+		reRender="addContractDtlsWizard" limitToList="true"/></div>
+</ui:composition>

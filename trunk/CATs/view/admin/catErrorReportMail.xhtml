@@ -1,0 +1,37 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:m="http://jboss.com/products/seam/mail"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	>
+
+    <m:from name="CATS" address="#{errorReportMailOps.fromEmail}" />
+    <ui:repeat var="_email" value="#{errorReportMailOps.toList}">
+    	<m:to><h:outputText value="#{_email}"/></m:to>
+    </ui:repeat>
+     <ui:repeat var="_emailCC" value="#{errorReportMailOps.ccList}">
+    	<m:cc><h:outputText value="#{_emailCC}"/></m:cc>
+    </ui:repeat>
+    <m:subject><h:outputText value="#{errorReportMailOps.subject} (#{appInfo.environment})"/></m:subject>
+	<m:replyTo address="catssupport@ithaka.org"/>
+    <m:body>
+    	<p><h:outputText value="Hi" />,</p>
+    	<s:fragment rendered="true">
+			<p>
+				<h:outputText value="#{errorReportMailOps.bodyPrefix}" />
+				<br/>
+			</p>
+			 <ul class="bullets">
+			 	<ui:repeat var="_error" value="#{errorReportMailOps.errorMessages}">
+			 		<li><h:outputText value="#{_error}"/></li>
+			 	</ui:repeat>
+			 </ul>
+			Environment: #{appInfo.environment}
+			<br/>
+			Host: #{appInfo.host}
+			
+		</s:fragment>
+		<p>Sincerely,<br/>CATS</p>
+	</m:body>
+</m:message>
