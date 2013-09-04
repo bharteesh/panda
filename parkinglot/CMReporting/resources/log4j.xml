@@ -1,18 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
-<log4j:configuration>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j = "http://jakarta.apache.org/log4j/" debug = "false">
+	
 	<appender name="FILE"
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="20MB" />
 		<param name="maxBackupIndex" value="99999" />
-		<param name="File" value="./logs/IssueMapUpdater.log" />
+		<param name="File" value="./logs/CMReporting.log" />
 		<param name="threshold" value="info" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{ISO8601} %5p %c{1}:%L - %m%n" />
 		</layout>
-	</appender>
-	<root>
-		<level value="all" />
-		<appender-ref ref="FILE" />
-	</root>
+	</appender>	
+	<appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <param name="Encoding" value="Cp866"/>
+        <layout class="org.apache.log4j.PatternLayout">
+        <param name="ConversionPattern" value="%d{ISO8601} [%-5p][%C{1}] - %m%n" />
+        </layout>
+    </appender>
+	<category name="org.springframework"> 
+        <priority value="FATAL"/>  
+    </category>    
+  	<category name="org.ithaka"> 
+        <priority value="TRACE"/>  
+    </category>     
+	<root> 
+    	<priority value ="all" /> 
+    	<appender-ref ref="ConsoleAppender" />
+    	<appender-ref ref="FILE" />
+  	</root>	
 </log4j:configuration>
