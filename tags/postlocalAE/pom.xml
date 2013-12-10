@@ -1,0 +1,483 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>cmsystems</artifactId>
+		<groupId>org.ithaka.cm</groupId>
+		<version>3.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>common</artifactId>
+	<name>Conprep Common Module</name>
+
+	<packaging>jar</packaging>
+
+	<description>formerly org/portico/common</description>
+	<build>
+	<resources>
+			<resource>
+        		<directory>src/main/java</directory>
+        		<includes>
+            		<include>**/*.java</include>
+        		</includes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+			<testResource>
+				<directory>src/test/java/test/org/ithaka/cm/conprep/workflow/persistence/impl</directory>
+			</testResource>
+			<testResource>
+				<directory>src/test/resources/dmclient/config</directory>
+			</testResource>
+		</testResources>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<!-- <configuration> <skipTests>true</skipTests> </configuration> -->
+				<configuration>
+				<skipTests>true</skipTests>
+					<excludes>
+						<exclude>**/threadedtool/**</exclude>
+						<exclude>**/conprep/util/**</exclude>
+						<exclude>**/ClassloadingTest**</exclude>
+						<exclude>**/PersistenceTest**</exclude>						
+					</excludes>
+					<!-- <classpathDependencyExcludes> <classpathDependencyExcludes>dom4j:dom4j</classpathDependencyExcludes> 
+						</classpathDependencyExcludes> -->
+				</configuration>
+
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>jmxri</artifactId>
+					<groupId>com.sun.jmx</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jmxtools</artifactId>
+					<groupId>com.sun.jdmk</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>activation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-xjc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb1-impl</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+		</dependency>
+		<dependency>
+			<artifactId>jms</artifactId>
+			<groupId>javax.jms</groupId>
+		</dependency>
+
+		<dependency>
+			<groupId>jug</groupId>
+			<artifactId>jug</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>All-MB</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>certjFIPS</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>configservice-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>configservice-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>dfc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>dms-client-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>jsafeFIPS</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>xtrim-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>xtrim-server</artifactId>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>emc.dctm</groupId> -->
+		<!-- <artifactId>docweb</artifactId> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>workflow</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>jmethods</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet</groupId>
+			<artifactId>org.restlet</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.noelios.restlet</groupId>
+			<artifactId>com.noelios.restlet</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jtidy</groupId>
+			<artifactId>jtidy</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.saxon</groupId>
+			<artifactId>saxon</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.saxon</groupId>
+			<artifactId>saxon-sql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>saxon9bridge</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>castor</groupId>
+			<artifactId>castor</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>jhove</groupId>
+			<artifactId>jhove1</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jhove</groupId>
+			<artifactId>jhove1-handler</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jhove</groupId>
+			<artifactId>jhove1-module</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jonelo</groupId>
+			<artifactId>jacksum</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.jscape</groupId>
+			<artifactId>sftpf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>wstx-asl</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws.s3</groupId>
+			<artifactId>jets3t</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-javamail_1.4_spec</artifactId>
+                </exclusion>
+            </exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>xml-resolver</groupId>
+			<artifactId>xml-resolver</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.messaging</groupId>
+			<artifactId>imq</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>javagnutar</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>archivestatistics</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>assetservice</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>characterconversion</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>dmd_curation_extract_1_0</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>dmdcurationrules</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>domainconfig</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>formatlookup</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>formatregistry</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>ithakadublincore</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>messagelookup</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>mimetypelookup</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>offsystemmetadata</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>pmd</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>porticoarticlemetadata</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>providerlookup</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>providerregistry</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>resolvefilereference</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>submissionprofile</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>toolregistry</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>toolresult</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>toolinfo</artifactId>
+		</dependency>
+		
+				<dependency>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava</artifactId>
+</dependency>
+		
+	</dependencies>
+
+
+</project>
+
