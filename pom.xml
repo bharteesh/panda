@@ -578,7 +578,7 @@
 			</dependency>
 
 			<dependency>
-				<version>1.5</version>
+				<version>1.6</version>
 				<groupId>org.ithaka.cm</groupId>
 				<artifactId>toolresult</artifactId>
 			</dependency>
