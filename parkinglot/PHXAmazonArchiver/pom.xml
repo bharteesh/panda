@@ -101,6 +101,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-ftp</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+	
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
@@ -170,32 +176,33 @@
 			
 	</dependencies>  
 	<build>
-	        <resources>
-	            <resource>
+		 <resources>
+	          <resource>
 	                <directory>src/main/resources</directory>
-      			   <excludes>
+      			  	 <excludes>
 	                    <exclude>*.properties</exclude>
 	                     <exclude>*.xml</exclude>
 	                </excludes>
+	              
 	                <filtering>false</filtering>
 	            </resource>
-	        </resources>
+	        </resources> 	
 	<plugins>        
 		<plugin>
 		    <groupId>org.apache.maven.plugins</groupId>
 		    <artifactId>maven-dependency-plugin</artifactId>
-		    <configuration>
-		        <outputDirectory>
-		            ${project.build.directory}
-		        </outputDirectory>
-		    </configuration>
+		    	<configuration>
+			        <outputDirectory>
+			            ${project.build.directory}
+		    	    </outputDirectory>
+		    	</configuration>
 		</plugin>	
-	</plugins>        
+	</plugins>      
 	</build>	
 	
 	<properties>
 		<spring.batch.version>2.1.8.RELEASE</spring.batch.version>
-		<spring.version>3.0.5.RELEASE</spring.version>
+		<spring.version>4.0.3.RELEASE</spring.version>
 		<mockito.version>1.8.5</mockito.version>
 		<logback.version>0.9.29</logback.version>
 		<junit.version>4.8.2</junit.version>
