@@ -108,7 +108,13 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-	
+		
+		<!-- JSCAPE SFTP Library -->
+		<dependency>
+			<groupId>com.jscape</groupId>
+			<artifactId>sftpf</artifactId>
+			<version>7.4.3</version>
+		</dependency>	
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
