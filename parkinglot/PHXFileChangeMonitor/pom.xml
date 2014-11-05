@@ -89,7 +89,16 @@
 			<groupId>com.jscape</groupId>
 			<artifactId>sftpf</artifactId>
 			<version>7.4.3</version>
-		</dependency>	
+		</dependency>
+		
+		<!-- Swagger Dependencies -->
+
+		<dependency>
+			<groupId>com.mangofactory</groupId>
+			<artifactId>swagger-springmvc</artifactId>
+			<version>0.8.8</version>
+		</dependency>
+		
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
