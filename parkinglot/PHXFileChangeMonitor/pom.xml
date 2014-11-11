@@ -216,7 +216,7 @@
     <!-- QA -->
     
     <profile>
-	<id>dev</id>
+	<id>qa</id>
 	<activation></activation>
     <build>
     	<finalName>PHXFileChangeMonitor</finalName>
