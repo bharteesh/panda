@@ -160,9 +160,22 @@
 		</dependency>
 		  
 	</dependencies>
+	<profiles>
+	
+	<profile>
+	<id>dev</id>
+	<activation></activation>
     <build>
     	<finalName>PHXFileChangeMonitor</finalName>
         <plugins>
+        	<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<configuration>
+					<server>tomcatserver</server>
+					<url>http://aa2cmdev01.ithaka.org:8484/manager/text</url>
+				</configuration>
+			</plugin>
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <version>2.9</version>
@@ -199,4 +212,6 @@
             </plugin>
 		 </plugins>
     </build>
+    </profile>
+    </profiles>
 </project>
