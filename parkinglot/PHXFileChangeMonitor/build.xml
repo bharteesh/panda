@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project name="PHXFileChangeMonitor" default="deploy" basedir=".">
-	<property name="project.name" value="PHXFileChangeMonitor" />
+	<property name="project.name" value="PHXFileChangeMonitor-1.0.0-BUILD-SNAPSHOT" />
    	<property name="fromLocation" value="/cmjp/shared/Bamboo-data/xml-data/build-dir/PFCM-PFCMQA-JOB1/target" />
 	<property name="toLocation" value="/cmjq/apache/tomcat/7.0.56/webapps" />
 	<property name="user" value="cmjq" />
