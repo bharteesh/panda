@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<project name="PHXFileChangeMonitor" default="deploy" basedir=".">
+	<property name="project.name" value="PHXFileChangeMonitor" />
+   	<property name="fromLocation" value="/cmjp/shared/Bamboo-data/xml-data/build-dir/PFCM-PFCMQA-JOB1/target" />
+	<property name="toLocation" value="/cmjq/apache/tomcat/7.0.56/webapps" />
+	<property name="user" value="cmjq" />
+	<property name="password" value="cmjq1000" />
+	<property name="host" value="aa2cmqa01.ithaka.org" />
+	
+   <target name="clean">
+	<delete file="${toLocation}/${project.name}.war"/>
+   </target>
+   <target name="deploy" depends="clean">
+   	<scp file="${fromLocation}/${project.name}.war" 
+   		todir="${user}:${password}@${host}:${toLocation}" trust="true" />
+   </target>
+</project>
