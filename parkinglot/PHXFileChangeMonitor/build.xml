@@ -23,6 +23,6 @@
    </target>
    <target name="deploy" depends="clean">
    	<scp file="${fromLocation}/${warFile}.war" 
-   		todir="${user}:${password}@${host}${toLocation}" trust="true"  verbose="true"/>
+   		todir="${user}:${password}@${host}:${toLocation}" trust="true"  verbose="true"/>
    </target>
 </project>
