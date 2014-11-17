@@ -39,8 +39,14 @@
 		<attribute name="password" />
 		<attribute name="user" />
 		<sequential>
+			<echo message="@{host}"/>
+			<echo message="@{user}"/>
+			<echo message="@{password}"/>
+			<echo message="${fromLocation}/${warFile}.war"/>
+			<echo message="${toLocation}"/>
+			
 			<scp file="${fromLocation}/${warFile}.war" 
-		        	   		todir="${user}:${password}@${host}:${toLocation}" trust="true"  verbose="true"/>
+		        	   		todir="@{user}:@{password}@@{host}:${toLocation}" trust="true"  verbose="true"/>
 		</sequential>
 	</macrodef>
 
@@ -51,6 +57,7 @@
 	</target>
 
 	<target name="deployPROD" depends="clean">
+		<echo message="in the target"/>
 		<deploywar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" />
 	</target>
 	
