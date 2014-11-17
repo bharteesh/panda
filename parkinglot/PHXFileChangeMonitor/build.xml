@@ -44,6 +44,7 @@
 			<echo message="@{password}"/>
 			<echo message="${fromLocation}/${warFile}.war"/>
 			<echo message="${toLocation}"/>
+			<echo message="@{user}:@{password}@@{host}:${toLocation}"/>
 			
 			<scp file="${fromLocation}/${warFile}.war" 
 		        	   		todir="@{user}:@{password}@@{host}:${toLocation}" trust="true"  verbose="true"/>
