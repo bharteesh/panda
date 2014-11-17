@@ -8,15 +8,7 @@
 	<property name="password" value="${password}" />
 	<property name="host" value="{$host}" />
 
-	<echo message="${warFile}" />
-	<echo message="${fromLocation}" />
-	<echo message="${toLocation}" />
-	<echo message="${user}" />
-	<echo message="${password}" />
-	<echo message="${host}" />
-
-
-	<target name="test">
+	<target name="if-file-exists">
 		<condition property="is.resource.exists" value="true" else="false">
 			<and>
 				<resourceexists>
@@ -26,9 +18,20 @@
 		</condition>
 	</target>
 
-	<target name="clean" unless="is.resource.exists" depends="test">
-		<sshexec host="${host}" username="${user}" password="${password}" command=" rm ${toLocation}/${warFile}.war" verbose="true" />
-	</target>
+	<macrodef name="deletewar">
+		<attribute name="host" />
+		<attribute name="password" />
+		<attribute name="user" />
+		<attribute name="toLocation" />
+		<sequential>
+			<echo message="@{host}" />
+			<echo message="@{user}" />
+			<echo message="@{password}" />
+			<echo message="@{toLocation}" />
+			<echo message="rm @{toLocation}/${warFile}.war" />
+			<sshexec host="@{host}" username="@{user}" password="@{password}" command=" rm @{toLocation}/${warFile}.war" verbose="true" />
+		</sequential>
+	</macrodef>
 
 
 	<macrodef name="deploywar">
@@ -43,26 +46,34 @@
 			<echo message="${fromLocation}/${warFile}.war" />
 			<echo message="@{toLocation}" />
 			<echo message="@{user}:@{password}@@@{host}:@{toLocation}" />
-
-
-
 			<scp file="${fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
 		</sequential>
 	</macrodef>
 
-
-	<target name="deployQA" depends="clean">
-		<scp file="${fromLocation}/${warFile}.war" todir="${user}:${password}@${host}:${toLocation}" trust="true" verbose="true" />
+	<target name="cleanQA" unless="is.resource.exists" depends="if-file-exists">
+		<deletewar host="aa2cmqa01.ithaka.org" user="cmjq" password="cmjq1000" toLocation="/cmjq/test/webapps" />
 	</target>
 
-	<target name="deployPROD02" depends="clean">
+	<target name="cleanPROD02" unless="is.resource.exists" depends="if-file-exists">
+		<deletewar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps" />
+	</target>
+
+	<target name="cleanPROD04" unless="is.resource.exists" depends="if-file-exists">
+		<deletewar host="aa2thumper04.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps" />
+	</target>
+
+	<target name="deployQA" depends="cleanQA">
+		<deploywar host="aa2cmqa01.ithaka.org" user="cmjq" password="cmjq1000" toLocation="/cmjq/test/webapps" />
+	</target>
+
+	<target name="deployPROD02" depends="cleanPROD02">
 		<echo message="in the target" />
-		<deploywar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps"/>
+		<deploywar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps" />
 	</target>
-	
-	<target name="deployPROD04" depends="clean">
-			<echo message="in the target" />
-			<deploywar host="aa2thumper04.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps"/>
-		</target>
+
+	<target name="deployPROD04" depends="cleanPROD04">
+		<echo message="in the target" />
+		<deploywar host="aa2thumper04.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps" />
+	</target>
 
 </project>
