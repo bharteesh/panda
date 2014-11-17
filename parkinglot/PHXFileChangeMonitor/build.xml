@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="PHXFileChangeMonitor" default="" basedir=".">
+<project name="PHXFileChangeMonitor" default="deployQA" basedir=".">
 	<property file="build.properties" />
 	<property name="project.war" value="${warFile}" />
 	<property name="fromLocation" value="${fromLocation}" />
@@ -29,10 +29,10 @@
 			<echo message="@{password}" />
 			<echo message="@{toLocation}" />
 			<echo message="rm @{toLocation}/${warFile}.war" />
+			<echo message="deleting  &quot;${warFile}.war&quot; from location &quot;@{toLocation}&quot;"/>
 			<sshexec host="@{host}" username="@{user}" password="@{password}" command=" rm @{toLocation}/${warFile}.war" verbose="true" />
 		</sequential>
 	</macrodef>
-
 
 	<macrodef name="deploywar">
 		<attribute name="host" />
@@ -46,6 +46,7 @@
 			<echo message="${fromLocation}/${warFile}.war" />
 			<echo message="@{toLocation}" />
 			<echo message="@{user}:@{password}@@@{host}:@{toLocation}" />
+			<echo message="deploying  &quot;${warFile}.war&quot; from location &quot;@{toLocation}&quot;"/>
 			<scp file="${fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
 		</sequential>
 	</macrodef>
