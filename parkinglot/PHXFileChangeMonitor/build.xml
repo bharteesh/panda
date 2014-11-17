@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <project name="PHXFileChangeMonitor" default="deploy" basedir=".">
 	<property file="build.properties" />
-	<property name="project.name" value="${project.name}" />
+	<property name="project.war" value="${warFile}" />
    	<property name="fromLocation" value="${fromLocation}" />
 	<property name="toLocation" value="${toLocation}" />
 	<property name="user" value="${user}" />
 	<property name="password" value="${password}" />
 	<property name="host" value="{$host}" />
 	
-	<echo message="${project.name}" />
+	<echo message="${warFile}" />
 	<echo message="${fromLocation}" />
 	<echo message="${toLocation}" />
 	<echo message="${user}" />
@@ -19,10 +19,10 @@
    	<sshexec host="${host}"
    	  username="${user}"
    	  password="${password}"
-   	  command=" rm ${toLocation}/${project.name}.war"  verbose="true"/>
+   	  command=" rm ${toLocation}/${warFile}.war"  verbose="true"/>
    </target>
    <target name="deploy" depends="clean">
-   	<scp file="${fromLocation}/${project.name}.war" 
-   		todir="${user}:${password}@${host}${toLocation}" trust="true" />
+   	<scp file="${fromLocation}/${warFile}.war" 
+   		todir="${user}:${password}@${host}${toLocation}" trust="true"  verbose="true"/>
    </target>
 </project>
