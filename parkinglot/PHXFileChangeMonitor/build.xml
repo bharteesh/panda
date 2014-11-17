@@ -24,11 +24,11 @@
 		<attribute name="user" />
 		<attribute name="toLocation" />
 		<sequential>
-			<echo message="@{host}" />
-			<echo message="@{user}" />
-			<echo message="@{password}" />
-			<echo message="@{toLocation}" />
-			<echo message="rm @{toLocation}/${warFile}.war" />
+		<echo message="host: &quot;@{host}&quot;" />
+		<echo message="user:  &quot; @{user}&quot;" />
+		<echo message="password:  &quot;@{password}&quot;" />
+		<echo message="destination &quot;@{toLocation}&quot;" />
+		<echo message="rm @{toLocation}/${warFile}.war" />
 			<echo message="deleting  &quot;${warFile}.war&quot; from location &quot;@{toLocation}&quot;"/>
 			<sshexec host="@{host}" username="@{user}" password="@{password}" command=" rm @{toLocation}/${warFile}.war" verbose="true" />
 		</sequential>
@@ -41,12 +41,12 @@
 		<attribute name="toLocation" />
 		<attribute name="fromLocation" />
 		<sequential>
-			<echo message="@{host}" />
-			<echo message="@{user}" />
-			<echo message="@{password}" />
-			<echo message="${fromLocation}/${warFile}.war" />
-			<echo message="@{toLocation}" />
-			<echo message="@{user}:@{password}@@@{host}:@{toLocation}" />
+			<echo message="host: &quot;@{host}&quot;" />
+			<echo message="user:  &quot; @{user}&quot;" />
+			<echo message="password:  &quot;@{password}&quot;" />
+			<echo message="source:  &quot;@{fromLocation}/${warFile}.war&quot;" />
+			<echo message="destination &quot;@{toLocation}&quot;" />
+			<echo message="ssh url: &quot;@{user}:@{password}@@@{host}:@{toLocation}&quot;" />
 			<echo message="deploying  &quot;${warFile}.war&quot; to location &quot;@{toLocation}&quot;"/>
 			<scp file="@{fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
 		</sequential>
