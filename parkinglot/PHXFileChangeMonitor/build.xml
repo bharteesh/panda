@@ -27,10 +27,7 @@
 	</target>
 
 	<target name="clean" unless="is.resource.exists" depends="test">
-		<sshexec host="${host}"
-	       	  username="${user}"
-	       	  password="${password}"
-	       	  command=" rm ${toLocation}/${warFile}.war"  verbose="true"/>
+		<sshexec host="${host}" username="${user}" password="${password}" command=" rm ${toLocation}/${warFile}.war" verbose="true" />
 	</target>
 
 
@@ -38,30 +35,29 @@
 		<attribute name="host" />
 		<attribute name="password" />
 		<attribute name="user" />
+		<attribute name="toLocation" />
 		<sequential>
-			<echo message="@{host}"/>
-			<echo message="@{user}"/>
-			<echo message="@{password}"/>
-			<echo message="${fromLocation}/${warFile}.war"/>
-			<echo message="${toLocation}"/>
-			<echo message="@{user}:@{password}@@@{host}:${toLocation}"/>
-			
-			
-			
-			<scp file="${fromLocation}/${warFile}.war" 
-		        	   		todir="@{user}:@{password}@@@{host}:${toLocation}" trust="true"  verbose="true"/>
+			<echo message="@{host}" />
+			<echo message="@{user}" />
+			<echo message="@{password}" />
+			<echo message="${fromLocation}/${warFile}.war" />
+			<echo message="${toLocation}" />
+			<echo message="@{user}:@{password}@@@{host}:@{toLocation}" />
+
+
+
+			<scp file="${fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
 		</sequential>
 	</macrodef>
 
 
 	<target name="deployQA" depends="clean">
-		<scp file="${fromLocation}/${warFile}.war" 
-   		todir="${user}:${password}@${host}:${toLocation}" trust="true"  verbose="true"/>
+		<scp file="${fromLocation}/${warFile}.war" todir="${user}:${password}@${host}:${toLocation}" trust="true" verbose="true" />
 	</target>
 
 	<target name="deployPROD" depends="clean">
-		<echo message="in the target"/>
-		<deploywar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" />
+		<echo message="in the target" />
+		<deploywar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps"/>
 	</target>
-	
+
 </project>
