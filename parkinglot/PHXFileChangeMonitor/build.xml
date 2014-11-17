@@ -2,27 +2,41 @@
 <project name="PHXFileChangeMonitor" default="deploy" basedir=".">
 	<property file="build.properties" />
 	<property name="project.war" value="${warFile}" />
-   	<property name="fromLocation" value="${fromLocation}" />
+	<property name="fromLocation" value="${fromLocation}" />
 	<property name="toLocation" value="${toLocation}" />
 	<property name="user" value="${user}" />
 	<property name="password" value="${password}" />
 	<property name="host" value="{$host}" />
-	
+
 	<echo message="${warFile}" />
 	<echo message="${fromLocation}" />
 	<echo message="${toLocation}" />
 	<echo message="${user}" />
 	<echo message="${password}" />
 	<echo message="${host}" />
-	
-   <target name="clean">
-   	<sshexec host="${host}"
-   	  username="${user}"
-   	  password="${password}"
-   	  command=" rm ${toLocation}/${warFile}.war"  verbose="true"/>
-   </target>
-   <target name="deploy" depends="clean">
-   	<scp file="${fromLocation}/${warFile}.war" 
+
+
+	<target name="test">
+		<condition property="is.resource.exists" value="true" else="false">
+			<and>
+				<resourceexists>
+					<file file="${warFile}.war" />
+				</resourceexists>
+			</and>
+		</condition>
+	</target>
+
+	<target name="clean" if="is.resource.exists" depends="test">
+		<sshexec host="${host}"
+	       	  username="${user}"
+	       	  password="${password}"
+	       	  command=" rm ${toLocation}/${warFile}.war"  verbose="true"/>
+	</target>
+
+
+
+	<target name="deploy" depends="clean">
+		<scp file="${fromLocation}/${warFile}.war" 
    		todir="${user}:${password}@${host}:${toLocation}" trust="true"  verbose="true"/>
-   </target>
+	</target>
 </project>
