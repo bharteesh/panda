@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="PHXFileChangeMonitor" default="deployQA" basedir=".">
+<project name="PHXFileChangeMonitor" default="" basedir=".">
 	<property file="build.properties" />
 	<property name="project.war" value="${warFile}" />
 	<property name="fromLocation" value="${fromLocation}" />
@@ -39,6 +39,7 @@
 		<attribute name="password" />
 		<attribute name="user" />
 		<attribute name="toLocation" />
+		<attribute name="fromLocation" />
 		<sequential>
 			<echo message="@{host}" />
 			<echo message="@{user}" />
@@ -46,35 +47,35 @@
 			<echo message="${fromLocation}/${warFile}.war" />
 			<echo message="@{toLocation}" />
 			<echo message="@{user}:@{password}@@@{host}:@{toLocation}" />
-			<echo message="deploying  &quot;${warFile}.war&quot; from location &quot;@{toLocation}&quot;"/>
-			<scp file="${fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
+			<echo message="deploying  &quot;${warFile}.war&quot; to location &quot;@{toLocation}&quot;"/>
+			<scp file="@{fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
 		</sequential>
 	</macrodef>
 
 	<target name="cleanQA" unless="is.resource.exists" depends="if-file-exists">
-		<deletewar host="aa2cmqa01.ithaka.org" user="cmjq" password="cmjq1000" toLocation="/cmjq/test/webapps" />
+		<deletewar host="${qa.host.name}" user="${qa.username}" password="${qa.password}" toLocation="${qa.war.toLocation}" />
 	</target>
 
 	<target name="cleanPROD02" unless="is.resource.exists" depends="if-file-exists">
-		<deletewar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps" />
+		<deletewar host="${prod02.host.name}" user="${prod02.username}" password="${prod02.password}" toLocation="${prod02.war.toLocation}" />
 	</target>
 
 	<target name="cleanPROD04" unless="is.resource.exists" depends="if-file-exists">
-		<deletewar host="aa2thumper04.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps" />
+		<deletewar host="${prod04.host.name}" user="${prod04.username}" password="${prod04.password}" toLocation="${prod04.war.toLocation" />
 	</target>
 
 	<target name="deployQA" depends="cleanQA">
-		<deploywar host="aa2cmqa01.ithaka.org" user="cmjq" password="cmjq1000" toLocation="/cmjq/test/webapps" />
+		<deploywar host="${qa.host.name}" user="${qa.username}" password="${qa.password}" toLocation="${qa.war.toLocation}" fromLocation="${qa.war.fromLocation}" />
 	</target>
 
 	<target name="deployPROD02" depends="cleanPROD02">
-		<echo message="in the target" />
-		<deploywar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps" />
+		<echo message="Deploying on Prod02" />
+		<deploywar host="${prod02.host.name}" user="${prod02.username}" password="${prod02.password}" toLocation="${prod02.war.toLocation}" fromLocation="${prod02.war.fromLocation}"/>
 	</target>
 
 	<target name="deployPROD04" depends="cleanPROD04">
-		<echo message="in the target" />
-		<deploywar host="aa2thumper04.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps" />
+		<echo message="Deploying on Prod04" />
+		<deploywar host="${prod04.host.name}" user="${prod04.username}" password="${prod04.password}" toLocation="${prod04.war.toLocation}"  fromLocation="${prod04.war.fromLocation}"/>
 	</target>
 
 </project>
