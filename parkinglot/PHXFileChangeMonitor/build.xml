@@ -19,7 +19,7 @@
    	<sshexec host="${host}"
    	  username="${user}"
    	  password="${password}"
-   	  command="cd toLocation | rm ${project.name}.war"/>
+   	  command="cd ${toLocation} | rm ${project.name}.war"  verbose="true"/>
    </target>
    <target name="deploy" depends="clean">
    	<scp file="${fromLocation}/${project.name}.war" 
