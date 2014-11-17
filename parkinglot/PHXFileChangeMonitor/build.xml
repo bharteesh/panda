@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="PHXFileChangeMonitor" default="deploy" basedir=".">
+<project name="PHXFileChangeMonitor" default="deployPROD" basedir=".">
 	<property file="build.properties" />
 	<property name="project.war" value="${warFile}" />
 	<property name="fromLocation" value="${fromLocation}" />
@@ -34,9 +34,23 @@
 	</target>
 
 
+	<macrodef name="deploywar">
+		<attribute name="host" />
+		<attribute name="password" />
+		<attribute name="user" />
+		<sequential>
+			<scp file="${fromLocation}/${warFile}.war" 
+		        	   		todir="${user}:${password}@${host}:${toLocation}" trust="true"  verbose="true"/>
+		</sequential>
+	</macrodef>
 
-	<target name="deploy" depends="clean">
+
+	<target name="deployQA" depends="clean">
 		<scp file="${fromLocation}/${warFile}.war" 
    		todir="${user}:${password}@${host}:${toLocation}" trust="true"  verbose="true"/>
+	</target>
+
+	<target name="deployPROD" depends="clean">
+		<deploywar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" />
 	</target>
 </project>
