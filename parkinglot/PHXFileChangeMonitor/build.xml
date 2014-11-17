@@ -1,17 +1,28 @@
 <?xml version="1.0"?>
 <project name="PHXFileChangeMonitor" default="deploy" basedir=".">
-	<property name="project.name" value="PHXFileChangeMonitor-1.0.0-BUILD-SNAPSHOT" />
-   	<property name="fromLocation" value="/cmjp/shared/Bamboo-data/xml-data/build-dir/PFCM-PFCMQA-JOB1/target" />
-	<property name="toLocation" value="/cmjq/apache/tomcat/7.0.56/webapps" />
-	<property name="user" value="cmjq" />
-	<property name="password" value="cmjq1000" />
-	<property name="host" value="aa2cmqa01.ithaka.org" />
+	<property file="build.properties" />
+	<property name="project.name" value="${project.name}" />
+   	<property name="fromLocation" value="${fromLocation}" />
+	<property name="toLocation" value="${toLocation}" />
+	<property name="user" value="${user}" />
+	<property name="password" value="${password}" />
+	<property name="host" value="{$host}" />
+	
+	<echo message="${project.name}" />
+	<echo message="${fromLocation}" />
+	<echo message="${toLocation}" />
+	<echo message="${user}" />
+	<echo message="${password}" />
+	<echo message="${host}" />
 	
    <target name="clean">
-	<delete file="${toLocation}/${project.name}.war"/>
+   	<sshexec host="${host}"
+   	  username="${user}"
+   	  password="${password}"
+   	  command="cd toLocation | rm ${project.name}.war"/>
    </target>
    <target name="deploy" depends="clean">
    	<scp file="${fromLocation}/${project.name}.war" 
-   		todir="${user}:${password}@${host}:${toLocation}" trust="true" />
+   		todir="${user}:${password}@${host}${toLocation}" trust="true" />
    </target>
 </project>
