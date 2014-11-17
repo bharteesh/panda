@@ -18,19 +18,15 @@
 
 	<target name="test">
 		<condition property="is.resource.exists" value="true" else="false">
-			<echo message="step1" />
 			<and>
 				<resourceexists>
-					<echo message="step2"/>
 					<file file="${warFile}.war" />
-					<echo message="step3" />
 				</resourceexists>
 			</and>
 		</condition>
 	</target>
 
-	<target name="clean" if="is.resource.exists" depends="test">
-		<echo message="step4" />
+	<target name="clean" unless="is.resource.exists" depends="test">
 		<sshexec host="${host}"
 	       	  username="${user}"
 	       	  password="${password}"
