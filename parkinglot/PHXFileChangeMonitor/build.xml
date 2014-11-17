@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="PHXFileChangeMonitor" default="deployPROD" basedir=".">
+<project name="PHXFileChangeMonitor" default="" basedir=".">
 	<property file="build.properties" />
 	<property name="project.war" value="${warFile}" />
 	<property name="fromLocation" value="${fromLocation}" />
@@ -41,7 +41,7 @@
 			<echo message="@{user}" />
 			<echo message="@{password}" />
 			<echo message="${fromLocation}/${warFile}.war" />
-			<echo message="${toLocation}" />
+			<echo message="@{toLocation}" />
 			<echo message="@{user}:@{password}@@@{host}:@{toLocation}" />
 
 
@@ -55,9 +55,14 @@
 		<scp file="${fromLocation}/${warFile}.war" todir="${user}:${password}@${host}:${toLocation}" trust="true" verbose="true" />
 	</target>
 
-	<target name="deployPROD" depends="clean">
+	<target name="deployPROD02" depends="clean">
 		<echo message="in the target" />
 		<deploywar host="aa2thumper02.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps"/>
 	</target>
+	
+	<target name="deployPROD04" depends="clean">
+			<echo message="in the target" />
+			<deploywar host="aa2thumper04.jstor.org" user="cmjp" password="cmjp1000" toLocation="/cmjp/apache/tomcat/7.0.56/webapps"/>
+		</target>
 
 </project>
