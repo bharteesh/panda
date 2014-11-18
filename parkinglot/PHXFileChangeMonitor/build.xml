@@ -8,6 +8,7 @@
 	<property name="password" value="${password}" />
 	<property name="host" value="{$host}" />
 
+	<!-- condition to check if the war file already exist--> 
 	<target name="if-file-exists">
 		<condition property="is.resource.exists" value="true" else="false">
 			<and>
@@ -17,6 +18,9 @@
 			</and>
 		</condition>
 	</target>
+	
+	
+<!--This macro def will delete the existing war file from the tomcat directory!-->  
 
 	<macrodef name="deletewar">
 		<attribute name="host" />
@@ -34,6 +38,8 @@
 		</sequential>
 	</macrodef>
 
+	<!--This macro def will copy  war file to  tomcat webapps  directory!-->  
+	
 	<macrodef name="deploywar">
 		<attribute name="host" />
 		<attribute name="password" />
@@ -73,6 +79,7 @@
 		<deploywar host="${prod02.host.name}" user="${prod02.username}" password="${prod02.password}" toLocation="${prod02.war.toLocation}" fromLocation="${prod02.war.fromLocation}"/>
 	</target>
 
+	<!-- This target  copy the war file on the thumper04 and delete the old war file if existing-->
 	<target name="deployPROD04" depends="cleanPROD04">
 		<echo message="Deploying on Prod04" />
 		<deploywar host="${prod04.host.name}" user="${prod04.username}" password="${prod04.password}" toLocation="${prod04.war.toLocation}"  fromLocation="${prod04.war.fromLocation}"/>
