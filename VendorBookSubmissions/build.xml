@@ -7,7 +7,7 @@
 	<property name="user" value="${user}" />
 	<property name="password" value="${password}" />
 	<property name="host" value="{$host}" />
-	<property name="serverhome" value="{$serverhome}" />
+	<property name="serverhome" value="${serverhome}" />
 
 	<!-- condition to check if the war file already exist-->
 	<target name="if-file-exists">
@@ -78,9 +78,9 @@
 	<macrodef name="restartserver">
 		<attribute name="serverhome" />
 		<sequential>
-			<exec executable="{serverhome}/bin/shutdown.sh" />
+			<exec executable="@{serverhome}/bin/shutdown.sh" />
 			<sleep seconds="10"/>
-			<exec executable="{serverhome}/bin/startup.sh" />
+			<exec executable="@{serverhome}/bin/startup.sh" />
 		</sequential>
 	</macrodef>
 
