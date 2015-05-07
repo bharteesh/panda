@@ -28,6 +28,7 @@
 		<attribute name="password" />
 		<attribute name="user" />
 		<attribute name="toLocation" />
+		<attribute name="serverhome" />
 		<sequential>
 			<echo message="host: &quot;@{host}&quot;" />
 			<echo message="user:  &quot; @{user}&quot;" />
@@ -35,7 +36,7 @@
 			<echo message="destination &quot;@{toLocation}&quot;" />
 			<echo message="rm @{toLocation}/${warFile}.war" />
 			<echo message="deleting  &quot;${warFile}.war&quot; from location &quot;@{toLocation}&quot;"/>
-			<sshexec host="@{host}" username="@{user}" password="@{password}" command=" rm @{toLocation}/${warFile}.war" verbose="true" />
+			<sshexec host="@{host}" username="@{user}" password="@{password}" command=" rm @{toLocation}/${warFile}.war ; @{serverhome}/bin/shutdown.sh" verbose="true" />
 		</sequential>
 	</macrodef>
 
@@ -47,6 +48,7 @@
 		<attribute name="user" />
 		<attribute name="toLocation" />
 		<attribute name="fromLocation" />
+		<attribute name="serverhome" />
 		<sequential>
 			<echo message="host: &quot;@{host}&quot;" />
 			<echo message="user:  &quot; @{user}&quot;" />
@@ -56,23 +58,19 @@
 			<echo message="ssh url: &quot;@{user}:@{password}@@@{host}:@{toLocation}&quot;" />
 			<echo message="deploying  &quot;${warFile}.war&quot; to location &quot;@{toLocation}&quot;"/>
 			<scp file="@{fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
+			<sshexec host="@{host}" username="@{user}" password="@{password}" command="@{serverhome}/bin/startup.sh" verbose="true" />
 		</sequential>
 	</macrodef>
 
 
 	<target name="cleanDEV" unless="is.resource.exists" depends="if-file-exists">
-		<deletewar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" />
+		<deletewar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" serverhome="${dev.server.home}"/>
 	</target>
 
 
-	<target name="deployDEVWAR" depends="cleanDEV">
+	<target name="deployDEV" depends="cleanDEV">
 		<echo message="DEV" />
-		<deploywar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" fromLocation="${dev.war.fromLocation}"/>
-	</target>
-
-	<target name="deployDEV" depends="deployDEVWAR">
-		<echo message="Restarting DEV Tomcat server" />
-		<restartserver serverhome="${dev.server.home}" />
+		<deploywar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" fromLocation="${dev.war.fromLocation}" serverhome="${dev.server.home}"/>
 	</target>
 
 	<macrodef name="restartserver">
