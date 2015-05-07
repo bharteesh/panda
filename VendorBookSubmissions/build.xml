@@ -76,6 +76,7 @@
 	</target>
 
 	<macrodef name="restartserver">
+		<attribute name="serverhome" />
 		<sequential>
 			<exec executable="${serverhome}/bin/shutdown.sh" />
 			<sleep seconds="10"/>
