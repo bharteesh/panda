@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<project name="vendorbooksubmissions" default="" basedir=".">
+	<property file="build.properties" />
+	<property name="project.war" value="${warFile}" />
+	<property name="fromLocation" value="${fromLocation}" />
+	<property name="toLocation" value="${toLocation}" />
+	<property name="user" value="${user}" />
+	<property name="password" value="${password}" />
+	<property name="host" value="{$host}" />
+
+	<!-- condition to check if the war file already exist--> 
+	<target name="if-file-exists">
+		<condition property="is.resource.exists" value="true" else="false">
+			<and>
+				<resourceexists>
+					<file file="${warFile}.war" />
+				</resourceexists>
+			</and>
+		</condition>
+	</target>
+	
+	
+<!--This macro def will delete the existing war file from the tomcat directory!-->  
+
+	<macrodef name="deletewar">
+		<attribute name="host" />
+		<attribute name="password" />
+		<attribute name="user" />
+		<attribute name="toLocation" />
+		<sequential>
+		<echo message="host: &quot;@{host}&quot;" />
+		<echo message="user:  &quot; @{user}&quot;" />
+		<echo message="password:  &quot;@{password}&quot;" />
+		<echo message="destination &quot;@{toLocation}&quot;" />
+		<echo message="rm @{toLocation}/${warFile}.war" />
+			<echo message="deleting  &quot;${warFile}.war&quot; from location &quot;@{toLocation}&quot;"/>
+			<sshexec host="@{host}" username="@{user}" password="@{password}" command=" rm @{toLocation}/${warFile}.war" verbose="true" />
+		</sequential>
+	</macrodef>
+
+	<!--This macro def will copy  war file to  tomcat webapps  directory!-->  
+	
+	<macrodef name="deploywar">
+		<attribute name="host" />
+		<attribute name="password" />
+		<attribute name="user" />
+		<attribute name="toLocation" />
+		<attribute name="fromLocation" />
+		<sequential>
+			<echo message="host: &quot;@{host}&quot;" />
+			<echo message="user:  &quot; @{user}&quot;" />
+			<echo message="password:  &quot;@{password}&quot;" />
+			<echo message="source:  &quot;@{fromLocation}/${warFile}.war&quot;" />
+			<echo message="destination &quot;@{toLocation}&quot;" />
+			<echo message="ssh url: &quot;@{user}:@{password}@@@{host}:@{toLocation}&quot;" />
+			<echo message="deploying  &quot;${warFile}.war&quot; to location &quot;@{toLocation}&quot;"/>
+			<scp file="@{fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
+		</sequential>
+	</macrodef>
+
+
+	<target name="cleanDEV" unless="is.resource.exists" depends="if-file-exists">
+		<deletewar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" />
+	</target>
+
+
+	<target name="deployDEV" depends="cleanDEV">
+		<echo message="DEV" />
+		<deploywar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" fromLocation="${dev.war.fromLocation}"/>
+	</target>
+
+
+</project>

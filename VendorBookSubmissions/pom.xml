@@ -2,13 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.ithaka</groupId>
-	<artifactId>VendorBookSubmissions</artifactId>
-	<name>VendorBookSubmissions</name>
+	<artifactId>vendorbooksubmissions</artifactId>
+	<name>vendorbooksubmissions</name>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
 
 	<properties>
 		<resources.dir>src/main/resources</resources.dir>
+		<mailtemplates.dir>src/main/resources/mailtemplates</mailtemplates.dir>
 		<!-- Generic properties -->
 		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -412,12 +413,17 @@
 	</profiles>
 
 	<build>
-		<finalName>vendorsubmissions</finalName>
+		<finalName>vendorbooksubmissions</finalName>
 		<resources>
 			<resource>
 				<directory>${resources.dir}/${environment}</directory>
 				<includes>
-					<include>**</include>
+					<include>*.*</include>
+				</includes>
+			</resource><resource>
+				<directory>${mailtemplates.dir}</directory>
+				<includes>
+					<include>*.*</include>
 				</includes>
 			</resource>
 		</resources>
