@@ -420,7 +420,14 @@
 				<includes>
 					<include>*.*</include>
 				</includes>
-			</resource><resource>
+			</resource>
+			<resource>
+				<directory>${resources.dir}</directory>
+				<includes>
+					<include>*.properties</include>
+				</includes>
+			</resource>
+			<resource>
 				<directory>${mailtemplates.dir}</directory>
 				<includes>
 					<include>*.*</include>
