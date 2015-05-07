@@ -35,7 +35,7 @@
 			<echo message="password:  &quot;@{password}&quot;" />
 			<echo message="destination &quot;@{toLocation}&quot;" />
 			<echo message="rm @{toLocation}/${warFile}.war" />
-			<echo message="deleting  &quot;${warFile}.war&quot; from location &quot;@{toLocation}&quot;"/>
+			<echo message="deleting  &quot;${warFile}.war&quot; from location &quot;@{toLocation}&quot;" />
 			<sshexec host="@{host}" username="@{user}" password="@{password}" command=" rm @{toLocation}/${warFile}.war ; @{serverhome}/bin/shutdown.sh" verbose="true" />
 		</sequential>
 	</macrodef>
@@ -56,7 +56,7 @@
 			<echo message="source:  &quot;@{fromLocation}/${warFile}.war&quot;" />
 			<echo message="destination &quot;@{toLocation}&quot;" />
 			<echo message="ssh url: &quot;@{user}:@{password}@@@{host}:@{toLocation}&quot;" />
-			<echo message="deploying  &quot;${warFile}.war&quot; to location &quot;@{toLocation}&quot;"/>
+			<echo message="deploying  &quot;${warFile}.war&quot; to location &quot;@{toLocation}&quot;" />
 			<scp file="@{fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
 			<sshexec host="@{host}" username="@{user}" password="@{password}" command="@{serverhome}/bin/startup.sh" verbose="true" />
 		</sequential>
@@ -64,15 +64,26 @@
 
 
 	<target name="cleanDEV" unless="is.resource.exists" depends="if-file-exists">
-		<deletewar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" serverhome="${dev.server.home}"/>
+		<deletewar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" serverhome="${dev.server.home}" />
 	</target>
 
 
 	<target name="deployDEV" depends="cleanDEV">
-		<echo message="DEV" />
-		<deploywar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" fromLocation="${dev.war.fromLocation}" serverhome="${dev.server.home}"/>
+		<echo message="DEV deployment" />
+		<deploywar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" fromLocation="${dev.war.fromLocation}" serverhome="${dev.server.home}" />
 	</target>
 
+	<target name="cleanQA" unless="is.resource.exists" depends="if-file-exists">
+		<deletewar host="${qa.host.name}" user="${qa.username}" password="${qa.password}" toLocation="${qa.war.toLocation}" serverhome="${qa.server.home}" />
+	</target>
+
+
+	<target name="deployQA" depends="cleanQA">
+		<echo message="QA deployment" />
+		<deploywar host="${qa.host.name}" user="${qa.username}" password="${qa.password}" toLocation="${qa.war.toLocation}" fromLocation="${qa.war.fromLocation}" serverhome="${qa.server.home}" />
+	</target>
+
+	<!--
 	<macrodef name="restartserver">
 		<attribute name="serverhome" />
 		<sequential>
@@ -81,5 +92,6 @@
 			<exec executable="@{serverhome}/bin/startup.sh" />
 		</sequential>
 	</macrodef>
+	-->
 
 </project>
