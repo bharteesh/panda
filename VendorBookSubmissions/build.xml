@@ -36,7 +36,7 @@
 			<echo message="destination &quot;@{toLocation}&quot;" />
 			<echo message="rm @{toLocation}/${warFile}.war" />
 			<echo message="deleting  &quot;${warFile}.war&quot; from location &quot;@{toLocation}&quot;" />
-			<sshexec host="@{host}" username="@{user}" password="@{password}" command=" rm @{toLocation}/${warFile}.war ; @{serverhome}/bin/shutdown.sh" verbose="true" />
+			<sshexec host="@{host}" username="@{user}" password="@{password}" command=" rm -rf @{toLocation}/${warFile}* ; @{serverhome}/bin/shutdown.sh" verbose="true" />
 		</sequential>
 	</macrodef>
 
