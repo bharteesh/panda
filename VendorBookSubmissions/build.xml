@@ -77,10 +77,18 @@
 		<deletewar host="${qa.host.name}" user="${qa.username}" password="${qa.password}" toLocation="${qa.war.toLocation}" serverhome="${qa.server.home}" />
 	</target>
 
-
 	<target name="deployQA" depends="cleanQA">
 		<echo message="QA deployment" />
 		<deploywar host="${qa.host.name}" user="${qa.username}" password="${qa.password}" toLocation="${qa.war.toLocation}" fromLocation="${qa.war.fromLocation}" serverhome="${qa.server.home}" />
+	</target>
+
+	<target name="cleanPROD" unless="is.resource.exists" depends="if-file-exists">
+		<deletewar host="${prod.host.name}" user="${prod.username}" password="${prod.password}" toLocation="${prod.war.toLocation}" serverhome="${prod.server.home}" />
+	</target>
+
+	<target name="deployPROD" depends="cleanPROD">
+		<echo message="PROD deployment" />
+		<deploywar host="${prod.host.name}" user="${prod.username}" password="${prod.password}" toLocation="${prod.war.toLocation}" fromLocation="${prod.war.fromLocation}" serverhome="${prod.server.home}" />
 	</target>
 
 	<!--
