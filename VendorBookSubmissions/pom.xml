@@ -297,6 +297,55 @@
 			<version>1.2</version>
 		</dependency>
 
+		<!-- Documentum -->
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>dfc</artifactId>
+			<version>6.5.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>emc.dctm</groupId>
+			<artifactId>workflow</artifactId>
+			<version>6.5.2</version>
+		</dependency>
+
+		<!-- CONPREP -->
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>common</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>conprepbooks</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>ConprepHibernateConfig</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>domainconfig</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.5</version>
+		</dependency>
 
 		<!-- Swagger Dependencies -->
 
