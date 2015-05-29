@@ -325,8 +325,14 @@
 
 		<dependency>
 			<groupId>org.ithaka.cm</groupId>
-			<artifactId>bookshibernateconfig</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<artifactId>pandahibernateconfig</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ithaka.cm</groupId>
+			<artifactId>koala-extensions</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 
 		<dependency>
