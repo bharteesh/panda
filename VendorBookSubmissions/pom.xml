@@ -509,16 +509,25 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<executions>
-					<execution>
-						<id>default-war</id>
-						<phase>package</phase>
-						<goals>
-							<goal>war</goal>
-						</goals>
-					</execution>
-				</executions>
+				<version>2.6</version>
+				<configuration>
+					<packagingExcludes>WEB-INF/lib/commons-net-1.4.1.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/com.noelios.restlet-1.1.8.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/hamcrest-all-1.2.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/jaxrs-api-2.2.2.GA.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/jcl-over-slf4j-1.6.1.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/jdom-1.1.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/jtidy-4aug2000r7-dev.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/ojdbc6-11.2.0.2.0.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/org.restlet-1.1.8.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/oro-2.0.8.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/saxon-9.3.0.4-pe.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/saxon9bridge-9.3.0.4-pe.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/saxon-sql-9.3.0.4-pe.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/stax2-api-2.9.9-2.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/wstx-asl-3.9.9-2.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/xml-resolver-1.2.jar</packagingExcludes>
+				</configuration>
 			</plugin>
 		</plugins>
 
