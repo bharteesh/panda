@@ -1,17 +1,4 @@
-CREATE OR REPLACE PACKAGE ejf_reg_sp
-AS
-  /* TODO enter package declarations (types, exceptions, methods etc) here */
-  PROCEDURE insert_mock_data(
-      test_case_id IN VARCHAR2);
-  PROCEDURE delete_mock_data(
-      test_case_id IN VARCHAR2);
-  PROCEDURE verify_results(
-      test_case_id IN VARCHAR2);
-  END ejf_reg_sp;
-/
-
-
-CREATE OR REPLACE PACKAGE BODY ejf_reg_sp
+create or replace PACKAGE BODY ejf_reg_sp
 AS
   PROCEDURE insert_mock_data(
       test_case_id IN VARCHAR2)
@@ -64,6 +51,7 @@ AS
     FROM PCL_DATA_UNIT_REG
     WHERE REG_TEST_CASE_ID = test_case_id
     AND MOCK_OPERATION_TYPE='COPY';
+    commit;
     INSERT
     INTO EJF_TITLE_FETCHED
       (
@@ -81,6 +69,7 @@ AS
     FROM EJF_TITLE_FETCHED_REG
     WHERE REG_TEST_CASE_ID = test_case_id
     AND MOCK_OPERATION_TYPE='COPY';
+    commit;
   END insert_mock_data;
 -- DELETE MOCK DATA
   PROCEDURE delete_mock_data(
@@ -95,6 +84,7 @@ AS
       WHERE REG_TEST_CASE_ID = test_case_id
       AND MOCK_OPERATION_TYPE='COPY'
       );
+      commit;
     DELETE
     FROM EJF_TITLE_FETCHED
     WHERE DATA_UNIT_ID IN
@@ -103,6 +93,7 @@ AS
       WHERE REG_TEST_CASE_ID   = test_case_id
       AND MOCK_OPERATION_TYPE IN ('COPY','VERIFY')
       );
+      commit;
   END delete_mock_data;
 -- VERIFY RESULTS
   PROCEDURE verify_results(
@@ -140,4 +131,3 @@ AS
     END ;
   END verify_results;
 END ejf_reg_sp;
-/
