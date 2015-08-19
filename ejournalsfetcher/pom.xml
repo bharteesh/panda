@@ -166,8 +166,15 @@
 		<dependency>
 			<groupId>com.jscape</groupId>
 			<artifactId>sftpf</artifactId>
-			<version>7.4.3</version>
+			<version>9.2.2</version>
 		</dependency>
+		
+		<!-- 
+		<dependency>
+			<groupId>com.jscape</groupId>
+			<artifactId>sftpf</artifactId>
+			<version>7.4.3</version>
+		</dependency>-->
 		
 		<dependency>
 			<groupId>javax.servlet</groupId>
