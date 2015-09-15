@@ -1,6 +1,6 @@
 --For PANDA-187
 UPDATE EJF_TITLES SET TITLE_JOURNAL_ID='nrc_er' WHERE TITLE_ID=8;
-UPDATE EJF_TITLE_CONFIG SET VALUE='.*/jid?_10\.1139%2fer((\.\d{4}\.)|)(vol?)(0(iss?)|na)_\d{6,}\.zip' WHERE TITLE_ID=8 AND NAME='REGEX_RULE';
+UPDATE EJF_TITLE_CONFIG SET VALUE='.*/jid?_.*%2fer((\.\d{4}\.)|)(vol?)(0(iss?)|na)_\d{6,}\.zip' WHERE TITLE_ID=8 AND NAME='REGEX_RULE';
 
 --For PANDA-188
 UPDATE EJF_TITLE_CONFIG SET VALUE='.*_jid?_.*%2f.*(vol?)\.0(iss?)00_\d{6,}\.zip' WHERE TITLE_ID=5 AND NAME='REGEX_RULE';
