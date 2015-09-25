@@ -57,6 +57,10 @@
 			<scp file="@{fromLocation}/${warFile}.war" todir="@{user}:@{password}@@@{host}:@{toLocation}" trust="true" verbose="true" />
 		</sequential>
 	</macrodef>
+	
+	<target name="cleanDEV" unless="is.resource.exists" depends="if-file-exists">
+		<deletewar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" />
+	</target>
 
 	<target name="cleanQA" unless="is.resource.exists" depends="if-file-exists">
 		<deletewar host="${qa.host.name}" user="${qa.username}" password="${qa.password}" toLocation="${qa.war.toLocation}" />
@@ -72,6 +76,10 @@
 
 	<target name="deployQA" depends="cleanQA">
 		<deploywar host="${qa.host.name}" user="${qa.username}" password="${qa.password}" toLocation="${qa.war.toLocation}" fromLocation="${qa.war.fromLocation}" />
+	</target>
+	
+	<target name="deployDEV" depends="cleanDEV">
+		<deploywar host="${dev.host.name}" user="${dev.username}" password="${dev.password}" toLocation="${dev.war.toLocation}" fromLocation="${dev.war.fromLocation}" />
 	</target>
 
 	<target name="deployPROD02" depends="cleanPROD02">
