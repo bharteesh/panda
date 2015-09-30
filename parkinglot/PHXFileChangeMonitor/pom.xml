@@ -93,8 +93,9 @@
 			<version>3.1</version>
 		</dependency>
 
+
 		<dependency>
-			<groupId>com.oracle</groupId>
+			<groupId>oracle</groupId>
 			<artifactId>ojdbc14</artifactId>
 			<version>10.2.0.1.0</version>
 		</dependency>
@@ -324,13 +325,6 @@
                     <downloadJavadocs>true</downloadJavadocs>
                 </configuration>
             </plugin>
-            
-        	<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.5</version>
-			</plugin>
-            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
