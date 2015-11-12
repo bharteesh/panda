@@ -759,8 +759,8 @@
 		<somVersion>1.0.0</somVersion>
 		<onix-jaxbVersion>3.0</onix-jaxbVersion>
 		<itext.version>5.3.3</itext.version>
-<!-- 		<pdfbox.version>1.6.0</pdfbox.version> -->
-		<pdfbox.version>1.7.1</pdfbox.version>
+<!-- 	<pdfbox.version>1.7.1</pdfbox.version> -->
+		<pdfbox.version>1.8.10</pdfbox.version>
 		<bouncycastlebcmail.version>1.44</bouncycastlebcmail.version>
 		<bouncycastlebcprov.version>1.44</bouncycastlebcprov.version>
 		<ibmicu4j.version>3.8</ibmicu4j.version>
