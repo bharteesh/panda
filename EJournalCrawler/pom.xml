@@ -371,9 +371,6 @@
 						WEB-INF/lib/ojdbc6-11.2.0.2.0.jar,WEB-INF/lib/org.restlet-1.1.8.jar,WEB-INF/lib/oro-2.0.8.jar,WEB-INF/lib/saxon-9.3.0.4-pe.jar,
 						WEB-INF/lib/saxon9bridge-9.3.0.4-pe.jar,WEB-INF/lib/saxon-sql-9.3.0.4-pe.jar,WEB-INF/lib/stax2-api-2.9.9-2.jar,WEB-INF/lib/wstx-asl-3.9.9-2.jar,
 						WEB-INF/lib/xml-resolver-1.2.jar</packagingExcludes>
-						
-					<!-- <packagingIncludes>/customJars/ia-web-commons-1.0-20131207.033010-102.jar</packagingIncludes> -->
-					<outputDirectory>D:\Tomcat 7\apache-tomcat-7.0.54\webapps\</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
