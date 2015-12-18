@@ -28,6 +28,16 @@
 		<junit.version>4.11</junit.version>
 
 	</properties>
+	
+	<repositories>
+		<repository>
+	      <id>internetarchive</id>
+	      <name>Internet Archive Maven Repository</name>
+	      <url>http://builds.archive.org:8080/maven2</url>
+	      <layout>default</layout>
+	    </repository>
+	</repositories>
+	
 
 	<pluginRepositories>
 		<pluginRepository>
