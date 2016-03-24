@@ -134,7 +134,7 @@ metadata.description=Basic crawl starting with useful defaults
                 <property name="listLogicalOr" value="true" />
                 <property name="regexList">
                         <list>
-			<value>(http:\/\/)?(www\.plantphysiol\.org\/(content|powerpoint)\/(\b)(1(6[789]|7[012])|(suppl\/201[567]))(\b)\/.*).*</value>
+						<value>(?:http:[\/][\/])?www\.plantphysiol\.org[\/](?:content|powerpoint)[\/](1(6[789]|7[012])|(suppl\/201[567])).*</value>
                         </list>
                 </property>
     </bean>
@@ -166,7 +166,7 @@ metadata.description=Basic crawl starting with useful defaults
                 <property name="listLogicalOr" value="true" />
                 <property name="regexList">
                         <list>
-                                <value>.*(?i)(\.(ico|wmv|mpe?g|rar|tar|gz|odt|xml|conf|swf|js|css|bmp|gif|jpe?g|png|svg|tiff?))</value>
+                                <value>.*(?i)(\.(ico|mpe?g|rar|tar|gz|odt|xml|conf|swf|js|css|bmp|gif|jpe?g|png|svg|tiff?))</value>
        				<value>.*(?i)((login_hit_hidden.gif|cited-by=yes|.zh|frame=sidebar|frame=header).*)</value>
 				<value>.*(?i)(adclick=true|adview=true)</value>
                         </list>
@@ -399,7 +399,7 @@ metadata.description=Basic crawl starting with useful defaults
                 <property name="listLogicalOr" value="true" />
                 <property name="regexList">
                         <list>
-			<value>(http:\/\/)?(www\.plantphysiol\.org\/(content|powerpoint)\/(\b)(1(6[789]|7[012])|(suppl\/201[567]))(\b)\/.*).*</value>
+			<value>(?:http:[\/][\/])?www\.plantphysiol\.org[\/](?:content|powerpoint)[\/](1(6[789]|7[012])|(suppl\/201[567])).*</value>
                         </list>
                 </property>
 	   </bean>
@@ -410,7 +410,7 @@ metadata.description=Basic crawl starting with useful defaults
   <!-- <property name="compress" value="true" /> -->
   <!-- <property name="prefix" value="IAH" /> -->
   <!-- <property name="suffix" value="${HOSTNAME}" /> -->
-   <property name="maxFileSizeBytes" value="5000000000" />
+  <!-- <property name="maxFileSizeBytes" value="1000000000" /> -->
   <!-- <property name="poolMaxActive" value="1" /> -->
   <!-- <property name="MaxWaitForIdleMs" value="500" /> -->
   <!-- <property name="skipIdenticalDigests" value="false" /> -->
