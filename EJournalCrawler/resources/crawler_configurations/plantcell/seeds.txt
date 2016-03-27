@@ -1,8 +1,8 @@
-http://www.plantcell.org/content/by/year/2015
-http://www.plantcell.org/content/by/year/2016
-http://www.plantcell.org/content/current
-http://www.plantcell.org/content/27/
-http://www.plantcell.org/content/28/
-http://www.plantcell.org/content/suppl/2015/
-http://www.plantcell.org/content/suppl/2016/
+http://www.plantcell.org/login
+http://www.plantcell.org/content/by/year/2015/
+http://www.plantcell.org/content/by/year/2016/
+http://www.plantcell.org/content/current/
 
+
+# Heritrix added seed redirect from http://www.plantcell.org/login.
+http://www.plantcell.org/

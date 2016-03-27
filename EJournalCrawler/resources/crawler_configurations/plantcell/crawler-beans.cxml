@@ -105,11 +105,11 @@ metadata.description=Basic crawl starting with useful defaults
  </bean>
  
  <bean id="acceptSurts" class="org.archive.modules.deciderules.surt.SurtPrefixedDecideRule">
-   <!-- <property name="decision" value="ACCEPT"/> 
-   <property name="seedsAsSurtPrefixes" value="true" /> -->
-  <!-- <property name="alsoCheckVia" value="false" /> -->
-  <!-- <property name="surtsSourceFile" value="" /> -->
-  <!-- <property name="surtsDumpFile" value="${launchId}/surts.dump" /> -->
+   <property name="decision" value="ACCEPT"/> 
+   <property name="seedsAsSurtPrefixes" value="true" />
+   <property name="alsoCheckVia" value="false" /> 
+   <!-- <property name="surtsSourceFile" value="" /> -->
+   <property name="surtsDumpFile" value="${launchId}/surts.dump" />
    <property name="surtsSource">
         <bean class="org.archive.spring.ConfigString">
          <property name="value">
@@ -118,7 +118,7 @@ metadata.description=Basic crawl starting with useful defaults
          </property> 
         </bean>
        </property> 
- </bean>
+</bean>
 
  <!-- SCOPE: rules for which discovered URIs to crawl; order is very 
       important because last decision returned other than 'NONE' wins. -->
@@ -129,15 +129,15 @@ metadata.description=Basic crawl starting with useful defaults
     <!-- Begin by REJECTing all... -->
     <bean class="org.archive.modules.deciderules.RejectDecideRule" />
     <!-- ...then ACCEPT those within configured/seed-implied SURT prefixes... -->
- <!--   <ref bean="acceptSurts" /> -->
+   <!--<ref bean="acceptSurts" /> -->
 
 	<bean class="org.archive.modules.deciderules.MatchesListRegexDecideRule">
                 <property name="decision" value="ACCEPT"/>
                 <property name="listLogicalOr" value="true" />
                 <property name="regexList">
                         <list>
-				<value>(?:http:[\/][\/])?www\.plantcell\.org[\/](?:content|powerpoint)[\/](?:2[789]|(?:suppl\/201[567])[\/]).*</value>
-                        </list>
+                       <value>(?:http:[\/][\/])?www\.plantcell\.org[\/](?:content|powerpoint)[\/](?:2[789]|(?:suppl\/201[567])[\/]).*</value>
+			 </list>
                 </property>
     </bean>
 
@@ -248,6 +248,9 @@ metadata.description=Basic crawl starting with useful defaults
   <!-- <property name="ipValidityDurationSeconds" value="21600" /> -->
   <!-- <property name="robotsValidityDurationSeconds" value="86400" /> -->
   <!-- <property name="calculateRobotsOnly" value="false" /> -->
+	<property name="credentialStore">
+		<ref bean="credentialStore" />
+	</property>
  </bean>
  <bean id="fetchDns" class="org.archive.modules.fetcher.FetchDNS">
   <!-- <property name="acceptNonDnsResolves" value="false" /> -->
@@ -293,6 +296,9 @@ metadata.description=Basic crawl starting with useful defaults
   <!-- <property name="httpProxyPassword" value="" /> -->
   <!-- <property name="digestContent" value="true" /> -->
   <!-- <property name="digestAlgorithm" value="sha1" /> -->
+        <property name="credentialStore">
+                <ref bean="credentialStore" />
+        </property>
  </bean>
  <bean id="extractorHttp" class="org.archive.modules.extractor.ExtractorHTTP">
  </bean>
@@ -313,9 +319,29 @@ metadata.description=Basic crawl starting with useful defaults
  </bean>
  <bean id="extractorSwf" class="org.archive.modules.extractor.ExtractorSWF">
  </bean>    
- 
- 
- 
+
+<bean id="exampleCredential" class="org.archive.modules.credential.HtmlFormCredential">
+	<property name="domain" value="http://www.plantcell.org" />
+	<property name="loginUri" value="http://www.plantcell.org/login" />
+	<property name="formItems">
+	<map>
+		<!-- username/password -->
+		<entry key="username" value="JSTOR"/>
+		<entry key="code" value="plant"/>
+		<!-- hidden inputs -->
+		<entry key="login_referer" value="form-asdf" />
+		<!-- submit -->
+		<entry key="signin" value="Sign In"/>
+	</map>
+	</property>
+</bean> 
+<bean id="credentialStore" class="org.archive.modules.credential.CredentialStore">
+	<property name="credentials">
+	<map>
+		<entry key="exampleCredential" value-ref="exampleCredential" />
+	</map>
+	</property>
+</bean>
  
  <bean id="persistLoadProcessor" class="org.archive.modules.recrawl.PersistLoadProcessor">
 </bean>
@@ -324,18 +350,6 @@ metadata.description=Basic crawl starting with useful defaults
    <!-- <property name="historyLength" value="10" /> -->
 </bean>
  
- 
-  <bean id="extractorForms" class="org.archive.modules.forms.ExtractorHTMLForms">
-   <!-- <property name="extractAllForms" value="false" /> -->
- </bean>
- <bean id="formFiller" class="org.archive.modules.forms.FormLoginProcessor">
-   <!-- generally these are overlaid with sheets rather than set directly -->
-   <!-- <property name="applicableSurtPrefix" value="" /> -->
-   	<property name="loginUsername" value="JSTOR" />
-    <property name="loginPassword" value="plant" />
- </bean>
- 
-  
  
  
  <!-- now, processors are assembled into ordered FetchChain bean -->
@@ -377,11 +391,7 @@ metadata.description=Basic crawl starting with useful defaults
     <ref bean="extractorJs"/>
     <!-- ...extract outlinks from Flash content... -->
     <ref bean="extractorSwf"/>
-
-
-	<ref bean="extractorForms"/>
-    <ref bean="formFiller"/>
-
+	
 
    </list>
   </property>
@@ -390,28 +400,10 @@ metadata.description=Basic crawl starting with useful defaults
  <!-- DISPOSITION CHAIN -->
  <!-- first, processors are declared as top-level named beans  -->
  <bean id="warcWriter" class="org.archive.modules.writer.WARCWriterProcessor">
-   <property name="shouldProcessRule">
-     <bean class="org.archive.modules.deciderules.DecideRuleSequence">
-       <property name="rules">
-         <list>
-  	    <bean class="org.archive.modules.deciderules.RejectDecideRule" />
-	    <bean class="org.archive.modules.deciderules.MatchesListRegexDecideRule">
-                <property name="decision" value="ACCEPT"/>
-                <property name="listLogicalOr" value="true" />
-                <property name="regexList">
-                        <list>
-                                <value>(?:http:[\/][\/])?www\.plantcell\.org[\/](?:content|powerpoint)[\/](?:2[789]|(?:suppl\/201[567])[\/]).*</value>
-                        </list>
-                </property>
-            </bean>
-	</list>
-       </property>
-     </bean>
-   </property>
   <!-- <property name="compress" value="true" /> -->
   <!-- <property name="prefix" value="IAH" /> -->
   <!-- <property name="suffix" value="${HOSTNAME}" /> -->
-  <!-- <property name="maxFileSizeBytes" value="1000000000" /> -->
+  <property name="maxFileSizeBytes" value="5000000000" />
   <!-- <property name="poolMaxActive" value="1" /> -->
   <!-- <property name="MaxWaitForIdleMs" value="500" /> -->
   <!-- <property name="skipIdenticalDigests" value="false" /> -->
@@ -597,24 +589,20 @@ metadata.description=Basic crawl starting with useful defaults
    applied. This example applies two sheets to URIs matching two SURT-prefixes.
    New associations may also be added mid-crawl using the scripting facility.
   -->
-
 <!--
 <bean class='org.archive.crawler.spring.SurtPrefixesSheetAssociation'>
  <property name='surtPrefixes'>
   <list>
-   <value>http://(org,example,</value>
-   <value>http://(com,example,www,)/</value>
+   <value>http://www.plantcell.org</value>
   </list>
  </property>
  <property name='targetSheetNames'>
   <list>
-   <value>veryPolite</value>
-   <value>smallBudget</value>
+   <value>formLoginFields</value>
   </list>
  </property>
 </bean>
 -->
-
  <!-- 
    OPTIONAL BUT RECOMMENDED BEANS
   -->
@@ -752,7 +740,7 @@ metadata.description=Basic crawl starting with useful defaults
   <!-- <property name="uriErrorsLogPath" value="uri-errors.log" /> -->
   <!-- <property name="runtimeErrorsLogPath" value="runtime-errors.log" /> -->
   <!-- <property name="nonfatalErrorsLogPath" value="nonfatal-errors.log" /> -->
-  <!-- <property name="logExtraInfo" value="false" /> -->
+  <property name="logExtraInfo" value="true" />
  </bean>
  
  <!-- SHEETOVERLAYMANAGER: manager of sheets of contextual overlays

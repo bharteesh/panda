@@ -246,6 +246,9 @@ metadata.description=Basic crawl starting with useful defaults
   <!-- <property name="ipValidityDurationSeconds" value="21600" /> -->
   <!-- <property name="robotsValidityDurationSeconds" value="86400" /> -->
   <!-- <property name="calculateRobotsOnly" value="false" /> -->
+  <property name="credentialStore">
+		<ref bean="credentialStore" />
+	</property>
  </bean>
  <bean id="fetchDns" class="org.archive.modules.fetcher.FetchDNS">
   <!-- <property name="acceptNonDnsResolves" value="false" /> -->
@@ -291,6 +294,9 @@ metadata.description=Basic crawl starting with useful defaults
   <!-- <property name="httpProxyPassword" value="" /> -->
   <!-- <property name="digestContent" value="true" /> -->
   <!-- <property name="digestAlgorithm" value="sha1" /> -->
+        <property name="credentialStore">
+                <ref bean="credentialStore" />
+        </property>
  </bean>
  <bean id="extractorHttp" class="org.archive.modules.extractor.ExtractorHTTP">
  </bean>
@@ -312,7 +318,28 @@ metadata.description=Basic crawl starting with useful defaults
  <bean id="extractorSwf" class="org.archive.modules.extractor.ExtractorSWF">
  </bean>    
  
- 
+ <bean id="exampleCredential" class="org.archive.modules.credential.HtmlFormCredential">
+	<property name="domain" value="http://www.plantphysiol.org" />
+	<property name="loginUri" value="http://www.plantphysiol.org/login" />
+	<property name="formItems">
+	<map>
+		<!-- username/password -->
+		<entry key="username" value="JSTOR"/>
+		<entry key="code" value="plant"/>
+		<!-- hidden inputs -->
+		<entry key="login_referer" value="form-asdf" />
+		<!-- submit -->
+		<entry key="signin" value="Sign In"/>
+	</map>
+	</property>
+</bean> 
+<bean id="credentialStore" class="org.archive.modules.credential.CredentialStore">
+	<property name="credentials">
+	<map>
+		<entry key="exampleCredential" value-ref="exampleCredential" />
+	</map>
+	</property>
+</bean>
  
  
  <bean id="persistLoadProcessor" class="org.archive.modules.recrawl.PersistLoadProcessor">
